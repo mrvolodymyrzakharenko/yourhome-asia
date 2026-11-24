@@ -532,3 +532,10 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .frow .ftg{padding:4px 4px}
   .frow .chip svg{display:none}
 }
+/* LISTING / MAP WITH ICONS ON PHONES TOO (owner, 2026-11-24: "a listing és a map jobb, hogyha ikonnal van jelölve"):
+   grid icon + Listing, map icon + Map on every screen; to keep row 2 on one line the Filters slider icon is hidden on phones. */
+@media (max-width:720px){
+  .frow .vsw svg{display:inline-block!important;width:15px;height:15px}
+  .frow .vsw a{gap:4px!important}
+  .frow .chip.more svg{display:none!important}
+}

@@ -37,6 +37,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Statistics: views per day, unique visitors, who viewed (anonymous: device, language, traffic source), when, which
   listing, contact clicks (phone / Telegram / WhatsApp), messages. Recent activity table.
 - Telegram alerts are stored as requests (yh_alerts); sending needs the Telegram bot to be connected (not done yet).
+- SETTINGS ALWAYS VISIBLE (owner, 2026-11-24: "my account – settings – ez legyen mindig látható, legyen ott verification kérés
+  is"): "⚙️ Settings" is the last dashboard tab, a button in the dashboard header (Back to site · Settings · Sign out) and an
+  overview card. It holds: name + sign-in email, contact details for listings (saved in user_metadata.contact, prefill the post
+  form) and "Get verified" – method (phone / video / Telegram / WhatsApp), contact, best time, note → table yh_verify_requests
+  (user inserts only; status pending → verified/rejected set by admin). Verified = an own yh_agents row with verified_at or a
+  'verified' request. No ID upload.
 
 ## Rules for listings
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin

@@ -215,3 +215,6 @@ for (const k of Object.keys(SB)) Object.assign(T[k], SB[k]);
 /* PHONE CARD ROW 1 = "<Type> for rent / for sale" (owner, 2026-11-24: "az első az apartman megnevezése… apartman for rent… vastagabbal") */
 const NM = { en:{nameRent:'{x} for rent',nameSale:'{x} for sale'}, km:{nameRent:'{x}សម្រាប់ជួល',nameSale:'{x}សម្រាប់លក់'}, zh:{nameRent:'{x}出租',nameSale:'{x}出售'}, fr:{nameRent:'{x} à louer',nameSale:'{x} à vendre'}, th:{nameRent:'{x}ให้เช่า',nameSale:'{x}ขาย'} };
 for (const k of Object.keys(NM)) Object.assign(T[k], NM[k]);
+/* "… for rent in BKK1" + "Phnom Penh, <street address>" (owner, 2026-11-24 20:02) */
+const IN = { en:{inPlace:'in {d}',cambodia:'Cambodia'}, km:{inPlace:'នៅ {d}',cambodia:'កម្ពុជា'}, zh:{inPlace:'· {d}',cambodia:'柬埔寨'}, fr:{inPlace:'à {d}',cambodia:'Cambodge'}, th:{inPlace:'ที่ {d}',cambodia:'กัมพูชา'} };
+for (const k of Object.keys(IN)) Object.assign(T[k], IN[k]);

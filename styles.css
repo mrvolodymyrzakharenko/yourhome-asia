@@ -221,3 +221,36 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .chips:not(.static){flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
   .more-panel .chips{flex-wrap:wrap;overflow:visible}
 }
+/* PHONE CARDS = THE STUDY PORTAL'S MOBILE CARD (owner, 2026-11-24: "vedd ki a mobilos nézetet a Study and Work portáról…
+   nem lehet kettő egy sorba, tökre úgy nézzen ki"): on phones every listing grid is ONE card per row, a big white card with
+   the photo on top (pastel pills: price · bedrooms · type, white round heart, camera count), then title, bathrooms · m²,
+   pin + district, red "View →". PC/tablet keep the approved 4-per-row card. */
+.ybadges,.ycount,.yfacts,.ymeta,.ylink{display:none}
+@media (max-width:720px){
+  .row4,.grid{grid-template-columns:minmax(0,1fr)!important;gap:26px!important}
+  .row-scroll{grid-auto-flow:row;grid-auto-columns:auto;grid-template-columns:minmax(0,1fr);gap:26px;overflow:visible;scroll-snap-type:none;padding:4px 0 14px}
+  .card{border-radius:16px;box-shadow:0 20px 50px rgba(15,23,42,.08),0 4px 12px rgba(15,23,42,.04)}
+  .card:hover{transform:none}
+  .card .ph{aspect-ratio:4/3;background:#E9EEF5}
+  .card .ph::after,.card .pov,.card .dots,.card .date,.card .tags,.card:not([href="#/post"]) .loc,.card .specs-row{display:none!important}
+  .row4 a.card[href="#/post"]~a.card[href="#/post"]{display:none}
+  a.card[href="#/post"] .ph{aspect-ratio:16/9}
+  .ybadges{display:flex;position:absolute;top:12px;left:12px;right:62px;z-index:2;flex-wrap:wrap;gap:6px}
+  .yb{padding:6px 11px;border-radius:11px;border:1px solid;font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;letter-spacing:-.025em}
+  .yb-price{background:#FFF3C9;border-color:#EFD98C;color:#5A4300}
+  .yb-beds{background:#E1EAFF;border-color:#B8CBF5;color:#0D2763}
+  .yb-type{background:#DFF3E5;border-color:#B4E0C1;color:#14552B}
+  .yb-top{background:#E00025;border-color:#E00025;color:#fff}
+  .yb-demo{background:#334155;border-color:#334155;color:#fff}
+  .card .heart{top:12px;right:12px;width:38px;height:38px;background:rgba(255,255,255,.96);box-shadow:0 2px 8px rgba(0,0,0,.12);font-size:18px;color:#0b1d51}
+  .card .heart.on{color:#E00025}
+  .ycount{display:inline-flex;position:absolute;right:12px;bottom:12px;z-index:2;align-items:center;gap:5px;padding:5px 10px;border-radius:999px;background:rgba(15,23,42,.62);color:#fff;font-size:12px;font-weight:600;backdrop-filter:blur(4px);letter-spacing:-.025em}
+  .ycount svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+  .card .cb,.row4 .cb{padding:16px 18px 18px;display:flex;flex-direction:column;gap:5px}
+  .card .ct,.row4 .ct{margin:0;font-size:13px;font-weight:600;color:#0b1d51;white-space:normal;line-height:1.35}
+  .yfacts{display:block;margin:0;font-size:13px;color:var(--muted)}
+  .ymeta{display:flex;align-items:center;gap:6px;margin:2px 0 0;font-size:12.5px;color:#334155}
+  .ymeta svg{width:16px;height:16px;flex:none;fill:none;stroke:#64748b;stroke-width:1.8}
+  .ylink{display:inline-flex;align-items:center;gap:7px;margin-top:8px;color:#E00025;font-size:13px;font-weight:600;letter-spacing:-.025em}
+  .ylink svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+}

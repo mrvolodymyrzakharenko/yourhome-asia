@@ -88,11 +88,16 @@ function card(l) {
       <span class="tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}${l.status !== 'active' ? `<span class="tag st">${esc(t('s_' + l.status))}</span>` : ''}</span>
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${isSaved(l.id) ? '♥' : '♡'}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
+      <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t('bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
+      ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
     </div>
     <div class="cb">
       <h3 class="ct">${esc(l.title)}</h3>
       <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || t('cityPP'))}</div>
       <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span>${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span></div>
+      ${[l.bathrooms ? l.bathrooms + ' ' + t('bathrooms').toLowerCase() : '', l.area_m2 ? Math.round(l.area_m2) + ' m²' : ''].filter(Boolean).length ? `<p class="yfacts">${esc([l.bathrooms ? l.bathrooms + ' ' + t('bathrooms').toLowerCase() : '', l.area_m2 ? Math.round(l.area_m2) + ' m²' : ''].filter(Boolean).join(' · '))}</p>` : ''}
+      <p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>${esc([l.district, t('cityPP')].filter(Boolean).join(', '))}</p>
+      <span class="ylink">${esc(t('view'))} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </div></a>`;
 }
 document.addEventListener('click', e => {

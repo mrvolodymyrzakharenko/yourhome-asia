@@ -27,7 +27,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   blue Search button floats above the middle with no label (→ #/search). ALWAYS VISIBLE (owner, 2026-11-24: "az alsó menü mindig
   látható legyen") – from the first second, never hidden at the top of a page or on scroll (unlike the Study portal's fade-in). index.html .bnav, styles.css "Bottom menu" block.
 - Homepage category blocks are UNIFORM (owner, 2026-11-24: "minden kategória legyen egységes – nincs két nagy kép, sem egy"):
-  every block shows at most 4 equal cards in one row (2 per row on phones), never stretched or scrolling, then a
+  every block shows at most 4 equal cards in one row on PC/tablet, never stretched or scrolling, then a
   "<category> · See all" button (.row4 / .block-more). Dashboard big cards are all the same white card (no red one).
 - FONT SIZES = STUDY PORTAL – BASE RULE (owner, 2026-11-24: "betűk túl nagyok – legyenek olyanok, mint a study portálon"):
   no text larger than 13px anywhere; headings and bold text 13px / 600, letter-spacing -.025em; other text max 13px / 400;
@@ -48,6 +48,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   "Want to rent out faster?" banner → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
+
+- PHONES = STUDY PORTAL MOBILE CARDS (owner, 2026-11-24: "vedd ki a mobilos nézetet a Study and Work portáról… nem lehet
+  kettő egy sorba, tökre úgy nézzen ki"): under 720px every listing grid (.row4, .grid, .row-scroll) is ONE card per row, the
+  Study .pcard look: pastel pills on the photo (price yellow · bedrooms blue · type green, TOP red, DEMO dark), white round
+  heart, camera count bottom-right, then title, bathrooms · m², pin + district, red "View →" (card() extra .yb*/.y* elements,
+  shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
 
 ## Dashboard (owner, 2026-11-24)
 - Very clear, big cards: Post listing · My listings · Messages · Statistics · Telegram alerts.

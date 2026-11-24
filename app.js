@@ -8,6 +8,13 @@ const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';
 const SUPPORT_EMAIL = 'info@yourhome.asia';
 const PP = [11.5564, 104.9282];
+// Cities (owner, 2026-11-24: "legyen az összes nagy város a listában, de a kezdő Phnom Penh") – every province capital
+// plus the two big border towns; Phnom Penh is first and the default. [name, lat, lng]
+const CITIES = [['Phnom Penh',11.5564,104.9282],['Siem Reap',13.3633,103.8564],['Sihanoukville',10.6253,103.5234],['Battambang',13.0957,103.2022],['Kampot',10.6104,104.1815],['Kep',10.4829,104.3167],['Kampong Cham',11.9934,105.4635],['Poipet',13.6589,102.5636],['Bavet',11.0662,106.1306],['Koh Kong',11.6153,102.9838],['Takeo',10.9908,104.7850],['Kampong Speu',11.4533,104.5209],['Kampong Chhnang',12.2505,104.6666],['Kampong Thom',12.7111,104.8887],['Pursat',12.5388,103.9192],['Prey Veng',11.4868,105.3253],['Svay Rieng',11.0878,105.7993],['Kratie',12.4881,106.0188],['Stung Treng',13.5259,105.9683],['Banlung',13.7394,106.9873],['Sen Monorom',12.4558,107.1881],['Preah Vihear',13.8077,104.9806],['Serei Saophoan',13.5859,102.9737],['Samraong',14.1817,103.5176],['Pailin',12.8489,102.6093],['Suong',11.9116,105.6587]];
+const CITY_NAMES = CITIES.map(c => c[0]);
+const cityCenter = c => { const x = CITIES.find(k => k[0] === c); return x ? [x[1], x[2]] : PP; };
+const cityLabel = c => !c || c === 'Phnom Penh' ? t('cityPP') : c;
+const districtOpts = (city, cur) => `<option value="">${t('any')}</option>` + (city === 'Phnom Penh' ? (cur && !DISTRICTS.includes(cur) ? [cur, ...DISTRICTS] : DISTRICTS) : (cur ? [cur] : [])).map(d => `<option value="${esc(d)}"${d === cur ? ' selected' : ''}>${esc(d)}</option>`).join('');
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 const TYPES = ['apartment','condo','house','villa','room','shophouse','office','land'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
@@ -172,7 +179,7 @@ function card(l) {
     </div>
     <div class="cb">
       <h3 class="ct">${esc(l.title)}</h3>
-      <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || t('cityPP'))}</div>
+      <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || cityLabel(l.city))}</div>
       <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span class="${AM_ICON_ORDER.filter(a => (l.amenities || []).includes(a)).length >= 2 ? 'sp-a2' : ''}">${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span>${AM_ICON_ORDER.filter(a => (l.amenities || []).includes(a)).slice(0, 2).map(a => `<span class="sp-am" title="${esc(t('am_' + a))}" aria-label="${esc(t('am_' + a))}">${AM_ICON[a]}</span>`).join('')}</div>
       <p class="yname"><span class="yn1">${esc(t(l.deal_type === 'sale' ? 'nameSale' : 'nameRent', { x: t('t_' + (l.deal_type === 'room' ? 'room' : l.property_type)) }))}</span>${l.district ? ` <span class="yn2">${esc(t('inPlace', { d: l.district }))}</span>` : ''}</p>
       <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span class="yty">${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : l.price_period === 'day' ? 'daily' : 'rent'))}</em><b>${l.bathrooms ?? '–'} ${esc(t('bathrooms').toLowerCase())}</b><b>${l.area_m2 ? Math.round(l.area_m2) + ' m²' : '– m²'}</b><b>${esc(l.posted_by ? t('by_' + l.posted_by) : shortDate(l.created_at))}</b></p>
@@ -222,6 +229,7 @@ async function fetchListings(f = {}) {
   let q = sb.from('yh_listings').select(LISTING_COLS).eq('status', 'active').eq('country', 'KH');
   if (f.deal === 'daily') q = q.eq('deal_type', 'rent').eq('price_period', 'day');   // Daily rent tab (owner, 2026-11-24)
   else if (f.deal) q = q.eq('deal_type', f.deal);
+  if (f.city && CITY_NAMES.includes(f.city)) q = q.eq('city', f.city);
   if (f.type) q = q.eq('property_type', f.type);
   if (f.max) q = q.lte('price', Number(f.max));
   if (f.beds) q = f.beds === '0' ? q.eq('bedrooms', 0) : q.gte('bedrooms', Number(f.beds));
@@ -254,8 +262,8 @@ const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent',
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
-    <div class="f"><label>${t('city')}</label><select disabled><option>${t('cityPP')}</option></select></div>
-    <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" aria-label="${esc(t('district'))}"><option value="">${t('any')}</option>${(p.q && !DISTRICTS.includes(p.q) ? [p.q, ...DISTRICTS] : DISTRICTS).map(d => `<option value="${esc(d)}"${d === p.q ? ' selected' : ''}>${esc(d)}</option>`).join('')}</select></div>
+    <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
+    <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
     <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <div class="sbtns"><a href="#/post" class="btn red sb-post">+ ${t('post')}</a><button class="btn blue">${t('search')} →</button></div>
@@ -267,6 +275,8 @@ function wireSearchBox(onSubmit) {
   let deal = document.querySelector('#dealTabs .on').dataset.deal;
   document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: deal === 'room' ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); onSubmit(deal); };
+  const cs = document.getElementById('citySel'), ds = document.getElementById('distSel');
+  if (cs && ds) cs.addEventListener('change', () => { ds.innerHTML = districtOpts(cs.value); });
   return () => deal;
 }
 let panelOpen = false;
@@ -337,7 +347,7 @@ async function viewHome() {
   const getDeal = wireSearchBox((deal, tabOnly) => {
     if (tabOnly) { FKEYS.forEach(k => delete st[k]); return drawChips(); }
     const f = new FormData(document.getElementById('sbox')); const p = new URLSearchParams({ deal });
-    for (const k of ['q', 'type', 'max']) if (f.get(k)) p.set(k, f.get(k));
+    for (const k of ['city', 'q', 'type', 'max']) if (f.get(k)) p.set(k, f.get(k));
     for (const k of FKEYS) if (st[k]) p.set(k, st[k]);
     go('#/search?' + p);
   });
@@ -382,7 +392,7 @@ async function viewSearch() {
     if (k === 'studio') return upd({ beds: p.beds === '0' ? '' : '0' });
     upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds });
   };
-  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
+  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ city: f.get('city'), q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
   document.getElementById('chipBox').addEventListener('click', e => { const b = e.target.closest('.vsw a'); if (!b) return; e.preventDefault(); e.stopPropagation(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); }, true);
   document.getElementById('notifyBtn').onclick = () => alertModal(p);
@@ -428,7 +438,7 @@ async function viewListing(id) {
     <div class="panel" style="margin-top:18px">
       <div class="tags" style="position:static;display:flex;gap:6px">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}<span class="tag" style="background:var(--blue-l);color:var(--blue)">${esc(t(l.deal_type === 'sale' ? 'buy' : l.deal_type))} · ${esc(t('t_' + l.property_type))}</span></div>
       <h1>${esc(l.title)}</h1>
-      <div class="loc" style="font-size:13px"><b>●</b> ${esc([l.address, l.district, t('cityPP')].filter(Boolean).join(', '))}</div>
+      <div class="loc" style="font-size:13px"><b>●</b> ${esc([l.address, l.district, cityLabel(l.city)].filter(Boolean).join(', '))}</div>
       <div class="bigprice">${money(l.price)} <small>${priceSuffix(l)}</small></div>
       <div class="specs"><div class="spec"><b>${esc(beds)}</b><span>${t('bedrooms')}</span></div><div class="spec"><b>${l.bathrooms ?? '–'}</b><span>${t('bathrooms')}</span></div><div class="spec"><b>${l.area_m2 ? Math.round(l.area_m2) : '–'}</b><span>${t('area')}</span></div><div class="spec"><b>${l.furnished ? '✓' : '–'}</b><span>${t('furnished')}</span></div></div>
       ${detailFacts(l)}
@@ -515,8 +525,9 @@ async function viewPost(editId) {
       <label class="chk" style="align-self:end;padding-bottom:10px"><input type="checkbox" name="foreigner_ok" ${l.foreigner_ok ? 'checked' : ''}> ${t('foreignerOk')} (${t('saleOnly')})</label></div>
     <div><div class="mp-lab" style="margin-top:0">${t('amenities')}</div><div class="amen-pick">${AMEN.map(a => `<label class="chk"><input type="checkbox" name="amen" value="${a}" ${(l.amenities || []).includes(a) ? 'checked' : ''}> ${t('am_' + a)}</label>`).join('')}</div></div>
     <label>${t('description')}<textarea name="description" maxlength="5000">${esc(l.description || '')}</textarea></label>
-    <div class="row"><label>${t('district')} *<select name="district" required><option value="">—</option>${DISTRICTS.map(d => `<option ${l.district === d ? 'selected' : ''}>${d}</option>`).join('')}</select></label>
-      <label>${t('address')}<input name="address" maxlength="200" value="${esc(l.address || '')}"></label></div>
+    <div class="row"><label>${t('city')} *<select name="city" id="pCity" required>${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (l.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></label>
+      <label>${t('district')} *<select name="district" id="pDist"${(l.city || 'Phnom Penh') === 'Phnom Penh' ? ' required' : ' hidden disabled'}><option value="">—</option>${DISTRICTS.map(d => `<option ${l.district === d ? 'selected' : ''}>${d}</option>`).join('')}</select><input name="district" id="pDistTxt" maxlength="80" value="${esc((l.city || 'Phnom Penh') !== 'Phnom Penh' ? (l.district || '') : '')}"${(l.city || 'Phnom Penh') === 'Phnom Penh' ? ' hidden disabled' : ' required'}></label></div>
+    <label>${t('address')}<input name="address" maxlength="200" value="${esc(l.address || '')}"></label>
     <label>${t('pickMap')}<div class="pick-map" id="pmap"></div></label>
     <label>${t('photos')}<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple></label>
     <div class="prev" id="prev"></div>
@@ -527,7 +538,12 @@ async function viewPost(editId) {
     ${agBlock}
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
-  const m = L.map('pmap').setView(pos || PP, pos ? 16 : 13); tiles(m); maps.push(m);
+  const m = L.map('pmap').setView(pos || cityCenter(l.city || 'Phnom Penh'), pos ? 16 : 13); tiles(m); maps.push(m);
+  document.getElementById('pCity').addEventListener('change', e => {   // Phnom Penh = district list, other cities = typed district
+    const pp = e.target.value === 'Phnom Penh', sd = document.getElementById('pDist'), td = document.getElementById('pDistTxt');
+    sd.hidden = sd.disabled = !pp; sd.required = pp; td.hidden = td.disabled = pp; td.required = !pp;
+    if (!pos) m.setView(cityCenter(e.target.value), 13);
+  });
   let mk = pos ? L.marker(pos).addTo(m) : null;
   m.on('click', e => { pos = [e.latlng.lat, e.latlng.lng]; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); });
   setTimeout(() => m.invalidateSize(), 60);
@@ -557,7 +573,7 @@ async function viewPost(editId) {
       amenities: fd.getAll('amen').filter(a => AMEN.includes(a)), posted_by: f.posted_by || null,
       min_lease: f.deal_type === 'sale' ? null : (f.min_lease || null),
       title_type: f.deal_type === 'sale' ? (f.title_type || null) : null, foreigner_ok: f.deal_type === 'sale' ? !!f.foreigner_ok : null,
-      district: f.district, address: f.address.trim() || null, lat: pos ? pos[0] : null, lng: pos ? pos[1] : null, photos,
+      city: CITY_NAMES.includes(f.city) ? f.city : 'Phnom Penh', district: f.district, address: f.address.trim() || null, lat: pos ? pos[0] : null, lng: pos ? pos[1] : null, photos,
       contact_name: f.contact_name.trim() || null, contact_phone: f.contact_phone.trim() || null,
       contact_telegram: f.contact_telegram.trim() || null, contact_whatsapp: f.contact_whatsapp.trim() || null,
     };

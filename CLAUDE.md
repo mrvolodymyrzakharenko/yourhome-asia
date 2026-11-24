@@ -93,6 +93,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
+- CITIES (owner, 2026-11-24 20:17 Tbilisi: "legyen az összes nagy város a listában, de a kezdő Phnom Penh"): the search card's
+  City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh
+  is FIRST and the default. Phnom Penh = district list (DISTRICTS); other cities = typed district in the post form and
+  "Any" in the search. ?city= filters the results; the post-form map centres on the picked city. yh_listings.city.
 
 - PHONES = STUDY PORTAL MOBILE CARDS (owner, 2026-11-24: "vedd ki a mobilos nézetet a Study and Work portáról… nem lehet
   kettő egy sorba, tökre úgy nézzen ki"): under 720px every listing grid (.row4, .grid, .row-scroll) is ONE card per row, the

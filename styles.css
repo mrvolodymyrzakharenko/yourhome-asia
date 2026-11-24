@@ -853,3 +853,29 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .yh-img{opacity:0;transition:opacity .45s ease}
 .yh-img.ld{opacity:1}
 @media (prefers-reduced-motion:reduce){.yh-in{animation:none}.yh-img{opacity:1;transition:none}}
+/* PC: the rows around the search card are as WIDE AS THE CARD (owner, 2026-11-24: "pc nézetben mehet minden ami a szélessége
+   a filternek") – the 10 categories spread evenly over the card width; the quick filters and More filters | Listing | Map |
+   Subscribe | Newest share ONE full-width line under the card, every item an equal column; the More filters panel below. */
+@media (min-width:901px){
+  .srow,.hero .srow{max-width:1080px;margin-left:auto;margin-right:auto}
+  #dealTabs.deal-tabs{display:flex!important;width:100%;max-width:1080px;margin-left:auto;margin-right:auto}
+  #dealTabs button{flex:1 1 0;text-align:center;justify-content:center}
+  .chipbox.home,#chipBox{display:flex;flex-wrap:wrap;align-items:center;max-width:1080px;margin-left:auto;margin-right:auto}
+  #chipBox .chips.qrow{flex:6 1 0;display:flex;justify-content:stretch;margin:0}
+  #chipBox .frow{flex:5 1 0;display:flex;justify-content:stretch;margin:0;position:relative}
+  #chipBox .frow::before{content:"";position:absolute;left:0;top:28%;bottom:28%;width:1px;background:#D5DAE3}
+  #chipBox .qrow>.chip,#chipBox .frow>*{flex:1 1 0;justify-content:center;text-align:center;white-space:nowrap}
+  #chipBox .frow .vsw{display:flex;flex:2 1 0}
+  #chipBox .frow .vsw a{flex:1 1 0;justify-content:center}
+  #chipBox .more-panel{flex:0 0 100%}
+}
+/* PC search card 10% smaller (owner, 2026-11-24 17:24 Chisinau: "maga a filter… lehet kisebb, 10%"): 972px wide (was 1080),
+   lower fields and buttons; the rows above and below follow the same width; the district pin sits on the label's line. */
+@media (min-width:901px){
+  .sbox{max-width:972px!important;padding:7px!important;border-radius:20px!important}
+  .sbox .f{padding-top:2px!important;padding-bottom:2px!important}
+  .sbox .btn{padding-top:11px!important;padding-bottom:11px!important}
+  .srow,.hero .srow,#dealTabs.deal-tabs,.chipbox.home,#chipBox{max-width:972px!important}
+  .sbox .f.addr label{display:block;white-space:nowrap}
+  .sbox .f.addr label .mf-l{display:inline!important}
+}

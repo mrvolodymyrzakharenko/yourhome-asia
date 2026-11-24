@@ -72,6 +72,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - FILTERS PANEL (owner, 2026-11-24 20:11): no white box – full width; Bathrooms · Min. size · Rental term · Listed within in
   ONE row of four columns (grey label, borderless value + small chevron, thin dividers); amenities and Reset | Close as grey
   words with thin dividers like the quick filters (picked = pink patch). No buttons, no outlines – only the thin strips. A round × top-right closes it; Pool/Gym (row 1) are not repeated.
+- PC SEARCH AREA (owner, 2026-11-24 evening): the search card is 972px wide and ~10% lower; the 10 categories above it and the
+  filters under it are exactly as WIDE AS THE CARD, every item an equal column; on PC the quick filters and More filters |
+  Listing | Map | Subscribe | Newest share ONE full-width line (styles.css "PC: the rows around the search card").
 - PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),
   then Post listing + Search in the row below.
 - Posting a listing must always be visible straight away (header button – on phones a compact red "+ Post" before Menu,

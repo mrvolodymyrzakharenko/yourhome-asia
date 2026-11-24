@@ -11,7 +11,7 @@ const PP = [11.5564, 104.9282];
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 const TYPES = ['apartment','condo','house','villa','room','shophouse','office','land'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
-const QUICK = { rent: ['edc','pool','gym','pets','parking'], room: ['edc','private_bath','wifi','aircon','female_only'], sale: ['pool','parking','security'], '': ['edc','pool','gym','pets','parking'] };
+const QUICK = { rent: ['pool','gym','pets','parking'], room: ['private_bath','wifi','aircon','female_only'], sale: ['pool','parking','security'], '': ['pool','gym','pets','parking'] };  // EDC only in Filters (owner, 2026-11-24)
 const CATS = [['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
@@ -204,7 +204,7 @@ function chipRow(st, deal) {
   return `<div class="chips qrow">
     ${chip('beds', '1', t('bed1'))}${['2', '3'].map(n => chip('beds', n, t('bedN', { n }))).join('')}
     ${deal === 'sale' ? chip('foreign', '1', t('f_foreign')) : chip('furn', '1', t('furnished'))}
-    ${quick.map((a, i) => chip('amen', a, a === 'edc' ? `<span class="mf-l">${t('am_edc')}</span><span class="mf-s">EDC</span>` : t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i < 3 ? ' q-x1' : ''))).join('')}
+    ${quick.map((a, i) => chip('amen', a, a === 'edc' ? `<span class="mf-l">${t('am_edc')}</span><span class="mf-s">EDC</span>` : t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i < 2 ? ' q-x1' : ''))).join('')}
     ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
   <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}<span class="mf-l">${t('moreFilters')}</span><span class="mf-s">${t('filters')}</span>${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>

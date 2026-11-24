@@ -2,6 +2,7 @@ export const LANGS = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', 
 
 export const T = {
 en: {
+  addrPhS: 'e.g. BKK1',
   newProjects: 'New projects',
   topbar: '24/7 support. Questions or feedback?', contactUs: 'Contact us →',
   experts: 'Experts', post: 'Post listing', postShort: 'Post',
@@ -34,6 +35,7 @@ en: {
   supportBody: 'Questions, feedback or a problem with a listing? Write to us and we reply within 24 hours.',
 },
 km: {
+  addrPhS: 'ឧ. BKK1',
   newProjects: 'គម្រោងថ្មី',
   topbar: 'ជំនួយ 24/7។ មានសំណួរ ឬមតិយោបល់?', contactUs: 'ទាក់ទងមកយើង →',
   experts: 'អ្នកជំនាញ', post: 'ដាក់ប្រកាស', postShort: 'ប្រកាស',
@@ -65,6 +67,7 @@ km: {
   required: 'សូមបំពេញព័ត៌មានចាំបាច់។', error: 'មានបញ្ហា៖ ', notifySoon: 'ការជូនដំណឹង Telegram នឹងមកដល់ឆាប់ៗ។',
 },
 zh: {
+  addrPhS: '如 BKK1',
   newProjects: '新楼盘',
   topbar: '24/7 客服。有问题或建议？', contactUs: '联系我们 →',
   experts: '专家', post: '发布房源', postShort: '发布',
@@ -96,6 +99,7 @@ zh: {
   required: '请填写必填项。', error: '出错了：', notifySoon: 'Telegram 提醒即将上线。',
 },
 fr: {
+  addrPhS: 'ex. BKK1',
   newProjects: 'Programmes neufs',
   topbar: 'Support 24h/24. Une question ou un avis ?', contactUs: 'Contactez-nous →',
   experts: 'Experts', post: 'Publier une annonce', postShort: 'Publier',
@@ -127,6 +131,7 @@ fr: {
   required: 'Veuillez remplir les champs obligatoires.', error: 'Une erreur est survenue : ', notifySoon: 'Les alertes Telegram arrivent bientôt.',
 },
 th: {
+  addrPhS: 'เช่น BKK1',
   newProjects: 'โครงการใหม่',
   topbar: 'บริการ 24/7 มีคำถามหรือข้อเสนอแนะ?', contactUs: 'ติดต่อเรา →',
   experts: 'ผู้เชี่ยวชาญ', post: 'ลงประกาศ', postShort: 'ลงประกาศ',

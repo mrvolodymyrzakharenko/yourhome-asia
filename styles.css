@@ -291,11 +291,12 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .chips:not(.static){flex-wrap:wrap!important;overflow:visible!important;justify-content:center}
   .prj-tabs{flex-wrap:wrap!important;justify-content:center;overflow:visible!important;border-radius:20px}
 }
-/* Search card on phones/tablets (owner, 2026-11-24): City full width; fields only ~5% lower than before; every label and
+/* Search card on phones/tablets (owner, 2026-11-24): City | District in one row (short placeholder), Type | Budget under them; fields only ~5% lower than before; every label and
    value CENTRED; the select arrow sits inside with room after it (never at the very edge). The picked tab/category stays red. */
 .deal-tabs button.on,.deal-tabs .dt-cat.on{background:#E00025!important;color:#fff!important}
 @media (max-width:900px){
-  .sbox .f:first-child{grid-column:1/-1}
+  .sbox .f:first-child,.sbox .f.addr{grid-column:auto!important}   /* City | District side by side (owner, 2026-11-24) */
+  .sbox input{text-overflow:ellipsis}
   .sbox .f{padding:7px 12px!important;text-align:center}
   .sbox label{display:block;text-align:center}
   .sbox select,.sbox input{width:100%;text-align:center;text-align-last:center}

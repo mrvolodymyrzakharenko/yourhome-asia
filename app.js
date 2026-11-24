@@ -163,7 +163,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select disabled><option>${t('cityPP')}</option></select></div>
-    <div class="f addr"><label>📍 ${t('district')}</label><input name="q" list="dl" placeholder="${esc(t('addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist></div>
+    <div class="f addr"><label>📍 ${t('district')}</label><input name="q" list="dl" placeholder="${esc(t(innerWidth <= 900 ? 'addrPhS' : 'addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist></div>
     <div class="f"><label>${t('type')}</label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <button class="btn blue">${t('search')} →</button>

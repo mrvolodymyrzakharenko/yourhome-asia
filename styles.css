@@ -659,3 +659,9 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .mp-x:hover{color:#E00025}
 .more-panel .mp-grid{padding-right:34px}
 @media (max-width:720px){.more-panel .mp-grid{padding-right:0;margin-top:36px}.mp-x{top:0}}
+/* name + address rows fill the card width on phones (font size set by fitCards() in app.js) */
+@media (max-width:720px){
+  .yname{text-overflow:clip!important;line-height:1.15}
+  .yfoot .ymeta{flex:1 1 auto;width:100%}
+  .yfoot .ymeta .yaddr{display:block;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+}

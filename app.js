@@ -847,7 +847,7 @@ function fitCards() {
   markLineStarts();
   if (innerWidth > 720) { document.querySelectorAll('.yname,.ymeta .yaddr').forEach(e => e.style.removeProperty('font-size')); return; }
   // ONE size on every card (owner, 2026-11-24 19:55: "egyfajta méretűek legyenek, minden kiírás mint a BKK1 nagyságú"): the size
-  // that makes "Apartment for rent in BKK1" fill the card is used for every name (a longer name wraps to a 2nd line), and the
+  // that makes "Apartment for rent in BKK1" fill the card is used for every name (a longer name stays on ONE line and ends with …), and the
   // size that makes "Phnom Penh, No. 24, Street 278" fill it for every address (longer ones end with …). Both 2px under the fit.
   const refSize = (sel, text, min, max, useParent) => {
     const e = document.querySelector(sel); if (!e) return 0;
@@ -857,7 +857,7 @@ function fitCards() {
   };
   const nSize = refSize('.card .yname', t('nameRent', { x: t('t_apartment') }) + ' ' + t('inPlace', { d: 'BKK1' }), 15, 26);
   const aSize = refSize('.card .ymeta .yaddr', t('cityPP') + ', No. 24, Street 278', 11, 17, true);
-  if (nSize) document.querySelectorAll('.card .yname').forEach(e => { e.style.setProperty('font-size', (nSize - 2) + 'px', 'important'); e.style.setProperty('white-space', 'normal', 'important'); });
+  if (nSize) document.querySelectorAll('.card .yname').forEach(e => { e.style.setProperty('font-size', (nSize - 2) + 'px', 'important'); e.style.setProperty('white-space', 'nowrap', 'important'); e.style.setProperty('overflow', 'hidden', 'important'); e.style.setProperty('text-overflow', 'ellipsis', 'important'); });   // ONE line, … if it does not fit (owner 20:05)
   if (aSize) document.querySelectorAll('.card .ymeta .yaddr').forEach(e => e.style.setProperty('font-size', (aSize - 2) + 'px', 'important'));
 }
 const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };

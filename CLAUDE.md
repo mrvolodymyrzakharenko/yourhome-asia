@@ -85,10 +85,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   PHONE CARD = VIETRENT 3 ROWS (owner, 2026-11-24 20:00, replaces the 6-fact version; vietrent screenshot): NO date pill at the
   top of any card – on phones the date is written on the photo bottom-left, dots in the middle, price bottom-right (.ydate,
   no camera count; owner 20:01); 1) bold "Apartment for rent in BKK1" / "… for sale in …" (17px/700, nameRent/nameSale + inPlace), 2) pin + "Phnom Penh, <street
-  address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02); rows 1–2 CENTRED, four colours – type+deal royal blue, "in <district>" red, city grey, street address near-black (owner 20:03), one line each with … at the end; the demo
+  address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02); rows 1–2 LEFT aligned like vietrent (owner 20:07), address row: city grey, street address near-black, one line each with … at the end; the demo
   listings have sample street addresses,
-  3) hairline + bed · bath · m² + up to two amenity icons (wifi, pool, gym, air-con, parking; AM_ICON) in equal centred
-  columns with dividers. ALTERNATING (owner 20:04): odd cards name blue / "in district" red / icons red, even cards the reverse. Phone corners 36px + soft deep shadow
+  3) hairline + FOUR marks: bed · bath · two amenity icons (gym, wifi, pool, parking, air-con; AM_ICON; m² only if fewer
+  than two) in equal columns with dividers. Name row ONE colour, 800 weight (owner 20:07: "nem lehet fele-fele"): odd cards
+  name blue + icons red, even cards name red + icons blue. Phone corners 36px + soft deep shadow
   (measured from the screenshot); PC 24px.
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | grid icon + Listing | map icon + Map (icons on phones too; phones hide the Filters icon) | Telegram logo + "Subscribe" (owner, 2026-11-24 19:56) | Newest – the Telegram button

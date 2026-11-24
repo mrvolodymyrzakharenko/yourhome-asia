@@ -600,3 +600,15 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .card:not([href="#/post"]) .specs-row .sp-am{flex:0 0 42px}
   .card:not([href="#/post"]) .specs-row svg{width:18px;height:18px}
 }
+/* PHONE CARD, 20:07 (owner: "nem lehet fele-fele… csak 4 jel… vastagabb… ne legyen középre rendezve, az elejétől a végéig, mint
+   a beillesztett kártyán"): name row ONE colour (odd cards blue, even red; icons the other colour), 800 weight, LEFT aligned like
+   vietrent, address row left aligned; icon row = 4 marks: bedrooms · bathrooms · two amenities (gym, wifi, pool, parking,
+   air-con – m² only when the listing has fewer than two). */
+@media (max-width:720px){
+  .yname{font-weight:800!important;text-align:left!important}
+  .yfoot,.yfoot .ymeta{justify-content:flex-start!important}
+  .yname .yn1,.yname .yn2{color:#032EA1!important}
+  .card:nth-child(even) .yname .yn1,.card:nth-child(even) .yname .yn2{color:#E00025!important}
+  .card:not([href="#/post"]) .specs-row .sp-a2{display:none!important}
+  .card:not([href="#/post"]) .specs-row span,.card:not([href="#/post"]) .specs-row .sp-am{flex:1 1 0!important}
+}

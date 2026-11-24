@@ -212,3 +212,6 @@ for (const k of Object.keys(CV)) Object.assign(T[k], CV[k]);
 /* FILTER ROW 2 WORDS (owner, 2026-11-24: "legyen listing, és subscribe, és ott a Telegram logó") */
 const SB = { en:{listing1:'Listing',subscribe:'Subscribe'}, km:{listing1:'បញ្ជី',subscribe:'ជាវ'}, zh:{listing1:'列表',subscribe:'订阅'}, fr:{listing1:'Liste',subscribe:'S’abonner'}, th:{listing1:'รายการ',subscribe:'ติดตาม'} };
 for (const k of Object.keys(SB)) Object.assign(T[k], SB[k]);
+/* PHONE CARD ROW 1 = "<Type> for rent / for sale" (owner, 2026-11-24: "az első az apartman megnevezése… apartman for rent… vastagabbal") */
+const NM = { en:{nameRent:'{x} for rent',nameSale:'{x} for sale'}, km:{nameRent:'{x}សម្រាប់ជួល',nameSale:'{x}សម្រាប់លក់'}, zh:{nameRent:'{x}出租',nameSale:'{x}出售'}, fr:{nameRent:'{x} à louer',nameSale:'{x} à vendre'}, th:{nameRent:'{x}ให้เช่า',nameSale:'{x}ขาย'} };
+for (const k of Object.keys(NM)) Object.assign(T[k], NM[k]);

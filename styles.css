@@ -539,3 +539,21 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .frow .vsw a{gap:4px!important}
   .frow .chip.more svg{display:none!important}
 }
+/* CARD = VIETRENT, 3 ROWS (owner, 2026-11-24 20:00, vietrent screenshot: "3 sort kértem, az első az apartman megnevezése…
+   vastagabbal… a dátumot vedd ki"): no date pill on any card; phones: 1) bold "Apartment for rent" (17px / 700 – owner's
+   exception), 2) pin + "District, Phnom Penh", 3) hairline, then bed · bath · m² with icons in three centred columns with
+   dividers. Corners 36px and the soft deep shadow measured from the owner's vietrent screenshot. */
+.yname{display:none}
+.card .date{display:none!important}
+@media (max-width:720px){
+  .card:not([href="#/post"]){border-radius:36px!important;box-shadow:0 14px 34px -8px rgba(15,23,42,.14),0 2px 10px rgba(15,23,42,.05)!important}
+  .card:not([href="#/post"]) .cb{padding:20px 22px 22px!important;gap:10px!important}
+  .card:not([href="#/post"]) .ct,.card:not([href="#/post"]) .loc,.yl1,.yfoot .ylink{display:none!important}
+  .yname{display:block;order:1;margin:0;font-size:17px!important;font-weight:700!important;letter-spacing:-.03em;color:#0b1d51;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .yfoot{order:2}
+  .yfoot .ymeta{font-size:13.5px!important;color:#64748b!important}
+  .card:not([href="#/post"]) .specs-row{display:grid!important;order:3;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:4px;padding-top:14px;border-top:1px solid #EEF1F5;font-size:15px!important;font-weight:600;color:#0b1d51}
+  .card:not([href="#/post"]) .specs-row span{justify-content:center;position:relative;gap:7px}
+  .card:not([href="#/post"]) .specs-row span+span::before{content:"";position:absolute;left:0;top:15%;bottom:15%;width:1px;background:#D5DAE3}
+  .card:not([href="#/post"]) .specs-row svg{width:20px;height:20px;stroke:#94a3b8}
+}

@@ -82,10 +82,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 
 - CARDS LIKE VIETRENT (owner, 2026-11-24): every listing card 24px corners + soft deep shadow (styles.css "CARDS LIKE VIETRENT";
   vietrent's own CSS could not be read – value set by eye, change only that rule if the owner wants it closer).
-  PHONE CARD BOTTOM (owner, 2026-11-24: "6 tulajdonság… bal részére Phnom Penh… jobb részre Click to View Apartment… az
-  apartman kiírás nagyobb, egyik piros, a másik kék"): two rows of three facts with dividers – bedrooms · TYPE (royal blue,
-  15px) · deal (red) / bathrooms · m² · Owner/Agent (date if unknown); last row: pin + "District, Phnom Penh" left, red 14px
-  "Click to view apartment →" right (.yfoot; clickView in i18n.js).
+  PHONE CARD = VIETRENT 3 ROWS (owner, 2026-11-24 20:00, replaces the 6-fact version; vietrent screenshot): NO date pill on
+  any card; 1) bold "Apartment for rent" / "… for sale" (17px/700, nameRent/nameSale), 2) pin + "District, Phnom Penh",
+  3) hairline + bed · bath · m² with icons in three centred columns with dividers. Phone corners 36px + soft deep shadow
+  (measured from the screenshot); PC 24px.
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | grid icon + Listing | map icon + Map (icons on phones too; phones hide the Filters icon) | Telegram logo + "Subscribe" (owner, 2026-11-24 19:56) | Newest – the Telegram button
   (#notifyBtn, name in a bubble on hover) | "Newest ▾" select (no "Sort:" word); no separate tools row under the heading.

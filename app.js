@@ -180,7 +180,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
     <div class="f addr"><label>📍 ${t('district')}</label><select name="q" aria-label="${esc(t('district'))}"><option value="">${t('any')}</option>${(p.q && !DISTRICTS.includes(p.q) ? [p.q, ...DISTRICTS] : DISTRICTS).map(d => `<option value="${esc(d)}"${d === p.q ? ' selected' : ''}>${esc(d)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('type')}</label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
-    <button class="btn blue">${t('search')} →</button>
+    <div class="sbtns"><a href="#/post" class="btn red sb-post">+ ${t('post')}</a><button class="btn blue">${t('search')} →</button></div>
   </form>
   <div class="chipbox home" id="chipBox">${chipRow(p, deal)}</div>`;
 }
@@ -204,7 +204,7 @@ function chipRow(st, deal) {
   return `<div class="chips qrow">
     ${chip('beds', '1', t('bed1'))}${['2', '3'].map(n => chip('beds', n, t('bedN', { n }))).join('')}
     ${deal === 'sale' ? chip('foreign', '1', t('f_foreign')) : chip('furn', '1', t('furnished'))}
-    ${quick.map((a, i) => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i ? '' : ' q-x1'))).join('')}
+    ${quick.map((a, i) => chip('amen', a, a === 'edc' ? `<span class="mf-l">${t('am_edc')}</span><span class="mf-s">EDC</span>` : t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i < 3 ? ' q-x1' : ''))).join('')}
     ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
   <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}<span class="mf-l">${t('moreFilters')}</span><span class="mf-s">${t('filters')}</span>${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>

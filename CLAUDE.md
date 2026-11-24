@@ -61,7 +61,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   clamp(26px,3.7vw,46px)
   (owner, 2026-11-24; fonts.css .hero h1 em::after). Under the card: filter chips
   1+ bed · 2+ beds · 3+ beds · … · More filters – no bed icon, no Studio chip.
-- Posting a listing must always be visible straight away (header button, bottom menu, banner on the homepage).
+- Posting a listing must always be visible straight away (header button, bottom menu, banner on the homepage, and a white
+  "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   "Want to rent out faster?" banner → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
@@ -88,7 +89,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | list icon (no "Listings" word – owner, 2026-11-24: "vedd ki") | Map | Telegram logo
   (#notifyBtn, name in a bubble on hover) | "Newest ▾" select (no "Sort:" word); no separate tools row under the heading.
-  Phones: row 1 shows one more quick filter (first amenity, .q-x1, from 390px), "More filters" reads "Filters"; both rows
+  Phones: row 1 = 1+ bed · 2+ beds · 3+ beds · Furnished · EDC · Pool · Gym (first three amenities, .q-x1; owner, 2026-11-24), edge to edge, "More filters" reads "Filters"; both rows
   fit one line each from 360px.
 
 - STUDY PORTAL = THE DESIGN REFERENCE (owner, 2026-11-24: "az összes betűtípust, az összes megjelenést vedd ki a Study

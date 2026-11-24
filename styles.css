@@ -474,3 +474,30 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 @media (max-width:720px){.frow .vsw a,.frow .chip{gap:4px!important}}
 .frow .fsort select{field-sizing:content;min-width:0}
 @media (max-width:720px){.card:not([href="#/post"]) .cb{padding-left:15px!important;padding-right:15px!important}.yfoot{gap:6px}.yfoot .ymeta{gap:4px!important}}
+/* POST + SEARCH SIDE BY SIDE (owner, 2026-11-24: "a search gomb mellett legyen post listing, és mellette a search gomb"):
+   red "+ Post listing" then blue "Search →" at the end of the search card; phones/tablets: one row, two equal buttons. */
+.sbtns{display:flex;gap:8px;align-items:center}
+.sbtns .btn{white-space:nowrap}
+.sbtns .sb-post{background:#fff!important;color:#E00025!important;box-shadow:0 6px 18px rgba(15,23,42,.10),0 1px 4px rgba(15,23,42,.06)!important}
+.sbtns .sb-post:hover{background:#fff0f2!important}
+@media (max-width:900px){
+  .sbtns{grid-column:1/-1;display:grid;grid-template-columns:1fr 1fr}
+  .sbtns .btn{grid-column:auto!important;padding:13px 10px!important;width:100%}
+}
+/* Rooms | Apartment: the hidden separator span broke the "button+button" divider (owner, 2026-11-24: "a rooms és az
+   apartments között nincs elválasztócsík") */
+#dealTabs .dt-sep+button::before{content:"";position:absolute;left:0;top:28%;bottom:28%;width:1px;background:#D5DAE3}
+#dealTabs button.on+.dt-sep+button::before,#dealTabs .dt-sep+button.on::before{display:none}
+/* PHONE ROW 1 = 7 QUICK FILTERS (owner, 2026-11-24: "abban a sorban, ahol bed van, oda még a pool meg a gym… ki kell, hogy
+   férjen… a sor hosszabb lesz"): 1+ bed · 2+ beds · 3+ beds · Furnished · EDC · Pool · Gym – the row runs edge to edge of the
+   screen, "EDC electricity" reads "EDC", tighter padding; the same three amenities are not repeated in More filters. */
+@media (max-width:720px){
+  .chipbox .qrow{margin:0 -14px;justify-content:center}
+  .chipbox .qrow .chip{padding:6px 5px!important}
+  .more-panel .chips .mp-q:nth-child(-n+3){display:none!important}
+}
+@media (max-width:389px){
+  .chipbox .qrow .q-x1{display:inline-flex!important}
+  .chipbox .qrow .chip{padding:6px 3.5px!important;font-size:12.5px!important}
+  .more-panel .chips .mp-q:nth-child(-n+3){display:none!important}
+}

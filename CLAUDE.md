@@ -38,7 +38,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - SEARCH ROW (owner, 2026-11-24): Rent · Buy · Rooms | Apartment · Condo · Studio · Villa · House in one pill row (CATS in
   app.js; Condo = 8th item, owner 2026-11-24); the picked tab/category is RED. On phones the row, the chips and the project tabs
   WRAP centred – never sideways scrolling (owner: "nem lehet sor elcsúszva jobbra"). Search card on phones/tablets: City full
-  width, fields ~25% lower (styles.css last blocks);
+  width, fields ~5% lower, every label and value centred, select arrows inside with room after them (styles.css last blocks);
   a category opens the results at once (deal of the active tab; Studio = bedrooms 0). The results page (#/search) shows
   EXACTLY the homepage top – title, lead, the row, the search card and the chips – with the results under it (owner,
   2026-11-24: "pont ugyanolyan legyen és ha bármire kattintok ne tűnjön el"; hero() in app.js; active tab + category

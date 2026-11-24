@@ -1,6 +1,7 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import { T } from './i18n.js';
 import * as AG from './agents.js';
+import * as POP from './popup.js';
 
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';
@@ -614,7 +615,14 @@ const PAGES = {
   support: () => `<h1>${t('support')}</h1><p>${t('supportBody')}</p><p><a class="btn blue" href="mailto:${SUPPORT_EMAIL}">✉ ${SUPPORT_EMAIL}</a></p>`,
 };
 
+let skipNext = false;
 async function route() {
+  const p0 = (location.hash.slice(1).split('?')[0] || '/').split('/').filter(Boolean);
+  if (p0[0] === 'l' && p0[1]) {           // a listing = the popup over the page (owner, 2026-11-24)
+    if (!app.querySelector('.wrap')) await viewHome();
+    return POP.open(decodeURIComponent(p0[1]), false);
+  }
+  if (POP.isOpen()) POP.hide();
   clearMaps();
   document.title = 'YourHome.asia — ' + t('heroTitle').replace(/<[^>]+>/g, '');
   const path = (location.hash.slice(1).split('?')[0] || '/').replace(/\/+$/, '') || '/';
@@ -625,7 +633,7 @@ async function route() {
   try {
     if (!parts.length) await viewHome();
     else if (parts[0] === 'search') await viewSearch();
-    else if (parts[0] === 'l' && parts[1]) await viewListing(parts[1]);
+
     else if (parts[0] === 'post') await viewPost();
     else if (parts[0] === 'edit' && parts[1]) await viewPost(parts[1]);
     else if (parts[0] === 'account' || parts[0] === 'my') await viewAccount();
@@ -637,7 +645,9 @@ async function route() {
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
-window.addEventListener('hashchange', route);
+const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on); b.textContent = on ? '♥' : '♡'; }); return on; };
+POP.init({ sb, t, esc, money, priceSuffix, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
+window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });
 
 applyStatic();
 const { data: { session } } = await sb.auth.getSession();

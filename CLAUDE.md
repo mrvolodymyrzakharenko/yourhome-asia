@@ -64,6 +64,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   #/account?tab=settings&v=1, which scrolls to the Get verified form; it shows "⏳ requested" while pending and "✓ You are a
   verified advertiser" once verified.
 
+## Listing popup (owner, 2026-11-24: "ha ingatlanra kattintok ez jöjjön be" – the Study portal apartment popup)
+- A click on ANY listing card opens the popup over the page (popup.js + popup.css, port of the Study apartments.js popup):
+  photo gallery left (blurred backdrop, arrows, dots, date pill, swipe, arrow keys), details right that scroll (tags, title,
+  district + "exact address after contact", Bedrooms/Bathrooms/Area circles, Description, Amenities, agent links #agLinks,
+  Stay safe note, Contact section with #agBox, Telegram/WhatsApp/call and the message form → yh_inquiries), a fixed price bar
+  with Contact owner (scrolls to the contact section), round close button and the share column (share, Telegram, Facebook,
+  WhatsApp, copy link, save). #/l/<id> = the popup (pushState; Back/Escape/× close it and the page below stays as it was);
+  a shared link opens it over the homepage. The old full listing page (viewListing) is no longer routed.
+
 ## Rules for listings
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.

@@ -565,3 +565,17 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .yprice{left:auto!important;right:18px;text-align:right}
   .ycount{display:none!important}
 }
+/* Phone card rows 1–2 centred (owner, 2026-11-24 20:03: "legalább középre rendezve") */
+@media (max-width:720px){
+  .yname{text-align:center}
+  .yfoot{justify-content:center!important}
+  .yfoot .ymeta{justify-content:center!important;max-width:100%}
+}
+/* Four colours on the phone card (owner, 2026-11-24 20:03: "egyik kékessel, másik pirossal, harmadik szürkével, negyedik
+   feketével"): "Apartment for rent" royal blue · "in BKK1" red · "Phnom Penh," grey · street address near-black. */
+@media (max-width:720px){
+  .yname .yn1{color:#032EA1}
+  .yname .yn2{color:#E00025}
+  .ymeta .ya1{color:#94a3b8}
+  .ymeta .ya2{color:#0f172a}
+}

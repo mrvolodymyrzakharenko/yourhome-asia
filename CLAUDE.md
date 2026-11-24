@@ -85,7 +85,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   PHONE CARD = VIETRENT 3 ROWS (owner, 2026-11-24 20:00, replaces the 6-fact version; vietrent screenshot): NO date pill at the
   top of any card – on phones the date is written on the photo bottom-left, dots in the middle, price bottom-right (.ydate,
   no camera count; owner 20:01); 1) bold "Apartment for rent in BKK1" / "… for sale in …" (17px/700, nameRent/nameSale + inPlace), 2) pin + "Phnom Penh, <street
-  address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02),
+  address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02); rows 1–2 CENTRED, four colours – type+deal royal blue, "in <district>" red, city grey, street address near-black (owner 20:03), one line each with … at the end; the demo
+  listings have sample street addresses,
   3) hairline + bed · bath · m² with icons in three centred columns with dividers. Phone corners 36px + soft deep shadow
   (measured from the screenshot); PC 24px.
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…

@@ -32,7 +32,7 @@ input:focus,select:focus,textarea:focus{outline-color:#ffc2cb}
 .ph,.gal .main{background:linear-gradient(135deg,#ffe4e8,#fff6f7)}
 a.card[href="#/post"]{border-color:#ffc2cb!important;background:#fffafa!important}
 a.card[href="#/post"] .ph{background:#fff0f2!important}
-.hero h1 em{text-decoration-color:#032EA1}
+.hero h1 em{text-decoration-color:#E00025}
 .btn.blue{box-shadow:0 6px 16px rgba(224,0,37,.22)}
 /* Logo (owner, 2026-11-24): one line "YourHome Cambodia" in a portal-style font, the house in a white square, house in 3 colours */
 .logo{gap:10px}

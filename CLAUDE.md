@@ -40,7 +40,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   2026-11-24: "pont ugyanolyan legyen és ha bármire kattintok ne tűnjön el"; hero() in app.js; active tab + category
   highlighted, a second click on a category clears it).
   Hero "Cambodia": bold (800), red, with EXACTLY the Georgia site underline (hero-x.mjs path M2 7 C 30 2, 70 2, 98 6,
-  stroke 3, left -2%, bottom -.14em, width 104%, height .22em) in royal blue #032EA1; title size = Georgia one-line hx-one
+  left -2%, width 104%) but RED #E00025 and thicker: stroke 5.5, bottom -.2em, height .3em (owner, 2026-11-24: "kék vonal fos – legyen piros és vastagabb"); title size = Georgia one-line hx-one
   clamp(26px,3.7vw,46px)
   (owner, 2026-11-24; fonts.css .hero h1 em::after). Under the card: filter chips
   1+ bed · 2+ beds · 3+ beds · … · More filters – no bed icon, no Studio chip.

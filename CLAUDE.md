@@ -42,7 +42,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
   classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
 - SEARCH ROW (owner, 2026-11-24): Rent · Buy · Rooms | Apartment · Condo · Studio · Villa · House in one pill row (CATS in
-  app.js; Condo = 8th item, owner 2026-11-24); the picked tab/category is RED. On phones the row, the chips and the project tabs
+  app.js; Condo = 8th item, owner 2026-11-24). TEXT WITH DIVIDERS like the Study search-type tabs (owner, 2026-11-24 screenshot:
+  "ne legyen begombozva"): no box, grey text, thin 1px dividers, the picked one a light pink patch with RED 600 text; phones
+  4 per row (styles.css "CATEGORY ROW = TEXT WITH DIVIDERS"). On phones the row, the chips and the project tabs
   WRAP centred – never sideways scrolling (owner: "nem lehet sor elcsúszva jobbra"). Search card on phones/tablets: City | District
   side by side (District = a real list: Any + DISTRICTS; every search-card select has a small FILLED triangle arrow, no outline chevron), Type | Budget under them, fields ~5% lower, every label and value centred, select arrows inside with room after them (styles.css last blocks);
   LIST / MAP SWITCH (owner, 2026-11-24: "nagyon fontos"): a white pill under the search card on the homepage and the results

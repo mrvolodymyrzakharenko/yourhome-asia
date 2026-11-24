@@ -315,3 +315,22 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
    the search card has a small FILLED triangle (no outline chevron), every screen. District is a real list (Any + districts). */
 .sbox select{-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:26px;
   background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0h10L5 6z' fill='%230f172a'/%3E%3C/svg%3E") no-repeat right 6px center/10px 6px}
+/* CATEGORY ROW = TEXT WITH DIVIDERS (owner, 2026-11-24, Study portal screenshot: "ne legyen begombozva… egy ilyen elválasztó…
+   amire rákattint, az piros marad"): Rent · Buy · Rooms · Apartment · Condo · Studio · Villa · House (and the project tabs) have
+   no box and no button look – grey text, a thin 1px divider (~70% of the text height) between neighbours; the picked one is a
+   light pink patch with red 600 text and the soft card shadow, the dividers beside it hidden. Phones: 4 per row, dividers only
+   inside a row. Replaces the white pill box and the solid red active pill. */
+#dealTabs.deal-tabs,.deal-tabs.prj-tabs{background:none!important;box-shadow:none!important;border-radius:0!important;padding:0!important;gap:0!important;align-items:center}
+#dealTabs .dt-sep{display:none}
+#dealTabs button,.prj-tabs a{position:relative;background:none!important;box-shadow:none!important;border:0;color:#5B6478!important;font-weight:400!important;padding:9px 16px!important;border-radius:12px!important}
+#dealTabs button+button::before,.prj-tabs a+a::before{content:"";position:absolute;left:0;top:28%;bottom:28%;width:1px;background:#D5DAE3}
+#dealTabs button.on,.prj-tabs a.on{background:#FDE4E7!important;color:#E00025!important;font-weight:600!important;box-shadow:0 6px 18px rgba(15,23,42,.08),0 1px 4px rgba(15,23,42,.05)!important}
+#dealTabs button.on::before,#dealTabs button.on+button::before,.prj-tabs a.on::before,.prj-tabs a.on+a::before{display:none}
+#dealTabs button:not(.on):hover,.prj-tabs a:not(.on):hover{color:#E00025!important}
+@media (max-width:720px){
+  #dealTabs.deal-tabs{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr));row-gap:6px!important;width:100%}
+  #dealTabs button{padding:9px 4px!important;white-space:nowrap}
+  #dealTabs button:nth-of-type(4n+1)::before{display:none}
+  .deal-tabs.prj-tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:6px!important;width:100%}
+  .prj-tabs a:nth-of-type(odd)::before{display:none}
+}

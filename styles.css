@@ -879,3 +879,13 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .sbox .f.addr label{display:block;white-space:nowrap}
   .sbox .f.addr label .mf-l{display:inline!important}
 }
+/* PC search card fields (owner, 2026-11-24 17:25 Chisinau: "kiírások középre… túl nagyok a helyek… DISTRICT TÚL NAGY – legyen
+   hely, lélegezzen, de ne ennyire"): four EQUAL fields, label and value centred with the small triangle right after the value,
+   tighter side padding. */
+@media (min-width:901px){
+  .sbox{grid-template-columns:repeat(4,minmax(0,1fr)) auto!important;column-gap:0!important}
+  .sbox .f{padding-left:10px!important;padding-right:10px!important;text-align:center}
+  .sbox label{display:block;text-align:center}
+  .sbox select{width:auto!important;max-width:100%;display:inline-block;text-align:center;text-align-last:center;padding:2px 20px 2px 4px!important;background-position:right 2px center!important}
+  .sbox .sbtns{padding-left:8px}
+}

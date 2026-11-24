@@ -950,3 +950,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .dtile.dt-red b,.dtile.dt-red small{color:#fff}
 @media (max-width:900px){.dtiles{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.dtile{padding:14px 13px;border-radius:16px}}
 @media (max-width:720px){.dash{margin-top:16px!important}.dtabs{margin:2px -6px 14px}.dtabs button{padding:7px 9px;font-size:12.5px}}
+/* Dashboard header buttons spread over the full width, equal gaps, small side margins (owner, 2026-11-24 19:51) */
+.dash .dhead>div:last-child{display:flex!important;flex-wrap:nowrap!important;width:100%;gap:8px!important;justify-content:space-between}
+.dash .dhead>div:last-child>*{flex:1 1 0;justify-content:center;text-align:center;white-space:nowrap}
+@media (max-width:720px){.dash.wrap{padding-left:12px!important;padding-right:12px!important}}

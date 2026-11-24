@@ -846,8 +846,19 @@ function markLineStarts() {
 function fitCards() {
   markLineStarts();
   if (innerWidth > 720) { document.querySelectorAll('.yname,.ymeta .yaddr').forEach(e => e.style.removeProperty('font-size')); return; }
-  document.querySelectorAll('.card .yname').forEach(e => { fitLine(e, 15, 26); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 2) + 'px', 'important'); });  // 2px under the full fit (owner, 20:16 + 20:56)
-  document.querySelectorAll('.card .ymeta .yaddr').forEach(e => { fitLine(e, 11, 17); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 2) + 'px', 'important'); });  // address 2px under the fit (owner, 20:56)
+  // ONE size on every card (owner, 2026-11-24 19:55: "egyfajta méretűek legyenek, minden kiírás mint a BKK1 nagyságú"): the size
+  // that makes "Apartment for rent in BKK1" fill the card is used for every name (a longer name wraps to a 2nd line), and the
+  // size that makes "Phnom Penh, No. 24, Street 278" fill it for every address (longer ones end with …). Both 2px under the fit.
+  const refSize = (sel, text, min, max, useParent) => {
+    const e = document.querySelector(sel); if (!e) return 0;
+    const w = useParent ? e.parentNode.clientWidth - 26 : e.clientWidth; if (!w || w < 0) return 0;   // the address row is centred, so its free width = the row minus the pin
+    const c = e.cloneNode(false); c.textContent = text; c.style.cssText += ';position:absolute;visibility:hidden;white-space:nowrap;display:block;width:' + w + 'px';
+    e.parentNode.appendChild(c); fitLine(c, min, max); const v = parseFloat(c.style.fontSize); c.remove(); return v;
+  };
+  const nSize = refSize('.card .yname', t('nameRent', { x: t('t_apartment') }) + ' ' + t('inPlace', { d: 'BKK1' }), 15, 26);
+  const aSize = refSize('.card .ymeta .yaddr', t('cityPP') + ', No. 24, Street 278', 11, 17, true);
+  if (nSize) document.querySelectorAll('.card .yname').forEach(e => { e.style.setProperty('font-size', (nSize - 2) + 'px', 'important'); e.style.setProperty('white-space', 'normal', 'important'); });
+  if (aSize) document.querySelectorAll('.card .ymeta .yaddr').forEach(e => e.style.setProperty('font-size', (aSize - 2) + 'px', 'important'));
 }
 const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };
 new MutationObserver(queueFit).observe(document.getElementById('app'), { childList: true, subtree: true });

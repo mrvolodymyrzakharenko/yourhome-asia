@@ -694,3 +694,53 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .card:not([href="#/post"]) .specs-row{color:#E00025!important}
   .card:nth-child(even):not([href="#/post"]) .specs-row{color:#032EA1!important}
 }
+/* FOOTER, RICHER (owner, 2026-11-24 20:18: "a láblécet jobban dolgozd ki… about us… study stílusra"): five columns on PC –
+   brand + contacts + "Follow us" round brand icons (Study portal look; "coming soon" bubble until a link exists) · Find a home ·
+   For advertisers · Company (About us, How it works, Safety tips, FAQ, Contact us, Terms, Privacy) · Chat with us. */
+.yft-g{grid-template-columns:1.4fr 1fr 1fr 1fr 1.25fr!important;gap:30px!important}
+.yft-soc{margin-top:20px}
+.yft-soc-t{display:block;margin-bottom:10px;font-size:13px!important;font-weight:600!important;color:var(--ink);letter-spacing:-.025em}
+.yft-soc-r{display:flex;flex-wrap:wrap;gap:10px}
+.yft-s{position:relative;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;box-shadow:0 4px 12px rgba(15,23,42,.14);transition:transform .25s,box-shadow .25s;cursor:default}
+.yft-s svg{width:19px;height:19px}
+.yft-s:hover{transform:translateY(-2px);box-shadow:0 8px 18px rgba(15,23,42,.2)}
+.yft-s-fb{background:#1877F2}.yft-s-tg{background:linear-gradient(135deg,#37AEE2,#1E96C8)}
+.yft-s-ig{background:radial-gradient(circle at 30% 107%,#FDF497 0%,#FD5949 45%,#D6249F 60%,#285AEB 90%)}
+.yft-s-tt{background:#111;box-shadow:-2px -1px 0 #25F4EE inset,2px 1px 0 #FE2C55 inset,0 4px 12px rgba(15,23,42,.14)}
+.yft-s-yt{background:#FF0000}
+.yft-s:hover .yft-tip,.yft-s.tip-on .yft-tip{opacity:1;transform:translate(-50%,0)}
+.yft-soc-r .yft-s:first-child .yft-tip{left:0;transform:translate(0,4px)}
+.yft-soc-r .yft-s:first-child:hover .yft-tip,.yft-soc-r .yft-s:first-child.tip-on .yft-tip{transform:translate(0,0)}
+.yft-soc-r .yft-s:first-child .yft-tip::after{left:19px}
+@media (max-width:1100px){.yft-g{grid-template-columns:repeat(3,minmax(0,1fr))!important}.yft-a{grid-column:1/-1}}
+@media (max-width:900px){.yft-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}.yft-chat{grid-column:1/-1}}
+@media (max-width:360px){.yft-g{grid-template-columns:minmax(0,1fr)!important}}
+/* ABOUT / HOW IT WORKS / SAFETY / FAQ pages (Study portal look: kicker, one-line H1 with a red word, lead, white cards,
+   red CTA band) */
+.page:has(.ab){max-width:980px;background:none;box-shadow:none;padding:8px 0 0}
+.ab-k{margin:0 0 6px;color:#E00025;font-size:11px!important;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.ab h1{margin:0 0 12px;font-size:clamp(24px,3.2vw,38px)!important;font-weight:800!important;letter-spacing:-.035em;line-height:1.15;color:#0b1d51}
+.ab h1 em{font-style:normal;color:#E00025}
+.ab-lead{max-width:760px;color:#475569;line-height:1.7}
+.ab h2{margin:30px 0 8px;font-size:13px!important;font-weight:600!important;color:#0b1d51;letter-spacing:-.025em}
+.ab p{line-height:1.7;color:#475569}
+.ab-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:24px 0 6px}
+.ab-c{background:#fff;border-radius:20px;padding:18px;box-shadow:0 10px 30px -6px rgba(15,23,42,.12),0 4px 10px -4px rgba(15,23,42,.06)}
+.ab-c b{display:block;margin-bottom:6px;color:#032EA1;font-size:13px;font-weight:600;letter-spacing:-.025em}
+.ab-c p{margin:0;font-size:13px}
+.ab-c:nth-child(even) b{color:#E00025}
+.ab-list{margin:0;padding-left:18px;color:#475569;line-height:1.7}.ab-list li{margin:6px 0}
+.ab-list b{color:#0b1d51;font-weight:600}
+.ab-steps{list-style:none;counter-reset:st;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.ab-steps li{counter-increment:st;background:#fff;border-radius:20px;padding:18px;box-shadow:0 10px 30px -6px rgba(15,23,42,.12),0 4px 10px -4px rgba(15,23,42,.06)}
+.ab-steps li::before{content:counter(st);display:grid;place-items:center;width:30px;height:30px;margin-bottom:10px;border-radius:50%;background:#FDE4E7;color:#E00025;font-weight:600}
+.ab-steps b{color:#0b1d51;font-weight:600}.ab-steps p{margin:4px 0 0}
+.ab-q{background:#fff;border-radius:16px;padding:14px 18px;margin:10px 0;box-shadow:0 6px 18px rgba(15,23,42,.08)}
+.ab-q summary{cursor:pointer;font-weight:600;color:#0b1d51;letter-spacing:-.025em}
+.ab-q p{margin:8px 0 0}
+.ab-cta{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:34px 0 10px;padding:22px 24px;border-radius:24px;background:linear-gradient(135deg,#032EA1,#021f6e);color:#fff}
+.ab-cta b{display:block;font-weight:600;letter-spacing:-.025em}.ab-cta span{display:block;margin-top:4px;opacity:.85}
+.ab-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;min-width:min(100%,300px)}
+.ab-btns .btn.ghost{background:#fff!important;color:#032EA1!important;border:0}
+@media (max-width:900px){.ab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ab-steps{grid-template-columns:1fr}}
+@media (max-width:480px){.ab-grid{grid-template-columns:1fr}.page:has(.ab){padding:0 2px}}

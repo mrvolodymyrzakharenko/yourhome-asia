@@ -80,7 +80,7 @@ function applyStatic() {
 document.getElementById('lang').addEventListener('change', e => { lang = e.target.value; store.set('yh_lang', lang); applyStatic(); route(); });
 // Footer / Support chat buttons: a channel without an address yet (Facebook) shows a "coming soon" bubble instead of opening
 document.addEventListener('click', e => {
-  const a = e.target.closest('.yft-ch[data-soon]'); if (!a) return;
+  const a = e.target.closest('.yft-ch[data-soon],.yft-s[data-soon]'); if (!a) return;
   e.preventDefault(); a.classList.add('tip-on'); clearTimeout(a._t); a._t = setTimeout(() => a.classList.remove('tip-on'), 2200);
 });
 
@@ -655,6 +655,41 @@ const PAGES = {
   terms: () => `<h1>${t('terms')}</h1><p>YourHome.asia is a listing platform that connects people looking for housing in Cambodia with owners and agents. Listings are published by their advertisers, who are responsible for their accuracy and legality. YourHome.asia is not a party to any rental or sale agreement.</p><p>Posting a standard listing is free. Advertisers must only post real properties they are entitled to offer, with honest prices and photos. We may hide or remove listings that are misleading, duplicated, spam or illegal, and may suspend accounts that break these rules.</p><p>Paid placements (TOP listings) are shown with a TOP label. Users should check every property in person and never send deposits before viewing it.</p><p>Questions: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>`,
   privacy: () => `<h1>${t('privacy')}</h1><p>We store the information you give us: your account email, your listings and the contact details you choose to publish, and messages sent through listing contact forms (delivered to the advertiser).</p><p>To show advertisers how their listings perform, we record anonymous visit statistics: the listing viewed, time, traffic source, device type and site language, linked to a random browser ID — not your name. Saved listings are kept only in your browser.</p><p>Data is stored with Supabase and the site is hosted on Vercel. We do not sell personal data. To delete your account or data, write to <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>`,
   support: () => `<h1>${t('support')}</h1><p>${t('supportBody')}</p><h3>${t('ft_chatT')}</h3><p>${t('ft_chatS')}</p><div class="yft-chs sup-chs">${document.querySelector('footer .yft-chs')?.innerHTML || ''}</div><p><a class="btn blue" href="tel:+855963068590">📞 +855 96 306 8590</a> <a class="btn ghost" href="mailto:${SUPPORT_EMAIL}">✉ ${SUPPORT_EMAIL}</a></p>`,
+  // ABOUT US / HOW IT WORKS / SAFETY / FAQ (owner, 2026-11-24: "about us… profi portáltervezők, profi ingatlanosok…
+  // a study stílusra") – English text; no invented years, numbers or awards.
+  about: () => `<div class="ab">
+    <p class="ab-k">About us</p>
+    <h1>Every home in Cambodia, <em>one search away</em></h1>
+    <p class="ab-lead">YourHome.asia is built by a team of experienced portal designers and real-estate professionals. We have built and run online portals for students, workers and property owners abroad, and we know the Cambodian rental market from the inside – so we made the portal we always wanted to use.</p>
+    <div class="ab-grid">
+      <div class="ab-c"><b>Portal builders</b><p>Our designers and developers have launched multilingual portals with listings, maps, dashboards and Telegram alerts. Fast pages, clear filters and a phone-first design are our standard.</p></div>
+      <div class="ab-c"><b>Real-estate professionals</b><p>Our property people work with landlords, agents and developers every day. They know what renters ask first – price, location, the real photos – and what owners need to rent out quickly.</p></div>
+      <div class="ab-c"><b>Made for Cambodia</b><p>Phnom Penh first, then the rest of the country. English, Khmer, Chinese, French and Thai, prices in US dollars, districts people actually search for.</p></div>
+      <div class="ab-c"><b>Free to post</b><p>Owners and agents list for free and go live at once. Paid TOP placement is optional and always marked, so the results stay honest.</p></div>
+    </div>
+    <h2>Our mission</h2>
+    <p>Finding a home should be simple and safe. We bring every rental, room and property for sale into one clean search, with real photos, a map view and direct contact with the owner or agent – no middlemen who hide the details.</p>
+    <h2>What we do</h2>
+    <ul class="ab-list"><li><b>For renters and buyers:</b> search by city, district, type, budget and amenities, save favourites and get new listings on Telegram.</li><li><b>For owners and agents:</b> post in two minutes, manage listings in a clear dashboard and see who viewed what and when.</li><li><b>For developers and partners:</b> present new projects, reach foreign and local buyers and work with us as a partner.</li></ul>
+    <h2>Trust and safety</h2>
+    <p>Advertisers can ask to be verified by our team with a short call – verified accounts get a ✓ badge. Visitors can report a listing at any time, and we hide listings that look misleading until we check them.</p>
+    <div class="ab-cta"><div><b>Have a question or want to work with us?</b><span>Write to us on Telegram, WhatsApp or Viber: +855 96 306 8590</span></div><div class="ab-btns"><a class="btn red" href="#/post">+ Post listing</a><a class="btn ghost" href="#/support">Contact us</a></div></div>
+  </div>`,
+  how: () => `<div class="ab"><p class="ab-k">How it works</p><h1>Find, contact, move in – <em>in three steps</em></h1>
+    <ol class="ab-steps"><li><b>Search</b><p>Choose Rent, Buy or Rooms, then the district, type and budget. Switch between the list and the map.</p></li><li><b>Contact</b><p>Open a listing and call, write on Telegram or WhatsApp, or send a message from the page – straight to the owner or agent.</p></li><li><b>Visit and decide</b><p>See the property in person, meet the owner and agree on the terms directly with them.</p></li></ol>
+    <h2>For owners and agents</h2><ol class="ab-steps"><li><b>Post for free</b><p>Add photos, price and location – your listing goes live at once.</p></li><li><b>Get verified</b><p>Ask for the ✓ badge in your account; our team calls you briefly – no ID upload.</p></li><li><b>Track results</b><p>Your dashboard shows views, contact clicks and messages for every listing.</p></li></ol>
+    <div class="ab-cta"><div><b>Ready to start?</b><span>Posting is free.</span></div><div class="ab-btns"><a class="btn red" href="#/post">+ Post listing</a><a class="btn ghost" href="#/search">Search homes</a></div></div></div>`,
+  safety: () => `<div class="ab"><p class="ab-k">Safety tips</p><h1>Rent and buy <em>safely</em></h1>
+    <ul class="ab-list"><li><b>Never pay before a viewing.</b> Do not send a deposit or rent before you have seen the property and met the owner or agent.</li><li><b>Meet in person.</b> Visit the address, check that keys, rooms and photos match the listing.</li><li><b>Get it in writing.</b> Ask for a written rental agreement with the price, deposit, utilities and the rental term.</li><li><b>Check who you deal with.</b> Prefer advertisers with the ✓ Verified badge and ask for the owner's or agent's ID or company details.</li><li><b>Report anything strange.</b> If a listing looks fake or the price is far too low, tell us – we check it and take it down if needed.</li></ul>
+    <div class="ab-cta"><div><b>Something wrong with a listing?</b><span>Write to us: +855 96 306 8590 (Telegram, WhatsApp, Viber)</span></div><div class="ab-btns"><a class="btn red" href="#/support">Contact us</a></div></div></div>`,
+  faq: () => `<div class="ab"><p class="ab-k">FAQ</p><h1>Questions <em>and answers</em></h1>
+    <details class="ab-q" open><summary>Is posting a listing free?</summary><p>Yes. Owners and agents post for free and the listing goes live at once. Paid TOP placement is optional and always marked TOP.</p></details>
+    <details class="ab-q"><summary>How do I contact an owner or agent?</summary><p>Open the listing: you can call, write on Telegram or WhatsApp, or send a message from the page.</p></details>
+    <details class="ab-q"><summary>What does the ✓ Verified badge mean?</summary><p>Our team talked to the advertiser in a short phone or video call. You can ask for it in your account – no ID upload is needed.</p></details>
+    <details class="ab-q"><summary>Can I get new listings on Telegram?</summary><p>Yes. On the results page tap Subscribe (the Telegram logo) and we send you new listings that match your search.</p></details>
+    <details class="ab-q"><summary>Which cities do you cover?</summary><p>Phnom Penh first; other Cambodian cities follow, and every listing already carries its city.</p></details>
+    <details class="ab-q"><summary>How do I report a listing?</summary><p>Write to us on Telegram, WhatsApp or Viber (+855 96 306 8590) or use the Support page – we check it quickly.</p></details>
+    <div class="ab-cta"><div><b>Still have a question?</b><span>We usually reply within an hour.</span></div><div class="ab-btns"><a class="btn red" href="#/support">Contact us</a></div></div></div>`
 };
 
 let skipNext = false;

@@ -28,6 +28,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Support + safety line. The same number is the owner's Telegram, WhatsApp and Viber. Facebook shows "coming soon" until
   its page link is filled in (href + remove data-soon). The Support page reuses the chat pills. Texts: FT block in i18n.js;
   styles "FOOTER" in styles.css, sizes at the end of fonts.css; phones: link columns two side by side.
+  RICHER (owner, 2026-11-24 20:18: "about us… profi portáltervezők, profi ingatlanosok… study stílusra"): + "Follow us" round
+  brand icons (Facebook, Telegram channel, Instagram, TikTok, YouTube – "coming soon" bubble until a link is filled in) and a
+  Company column: About us (#/about), How it works (#/how), Safety tips (#/safety), FAQ (#/faq), Contact us, Terms, Privacy.
+  Those pages are PAGES in app.js (English, no invented numbers), styles .ab-* (kicker, H1 with a red word, cards, blue CTA band).
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
   icons 21px; six equal columns Home · Map · Saved · Post (red plus, red label – always visible) · Experts · Account; the round

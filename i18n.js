@@ -221,3 +221,11 @@ for (const k of Object.keys(IN)) Object.assign(T[k], IN[k]);
 /* short "Type" label for the one-row phone search card (owner, 2026-11-24 20:08) */
 const TS = { en:{typeShort:'Type'}, km:{typeShort:'ប្រភេទ'}, zh:{typeShort:'类型'}, fr:{typeShort:'Type'}, th:{typeShort:'ประเภท'} };
 for (const k of Object.keys(TS)) Object.assign(T[k], TS[k]);
+/* FOOTER COMPANY COLUMN + FOLLOW US (owner, 2026-11-24 20:18) */
+const CO = {
+en:{ft_co:'Company',ft_aboutUs:'About us',ft_how:'How it works',ft_safety:'Safety tips',ft_faq:'FAQ',ft_contact:'Contact us',ft_follow:'Follow us'},
+km:{ft_co:'ក្រុមហ៊ុន',ft_aboutUs:'អំពីយើង',ft_how:'របៀបប្រើប្រាស់',ft_safety:'គន្លឹះសុវត្ថិភាព',ft_faq:'សំណួរញឹកញាប់',ft_contact:'ទាក់ទងមកយើង',ft_follow:'តាមដានយើង'},
+zh:{ft_co:'公司',ft_aboutUs:'关于我们',ft_how:'使用方法',ft_safety:'安全提示',ft_faq:'常见问题',ft_contact:'联系我们',ft_follow:'关注我们'},
+fr:{ft_co:'Société',ft_aboutUs:'À propos',ft_how:'Comment ça marche',ft_safety:'Conseils de sécurité',ft_faq:'FAQ',ft_contact:'Nous contacter',ft_follow:'Suivez-nous'},
+th:{ft_co:'บริษัท',ft_aboutUs:'เกี่ยวกับเรา',ft_how:'วิธีใช้งาน',ft_safety:'เคล็ดลับความปลอดภัย',ft_faq:'คำถามที่พบบ่อย',ft_contact:'ติดต่อเรา',ft_follow:'ติดตามเรา'} };
+for (const k of Object.keys(CO)) Object.assign(T[k], CO[k]);

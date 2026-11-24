@@ -980,3 +980,13 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .more-panel .chips.mp-am{margin-top:8px!important}
 /* Hero line under the title: ONE line, shorter text (owner, 2026-11-24 20:29) */
 .hero > p{white-space:nowrap!important;overflow:hidden;text-overflow:clip}
+/* French: the long "Appartement" swaps places with "Villa" – row 2 reads Maison · Condo · Studio · Appartement · Villa (owner, 2026-11-24 20:45) */
+@media (max-width:720px){
+  html[lang=fr] #dealTabs .dt-cat[data-cat=villa]{order:4}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=apartment]:not(.on)::before{display:block!important}
+}
+/* Phones: no divider lines in the Rent … / House … rows – the even columns are enough (owner, 2026-11-24 20:45) */
+@media (max-width:720px){
+  #dealTabs .dt-deal::before,#dealTabs .dt-cat::before,#dealTabs .dt-deal::after,#dealTabs .dt-cat::after,
+  html[lang] #dealTabs .dt-cat[data-cat]:not(.on)::before{display:none!important}
+}

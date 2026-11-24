@@ -209,6 +209,18 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .bnav .bp{width:26px;height:22px;border-radius:7px;background:var(--red);color:#fff;display:grid;place-items:center;box-shadow:0 4px 10px rgba(224,0,37,.28)}
 .bnav .bp svg{width:14px;height:14px;stroke-width:3}
 .bnav a.bnav-post{color:var(--red)}
+.bnav a.bnav-tg svg{fill:#229ED9;stroke:none}
+.bnav a.bnav-tg[aria-expanded="true"]{color:#229ED9}
+/* Telegram channel card (bottom menu Telegram button + footer icon) */
+.tgch{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translate(-50%,10px);z-index:2600;width:min(300px,calc(100% - 32px));background:#fff;border-radius:16px;padding:16px 16px 14px;box-shadow:0 0 18px rgba(15,23,42,.10),0 14px 35px rgba(15,23,42,.14);display:flex;flex-direction:column;gap:8px;opacity:0;transition:opacity .25s,transform .25s}
+.tgch.on{opacity:1;transform:translate(-50%,0)}
+.tgch-h{display:flex;align-items:center;gap:9px;padding-right:22px}.tgch-h b{font-size:14px;font-weight:700;line-height:1.3}
+.tgch-ic{width:32px;height:32px;flex:none;border-radius:50%;background:#229ED9;display:grid;place-items:center}.tgch-ic svg{width:17px;height:17px;fill:#fff}
+.tgch p{margin:0;font-size:13px;color:var(--muted);line-height:1.45}
+.tgch-go{display:flex;align-items:center;justify-content:center;height:40px;border-radius:12px;background:#229ED9;color:#fff;text-decoration:none;font-size:14px;font-weight:600;box-shadow:0 6px 18px rgba(15,23,42,.10)}
+.tgch-go:hover{background:#1C8FC4}
+.tgch-n{font-size:12px;color:#8A93A6;text-align:center}
+.tgch-x{position:absolute;top:10px;right:10px;width:26px;height:26px;border:0;border-radius:50%;background:#F2F4F8;color:#5B6478;font-size:17px;line-height:1;cursor:pointer;padding:0}
 /* Homepage category blocks (owner, 2026-11-24: "minden kategória legyen egységes – nincs két nagy kép, sem egy"): every block
    is the same grid – 4 equal cards per row on PC/tablet, 2 on phones, never stretched, no sideways scrolling – then a button */
 .row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}

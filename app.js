@@ -80,6 +80,43 @@ function applyStatic() {
   document.getElementById('year').textContent = new Date().getFullYear();
 }
 document.getElementById('lang').addEventListener('change', e => { lang = e.target.value; store.set('yh_lang', lang); applyStatic(); route(); });
+// TELEGRAM CHANNEL (owner, 2026-11-24: "kellene egy telegram gomb – amivel fel tud iratkozni a yourhome.asia csatornára"):
+// the bottom menu's first button and the footer Telegram icon ([data-tgch]) open a small card "Join our Telegram channel"
+// + "Join on Telegram". TG_CHANNEL = the channel's public username without @ – until it is filled in, the card says
+// "coming soon" and its button is hidden. Once set, the card also opens by itself once per visitor (3 s after load, 7 s).
+const TG_CHANNEL = '';
+function tgCard() {
+  let c = document.getElementById('tgch');
+  if (c) return c;
+  c = document.createElement('div'); c.id = 'tgch'; c.className = 'tgch'; c.setAttribute('role', 'dialog'); c.hidden = true;
+  document.body.appendChild(c);
+  return c;
+}
+function tgCardFill(c) {
+  const url = TG_CHANNEL ? 'https://t.me/' + TG_CHANNEL : '';
+  c.innerHTML = `<button type="button" class="tgch-x" aria-label="${esc(t('close'))}">×</button>
+    <div class="tgch-h"><span class="tgch-ic"><svg viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.4 0 1.7l4.7 1.5 1.8 5.6c.2.6.9.8 1.4.4l2.6-2.1 5 3.7c.7.5 1.6.1 1.8-.7l3.1-14.9c.2-1-.8-1.8-1.8-1.4z"/></svg></span><b>${t('tgchTitle')}</b></div>
+    <p>${t('tgchLine')}</p>
+    ${url ? `<a class="tgch-go" href="${url}" target="_blank" rel="noopener">${t('tgchJoin')}</a><span class="tgch-n">@${esc(TG_CHANNEL)}</span>` : `<span class="tgch-n">${t('tgchSoon')}</span>`}`;
+  c.setAttribute('aria-label', t('tgchTitle'));
+}
+function tgCardOpen(auto) {
+  const c = tgCard(); tgCardFill(c); c.hidden = false;
+  requestAnimationFrame(() => c.classList.add('on'));
+  clearTimeout(c._t); if (auto) c._t = setTimeout(tgCardClose, 7000);
+}
+function tgCardClose() { const c = document.getElementById('tgch'); if (!c || c.hidden) return; c.classList.remove('on'); setTimeout(() => { c.hidden = true; }, 250); }
+document.addEventListener('click', e => {
+  const b = e.target.closest('[data-tgch]');
+  if (b) { e.preventDefault(); const c = document.getElementById('tgch'); c && !c.hidden ? tgCardClose() : tgCardOpen(); return; }
+  const c = document.getElementById('tgch');
+  if (c && !c.hidden && (e.target.closest('.tgch-x') || !c.contains(e.target))) tgCardClose();
+});
+if (TG_CHANNEL) {
+  document.querySelectorAll('.yft-s-tg').forEach(a => { a.setAttribute('aria-label', 'Telegram channel'); a.querySelector('.yft-tip')?.remove(); });
+  try { if (!localStorage.getItem('yh_tgch')) { localStorage.setItem('yh_tgch', '1'); setTimeout(() => tgCardOpen(true), 3000); } } catch (_) {}
+}
+
 // Footer / Support chat buttons: a channel without an address yet (Facebook) shows a "coming soon" bubble instead of opening
 document.addEventListener('click', e => {
   const a = e.target.closest('.yft-ch[data-soon],.yft-s[data-soon]'); if (!a) return;

@@ -34,7 +34,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Those pages are PAGES in app.js (English, no invented numbers), styles .ab-* (kicker, H1 with a red word, cards, blue CTA band).
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
-  icons 21px; six equal columns Home · Map · Saved · Post (red plus, red label – always visible) · Experts · Account; the round
+  icons 21px; six equal columns Telegram · Home · Saved · Post (red plus, red label – always visible) · Map · Account
+  (owner, 2026-11-24 17:37: "kellene egy telegram gomb – amivel fel tud iratkozni a yourhome.asia csatornára" – Telegram replaced
+  Experts, which stays in the menu/footer). Telegram (and the footer Telegram icon, [data-tgch]) opens the small card "Join our
+  Telegram channel" + "Join on Telegram" (app.js TG_CHANNEL = the channel's username; empty = "coming soon"; once set, the card
+  also opens by itself once per visitor, 3 s after load, for 7 s – localStorage yh_tgch); texts TC in i18n.js, styles .tgch; the round
   blue Search button floats above the middle with no label (→ #/search). ALWAYS VISIBLE (owner, 2026-11-24: "az alsó menü mindig
   látható legyen") – from the first second, never hidden at the top of a page or on scroll (unlike the Study portal's fade-in). index.html .bnav, styles.css "Bottom menu" block.
 - Homepage category blocks are UNIFORM (owner, 2026-11-24: "minden kategória legyen egységes – nincs két nagy kép, sem egy"):

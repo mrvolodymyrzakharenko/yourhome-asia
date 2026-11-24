@@ -239,3 +239,13 @@ zh:{ft_co:'公司',ft_aboutUs:'关于我们',ft_how:'使用方法',ft_safety:'�
 fr:{ft_co:'Société',ft_aboutUs:'À propos',ft_how:'Comment ça marche',ft_safety:'Conseils de sécurité',ft_faq:'FAQ',ft_contact:'Nous contacter',ft_follow:'Suivez-nous'},
 th:{ft_co:'บริษัท',ft_aboutUs:'เกี่ยวกับเรา',ft_how:'วิธีใช้งาน',ft_safety:'เคล็ดลับความปลอดภัย',ft_faq:'คำถามที่พบบ่อย',ft_contact:'ติดต่อเรา',ft_follow:'ติดตามเรา'} };
 for (const k of Object.keys(CO)) Object.assign(T[k], CO[k]);
+
+// Telegram channel card (bottom menu + footer)
+const TC = {
+en: { tgchTitle:'Join our Telegram channel', tgchLine:'New listings and price drops in Phnom Penh – first on Telegram.', tgchJoin:'Join on Telegram', tgchSoon:'Our channel opens soon.' },
+km: { tgchTitle:'ចូលរួមឆានែល Telegram របស់យើង', tgchLine:'ប្រកាសថ្មី និងការបញ្ចុះតម្លៃនៅភ្នំពេញ – មុនគេនៅលើ Telegram។', tgchJoin:'ចូលរួមតាម Telegram', tgchSoon:'ឆានែលរបស់យើងនឹងបើកឆាប់ៗ។' },
+zh: { tgchTitle:'加入我们的 Telegram 频道', tgchLine:'金边新房源和降价信息，第一时间在 Telegram 发布。', tgchJoin:'在 Telegram 加入', tgchSoon:'我们的频道即将开通。' },
+fr: { tgchTitle:'Rejoignez notre chaîne Telegram', tgchLine:'Nouvelles annonces et baisses de prix à Phnom Penh – d’abord sur Telegram.', tgchJoin:'Rejoindre sur Telegram', tgchSoon:'Notre chaîne ouvre bientôt.' },
+th: { tgchTitle:'เข้าร่วมช่อง Telegram ของเรา', tgchLine:'ประกาศใหม่และราคาลดในพนมเปญ – ก่อนใครบน Telegram', tgchJoin:'เข้าร่วมทาง Telegram', tgchSoon:'ช่องของเราจะเปิดเร็วๆ นี้' },
+};
+for (const k of Object.keys(TC)) Object.assign(T[k], TC[k]);

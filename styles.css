@@ -137,12 +137,40 @@ label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:6px}
 .av{width:52px;height:52px;border-radius:50%;background:var(--blue);color:#fff;display:grid;place-items:center;font-weight:800;font-size:20px;flex:none}
 .back{display:inline-block;margin-top:22px;text-decoration:none;font-weight:700}
 .toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:12px 18px;border-radius:12px;z-index:3000;max-width:90vw;font-weight:600}
-.ftr{margin-top:60px;padding:26px 0;border-top:1px solid var(--line);background:#fff}
-.ftr-in{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
-.copy{font-size:11px;color:#94a3b8;font-weight:700;letter-spacing:.06em;margin-top:6px;text-transform:uppercase}
-.ftr-nav{display:flex;gap:22px;flex-wrap:wrap}
-.ftr-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-.ftr-nav a:hover{color:var(--blue)}
+/* FOOTER (owner, 2026-11-24: "profi lábléc… mint a Study portálon"): Study portal footer layout – brand + contacts,
+   two link columns, "Chat with us" (Telegram · WhatsApp · Viber · Facebook in brand colours), bottom row © · Terms · Privacy */
+.yft{margin-top:64px;background:#F6F7FA;color:var(--muted);border-top:1px solid var(--line)}
+.yft-g{display:grid;grid-template-columns:1.45fr 1fr 1fr 1.25fr;gap:34px;padding-top:46px;padding-bottom:34px}
+.yft-logo{display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.yft-a>p{margin:14px 0 0;max-width:310px;line-height:1.65}
+.yft .yft-c{list-style:none;margin:18px 0 0;padding:0;display:flex;flex-direction:column;gap:9px}
+.yft-c li{display:flex;align-items:center;gap:9px;min-width:0}
+.yft-c svg{width:16px;height:16px;color:var(--blue);flex:0 0 auto}
+.yft-c a{color:#334155;text-decoration:none}.yft-c a:hover{color:var(--blue)}
+.yft h4{margin:0 0 14px;color:var(--ink)}
+.yft ul{list-style:none;margin:0;padding:0}
+.yft-g>div>ul:not(.yft-c){display:flex;flex-direction:column;gap:10px}
+.yft-g>div>ul:not(.yft-c) a{color:#3A4256;text-decoration:none;transition:color .2s}
+.yft-g>div>ul:not(.yft-c) a:hover{color:var(--red)}
+.yft-chat>p{margin:-4px 0 12px;line-height:1.55}
+.yft-chs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;max-width:300px}
+.yft-ch{position:relative;display:flex;align-items:center;gap:8px;height:40px;padding:0 12px 0 6px;border-radius:99px;color:#fff;text-decoration:none;box-shadow:0 6px 18px rgba(15,23,42,.10),0 1px 4px rgba(15,23,42,.06);transition:transform .25s ease,box-shadow .25s ease}
+.yft-ch svg{width:28px;height:28px;padding:5px;border-radius:50%;background:rgba(255,255,255,.18);flex:0 0 auto}
+.yft-ch:hover,.yft-ch:focus-visible{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.18)}
+.yft-tg{background:linear-gradient(135deg,#37AEE2,#1E96C8)}
+.yft-wa{background:#25D366}
+.yft-vb{background:#7360F2}
+.yft-fb{background:#1877F2}
+.yft-ch[data-soon]{cursor:default}
+.yft-tip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translate(-50%,4px);padding:6px 10px;border-radius:8px;background:#0b1d51;color:#fff;font-style:normal;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:5}
+.yft-tip::after{content:"";position:absolute;top:100%;left:50%;margin-left:-5px;border:5px solid transparent;border-top-color:#0b1d51}
+.yft-ch:hover .yft-tip,.yft-ch.tip-on .yft-tip{opacity:1;transform:translate(-50%,0)}
+.yft-post{margin-top:14px;max-width:300px;width:100%;justify-content:center}
+.yft-b{display:flex;justify-content:space-between;align-items:center;gap:10px 30px;flex-wrap:wrap;border-top:1px solid #E4E7EE;padding-top:18px;padding-bottom:22px}
+.yft-l{display:flex;align-items:center;gap:6px 18px;flex-wrap:wrap}
+.yft-l a{color:inherit;text-decoration:underline;text-underline-offset:2px}.yft-l a:hover{color:var(--blue)}
+@media (max-width:980px){.yft-g{grid-template-columns:repeat(2,minmax(0,1fr))}.yft-a{grid-column:1/-1}.yft-a>p{max-width:none}}
+@media (max-width:900px){.yft-g{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px 18px}.yft-chat{grid-column:1/-1}.yft-c a,.yft-c span{overflow-wrap:anywhere}.yft-chs,.yft-post{max-width:none}.yft-b{flex-direction:column;align-items:flex-start}}
 .chipbox.home{max-width:1080px;margin:12px auto 0;text-align:left}
 .fbox{background:#fff;border-radius:18px;padding:12px;box-shadow:var(--shadow);margin:18px 0}
 .fbox .fbar{box-shadow:none;padding:0;margin:0;border-radius:0;grid-template-columns:1fr 1.6fr 1fr 1fr}

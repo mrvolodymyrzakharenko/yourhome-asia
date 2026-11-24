@@ -14,9 +14,8 @@ label{font-weight:500}
 .ag-lab,.mp-lab,.sbox select,.sbox input,.specs-row,.pop b,.pop a,.cb .ct{font-size:13px;font-weight:600;letter-spacing:-.025em}
 .logo-t small,.logo-t2 small{font-size:11px;font-weight:600;letter-spacing:-.01em}
 .pov small,.bigprice small{font-size:11px;font-weight:500;letter-spacing:0;text-transform:none}
-.spec span,.date,.tag,.copy,.ftr-nav a,.sbox label,.ag-v,.ag-chips span,.xl-note,.dots{font-size:11px;font-weight:600}
+.spec span,.date,.tag,.sbox label,.ag-v,.ag-chips span,.xl-note,.dots{font-size:11px;font-weight:600}
 .tag{letter-spacing:.02em}
-.ftr-nav a,.copy{letter-spacing:.04em}
 .ag-k,.ag-slug span{font-size:13px}
 /* price on the card photo: a pill like the Study portal's "$6,500 / year" */
 .pov{left:12px;bottom:12px;background:rgba(255,255,255,.94);color:var(--red);text-shadow:none;padding:5px 11px;border-radius:99px}
@@ -40,7 +39,7 @@ label{font-weight:500}
 /* Logo wordmark is a graphic, not text – exception to the 13px rule (owner, 2026-11-24: "logó egy sorba, szép portálos betűvel") */
 .brand{font-size:20px;font-weight:600;letter-spacing:-.025em;line-height:1}
 .brand em{font-weight:600}
-.ftr .brand{font-size:17px}
+.yft .brand{font-size:18px}
 @media (max-width:480px){.hdr .brand{font-size:15px;letter-spacing:-.04em}.hdr .brand-i{width:30px;height:30px}.hdr .logo{gap:7px}.hdr-r{gap:6px}.hdr .lang{width:60px;padding:8px 22px 8px 11px;background-position:right 9px center}}
 /* Hero title in the Study portal style (owner, 2026-11-24 – "ilyen stílusú legyen"): heavy navy text, the country in red
    with a hand-drawn red swoosh under it, red full stop */
@@ -49,3 +48,12 @@ label{font-weight:500}
 .hero h1 em::after{content:"";position:absolute;left:-2%;bottom:-.2em;width:104%;height:.3em;overflow:visible;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none' overflow='visible'%3E%3Cpath d='M2 7 C 30 2, 70 2, 98 6' fill='none' stroke='%23E00025' stroke-width='5.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
 .hero h1 i{font-style:normal;color:#E00025}
 .hero p{color:#1e293b}
+
+/* Footer (owner, 2026-11-24): Study portal sizes – titles 13/600, text 13/400, bottom row 12px */
+.yft,.yft p,.yft li,.yft a,.yft span{font-size:13px;font-weight:400}
+.yft h4{font-size:13px;font-weight:600;letter-spacing:-.025em}
+.yft .brand{font-size:18px;font-weight:600}.yft .brand em{font-weight:600}
+.yft-ch span{font-size:13px;font-weight:500;letter-spacing:-.025em}
+.yft-post,.yft-post span{font-size:13px;font-weight:500;letter-spacing:-.025em}
+.yft-b,.yft-b span,.yft-b a{font-size:12px}
+.yft-tip{font-size:12px;font-weight:500}

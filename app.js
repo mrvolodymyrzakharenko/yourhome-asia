@@ -78,6 +78,11 @@ function applyStatic() {
   document.getElementById('year').textContent = new Date().getFullYear();
 }
 document.getElementById('lang').addEventListener('change', e => { lang = e.target.value; store.set('yh_lang', lang); applyStatic(); route(); });
+// Footer / Support chat buttons: a channel without an address yet (Facebook) shows a "coming soon" bubble instead of opening
+document.addEventListener('click', e => {
+  const a = e.target.closest('.yft-ch[data-soon]'); if (!a) return;
+  e.preventDefault(); a.classList.add('tip-on'); clearTimeout(a._t); a._t = setTimeout(() => a.classList.remove('tip-on'), 2200);
+});
 
 function card(l) {
   const ph = l.photos && l.photos[0] ? `<img src="${esc(l.photos[0])}" alt="" loading="lazy">` : `<span class="noimg">🏠</span>`;
@@ -620,7 +625,7 @@ const viewExperts = () => AG.viewExperts();
 const PAGES = {
   terms: () => `<h1>${t('terms')}</h1><p>YourHome.asia is a listing platform that connects people looking for housing in Cambodia with owners and agents. Listings are published by their advertisers, who are responsible for their accuracy and legality. YourHome.asia is not a party to any rental or sale agreement.</p><p>Posting a standard listing is free. Advertisers must only post real properties they are entitled to offer, with honest prices and photos. We may hide or remove listings that are misleading, duplicated, spam or illegal, and may suspend accounts that break these rules.</p><p>Paid placements (TOP listings) are shown with a TOP label. Users should check every property in person and never send deposits before viewing it.</p><p>Questions: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>`,
   privacy: () => `<h1>${t('privacy')}</h1><p>We store the information you give us: your account email, your listings and the contact details you choose to publish, and messages sent through listing contact forms (delivered to the advertiser).</p><p>To show advertisers how their listings perform, we record anonymous visit statistics: the listing viewed, time, traffic source, device type and site language, linked to a random browser ID — not your name. Saved listings are kept only in your browser.</p><p>Data is stored with Supabase and the site is hosted on Vercel. We do not sell personal data. To delete your account or data, write to <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>`,
-  support: () => `<h1>${t('support')}</h1><p>${t('supportBody')}</p><p><a class="btn blue" href="mailto:${SUPPORT_EMAIL}">✉ ${SUPPORT_EMAIL}</a></p>`,
+  support: () => `<h1>${t('support')}</h1><p>${t('supportBody')}</p><h3>${t('ft_chatT')}</h3><p>${t('ft_chatS')}</p><div class="yft-chs sup-chs">${document.querySelector('footer .yft-chs')?.innerHTML || ''}</div><p><a class="btn blue" href="tel:+855963068590">📞 +855 96 306 8590</a> <a class="btn ghost" href="mailto:${SUPPORT_EMAIL}">✉ ${SUPPORT_EMAIL}</a></p>`,
 };
 
 let skipNext = false;

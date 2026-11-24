@@ -21,7 +21,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Language pill: own small chevron close to the code with room after it (owner, 2026-11-24). "Become a partner" (white pill,
   → #/partners) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).
   "New projects" (white pill → #/projects) sits before it on screens over 1180px, and is the 2nd Menu item + a footer link.
-- Footer like vietrent: logo + © line, links Listings · Experts · Terms · Privacy · Support.
+- FOOTER = STUDY PORTAL FOOTER (owner, 2026-11-24: "profi lábléc… Terms and Conditions… Facebook, Telegram, WhatsApp, Viber…
+  mint a Study portálon"): index.html footer.yft – brand column (logo, one line, phone +855 96 306 8590, info@yourhome.asia,
+  Phnom Penh, reply line) · Find a home (incl. New projects) · For advertisers (Become a partner → #/partners) · "Chat with us" (brand-coloured pills Telegram t.me/+855963068590,
+  WhatsApp wa.me/855963068590, Viber, Facebook + red Post listing) · bottom row © · Terms and Conditions · Privacy Policy ·
+  Support + safety line. The same number is the owner's Telegram, WhatsApp and Viber. Facebook shows "coming soon" until
+  its page link is filled in (href + remove data-soon). The Support page reuses the chat pills. Texts: FT block in i18n.js;
+  styles "FOOTER" in styles.css, sizes at the end of fonts.css; phones: link columns two side by side.
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
   icons 21px; six equal columns Home · Map · Saved · Post (red plus, red label – always visible) · Experts · Account; the round

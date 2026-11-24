@@ -67,3 +67,11 @@ label{font-weight:500}
 .hdr .brand,.yft .brand{font-size:13px!important;font-weight:500!important;letter-spacing:-.025em!important}
 .hdr .brand em,.yft .brand em{font-weight:500!important}
 @media (max-width:720px){.hdr .brand,.yft .brand{font-size:12px!important;font-weight:600!important}.hdr .brand em,.yft .brand em{font-weight:600!important}}
+/* LOGO TEXT (owner, 2026-11-24 20:37 Tbilisi): "www.yourhome.asia" with "CAMBODIA" in capitals under it, the two lines
+   centred vertically next to the house; line 1 = the menu-name type, line 2 small red capitals. Header and footer. */
+.hdr .brand,.yft .brand{display:flex!important;flex-direction:column;justify-content:center;line-height:1.15!important}
+.hdr .brand .b1,.yft .brand .b1{font-size:13px;font-weight:500;letter-spacing:-.025em;color:#0f172a}
+.hdr .brand em,.yft .brand em{font-size:10px!important;font-weight:600!important;letter-spacing:.16em!important;color:#E00025;margin-top:2px}
+.hdr .logo,.yft .logo{align-items:center}
+@media (max-width:720px){.hdr .brand .b1,.yft .brand .b1{font-size:12px;font-weight:600}.hdr .brand em,.yft .brand em{font-size:9px!important;letter-spacing:.14em!important}}
+@media (max-width:339px){.hdr .brand .b1{font-size:11px}}

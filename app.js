@@ -289,7 +289,13 @@ async function viewHome() {
     <div id="blocks"><div class="empty">${t('loading')}</div></div></div>`;
   let st = {};
   const box = document.getElementById('chipBox');
-  const drawChips = () => { box.innerHTML = chipRow(st, getDeal()); };
+  const homeTools = () => {   // same tools as the results page: Subscribe opens the Telegram alert form, Newest opens the sorted results
+    const fr = box.querySelector('.frow'); if (!fr || fr.querySelector('#notifyBtn')) return;
+    fr.insertAdjacentHTML('beforeend', resultTools({}));
+    fr.querySelector('#notifyBtn').onclick = () => alertModal({ deal: getDeal() });
+    fr.querySelector('#sortSel').onchange = e => go('#/search?' + new URLSearchParams({ deal: getDeal(), ...(e.target.value === 'new' ? {} : { sort: e.target.value }) }));
+  };
+  const drawChips = () => { box.innerHTML = chipRow(st, getDeal()); homeTools(); };
   wireChips(box, st, drawChips);
   const getDeal = wireSearchBox((deal, tabOnly) => {
     if (tabOnly) { FKEYS.forEach(k => delete st[k]); return drawChips(); }
@@ -298,6 +304,7 @@ async function viewHome() {
     for (const k of FKEYS) if (st[k]) p.set(k, st[k]);
     go('#/search?' + p);
   });
+  homeTools();
   const all = await fetchListings({ limit: 300 });
   const rent = all.filter(l => l.deal_type === 'rent');
   const html = block(t('recommended'), all.filter(l => l.is_featured).concat(all.filter(l => !l.is_featured)), '#/search?sort=new')
@@ -311,6 +318,8 @@ async function viewHome() {
   b0.innerHTML = ((html + prj) || `<div class="empty">${t('noResults')}</div>`);
 }
 
+// Subscribe (Telegram) + Newest in the filters' second row – on the homepage too (owner, 2026-11-24 22:21: "hova tűnt?")
+const resultTools = p => `<button type="button" class="ftg" id="notifyBtn" aria-label="${esc(t('notify'))}" data-tip="${esc(t('notify'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5zM8.9 13.6l8.6-5.4c.4-.3.8-.1.5.2l-7.4 6.7-.3 3.1-1.4-4.6z"/></svg><span>${t('subscribe')}</span></button><label class="fsort"><select id="sortSel" aria-label="${esc(t('sort'))}"><option value="new">${t('sortNew')}</option><option value="cheap" ${p.sort === 'cheap' ? 'selected' : ''}>${t('sortCheap')}</option><option value="exp" ${p.sort === 'exp' ? 'selected' : ''}>${t('sortExp')}</option></select></label>`;
 async function viewSearch() {
   const p = Object.fromEntries(qs());
   const view = p.view === 'map' ? 'map' : 'grid';
@@ -321,7 +330,8 @@ async function viewSearch() {
   // Results tools in the filters' second row (owner, 2026-11-24: "a Telegram alerts oda nem kell kiírni, hanem egy Telegram
   // logó… ha rámegy, kiírja… ne legyen kiírva, hogy sort, csak newest… lenyílik… két sorba, nem háromba"):
   // More filters | Listings | Map | Telegram logo (bubble on hover) | Newest ▾
-  document.querySelector('#chipBox .frow').insertAdjacentHTML('beforeend', `<button type="button" class="ftg" id="notifyBtn" aria-label="${esc(t('notify'))}" data-tip="${esc(t('notify'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5zM8.9 13.6l8.6-5.4c.4-.3.8-.1.5.2l-7.4 6.7-.3 3.1-1.4-4.6z"/></svg><span>${t('subscribe')}</span></button><label class="fsort"><select id="sortSel" aria-label="${esc(t('sort'))}"><option value="new">${t('sortNew')}</option><option value="cheap" ${p.sort === 'cheap' ? 'selected' : ''}>${t('sortCheap')}</option><option value="exp" ${p.sort === 'exp' ? 'selected' : ''}>${t('sortExp')}</option></select></label>`);
+  document.querySelector('#chipBox .frow').insertAdjacentHTML('beforeend', resultTools(p));
+
   const upd = ch => { const n = new URLSearchParams(qs()); for (const k in ch) ch[k] ? n.set(k, ch[k]) : n.delete(k); go('#/search?' + n); };
   const st = {}; FKEYS.forEach(k => { if (p[k]) st[k] = p[k]; });
   wireChips(document.getElementById('chipBox'), st, s => upd(Object.fromEntries(FKEYS.map(k => [k, s[k] || '']))));

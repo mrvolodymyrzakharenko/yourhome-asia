@@ -116,7 +116,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   so they are .yab spans opening their own link (click counted in yh_events). agentBar() in app.js; fetchListings attaches
   l._agent. Photo order: agent photo → yh_listings.contact_photo (https only) → initials. Demo listings: invented Khmer names
   (Sokha Chan, Sreymom Ly, Dara Heng, Bopha Kim, Vannak Mao, Chanthy Sok) with free Unsplash portraits and the portal number.
-- FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
+- FILTERS = TWO ROWS ON THE RESULTS PAGE TOO – and the HOMEPAGE has the same Subscribe + Newest in row 2 (owner, 2026-11-24 22:21;
+  resultTools() in app.js; on the homepage Newest opens #/search sorted) (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | grid icon + Listing | map icon + Map (icons on phones too; phones hide the Filters icon) | Telegram logo + "Subscribe" (owner, 2026-11-24 19:56) | Newest – the Telegram button
   (#notifyBtn, name in a bubble on hover) | "Newest ▾" select (no "Sort:" word); no separate tools row under the heading.
   Row 1 on EVERY screen and tab = 1+ bed · 2+ beds · 3+ beds · Furnished (Buy: Foreigners can buy) · Pool · Gym (owner, 2026-11-24: "nem a private bedroom kell, hanem gym és pool"; other amenities, EDC and Owner only in More filters; on phones the row spans the search card's full width, chips share it equally, .q-x1; owner, 2026-11-24), edge to edge, "More filters" reads "Filters"; both rows

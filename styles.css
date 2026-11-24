@@ -579,3 +579,24 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .ymeta .ya1{color:#94a3b8}
   .ymeta .ya2{color:#0f172a}
 }
+/* PHONE CARD ICON ROW = 4–5 ICONS + ALTERNATING COLOURS (owner, 2026-11-24 20:04: "ahol kék a cím, ott piros a fürdőszoba,
+   ahol piros a cím, ott kék… ne három ikon legyen, hanem 4 vagy 5"): bed · bath · m² + up to two of the listing's amenities
+   (wifi, pool, gym, air-con, parking – icon only, name on hover/long-press); equal columns with dividers.
+   Odd cards: "Apartment for rent" blue, "in BKK1" red, icons RED; even cards: the other way round, icons BLUE. */
+.sp-am{display:none!important}
+@media (max-width:720px){
+  .card:not([href="#/post"]) .specs-row{grid-template-columns:none!important;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+  .card:not([href="#/post"]) .specs-row .sp-am{display:flex!important}
+  .card:not([href="#/post"]) .specs-row svg{stroke:#E00025!important}
+  .card:not([href="#/post"]) .specs-row .sp-am circle{fill:#E00025;stroke:none}
+  .card:nth-child(even) .yname .yn1{color:#E00025}
+  .card:nth-child(even) .yname .yn2{color:#032EA1}
+  .card:nth-child(even):not([href="#/post"]) .specs-row svg{stroke:#032EA1!important}
+  .card:nth-child(even):not([href="#/post"]) .specs-row .sp-am circle{fill:#032EA1}
+}
+@media (max-width:720px){
+  .card:not([href="#/post"]) .specs-row{display:flex!important;justify-content:space-between}
+  .card:not([href="#/post"]) .specs-row span{flex:1 1 auto;gap:5px}
+  .card:not([href="#/post"]) .specs-row .sp-am{flex:0 0 42px}
+  .card:not([href="#/post"]) .specs-row svg{width:18px;height:18px}
+}

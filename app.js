@@ -84,6 +84,15 @@ document.addEventListener('click', e => {
   e.preventDefault(); a.classList.add('tip-on'); clearTimeout(a._t); a._t = setTimeout(() => a.classList.remove('tip-on'), 2200);
 });
 
+// Amenity icons in the phone card's icon row (owner, 2026-11-24: "ne csak három ikon… wifi, gym, pool… 4 vagy 5")
+const AM_ICON_ORDER = ['wifi', 'pool', 'gym', 'aircon', 'parking'];
+const AM_ICON = {
+  wifi: '<svg viewBox="0 0 24 24"><path d="M2.5 9a14 14 0 0 1 19 0M5.5 12.5a9.5 9.5 0 0 1 13 0M8.6 16a5 5 0 0 1 6.8 0"/><circle cx="12" cy="19.3" r="1.1"/></svg>',
+  pool: '<svg viewBox="0 0 24 24"><path d="M2 17c2 0 2-1.4 4-1.4S8 17 10 17s2-1.4 4-1.4S16 17 18 17s2-1.4 4-1.4M2 21c2 0 2-1.4 4-1.4S8 21 10 21s2-1.4 4-1.4S16 21 18 21s2-1.4 4-1.4M8 14V5.5a2 2 0 0 1 4 0M16 14V5.5a2 2 0 0 0-4 0M8 9h8"/></svg>',
+  gym: '<svg viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></svg>',
+  aircon: '<svg viewBox="0 0 24 24"><path d="M12 2v20M4 6l16 12M20 6 4 18M9 3.5 12 6l3-2.5M9 20.5 12 18l3 2.5"/></svg>',
+  parking: '<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><path d="M9.5 17V7.5h3.2a3 3 0 0 1 0 6H9.5"/></svg>',
+};
 function card(l) {
   const ph = l.photos && l.photos[0] ? `<img src="${esc(l.photos[0])}" alt="" loading="lazy">` : `<span class="noimg">🏠</span>`;
   const dots = l.photos && l.photos.length > 1 ? `<div class="dots">${l.photos.slice(0, 5).map(() => '<i></i>').join('')}</div>` : '';
@@ -103,7 +112,7 @@ function card(l) {
     <div class="cb">
       <h3 class="ct">${esc(l.title)}</h3>
       <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || t('cityPP'))}</div>
-      <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span>${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span></div>
+      <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span>${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span>${AM_ICON_ORDER.filter(a => (l.amenities || []).includes(a)).slice(0, 2).map(a => `<span class="sp-am" title="${esc(t('am_' + a))}" aria-label="${esc(t('am_' + a))}">${AM_ICON[a]}</span>`).join('')}</div>
       <p class="yname"><span class="yn1">${esc(t(l.deal_type === 'sale' ? 'nameSale' : 'nameRent', { x: t('t_' + (l.deal_type === 'room' ? 'room' : l.property_type)) }))}</span>${l.district ? ` <span class="yn2">${esc(t('inPlace', { d: l.district }))}</span>` : ''}</p>
       <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span class="yty">${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : 'rent'))}</em><b>${l.bathrooms ?? '–'} ${esc(t('bathrooms').toLowerCase())}</b><b>${l.area_m2 ? Math.round(l.area_m2) + ' m²' : '– m²'}</b><b>${esc(l.posted_by ? t('by_' + l.posted_by) : shortDate(l.created_at))}</b></p>
       <div class="yfoot"><p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span><span class="ya1">${esc(!l.city || l.city === 'Phnom Penh' ? t('cityPP') : l.city)},</span> <span class="ya2">${esc(l.address || t('cambodia'))}</span></span></p>

@@ -821,3 +821,6 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .ysample{margin-bottom:12px!important;padding:7px 12px!important;font-size:12px!important}
   .frow{margin-bottom:0}
 }
+/* Phone header logo text smaller (owner, 2026-11-24 21:12: "YourHome Cambodia túl nagy… legyen még kisebb") */
+@media (max-width:720px){.hdr .brand{font-size:12px!important;letter-spacing:-.03em}.hdr .brand-i{width:26px!important;height:26px!important}.hdr .logo{gap:6px!important}}
+@media (max-width:339px){.hdr .brand{font-size:11px!important}}

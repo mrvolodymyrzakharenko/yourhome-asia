@@ -40,6 +40,7 @@
     </div>
   </div>
   <nav class="drawer" id="drawer" hidden>
+    <button type="button" class="dr-close" id="drClose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span data-i18n="closeMenu">Close menu</span></button>
     <a href="#/search" data-i18n="listings">Listings</a>
     <a href="#/projects" class="dr-prj" data-i18n="newProjects">New projects</a>
     <a href="#/search?view=map" data-i18n="mapNav">Map</a>
@@ -99,7 +100,8 @@
 (function(){var b=document.getElementById('menuBtn'),d=document.getElementById('drawer');
 b.addEventListener('click',function(e){e.stopPropagation();d.hidden=!d.hidden;});
 document.addEventListener('click',function(e){if(!d.hidden&&!d.contains(e.target))d.hidden=true;});
-window.addEventListener('hashchange',function(){d.hidden=true;});})();
+window.addEventListener('hashchange',function(){d.hidden=true;});
+document.getElementById('drClose').addEventListener('click',function(e){e.stopPropagation();d.hidden=true;});})();
 </script>
 <script src="/picker.js?v=4" defer></script>
 <script src="/fade.js?v=2" defer></script>

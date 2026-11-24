@@ -665,3 +665,25 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .yfoot .ymeta{flex:1 1 auto;width:100%}
   .yfoot .ymeta .yaddr{display:block;flex:1 1 auto;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
+/* HEADER POST BUTTON ON PHONES TOO (owner, 2026-11-24 20:13: "a post gomb a fejlécben… és az alsó menüben egy plusz jel"):
+   a compact red "+ Post" sits in the phone header before the language pill; the bottom menu keeps its red plus + "Post". */
+@media (max-width:720px){
+  .hdr-r .btn.red.hdr-post{display:inline-flex!important;padding:8px 12px!important;border-radius:99px!important;font-size:13px!important;font-weight:600!important;gap:4px}
+}
+@media (max-width:720px){
+  .hdr-r a.rb[href="#/account"]{display:none!important}   /* Account lives in the bottom menu; frees room for + Post */
+}
+@media (max-width:379px){
+  .hdr .brand{font-size:14px!important;letter-spacing:-.045em}
+  .hdr .brand-i{width:28px;height:28px}
+  .hdr .lang{width:52px!important;padding:7px 18px 7px 9px!important;background-position:right 6px center!important}
+  .hdr-r{gap:5px!important}
+  .hdr-r .btn.red.hdr-post{padding:7px 10px!important}
+}
+@media (max-width:379px){
+  .hdr .wrap.hdr-in{padding-left:12px!important;padding-right:12px!important}
+  .menu-btn span{display:none}
+  .hdr .logo{gap:6px!important}
+}
+@media (max-width:339px){.hdr .brand{font-size:12.5px!important}.hdr .lang{display:none!important}}
+@media (max-width:440px){.hdr .wrap.hdr-in{padding-left:12px!important;padding-right:12px!important}.hdr-r{gap:6px!important}.menu-btn span{display:none}}

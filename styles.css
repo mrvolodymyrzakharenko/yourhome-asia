@@ -845,3 +845,11 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 @media (max-width:379px){.menu-btn{padding:8px 8px!important;gap:4px!important}.menu-btn span{font-size:11.5px!important}}
 @media (max-width:379px){.hdr .wrap.hdr-in{padding-left:10px!important;padding-right:10px!important}.hdr-r{gap:4px!important}.hdr .lang{width:52px!important;padding-left:9px!important;padding-right:18px!important;background-position:right 6px center!important}.hdr .hdr-post{padding-left:10px!important;padding-right:10px!important}.menu-btn{padding:8px 7px!important}.hdr .logo{gap:5px!important}}
 @media (max-width:379px){.hero h1{font-size:6.4vw!important}}  /* hero title fits one line on 320–379px phones */
+/* FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js marks every
+   newly added element in #app and in the popup details with .yh-in (siblings staggered 40ms via --yh-d); photos fade in once
+   loaded (.yh-img → .ld). Same on phone, tablet and PC; off with "reduce motion". The header and bottom menu never fade. */
+@keyframes yhFade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.yh-in{animation:yhFade .42s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--yh-d,0ms)}
+.yh-img{opacity:0;transition:opacity .45s ease}
+.yh-img.ld{opacity:1}
+@media (prefers-reduced-motion:reduce){.yh-in{animation:none}.yh-img{opacity:1;transition:none}}

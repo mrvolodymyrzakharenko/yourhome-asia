@@ -105,7 +105,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   3) hairline + FOUR marks: bed · bath · two amenity icons (gym, wifi, pool, parking, air-con; AM_ICON; m² only if fewer
   than two) in equal columns with dividers. Name row ONE colour, 800 weight (owner 20:07: "nem lehet fele-fele"): odd cards
   name blue + icons red, even cards name red + icons blue; the icon-row NUMBERS take the icons' colour (owner 20:16); the name is
-  1px under the full-width fit with slightly wider letter spacing. Phone corners 36px + soft deep shadow
+  2px under the full-width fit and the address 2px under its fit (owner 20:56) with slightly wider letter spacing. Phone corners 36px + soft deep shadow
   (measured from the screenshot); PC 24px.
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | grid icon + Listing | map icon + Map (icons on phones too; phones hide the Filters icon) | Telegram logo + "Subscribe" (owner, 2026-11-24 19:56) | Newest – the Telegram button

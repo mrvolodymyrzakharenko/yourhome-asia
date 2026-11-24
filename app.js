@@ -763,8 +763,8 @@ function fitLine(el, min, max) {
 let fitRaf = 0;
 function fitCards() {
   if (innerWidth > 720) { document.querySelectorAll('.yname,.ymeta .yaddr').forEach(e => e.style.removeProperty('font-size')); return; }
-  document.querySelectorAll('.card .yname').forEach(e => { fitLine(e, 15, 26); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 1) + 'px', 'important'); });  // 1px under the full fit (owner, 20:16)
-  document.querySelectorAll('.card .ymeta .yaddr').forEach(e => fitLine(e, 11, 17));
+  document.querySelectorAll('.card .yname').forEach(e => { fitLine(e, 15, 26); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 2) + 'px', 'important'); });  // 2px under the full fit (owner, 20:16 + 20:56)
+  document.querySelectorAll('.card .ymeta .yaddr').forEach(e => { fitLine(e, 11, 17); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 2) + 'px', 'important'); });  // address 2px under the fit (owner, 20:56)
 }
 const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };
 new MutationObserver(queueFit).observe(document.getElementById('app'), { childList: true, subtree: true });

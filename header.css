@@ -1,14 +1,8 @@
 .topbar{display:none}
 .hdr{background:rgba(255,255,255,.96)}
 .hdr-in{height:60px;gap:10px}
-.logo{gap:11px}
-.logo-t2{display:flex;flex-direction:column;line-height:1.15}
-.lw{font-weight:400;color:var(--blue);letter-spacing:.02em}
-.lw b{font-weight:700}
-.lw i{font-style:normal;font-weight:400;color:var(--red)}
-.logo-t2 .lw{font-size:18px}
-.logo-t2 small{font-weight:500;color:var(--red);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;margin-top:2px}
-.logo.small .logo-t{font-size:16px}
+.logo-t2{font-weight:800;font-size:15px;line-height:1.1;letter-spacing:-.01em}
+.logo-t2 small{font-weight:600;color:var(--red);font-size:12px}
 .hdr-r{gap:8px}
 .rb{width:38px;height:38px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:#fff;color:var(--ink);flex:none}
 .rb svg,.menu-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8}

@@ -210,16 +210,3 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .chips:not(.static){flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
   .more-panel .chips{flex-wrap:wrap;overflow:visible}
 }
-/* Homepage search card (owner, 2026-11-24): blue outline, colour only in the Rent/Buy/Rooms row, everything else light,
-   card only slightly narrower than the page */
-.hero .deal-tabs{display:flex;max-width:1160px;margin:0 auto;background:var(--blue);border-radius:22px 22px 0 0;padding:8px 8px 0;gap:6px;box-shadow:none}
-.hero .deal-tabs button{color:rgba(255,255,255,.82);border-radius:14px 14px 0 0;padding:10px 22px}
-.hero .deal-tabs button.on{background:#fff;color:var(--blue)}
-.hero .sbox{max-width:1160px;border:1.5px solid var(--blue);border-top:0;border-radius:0 0 22px 22px;box-shadow:0 10px 30px rgba(3,46,161,.08)}
-.hero .sbox .btn{background:var(--blue-l);color:var(--blue);border:1.5px solid var(--blue);box-shadow:none}
-.hero .sbox .btn:hover{background:#dbe3fa}
-.chipbox.home{max-width:1160px}
-@media (max-width:720px){
-  .hero .deal-tabs button{flex:1;padding:10px 8px}
-  .hero .sbox .f{background:#fff;border:1px solid var(--line)}
-}

@@ -103,9 +103,9 @@ function card(l) {
       <h3 class="ct">${esc(l.title)}</h3>
       <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || t('cityPP'))}</div>
       <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span>${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span></div>
-      <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span>${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : 'rent'))}</em></p>
-      <p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>${esc([l.district, t('cityPP')].filter(Boolean).join(', '))}</p>
-      <span class="ylink">${esc(t('view'))} ${esc(t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase())} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span class="yty">${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : 'rent'))}</em><b>${l.bathrooms ?? '–'} ${esc(t('bathrooms').toLowerCase())}</b><b>${l.area_m2 ? Math.round(l.area_m2) + ' m²' : '– m²'}</b><b>${esc(l.posted_by ? t('by_' + l.posted_by) : shortDate(l.created_at))}</b></p>
+      <div class="yfoot"><p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>${esc([l.district, t('cityPP')].filter(Boolean).join(', '))}</span></p>
+      <span class="ylink">${esc(t('clickView', { x: t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase() }))} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
     </div></a>`;
 }
 // Phone card photo slider like vietrent (owner, 2026-11-24: "pöttyök… ha rákattint a pöttyre, a képek mozognak a kártyán belül"):
@@ -204,10 +204,10 @@ function chipRow(st, deal) {
   return `<div class="chips qrow">
     ${chip('beds', '1', t('bed1'))}${['2', '3'].map(n => chip('beds', n, t('bedN', { n }))).join('')}
     ${deal === 'sale' ? chip('foreign', '1', t('f_foreign')) : chip('furn', '1', t('furnished'))}
-    ${quick.map(a => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip q-x')).join('')}
+    ${quick.map((a, i) => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i ? '' : ' q-x1'))).join('')}
     ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
-  <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}${t('moreFilters')}${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>
+  <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}<span class="mf-l">${t('moreFilters')}</span><span class="mf-s">${t('filters')}</span>${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>
   <div class="more-panel" ${panelOpen ? '' : 'hidden'}>
     <div class="mp-grid">
       ${sel('baths', [1, 2, 3].map(n => [n, n + '+']), t('bathrooms'))}
@@ -275,12 +275,12 @@ async function viewSearch() {
   const deal = p.deal || '';
   const cat = p.beds === '0' ? 'studio' : (CATS.some(([k]) => k === p.type) ? p.type : '');
   app.innerHTML = `<div class="wrap">${hero(p, deal, cat)}
-    <div class="bh"><h2 id="rc">${t('loading')}</h2>
-      <div class="tools">
-        <button class="notify" id="notifyBtn">🔔 ${t('notify')}</button>
-        <select id="sortSel"><option value="new">${t('sort')}: ${t('sortNew')}</option><option value="cheap" ${p.sort === 'cheap' ? 'selected' : ''}>${t('sortCheap')}</option><option value="exp" ${p.sort === 'exp' ? 'selected' : ''}>${t('sortExp')}</option></select>
-      </div></div>
+    <div class="bh"><h2 id="rc">${t('loading')}</h2></div>
     <div id="res"></div></div>`;
+  // Results tools in the filters' second row (owner, 2026-11-24: "a Telegram alerts oda nem kell kiírni, hanem egy Telegram
+  // logó… ha rámegy, kiírja… ne legyen kiírva, hogy sort, csak newest… lenyílik… két sorba, nem háromba"):
+  // More filters | Listings | Map | Telegram logo (bubble on hover) | Newest ▾
+  document.querySelector('#chipBox .frow').insertAdjacentHTML('beforeend', `<button type="button" class="ftg" id="notifyBtn" aria-label="${esc(t('notify'))}" data-tip="${esc(t('notify'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5zM8.9 13.6l8.6-5.4c.4-.3.8-.1.5.2l-7.4 6.7-.3 3.1-1.4-4.6z"/></svg></button><label class="fsort"><select id="sortSel" aria-label="${esc(t('sort'))}"><option value="new">${t('sortNew')}</option><option value="cheap" ${p.sort === 'cheap' ? 'selected' : ''}>${t('sortCheap')}</option><option value="exp" ${p.sort === 'exp' ? 'selected' : ''}>${t('sortExp')}</option></select></label>`);
   const upd = ch => { const n = new URLSearchParams(qs()); for (const k in ch) ch[k] ? n.set(k, ch[k]) : n.delete(k); go('#/search?' + n); };
   const st = {}; FKEYS.forEach(k => { if (p[k]) st[k] = p[k]; });
   wireChips(document.getElementById('chipBox'), st, s => upd(Object.fromEntries(FKEYS.map(k => [k, s[k] || '']))));

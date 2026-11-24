@@ -351,7 +351,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .mp-q{display:none!important}
 @media (max-width:720px){
   .chipbox .qrow{flex-wrap:nowrap!important;overflow:hidden}
-  .chipbox .qrow .q-x{display:none!important}
+  .chipbox .qrow .q-x:not(.q-x1){display:none!important}
   .chipbox .qrow .chip{flex:none}
   .mp-q{display:inline-flex!important}
 }
@@ -417,3 +417,61 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .yprice small{font-size:11px;font-weight:600;margin-left:3px;opacity:.95;letter-spacing:.02em}
   .yb-price{display:none!important}
 }
+
+/* RESULTS TOOLS IN THE FILTER ROW (owner, 2026-11-24): row 2 = More filters | Listings | Map | Telegram logo | Newest ▾ –
+   the Telegram button shows only the logo, its name appears in a bubble on hover; the sort list shows only the chosen order.
+   Phones: one more quick filter fits in row 1 (the first amenity, .q-x1). Everything stays in two rows. */
+.frow .ftg,.frow .fsort{position:relative;display:inline-flex;align-items:center}
+.frow .ftg::before,.frow .fsort::before{content:"";position:absolute;left:0;top:30%;bottom:30%;width:1px;background:#D5DAE3}
+.frow .ftg{border:0;background:none;padding:4px 10px;cursor:pointer}
+.frow .ftg svg{width:24px;height:24px;padding:5px;border-radius:50%;background:linear-gradient(135deg,#37AEE2,#1E96C8);fill:#fff;box-shadow:0 3px 8px rgba(30,150,200,.28);transition:transform .2s}
+.frow .ftg:hover svg{transform:translateY(-1px)}
+.frow .ftg::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translate(-50%,4px);padding:6px 10px;border-radius:8px;background:#0b1d51;color:#fff;font-size:12px;font-weight:500;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:20}
+.frow .ftg:hover::after,.frow .ftg:focus-visible::after{opacity:1;transform:translate(-50%,0)}
+.frow .fsort{padding-left:6px}
+.frow .fsort select{width:auto;border:0;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6478' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 4px center/12px;padding:6px 20px 6px 6px;font:inherit;font-size:13px;color:#5B6478;letter-spacing:-.025em;cursor:pointer;-webkit-appearance:none;appearance:none;box-shadow:none}
+.frow .fsort select:hover{color:#E00025}
+@media (max-width:720px){
+  .frow{flex-wrap:nowrap}
+  .frow .chip,.frow .vsw a{padding:6px 7px!important}
+  .frow .ftg{padding:4px 7px}
+  .frow .fsort select{padding:6px 18px 6px 4px}
+}
+@media (max-width:720px){.more-panel .chips .mp-q:first-child{display:none!important}}
+
+/* CARDS LIKE VIETRENT (owner, 2026-11-24: "a kártya kerekebb… ugyanolyan kerek, mint a vietrenten… ugyanolyan árnyéka"):
+   24px corners and a soft deep shadow on every listing card, every screen. */
+.card{border-radius:24px!important;box-shadow:0 10px 30px -6px rgba(15,23,42,.12),0 4px 10px -4px rgba(15,23,42,.06)!important}
+/* PHONE CARD BOTTOM = 6 FACTS + LOCATION | CLICK TO VIEW (owner, 2026-11-24: "6 tulajdonságot… bal részére Phnom Penh…
+   jobb részre Click to View Apartment… az apartman kiírás nagyobb betűvel, egyik piros, a másik kék"): two rows of three
+   facts (bedrooms · TYPE · deal / bathrooms · m² · owner or agent) with thin dividers; the type is royal blue 15px; last row:
+   pin + district, Phnom Penh on the left, red 15px "Click to view apartment →" on the right. */
+.yfoot{display:none}
+@media (max-width:720px){
+  .yl1{grid-template-columns:repeat(3,minmax(0,1fr))!important;row-gap:10px!important;align-items:center}
+  .yl1>*:nth-child(3n+1)::before{display:none}
+  .yl1 b{color:#0b1d51!important}
+  .yl1 .yty{color:#032EA1!important;font-size:15px!important;font-weight:600}
+  .yl1 em{color:#E00025}
+  .yfoot{display:flex;align-items:center;justify-content:space-between;gap:10px;min-width:0}
+  .yfoot .ymeta{margin:0!important;min-width:0;justify-content:flex-start!important}
+  .yfoot .ymeta span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .yfoot .ylink{display:inline-flex!important;flex:none;align-self:auto!important;margin:0!important;color:#E00025;font-size:15px!important;font-weight:600}
+}
+@media (max-width:720px){
+  .chipbox .qrow .chip{padding:6px 7px!important}
+  .frow .chip,.frow .vsw a{padding:6px 5px!important}
+  .frow .ftg{padding:4px 6px}
+  .frow .fsort{padding-left:3px}
+  .yfoot .ylink{font-size:14px!important;gap:5px}
+  .yfoot .ymeta{font-size:12.5px}
+}
+@media (max-width:389px){.chipbox .qrow .q-x1{display:none!important}.more-panel .chips .mp-q:first-child{display:inline-flex!important}}
+/* phones: "More filters" reads "Filters" so row 2 (Filters | Listings | Map | Telegram | Newest) fits one line from 360px */
+.mf-s{display:none}
+@media (max-width:720px){.mf-l{display:none}.mf-s{display:inline}}
+@media (max-width:374px){.frow .vsw a[data-v="grid"] span{display:none}}
+@media (max-width:720px){.frow .ftg{padding:4px 5px}.frow .fsort select{padding:6px 16px 6px 3px;background-position:right 2px center}}
+@media (max-width:720px){.frow .vsw a,.frow .chip{gap:4px!important}}
+.frow .fsort select{field-sizing:content;min-width:0}
+@media (max-width:720px){.card:not([href="#/post"]) .cb{padding-left:15px!important;padding-right:15px!important}.yfoot{gap:6px}.yfoot .ymeta{gap:4px!important}}

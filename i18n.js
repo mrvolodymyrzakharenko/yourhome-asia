@@ -206,3 +206,6 @@ fr: { terms:'Conditions générales', privacy:'Politique de confidentialité', f
 th: { terms:'ข้อกำหนดและเงื่อนไข', privacy:'นโยบายความเป็นส่วนตัว', ft_about:'อพาร์ตเมนต์ บ้าน คอนโด และห้องเช่า ให้เช่าและขายในกัมพูชา – จากเจ้าของและนายหน้าโดยตรง ลงประกาศฟรี', ft_place:'พนมเปญ กัมพูชา', ft_hours:'เราตอบทุกวัน โดยปกติภายในหนึ่งชั่วโมง', ft_find:'หาที่พัก', ft_rent:'บ้านให้เช่า', ft_buy:'บ้านขาย', ft_rooms:'ห้องให้เช่า', ft_map:'ค้นหาบนแผนที่', ft_agents:'นายหน้าและบริษัท', ft_saved:'ประกาศที่บันทึกไว้', ft_adv:'สำหรับผู้ลงประกาศ', ft_post:'ลงประกาศ – ฟรี', ft_partner:'เป็นพาร์ทเนอร์', ft_dash:'แดชบอร์ดของฉัน', ft_verify:'ขอยืนยันตัวตน', ft_help:'ช่วยเหลือ', ft_chatT:'แชทกับเรา', ft_chatS:'ส่งข้อความหรือโทร +855 96 306 8590 ผ่านแอปใดก็ได้ด้านล่าง', ft_note:'ประกาศลงโดยผู้ลงประกาศเอง อย่าจ่ายเงินมัดจำก่อนได้ดูทรัพย์' },
 };
 for (const k of Object.keys(FT)) Object.assign(T[k], FT[k]);
+/* PHONE CARD FOOTER (owner, 2026-11-24: "jobb részre … Click to View Apartment") */
+const CV = { en:{clickView:'Click to view {x}'}, km:{clickView:'ចុចដើម្បីមើល{x}'}, zh:{clickView:'点击查看{x}'}, fr:{clickView:'Voir {x}'}, th:{clickView:'คลิกดู{x}'} };
+for (const k of Object.keys(CV)) Object.assign(T[k], CV[k]);

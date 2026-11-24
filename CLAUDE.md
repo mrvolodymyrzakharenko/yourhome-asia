@@ -43,8 +43,25 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.
 
+## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
+- Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,
+  languages, areas, phone/Telegram/WhatsApp/email, links) in the dashboard tab "My agent profile" (#/account?tab=agent).
+  Public page #/agent/<slug> = profile + all active listings that carry it. Experts page (#/experts) = "Agents & agencies"
+  (profile cards, verified first) + "Other advertisers" without a profile.
+- The post form has an "Agent profile" block: pick one of your own profiles (agent_id – the database refuses someone else's)
+  and optional links of THIS property on Booking.com, Agoda, Trip.com, Airbnb, Expedia, Google Maps + 2 free fields
+  (yh_listings.external_links [{name,url}]). Profiles take Booking, Agoda, Trip.com, Airbnb, Google Maps, Facebook,
+  Instagram, TikTok, YouTube, Khmer24, Realestate.com.kh, website + 1 free field.
+- The site name and colour come from the link's address (SITES in agents.js), never from what the user typed. Links: https
+  only, max 12, never yourhome.asia (yh_clean_links() in the database), opened in a new tab with rel="nofollow ugc noopener".
+- Wording: "Also on Booking.com". "✓ Verified on …" and the "Verified" badge only when OUR team set yh_agents.verified_at
+  (admin / service key only; changing name, kind or company removes it). NEVER "Verified by Booking" – that would say the
+  other company checked it.
+- Code: agents.js (all agent UI + its own 5-language texts TX), agents.css; app.js only calls AG.* (listing page #agBox /
+  #agLinks, post form block, dashboard tab, #/agent route, experts page).
+
 ## Files
 - index.html – page shell, header, footer, bottom menu · styles.css + header.css – design · app.js – the whole app
-  (hash routes: #/ · #/search · #/l/<id> · #/post · #/edit/<id> · #/account · #/saved · #/experts · #/terms · #/privacy · #/support)
+  (hash routes: #/ · #/search · #/l/<id> · #/post · #/edit/<id> · #/account · #/saved · #/experts · #/agent/<slug> · #/terms · #/privacy · #/support)
 - i18n.js – all UI text in 5 languages (missing keys fall back to English).
-- Supabase tables: yh_listings, yh_inquiries, yh_events (statistics), yh_alerts; storage bucket yh-photos.
+- Supabase tables: yh_listings, yh_inquiries, yh_events (statistics), yh_alerts, yh_agents; storage bucket yh-photos.

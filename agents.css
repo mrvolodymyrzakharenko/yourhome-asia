@@ -1,0 +1,68 @@
+/* Agent / agency profiles + "Also on Booking.com" link pills (agents.js) */
+
+/* agent cards (Agents & agencies page, dashboard, "Listed by") */
+.ag-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.ag-card{display:flex;gap:14px;align-items:center;background:#fff;border-radius:18px;padding:16px;box-shadow:var(--shadow);text-decoration:none;color:inherit;transition:transform .15s,box-shadow .15s;min-width:0}
+.ag-card:hover{transform:translateY(-2px);box-shadow:0 4px 10px rgba(15,23,42,.06),0 16px 36px rgba(15,23,42,.10)}
+.ag-av{width:60px;height:60px;border-radius:50%;object-fit:cover;flex:none;background:var(--blue-l)}
+.ag-ini{display:grid;place-items:center;color:var(--blue);font-weight:800;font-size:22px}
+.ag-ct{min-width:0}
+.ag-nm{font-weight:800;line-height:1.3;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.ag-k{color:var(--muted);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ag-v{display:inline-flex;align-items:center;gap:3px;background:#e7f7ee;color:#0a7a3d;font-size:11px;font-weight:800;padding:3px 8px;border-radius:99px;white-space:nowrap}
+
+/* "Listed by" on the listing page */
+.ag-on{padding:16px}
+.ag-on .ag-card{box-shadow:none;padding:0;border-radius:0}
+.ag-on .ag-card:hover{transform:none;box-shadow:none}
+.ag-lab{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.ag-more{display:block;margin-top:12px;font-weight:700;font-size:14px;text-decoration:none}
+
+/* profile page */
+.ag-hero{display:flex;gap:24px;align-items:flex-start;margin-top:16px}
+.ag-big{width:120px;height:120px;border-radius:50%;object-fit:cover;flex:none;background:var(--blue-l);font-size:44px}
+.ag-main{min-width:0;flex:1}
+.ag-main h1{font-size:26px;margin:4px 0 4px;letter-spacing:-.02em;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ag-chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.ag-chips span{background:var(--bg);border-radius:99px;padding:5px 11px;font-size:12px;font-weight:700}
+.ag-areas span{background:var(--blue-l);color:var(--blue)}
+.ag-contact{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.ag-contact .btn{padding:9px 16px;font-size:14px}
+
+/* link pills: Also on Booking.com / Verified on Agoda / Facebook */
+.xl-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.xl{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:6px 14px 6px 6px;font-size:13px;font-weight:700;color:var(--ink);text-decoration:none;box-shadow:0 1px 3px rgba(15,23,42,.05);transition:border-color .15s,transform .15s}
+.xl:hover{border-color:var(--c);transform:translateY(-1px)}
+.xl i{font-style:normal;width:24px;height:24px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:11px;font-weight:800;line-height:1}
+.xl-note{color:var(--muted);font-size:12px;margin:10px 0 0}
+
+/* forms: link fields with the site badge */
+.xl-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px}
+.xl-f>span{display:flex;align-items:center;gap:7px;color:var(--ink)}
+.xl-f i{font-style:normal;width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;display:grid;place-items:center;font-size:10px;font-weight:800}
+.ag-fs{border:1px solid var(--line);border-radius:16px;padding:16px;margin:0;display:grid;gap:12px}
+.ag-fs legend{font-weight:800;padding:0 6px}
+.ag-sub{font-weight:800;color:var(--ink);margin-top:6px}
+.ag-photo{display:flex;align-items:center;gap:16px}
+.ag-photo .ag-big{width:84px;height:84px;font-size:30px}
+.ag-photo label.btn{cursor:pointer}
+.ag-slug{display:flex;align-items:center;border:1px solid var(--line);border-radius:12px;background:#fff;overflow:hidden}
+.ag-slug span{padding:0 4px 0 12px;color:var(--muted);font-weight:500;white-space:nowrap;font-size:13px}
+.ag-slug input{border:0;border-radius:0;padding-left:2px}
+.ag-pick{display:flex;flex-wrap:wrap;gap:6px}
+.ag-pick label{display:inline-flex;cursor:pointer}
+.ag-pick input{position:absolute;opacity:0;width:1px;height:1px}
+.ag-pick span{border:1px solid var(--line);border-radius:99px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--ink);background:#fff}
+.ag-pick input:checked+span{background:var(--blue);border-color:var(--blue);color:#fff}
+.ag-pick input:focus-visible+span{outline:2px solid #c7d2fe}
+.ag-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.ag-mine{margin:0}
+.ag-mine .ag-card{box-shadow:none;padding:0}
+
+@media (max-width:720px){
+  .ag-hero{flex-direction:column;align-items:center;text-align:center}
+  .ag-main h1,.ag-chips,.ag-contact,.xl-row{justify-content:center}
+  .ag-big{width:96px;height:96px}
+  .xl-fields{grid-template-columns:1fr}
+  .ag-grid{grid-template-columns:1fr}
+}

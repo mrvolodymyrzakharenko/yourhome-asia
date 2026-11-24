@@ -1,5 +1,6 @@
 import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 import { T } from './i18n.js';
+import * as AG from './agents.js';
 
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';
@@ -306,10 +307,10 @@ async function viewListing(id) {
       <div class="specs"><div class="spec"><b>${esc(beds)}</b><span>${t('bedrooms')}</span></div><div class="spec"><b>${l.bathrooms ?? '–'}</b><span>${t('bathrooms')}</span></div><div class="spec"><b>${l.area_m2 ? Math.round(l.area_m2) : '–'}</b><span>${t('area')}</span></div><div class="spec"><b>${l.furnished ? '✓' : '–'}</b><span>${t('furnished')}</span></div></div>
       ${detailFacts(l)}
       ${l.description ? `<h3>${t('description')}</h3><div class="desc">${esc(l.description)}</div>` : ''}
-    </div>
+    </div><div id="agLinks"></div>
     ${l.lat && l.lng ? `<div class="panel"><h3>${t('location')}</h3><div class="mini-map" id="mmap"></div></div>` : ''}
   </div>
-  <aside><div class="sticky">
+  <aside><div class="sticky"><div id="agBox"></div>
     <div class="panel"><h3>${t('contactOwner')}</h3>${l.contact_name ? `<p style="margin:0 0 12px;font-weight:700">${esc(l.contact_name)}</p>` : ''}
       <div class="contact">
         ${tg ? `<a class="btn tg wide" data-ev="telegram" href="https://t.me/${tg}" target="_blank" rel="noopener">Telegram @${esc(tg)}</a>` : ''}
@@ -323,6 +324,7 @@ async function viewListing(id) {
       <button class="btn red wide">${t('send')}</button></form>
   </div></aside></div></div>`;
   app.querySelectorAll('[data-ev]').forEach(a => a.addEventListener('click', () => track(l, a.dataset.ev)));
+  AG.listingExtras(l);
   app.querySelectorAll('.thumbs img').forEach(img => img.onclick = () => { document.getElementById('gmain').innerHTML = `<img src="${esc(photos[img.dataset.i])}" alt="">`; app.querySelectorAll('.thumbs img').forEach(x => x.classList.toggle('on', x === img)); });
   if (l.lat && l.lng) { const m = L.map('mmap').setView([l.lat, l.lng], 15); tiles(m); L.marker([l.lat, l.lng]).addTo(m); maps.push(m); }
   document.getElementById('inq').onsubmit = async e => {
@@ -368,6 +370,7 @@ async function viewPost(editId) {
     const last = store.get('yh_contact', {}); Object.assign(l, last);
   }
   let photos = [...(l.photos || [])];
+  const agBlock = await AG.postBlock(l, !editId);
   const sel = (name, opts, cur) => `<select name="${name}">${opts.map(([v, lab]) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
   app.innerHTML = `<div class="wrap"><form class="narrow panel form" id="pform">
     <h1 style="margin:0">${editId ? t('editTitle') : t('postTitle')}</h1>
@@ -395,6 +398,7 @@ async function viewPost(editId) {
       <label>${t('phone')}<input name="contact_phone" maxlength="30" value="${esc(l.contact_phone || '')}" placeholder="+855 …"></label></div>
     <div class="row"><label>${t('telegram')}<input name="contact_telegram" maxlength="40" value="${esc(l.contact_telegram || '')}" placeholder="@username"></label>
       <label>${t('whatsapp')}<input name="contact_whatsapp" maxlength="30" value="${esc(l.contact_whatsapp || '')}" placeholder="+855 …"></label></div>
+    ${agBlock}
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
   const m = L.map('pmap').setView(pos || PP, pos ? 16 : 13); tiles(m); maps.push(m);
@@ -431,6 +435,8 @@ async function viewPost(editId) {
       contact_name: f.contact_name.trim() || null, contact_phone: f.contact_phone.trim() || null,
       contact_telegram: f.contact_telegram.trim() || null, contact_whatsapp: f.contact_whatsapp.trim() || null,
     };
+    const ag = AG.postValues(e.target); if (!ag) { btn.disabled = false; return; }
+    Object.assign(row, ag);
     store.set('yh_contact', { contact_name: row.contact_name, contact_phone: row.contact_phone, contact_telegram: row.contact_telegram, contact_whatsapp: row.contact_whatsapp });
     const res = editId ? await sb.from('yh_listings').update(row).eq('id', editId).select('id').single()
                        : await sb.from('yh_listings').insert(row).select('id').single();
@@ -459,12 +465,13 @@ async function viewAccount() {
   const contacts = ev.filter(e => ['phone', 'telegram', 'whatsapp'].includes(e.kind));
   const uniq = new Set(views.map(e => e.visitor)).size;
   const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="panel" style="text-decoration:none;color:inherit;display:block;margin:0;${red ? 'background:var(--red);color:#fff' : ''}"><div style="font-size:30px">${icon}</div><div style="font-weight:800;font-size:19px;margin-top:6px">${title}</div><div style="opacity:.75;font-size:14px">${sub}</div></a>`;
-  const tabs = ['overview', 'listings', 'messages', 'stats', 'telegram'];
-  const tabLabel = { overview: t('overview'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts') };
+  const tabs = ['overview', 'agent', 'listings', 'messages', 'stats', 'telegram'];
+  const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts') };
   let body = '';
   if (tab === 'overview') {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
       ${bigCard('#/post', '＋', t('post'), t('postSub'))}
+      ${bigCard('#/account?tab=agent', '👤', AG.label('myAgent'), AG.label('agentSub'))}
       ${bigCard('#/account?tab=listings', '🏠', t('my'), String(mine.length))}
       ${bigCard('#/account?tab=messages', '✉️', t('inquiries'), String(inq.length))}
       ${bigCard('#/account?tab=stats', '📊', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
@@ -495,6 +502,8 @@ async function viewAccount() {
         <tr style="text-align:left;color:var(--muted)"><th style="padding:6px">${t('when')}</th><th>${t('what')}</th><th>${t('action')}</th><th>${t('from')}</th><th>${t('device')}</th><th>🌐</th></tr>
         ${ev.slice(0, 100).map(e => `<tr style="border-top:1px solid var(--line)"><td style="padding:7px 6px;white-space:nowrap">${dateTime(e.created_at)}</td><td>${esc(byId[e.listing_id]?.title || '')}</td><td>${t('a_' + e.kind)}</td><td>${esc(e.source === 'direct' ? t('direct') : e.source || '')}</td><td>${t(e.device || 'desktop')}</td><td>${esc((e.lang || '').toUpperCase())}</td></tr>`).join('')}
       </table></div></div>` : `<div class="empty">${t('noStats')}</div>`);
+  } else if (tab === 'agent') {
+    body = '<div id="agTab"></div>';
   } else if (tab === 'telegram') {
     body = `<form class="panel form" id="tgform" style="max-width:560px"><h3>🔔 ${t('tgAlerts')}</h3><p style="margin:0;color:var(--muted)">${t('tgAlertsSub')}</p>
       ${alerts.length ? `<p style="margin:0;font-weight:700">✓ ${t('tgActive')} ${esc(alerts[0].telegram)}</p>` : ''}
@@ -509,6 +518,7 @@ async function viewAccount() {
     <div class="bh"><div><div style="color:var(--muted);font-weight:700">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
+  if (tab === 'agent') AG.accountTab(document.getElementById('agTab'));
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
   document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };
   app.querySelectorAll('[data-status]').forEach(s => s.onchange = async () => { const { error } = await sb.from('yh_listings').update({ status: s.value }).eq('id', s.dataset.status); toast(error ? t('error') + error.message : t('savedOk')); });
@@ -548,14 +558,8 @@ async function viewSaved() {
   const list = await fetchListings({ ids: ids.slice(0, 100) });
   res.innerHTML = list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="empty">${t('savedEmpty')}</div>`;
 }
-async function viewExperts() {
-  app.innerHTML = `<div class="wrap"><div class="bh" style="margin-top:26px"><div><h2>⚡ ${t('expertsTitle')}</h2><div style="color:var(--muted)">${t('expertsSub')}</div></div><a class="btn red" href="#/post">+ ${t('post')}</a></div><div id="res"><div class="empty">${t('loading')}</div></div></div>`;
-  const { data = [] } = await sb.from('yh_listings').select('owner_id,contact_name,contact_telegram,created_at').eq('status', 'active').not('owner_id', 'is', null).limit(2000);
-  const g = {}; (data || []).forEach(r => { const x = g[r.owner_id] ||= { n: 0, name: r.contact_name, tg: r.contact_telegram }; x.n++; if (!x.name && r.contact_name) x.name = r.contact_name; });
-  const list = Object.entries(g).sort((a, b) => b[1].n - a[1].n);
-  document.getElementById('res').innerHTML = list.length ? `<div class="grid">${list.map(([id, x]) => `<a class="exp" href="#/search?owner=${id}" style="text-decoration:none;color:inherit"><div class="av">${esc((x.name || '?').trim()[0]?.toUpperCase() || '?')}</div><div><div style="font-weight:800">${esc(x.name || 'YourHome')}</div><div style="color:var(--muted);font-size:13px">${t('listingsCount', { n: x.n })}${tgHandle(x.tg) ? ' · @' + esc(tgHandle(x.tg)) : ''}</div></div></a>`).join('')}</div>`
-    : `<div class="empty">${t('noResults')}<br><br><a class="btn red" href="#/post">+ ${t('post')}</a></div>`;
-}
+// Agents & agencies page lives in agents.js (profiles + other advertisers)
+const viewExperts = () => AG.viewExperts();
 const PAGES = {
   terms: () => `<h1>${t('terms')}</h1><p>YourHome.asia is a listing platform that connects people looking for housing in Cambodia with owners and agents. Listings are published by their advertisers, who are responsible for their accuracy and legality. YourHome.asia is not a party to any rental or sale agreement.</p><p>Posting a standard listing is free. Advertisers must only post real properties they are entitled to offer, with honest prices and photos. We may hide or remove listings that are misleading, duplicated, spam or illegal, and may suspend accounts that break these rules.</p><p>Paid placements (TOP listings) are shown with a TOP label. Users should check every property in person and never send deposits before viewing it.</p><p>Questions: <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a></p>`,
   privacy: () => `<h1>${t('privacy')}</h1><p>We store the information you give us: your account email, your listings and the contact details you choose to publish, and messages sent through listing contact forms (delivered to the advertiser).</p><p>To show advertisers how their listings perform, we record anonymous visit statistics: the listing viewed, time, traffic source, device type and site language, linked to a random browser ID — not your name. Saved listings are kept only in your browser.</p><p>Data is stored with Supabase and the site is hosted on Vercel. We do not sell personal data. To delete your account or data, write to <a href="mailto:${SUPPORT_EMAIL}">${SUPPORT_EMAIL}</a>.</p>`,
@@ -567,7 +571,7 @@ async function route() {
   document.title = 'YourHome.asia — ' + t('heroTitle').replace(/<[^>]+>/g, '');
   const path = (location.hash.slice(1).split('?')[0] || '/').replace(/\/+$/, '') || '/';
   const parts = path.split('/').filter(Boolean);
-  const nav = parts[0] === 'search' ? (qs().get('view') === 'map' ? 'map' : 'search') : ({ '': 'home', post: 'post', saved: 'saved', experts: 'experts', account: 'account' }[parts[0] || ''] || '');
+  const nav = parts[0] === 'search' ? (qs().get('view') === 'map' ? 'map' : 'search') : ({ '': 'home', post: 'post', saved: 'saved', experts: 'experts', agent: 'experts', account: 'account' }[parts[0] || ''] || '');
   document.querySelectorAll('.bnav a').forEach(a => a.classList.toggle('on', a.dataset.nav === nav));
   window.scrollTo(0, 0);
   try {
@@ -579,10 +583,12 @@ async function route() {
     else if (parts[0] === 'account' || parts[0] === 'my') await viewAccount();
     else if (parts[0] === 'saved') await viewSaved();
     else if (parts[0] === 'experts') await viewExperts();
+    else if (parts[0] === 'agent' && parts[1]) await AG.viewAgent(decodeURIComponent(parts[1]));
     else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${PAGES[parts[0]]()}</div></div>`;
     else await viewHome();
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }
+AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
 window.addEventListener('hashchange', route);
 
 applyStatic();

@@ -143,6 +143,28 @@ label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:6px}
 .ftr-nav{display:flex;gap:22px;flex-wrap:wrap}
 .ftr-nav a{color:var(--muted);text-decoration:none;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
 .ftr-nav a:hover{color:var(--blue)}
+.chipbox.home{max-width:1080px;margin:12px auto 0;text-align:left}
+.fbox{background:#fff;border-radius:18px;padding:12px;box-shadow:var(--shadow);margin:18px 0}
+.fbox .fbar{box-shadow:none;padding:0;margin:0;border-radius:0;grid-template-columns:1fr 1.6fr 1fr 1fr}
+.fbox .chipbox{border-top:1px solid var(--line);margin-top:12px;padding-top:12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+.chip{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:99px;padding:6px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;white-space:nowrap;line-height:1.2}
+.chip:hover{border-color:#c7d2fe}
+.chip.on{background:var(--blue-l);border-color:var(--blue);color:var(--blue)}
+.chip svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.9}
+.chip.more{font-weight:700}
+.chips.static .chip{cursor:default}
+.chips.static{margin:4px 0 6px}
+.chip-grp{display:inline-flex;align-items:center;gap:4px;background:var(--bg);border-radius:99px;padding:3px 4px 3px 10px}
+.chip-grp .chip{padding:5px 10px}
+.chip-ic{display:grid;place-items:center;color:var(--muted)}
+.chip-ic svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8}
+.more-panel{background:#fff;border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:10px}
+.chipbox.home .more-panel{box-shadow:var(--shadow);border:0}
+.mp-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.mp-lab{font-size:12px;font-weight:700;color:var(--muted);margin:14px 0 8px;text-transform:uppercase;letter-spacing:.06em}
+.mp-act{display:flex;justify-content:flex-end;gap:8px;margin-top:14px}
+.amen-pick{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:8px 14px}
 /* Bottom menu (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz akármikor"): every screen,
    centred, max 400px, rounded top, pale-blue bar, six equal columns Home · Map · Saved · Post · Experts · Account,
    round blue Search floating above the middle (no label), red Post always visible */
@@ -168,7 +190,8 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .sbox .f{border-right:0;background:var(--bg);border-radius:14px;padding:8px 12px}
   .sbox .f.addr{grid-column:1/-1}
   .sbox .btn{grid-column:1/-1}
-  .fbar{grid-template-columns:1fr 1fr}
+  .fbar,.fbox .fbar{grid-template-columns:1fr 1fr}
+  .mp-grid{grid-template-columns:1fr 1fr}
   .detail{grid-template-columns:1fr}
   .sticky{position:static}
   .specs{grid-template-columns:repeat(2,1fr)}
@@ -184,4 +207,6 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .row4 .cb{padding:10px 11px 12px}.row4 .ct{font-size:14px}.row4 .pov{font-size:17px;left:10px;bottom:9px}
   .row4 .specs-row{font-size:11.5px;padding-top:9px}.row4 .specs-row svg{width:14px;height:14px}.row4 .tags{right:46px;top:10px}.row4 .date{top:10px;left:10px}
   .row-scroll{grid-auto-columns:78%}
+  .chips:not(.static){flex-wrap:nowrap;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+  .more-panel .chips{flex-wrap:wrap;overflow:visible}
 }

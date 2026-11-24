@@ -893,3 +893,23 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 @media (min-width:901px){.sbox{padding:9px 7px!important}.sbox .f{padding-top:4px!important;padding-bottom:4px!important}.sbox .btn{padding-top:12px!important;padding-bottom:12px!important}}
 /* the banner between two blocks keeps the block spacing */
 #blocks>.cta{margin:6px 0 26px!important}
+/* Filters panel: no Reset / Close row; the round × is RED with the cross exactly centred; a wrapped amenity line never starts
+   with a divider (owner, 2026-11-24 17:27) */
+.mp-x{color:#E00025!important;padding:0!important;font-size:0!important}
+.mp-x svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;display:block}
+.mp-x:hover{background:#FDE4E7!important}
+.more-panel .chips .chip.ln1::before{display:none!important}
+/* PC filter line = EQUAL GAPS between all words (owner, 2026-11-24 17:28: "egyenlő távolság… bal oldal pihen, jobb össze van
+   sűrítve"): every item keeps its own width and the free space is shared equally (space-between), thin divider between each. */
+@media (min-width:901px){
+  #chipBox{justify-content:space-between}
+  #chipBox .chips.qrow,#chipBox .frow,#chipBox .frow .vsw{display:contents!important}
+  #chipBox .frow::before{display:none!important}
+  #chipBox .qrow>.chip,#chipBox .frow>*,#chipBox .frow .vsw a{flex:0 0 auto!important;position:relative}
+  #chipBox .frow>.chip.more::before{content:"";position:absolute;left:-1px;top:28%;bottom:28%;width:1px;background:#D5DAE3}
+}
+/* PC filter line: every word grows by the same amount → equal gaps AND the thin divider sits in the middle of each gap */
+@media (min-width:901px){#chipBox .qrow>.chip,#chipBox .frow>*,#chipBox .frow .vsw a{flex:1 1 auto!important;justify-content:center;text-align:center}}
+/* our rounded list on PC (More filters selects): a small centred card, not a full-screen picker */
+@media (min-width:901px){.ypk-w{top:22vh!important;bottom:auto!important;left:50%!important;right:auto!important;width:300px;max-height:56vh;transform:translateX(-50%) scale(.96)}.ypk.in .ypk-w{transform:translateX(-50%)}}
+#chipBox .chip:focus,#chipBox .vsw a:focus{outline:none}#chipBox .chip:focus-visible,#chipBox .vsw a:focus-visible{outline:2px solid #ffc2cb;outline-offset:2px}

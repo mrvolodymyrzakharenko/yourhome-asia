@@ -69,11 +69,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   clamp(26px,3.7vw,46px)
   (owner, 2026-11-24; fonts.css .hero h1 em::after). Under the card: filter chips
   1+ bed · 2+ beds · 3+ beds · … · More filters – no bed icon, no Studio chip.
-- FILTERS PANEL (owner, 2026-11-24 20:11): no white box – full width; Bathrooms · Min. size · Rental term · Listed within in
+- FILTERS PANEL (owner, 2026-11-24 17:27 Chisinau: no Reset / Close row any more; the × is red and centred; a wrapped amenity line
+  never starts with a divider – markLineStarts() in app.js; its four selects open OUR rounded list (picker.js) on every screen, a 300px card on PC). Earlier (20:11): no white box – full width; Bathrooms · Min. size · Rental term · Listed within in
   ONE row of four columns (grey label, borderless value + small chevron, thin dividers); amenities and Reset | Close as grey
   words with thin dividers like the quick filters (picked = pink patch). No buttons, no outlines – only the thin strips. A round × top-right closes it; Pool/Gym (row 1) are not repeated.
 - PC SEARCH AREA (owner, 2026-11-24 evening): the search card is 972px wide and ~10% lower; the 10 categories above it and the
-  filters under it are exactly as WIDE AS THE CARD, every item an equal column; on PC the quick filters and More filters |
+  filters under it are exactly as WIDE AS THE CARD, on PC the quick filters (owner 17:28: EQUAL GAPS between the words, space-between – not equal columns) and More filters |
   Listing | Map | Subscribe | Newest share ONE full-width line (styles.css "PC: the rows around the search card").
   The card is ~5% taller again (owner: "túl szűk"). The four fields are EQUAL, label + value centred, the small filled triangle right after the value (owner: "lélegezzen, de ne ennyire").
 - PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),

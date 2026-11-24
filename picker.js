@@ -9,7 +9,7 @@
   function open(sel) {
     close(); cur = sel;
     box = document.createElement('div'); box.className = 'ypk';
-    var lab = (sel.closest('.f') && sel.closest('.f').querySelector('label')) ? sel.closest('.f').querySelector('label').textContent.replace(/^\W+/, '') : '';
+    var lw = sel.closest('.f') || sel.closest('label'), lab = lw ? (lw.querySelector('label') || lw).firstChild.textContent.replace(/^\W+/, '').trim() : '';
     var h = '<div class="ypk-bg"></div><div class="ypk-w" role="listbox" aria-label="' + lab.replace(/"/g, '&quot;') + '"><div class="ypk-h"><span>' + lab.replace(/</g, '&lt;') + '</span><button type="button" class="ypk-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="ypk-l">';
     for (var i = 0; i < sel.options.length; i++) {
       var o = sel.options[i];
@@ -24,7 +24,8 @@
       if (b || e.target.classList.contains('ypk-bg') || e.target.closest('.ypk-x')) close();
     });
   }
-  function hit(e) { var s = e.target.closest && e.target.closest('.sbox select'); return s && !s.disabled && mq.matches ? s : null; }
+  // also the More filters selects on EVERY screen (owner, 2026-11-24 17:28: the native list was ugly – "szép, gömbölyű, szélesebb")
+  function hit(e) { if (!e.target.closest) return null; var s = e.target.closest('.sbox select'); if (s && !s.disabled && mq.matches) return s; s = e.target.closest('.more-panel select'); return s && !s.disabled ? s : null; }
   document.addEventListener('mousedown', function (e) { if (hit(e)) e.preventDefault(); }, true);
   document.addEventListener('touchstart', function (e) { if (hit(e)) e.preventDefault(); }, { capture: true, passive: false });
   document.addEventListener('touchend', function (e) { var s = hit(e); if (s) { e.preventDefault(); open(s); } }, { capture: true, passive: false });

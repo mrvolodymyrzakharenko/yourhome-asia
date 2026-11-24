@@ -249,7 +249,7 @@ function chipRow(st, deal) {
     ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
   <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}<span class="mf-l">${t('moreFilters')}</span><span class="mf-s">${t('filters')}</span>${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>
-  <div class="more-panel" ${panelOpen ? '' : 'hidden'}><button type="button" class="mp-x" data-more aria-label="${esc(t('close'))}" title="${esc(t('close'))}">×</button>
+  <div class="more-panel" ${panelOpen ? '' : 'hidden'}><button type="button" class="mp-x" data-more aria-label="${esc(t('close'))}" title="${esc(t('close'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg></button>
     <div class="mp-grid">
       ${sel('baths', [1, 2, 3].map(n => [n, n + '+']), t('bathrooms'))}
       ${sel('area', [30, 50, 80, 120, 200].map(n => [n, n + '+ m²']), t('minArea'))}
@@ -258,12 +258,12 @@ function chipRow(st, deal) {
     </div>
     <div class="mp-lab">${t('amenities')}</div>
     <div class="chips">${quick.slice(2).map(a => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, t('am_' + a))).join('')}${chip('photos', '1', '📷 ' + t('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
-    <div class="mp-act"><button type="button" class="btn ghost sm" data-reset>${t('resetFilters')}</button><button type="button" class="btn blue sm" data-more>${t('close')}</button></div>
+
   </div>`;
 }
 function wireChips(root, st, onChange) {
   root.onclick = e => {
-    if (e.target.closest('[data-more]')) { panelOpen = !panelOpen; const pn = root.querySelector('.more-panel'); pn.hidden = !panelOpen; root.querySelector('.chip.more').setAttribute('aria-expanded', panelOpen); return; }
+    if (e.target.closest('[data-more]')) { panelOpen = !panelOpen; const pn = root.querySelector('.more-panel'); pn.hidden = !panelOpen; requestAnimationFrame(markLineStarts); root.querySelector('.chip.more').setAttribute('aria-expanded', panelOpen); return; }
     if (e.target.closest('[data-reset]')) { FKEYS.forEach(k => delete st[k]); return onChange(st); }
     const c = e.target.closest('.chip[data-k]'); if (!c) return;
     const { k, v } = c.dataset;
@@ -797,7 +797,12 @@ function fitLine(el, min, max) {
   el.style.setProperty('font-size', lo + 'px', 'important');
 }
 let fitRaf = 0;
+// Wrapped rows of words with thin dividers: the first word of every line gets no divider (owner, 2026-11-24 17:27)
+function markLineStarts() {
+  document.querySelectorAll('.more-panel .chips').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
+}
 function fitCards() {
+  markLineStarts();
   if (innerWidth > 720) { document.querySelectorAll('.yname,.ymeta .yaddr').forEach(e => e.style.removeProperty('font-size')); return; }
   document.querySelectorAll('.card .yname').forEach(e => { fitLine(e, 15, 26); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 2) + 'px', 'important'); });  // 2px under the full fit (owner, 20:16 + 20:56)
   document.querySelectorAll('.card .ymeta .yaddr').forEach(e => { fitLine(e, 11, 17); e.style.setProperty('font-size', (parseFloat(e.style.fontSize) - 2) + 'px', 'important'); });  // address 2px under the fit (owner, 20:56)

@@ -209,3 +209,6 @@ for (const k of Object.keys(FT)) Object.assign(T[k], FT[k]);
 /* PHONE CARD FOOTER (owner, 2026-11-24: "jobb részre … Click to View Apartment") */
 const CV = { en:{clickView:'Click to view {x}'}, km:{clickView:'ចុចដើម្បីមើល{x}'}, zh:{clickView:'点击查看{x}'}, fr:{clickView:'Voir {x}'}, th:{clickView:'คลิกดู{x}'} };
 for (const k of Object.keys(CV)) Object.assign(T[k], CV[k]);
+/* FILTER ROW 2 WORDS (owner, 2026-11-24: "legyen listing, és subscribe, és ott a Telegram logó") */
+const SB = { en:{listing1:'Listing',subscribe:'Subscribe'}, km:{listing1:'បញ្ជី',subscribe:'ជាវ'}, zh:{listing1:'列表',subscribe:'订阅'}, fr:{listing1:'Liste',subscribe:'S’abonner'}, th:{listing1:'รายการ',subscribe:'ติดตาม'} };
+for (const k of Object.keys(SB)) Object.assign(T[k], SB[k]);

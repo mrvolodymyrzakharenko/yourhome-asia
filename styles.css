@@ -516,3 +516,19 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 /* ROW 1 = 1+ bed · 2+ beds · 3+ beds · Furnished · Pool · Gym on every tab (Rent, Buy, Rooms) and screen (owner, 2026-11-24:
    "nem a private bedroom kell, hanem gym és pool"); the other amenities stay in More filters. */
 .more-panel .chips .mp-q:nth-child(2){display:none!important}
+/* ROW 2 = Filters · Listing · Map · Telegram logo + Subscribe · Newest ▾ (owner, 2026-11-24). The Telegram button keeps its
+   hover bubble "Telegram alerts". Phones: list/map icons hidden so the words fit one line. */
+.frow .ftg{gap:6px;color:#5B6478!important;font:inherit;font-size:13px;letter-spacing:-.025em}
+.frow .ftg svg{width:22px;height:22px;padding:4.5px}
+.frow .ftg:hover{color:#E00025!important}
+@media (max-width:720px){
+  .frow .vsw svg{display:none}
+  .frow .chip,.frow .vsw a{padding:6px 6px!important}
+  .frow .ftg{padding:4px 6px;gap:4px}
+}
+@media (max-width:379px){
+  .frow .chip,.frow .vsw a,.frow .ftg,.frow .fsort select{font-size:12.5px!important}
+  .frow .chip,.frow .vsw a{padding:6px 4px!important}
+  .frow .ftg{padding:4px 4px}
+  .frow .chip svg{display:none}
+}

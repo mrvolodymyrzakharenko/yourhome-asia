@@ -254,3 +254,22 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .ylink{display:inline-flex;align-items:center;gap:7px;margin-top:8px;color:#E00025;font-size:13px;font-weight:600;letter-spacing:-.025em}
   .ylink svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 }
+/* PHONES: SEARCH ROWS WRAP (owner, 2026-11-24: "nem lehet sor elcsúszva jobbra… egy sorba annyit, amennyit lehet, a következőt
+   az alatta lévő sorba"): Rent · Buy · Rooms | categories, the filter chips and the project tabs never scroll sideways –
+   as many as fit on a line, the rest on the next line, centred. */
+@media (max-width:720px){
+  .srow .deal-tabs,.hero .deal-tabs,.deal-tabs{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;overflow:visible!important;max-width:100%;row-gap:4px;height:auto}
+  .srow .deal-tabs button,.hero .deal-tabs button{flex:0 0 auto}
+  .chips:not(.static){flex-wrap:wrap!important;overflow:visible!important;justify-content:center}
+  .prj-tabs{flex-wrap:wrap!important;justify-content:center;overflow:visible!important;border-radius:20px}
+}
+/* Search card on phones/tablets (owner, 2026-11-24): City full width, every field ~25% lower; the picked tab and category
+   stay red */
+.deal-tabs button.on,.deal-tabs .dt-cat.on{background:#E00025!important;color:#fff!important}
+@media (max-width:900px){
+  .sbox .f:first-child{grid-column:1/-1}
+  .sbox .f{padding:5px 12px!important;border-radius:12px!important}
+  .sbox label{line-height:1.3}
+  .sbox select,.sbox input{padding:0!important;line-height:1.35;height:auto;min-height:0}
+  .sbox .btn{padding:10px 20px!important;border-radius:13px}
+}

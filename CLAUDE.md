@@ -35,7 +35,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   buttons 13px / 500 (phones 600). Only the homepage hero H1 and icon glyphs/emoji/initials keep their size. Card price =
   white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
   classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
-- SEARCH ROW (owner, 2026-11-24): Rent · Buy · Rooms | Apartment · Studio · Villa · House in one pill row (CATS in app.js);
+- SEARCH ROW (owner, 2026-11-24): Rent · Buy · Rooms | Apartment · Condo · Studio · Villa · House in one pill row (CATS in
+  app.js; Condo = 8th item, owner 2026-11-24); the picked tab/category is RED. On phones the row, the chips and the project tabs
+  WRAP centred – never sideways scrolling (owner: "nem lehet sor elcsúszva jobbra"). Search card on phones/tablets: City full
+  width, fields ~25% lower (styles.css last blocks);
   a category opens the results at once (deal of the active tab; Studio = bedrooms 0). The results page (#/search) shows
   EXACTLY the homepage top – title, lead, the row, the search card and the chips – with the results under it (owner,
   2026-11-24: "pont ugyanolyan legyen és ha bármire kattintok ne tűnjön el"; hero() in app.js; active tab + category

@@ -42,7 +42,8 @@ html.apm-on{overflow:hidden}
 .apm-safe{display:flex;flex-direction:column;gap:3px;margin:28px 0 0;padding:12px 14px;border-radius:14px;background:#FFF6E0;color:#5b4a1d;font-size:12px}
 .apm-safe b{color:#9A6400;font-weight:600;letter-spacing:-.025em;font-size:13px}
 .apm-cname{margin:0 0 12px;font-size:13px;font-weight:600;letter-spacing:-.025em}
-.apm-cbtn{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px}
+.apm-cbtn{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:8px;margin-bottom:16px}
+.apm-cbtn .btn{width:100%;min-width:0;justify-content:center;text-align:center;white-space:nowrap;padding-left:10px;padding-right:10px}
 .apm-cbtn:empty{display:none}
 .apm-inq{display:grid;gap:10px;padding:16px;border-radius:16px;background:#F8FAFC}
 .apm-inq textarea{min-height:80px}

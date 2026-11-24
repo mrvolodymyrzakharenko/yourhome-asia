@@ -95,7 +95,10 @@ export async function open(id, push) {
   if (error || !l) { C.toast('404'); return; }
   cur = l; photo = 0; lastFocus = document.activeElement;
   C.track(l, 'view');
-  const tg = C.tgHandle(l.contact_telegram), wa = C.digits(l.contact_whatsapp), ph = C.digits(l.contact_phone);
+  const wa = C.digits(l.contact_whatsapp), ph = C.digits(l.contact_phone);
+  // Telegram: the advertiser's @username, else their number (t.me/+855… opens the chat by phone number)
+  const tgName = C.tgHandle(l.contact_telegram), tgNum = (wa || ph || '').replace('+', '');
+  const tg = tgName || (tgNum ? '+' + tgNum : null);
   dlg.querySelector('.apm-date').textContent = day(l.created_at);
   dlg.querySelector('.apm-scroll').innerHTML = `
     <div class="apm-tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}<span class="tag apm-kind">${esc(t(l.deal_type === 'sale' ? 'buy' : l.deal_type))} · ${esc(t('t_' + l.property_type))}</span></div>
@@ -115,9 +118,9 @@ export async function open(id, push) {
       <div id="agBox" class="apm-ag"></div>
       ${l.contact_name ? `<p class="apm-cname">${esc(l.contact_name)}</p>` : ''}
       <div class="apm-cbtn">
-        ${tg ? `<a class="btn tg" data-ev="telegram" href="https://t.me/${tg}" target="_blank" rel="noopener">Telegram @${esc(tg)}</a>` : ''}
+        ${tg ? `<a class="btn tg" data-ev="telegram" href="https://t.me/${tg}" target="_blank" rel="noopener">Telegram</a>` : ''}
         ${wa ? `<a class="btn wa" data-ev="whatsapp" href="https://wa.me/${wa.replace('+', '')}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
-        ${ph ? `<a class="btn blue" data-ev="phone" href="tel:${ph}">📞 ${esc(t('call'))} ${esc(l.contact_phone)}</a>` : ''}
+        ${ph ? `<a class="btn blue" data-ev="phone" href="tel:${ph}" title="${esc(l.contact_phone)}">📞 ${esc(t('call'))}</a>` : ''}
       </div>
       <form class="form apm-inq" id="apmInq"><b>${esc(t('sendMsg'))}</b>
         <input name="name" placeholder="${esc(t('yourName'))}" required maxlength="100">

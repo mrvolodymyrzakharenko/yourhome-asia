@@ -380,7 +380,9 @@ async function viewListing(id) {
   track(l, 'view');
   document.title = `${l.title} — YourHome.asia`;
   const photos = l.photos || [];
-  const tg = tgHandle(l.contact_telegram), wa = digits(l.contact_whatsapp), ph = digits(l.contact_phone);
+  const wa = digits(l.contact_whatsapp), ph = digits(l.contact_phone);
+  const tgName = tgHandle(l.contact_telegram), tgNum = (wa || ph || '').replace('+', '');
+  const tg = tgName || (tgNum ? '+' + tgNum : null);
   const beds = l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–');
   app.innerHTML = `<div class="wrap"><a class="back" href="javascript:history.back()">${t('back')}</a>
   <div class="detail"><div>
@@ -400,7 +402,7 @@ async function viewListing(id) {
   <aside><div class="sticky"><div id="agBox"></div>
     <div class="panel"><h3>${t('contactOwner')}</h3>${l.contact_name ? `<p style="margin:0 0 12px;font-weight:600">${esc(l.contact_name)}</p>` : ''}
       <div class="contact">
-        ${tg ? `<a class="btn tg wide" data-ev="telegram" href="https://t.me/${tg}" target="_blank" rel="noopener">Telegram @${esc(tg)}</a>` : ''}
+        ${tg ? `<a class="btn tg wide" data-ev="telegram" href="https://t.me/${tg}" target="_blank" rel="noopener">Telegram${tgName ? ' @' + esc(tgName) : ''}</a>` : ''}
         ${wa ? `<a class="btn wa wide" data-ev="whatsapp" href="https://wa.me/${wa.replace('+', '')}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
         ${ph ? `<a class="btn blue wide" data-ev="phone" href="tel:${ph}">📞 ${t('call')} ${esc(l.contact_phone)}</a>` : ''}
       </div></div>

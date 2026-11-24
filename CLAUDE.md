@@ -17,7 +17,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Structure copies vietrent.net (portal look), but in Cambodian flag colours: royal blue #032EA1 (main), red #E00025
   (accents: TOP badge, prices, Post buttons), white background.
 - Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + "YourHome Cambodia" on ONE line, bold portal font, "Cambodia" red (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language select
-  (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown.
+  (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown (the word "Menu" shows on phones too – owner 21:29).
   Language pill: own small chevron close to the code with room after it (owner, 2026-11-24). "Become a partner" (white pill,
   → #/partners) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).
   "New projects" (white pill → #/projects) sits before it on screens over 1180px, and is the 2nd Menu item + a footer link.
@@ -111,7 +111,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   agent_id, else initials), name (agent name, else contact_name), three round outline buttons Call (blue) · WhatsApp (green) ·
   Telegram (sky) from the listing's contact fields (agent's as fallback; a phone number works as t.me/+…). The card is a link,
   so they are .yab spans opening their own link (click counted in yh_events). agentBar() in app.js; fetchListings attaches
-  l._agent. Demo listings: "YourHome Team" with the portal number.
+  l._agent. Photo order: agent photo → yh_listings.contact_photo (https only) → initials. Demo listings: invented Khmer names
+  (Sokha Chan, Sreymom Ly, Dara Heng, Bopha Kim, Vannak Mao, Chanthy Sok) with free Unsplash portraits and the portal number.
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | grid icon + Listing | map icon + Map (icons on phones too; phones hide the Filters icon) | Telegram logo + "Subscribe" (owner, 2026-11-24 19:56) | Newest – the Telegram button
   (#notifyBtn, name in a bubble on hover) | "Newest ▾" select (no "Sort:" word); no separate tools row under the heading.

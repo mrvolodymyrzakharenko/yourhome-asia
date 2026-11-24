@@ -840,3 +840,8 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .yab-tg svg{stroke:#229ED9}.yab-tg:hover{border-color:#229ED9;background:#E8F6FD}
 @media (max-width:720px){.yagent{margin-top:14px;padding-top:14px}.yav{width:38px;height:38px}.yab{width:40px;height:40px}.yab svg{width:18px;height:18px}}
 .cb .yagent{order:99}  /* agent bar always the last row of the card */
+/* "Menu" word beside the menu icon on phones too (owner, 2026-11-24 21:29) */
+@media (max-width:720px){.menu-btn span{display:inline!important;font-size:12px!important;font-weight:600}.menu-btn{gap:5px!important;padding:8px 10px!important}.menu-btn svg{width:16px!important;height:16px!important}}
+@media (max-width:379px){.menu-btn{padding:8px 8px!important;gap:4px!important}.menu-btn span{font-size:11.5px!important}}
+@media (max-width:379px){.hdr .wrap.hdr-in{padding-left:10px!important;padding-right:10px!important}.hdr-r{gap:4px!important}.hdr .lang{width:52px!important;padding-left:9px!important;padding-right:18px!important;background-position:right 6px center!important}.hdr .hdr-post{padding-left:10px!important;padding-right:10px!important}.menu-btn{padding:8px 7px!important}.hdr .logo{gap:5px!important}}
+@media (max-width:379px){.hero h1{font-size:6.4vw!important}}  /* hero title fits one line on 320–379px phones */

@@ -71,7 +71,7 @@ const ICON = {
   map: '<svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg>',
   sliders: '<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
 };
-const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id';
+const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id,contact_photo';
 
 function applyStatic() {
   document.documentElement.lang = lang;
@@ -104,7 +104,7 @@ function agentBar(l) {
   const ph = digits(l.contact_phone || (ag && ag.phone)), wa = digits(l.contact_whatsapp || (ag && ag.whatsapp)), tgRaw = l.contact_telegram || (ag && ag.telegram), tg = tgHandle(tgRaw) || (/^\+?\d{8,15}$/.test(String(tgRaw || '').replace(/[\s-]/g, '')) ? '+' + digits(tgRaw).replace('+', '') : null);
   if (!name && !ph && !wa && !tg) return '';
   const ini = (name || '?').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  const av = ag && ag.photo ? `<img src="${esc(ag.photo)}" alt="" loading="lazy">` : `<i>${esc(ini)}</i>`;
+  const pic = (ag && ag.photo) || l.contact_photo, av = pic ? `<img src="${esc(pic)}" alt="" loading="lazy">` : `<i>${esc(ini)}</i>`;
   const b = (href, ev, cls, svg, lab) => `<span class="yab ${cls}" role="link" tabindex="0" data-href="${esc(href)}" data-ev="${ev}" data-id="${l.id}" aria-label="${esc(lab)}">${svg}</span>`;
   return `<div class="yagent"><span class="yav">${av}</span><span class="yan">${esc(name || t('by_owner'))}</span><span class="yabs">${
     ph ? b('tel:' + ph, 'phone', 'yab-ph', '<svg viewBox="0 0 24 24"><path d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 7.1 7.1l1.4-2.3L21 15.5V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>', t('call')) : ''}${

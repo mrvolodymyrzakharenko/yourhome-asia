@@ -476,6 +476,7 @@ async function viewAccount() {
   if (tab === 'overview') {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
       ${bigCard('#/post', '＋', t('post'), t('postSub'))}
+      ${bigCard('#/account?tab=settings&v=1', vState === 'done' ? '✅' : '🛡️', vState === 'done' ? t('v_done') : t('v_cardTitle'), vState === 'pending' ? '⏳ ' + t('v_pending') : vState === 'done' ? t('v_cardDone') : t('v_cardSub'))}
       ${bigCard('#/account?tab=agent', '👤', AG.label('myAgent'), AG.label('agentSub'))}
       ${bigCard('#/account?tab=listings', '🏠', t('my'), String(mine.length))}
       ${bigCard('#/account?tab=messages', '✉️', t('inquiries'), String(inq.length))}
@@ -559,6 +560,7 @@ async function viewAccount() {
     store.set('yh_contact', contact); toast(t('savedOk')); route();
   };
   const vf = document.getElementById('verform');
+  if (vf && qs().get('v')) setTimeout(() => vf.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60);
   if (vf && vf.querySelector('[name=contact]')) vf.onsubmit = async e => {
     e.preventDefault(); const f = new FormData(vf), contact = String(f.get('contact') || '').trim(); if (contact.length < 3) return toast(t('required'));
     const { error } = await sb.from('yh_verify_requests').insert({ method: f.get('method'), contact, preferred_time: String(f.get('time') || '').trim() || null, note: String(f.get('note') || '').trim() || null });

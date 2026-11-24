@@ -202,9 +202,11 @@ function wireChips(root, st, onChange) {
   };
   root.onchange = e => { const s = e.target.closest('select[data-k]'); if (!s) return; s.value ? st[s.dataset.k] = s.value : delete st[s.dataset.k]; onChange(st); };
 }
+const postCard = () => `<a class="card" href="#/post" style="border:2px dashed #c7d2fe;box-shadow:none;background:#fbfcff"><div class="ph" style="background:#e8edfb"><span style="position:relative;z-index:2;width:64px;height:64px;border-radius:50%;background:#E00025;color:#fff;font-size:38px;display:grid;place-items:center;box-shadow:0 8px 20px rgba(224,0,37,.3);line-height:1">+</span></div><div class="cb"><h3 class="ct" style="color:#E00025">${t('post')}</h3><div class="loc">${t('postSub')}</div></div></a>`;
+const fill4 = list => { const items = list.slice(0, 4).map(card); while (items.length < 4) items.push(postCard()); return items.join(''); };
 function block(title, list, more) {
   if (!list.length) return '';
-  return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${list.slice(0, 4).map(card).join('')}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
+  return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${fill4(list)}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }
 async function viewHome() {
   app.innerHTML = `<div class="wrap"><section class="hero"><h1>${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox()}</section>
@@ -223,7 +225,7 @@ async function viewHome() {
   });
   const all = await fetchListings({ limit: 300 });
   const rent = all.filter(l => l.deal_type === 'rent');
-  const html = block(t('recommended'), all.filter(l => l.is_featured), '#/search?sort=new')
+  const html = block(t('recommended'), all.filter(l => l.is_featured).concat(all.filter(l => !l.is_featured)), '#/search?sort=new')
     + block(t('newest'), [...all].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)), '#/search?sort=new')
     + block(t('cheapest'), [...rent].sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
     + block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')

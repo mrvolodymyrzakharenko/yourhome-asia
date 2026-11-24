@@ -2,6 +2,7 @@ export const LANGS = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', 
 
 export const T = {
 en: {
+  newProjects: 'New projects',
   topbar: '24/7 support. Questions or feedback?', contactUs: 'Contact us →',
   experts: 'Experts', post: 'Post listing', postShort: 'Post',
   heroTitle: 'Find your home in <em>Cambodia</em><i>.</i>',
@@ -33,6 +34,7 @@ en: {
   supportBody: 'Questions, feedback or a problem with a listing? Write to us and we reply within 24 hours.',
 },
 km: {
+  newProjects: 'គម្រោងថ្មី',
   topbar: 'ជំនួយ 24/7។ មានសំណួរ ឬមតិយោបល់?', contactUs: 'ទាក់ទងមកយើង →',
   experts: 'អ្នកជំនាញ', post: 'ដាក់ប្រកាស', postShort: 'ប្រកាស',
   heroTitle: 'ស្វែងរកផ្ទះនៅ<em>កម្ពុជា</em>',
@@ -63,6 +65,7 @@ km: {
   required: 'សូមបំពេញព័ត៌មានចាំបាច់។', error: 'មានបញ្ហា៖ ', notifySoon: 'ការជូនដំណឹង Telegram នឹងមកដល់ឆាប់ៗ។',
 },
 zh: {
+  newProjects: '新楼盘',
   topbar: '24/7 客服。有问题或建议？', contactUs: '联系我们 →',
   experts: '专家', post: '发布房源', postShort: '发布',
   heroTitle: '在<em>柬埔寨</em>找到您的家',
@@ -93,6 +96,7 @@ zh: {
   required: '请填写必填项。', error: '出错了：', notifySoon: 'Telegram 提醒即将上线。',
 },
 fr: {
+  newProjects: 'Programmes neufs',
   topbar: 'Support 24h/24. Une question ou un avis ?', contactUs: 'Contactez-nous →',
   experts: 'Experts', post: 'Publier une annonce', postShort: 'Publier',
   heroTitle: 'Votre logement au <em>Cambodge</em><i>.</i>',
@@ -123,6 +127,7 @@ fr: {
   required: 'Veuillez remplir les champs obligatoires.', error: 'Une erreur est survenue : ', notifySoon: 'Les alertes Telegram arrivent bientôt.',
 },
 th: {
+  newProjects: 'โครงการใหม่',
   topbar: 'บริการ 24/7 มีคำถามหรือข้อเสนอแนะ?', contactUs: 'ติดต่อเรา →',
   experts: 'ผู้เชี่ยวชาญ', post: 'ลงประกาศ', postShort: 'ลงประกาศ',
   heroTitle: 'หาบ้านของคุณใน<em>กัมพูชา</em>',

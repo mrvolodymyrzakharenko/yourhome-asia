@@ -13,10 +13,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/styles.css?v=20261124m1">
-<link rel="stylesheet" href="/header.css?v=20261124x">
+<link rel="stylesheet" href="/header.css?v=20261124p1">
 <link rel="stylesheet" href="/agents.css?v=1">
 <link rel="stylesheet" href="/popup.css?v=1">
-<link rel="stylesheet" href="/fonts.css?v=9">
+<link rel="stylesheet" href="/partners.css?v=1">
+<link rel="stylesheet" href="/fonts.css?v=10">
 </head>
 <body>
 <header class="hdr">
@@ -32,18 +33,20 @@
       <a href="#/support" class="rb" aria-label="Contact"><svg viewBox="0 0 24 24"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg></a>
       <a href="#/account" class="rb" aria-label="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg></a>
       <a href="#/post" class="btn red hdr-post">+ <span data-i18n="post">Post listing</span></a>
-      <a href="#/account?tab=agent" class="btn ghost hdr-partner" data-i18n="becomePartner">Become a partner</a>
+      <a href="#/projects" class="btn ghost hdr-partner hdr-prj" data-i18n="newProjects">New projects</a>
+      <a href="#/partners" class="btn ghost hdr-partner" data-i18n="becomePartner">Become a partner</a>
       <button class="menu-btn" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span>Menu</span></button>
     </div>
   </div>
   <nav class="drawer" id="drawer" hidden>
     <a href="#/search" data-i18n="listings">Listings</a>
+    <a href="#/projects" class="dr-prj" data-i18n="newProjects">New projects</a>
     <a href="#/search?view=map" data-i18n="mapNav">Map</a>
     <a href="#/experts" data-i18n="experts">Experts</a>
     <a href="#/saved" data-i18n="saved">Saved</a>
     <a href="#/account" data-i18n="account">Account</a>
     <a href="#/post" class="dr-post" data-i18n="post">Post listing</a>
-    <a href="#/account?tab=agent" class="dr-partner" data-i18n="becomePartner">Become a partner</a>
+    <a href="#/partners" class="dr-partner" data-i18n="becomePartner">Become a partner</a>
     <a href="#/support" data-i18n="support">Support</a>
   </nav>
 </header>
@@ -58,7 +61,9 @@
     </div>
     <nav class="ftr-nav">
       <a href="#/search">⌂ <span data-i18n="listings">Listings</span></a>
+      <a href="#/projects">▦ <span data-i18n="newProjects">New projects</span></a>
       <a href="#/experts">✦ <span data-i18n="experts">Experts</span></a>
+      <a href="#/partners">✚ <span data-i18n="becomePartner">Become a partner</span></a>
       <a href="#/terms">▤ <span data-i18n="terms">Terms of service</span></a>
       <a href="#/privacy">◎ <span data-i18n="privacy">Privacy policy</span></a>
       <a href="#/support">✉ <span data-i18n="support">Support</span></a>

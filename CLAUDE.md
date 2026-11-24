@@ -19,7 +19,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + "YourHome Cambodia" on ONE line, bold portal font, "Cambodia" red (owner, 2026-11-24; header.css + fonts.css .brand), language select
   (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown.
   Language pill: own small chevron close to the code with room after it (owner, 2026-11-24). "Become a partner" (white pill,
-  → #/account?tab=agent) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).
+  → #/partners) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).
+  "New projects" (white pill → #/projects) sits before it on screens over 1180px, and is the 2nd Menu item + a footer link.
 - Footer like vietrent: logo + © line, links Listings · Experts · Terms · Privacy · Support.
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
@@ -54,6 +55,30 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Study .pcard look: pastel pills on the photo (price yellow · bedrooms blue · type green, TOP red, DEMO dark), white round
   heart, camera count bottom-right, then title, bathrooms · m², pin + district, red "View →" (card() extra .yb*/.y* elements,
   shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
+
+- STUDY PORTAL = THE DESIGN REFERENCE (owner, 2026-11-24: "az összes betűtípust, az összes megjelenést vedd ki a Study
+  portál szabályaiból"): fonts, sizes, weights, spacing, cards, banners and buttons follow the Study and Work portal's rules
+  (its CLAUDE.md "Font sizes and weights"): Plus Jakarta Sans; max 13px (banner H1s excepted); headings/bold 13px / 600 /
+  -.025em; body max 13px / 400; buttons 13px / 500 (phones 600) with -.025em. Check: render the page and make sure nothing
+  except hero H1s, the logo and glyphs is over 13px or over 600.
+
+## Become a partner page (owner, 2026-11-24: "vedd ki teljesen a became a partner oldalt… minden olyan szolgáltatást, ami
+   az ingatlanos oldalhoz lehet… kategóriákat, kártyákat")
+- #/partners = port of the Study For Partners page (partners.js viewPartners + partners.css): banner (photo fading in from
+  white on the right) → Who Can Partner With Us? (6 photo cards: agents & agencies, owners & landlords, developers, hotels /
+  guesthouses / short stays, property management, legal & notary) → Home Services Partners (12 icon cards: moving, cleaning,
+  interior & furniture, renovation, air-con & electrical, pest control, valuation, mortgage & banking, insurance, photo/video/
+  3D tours, internet & utilities, security & smart home) → How Partnership Works (5 steps) → 6 benefit tiles → Choose Your
+  Partnership Type (listing, developer, service, advertising, country representative) → Partner Dashboard → Partner
+  Application form → Country Representative band. Every card scrolls to the form with its type preset; #/partners?type=<key>
+  opens it preset. Applications → yh_partner_requests (anon/auth INSERT only, status 'new'; our team reads them with the
+  service key). Card counts stay EVEN (full rows of two on phones).
+
+## New projects (owner, 2026-11-24: "legyen egy olyan fő menüpont, hogy projects… new projects")
+- #/projects (tabs All · Pre-sale · Under construction · Ready) and #/project/<slug> (gallery, facts, amenities, price from,
+  call / Telegram / WhatsApp, "Ask about this project" → yh_project_leads, insert only). Homepage block "New projects" after
+  the category blocks. Table yh_projects (public read of active rows; only our team adds/edits with the service key;
+  is_demo = sample, 4 demo projects – delete at launch). Developers apply via #/partners?type=developers.
 
 ## Dashboard (owner, 2026-11-24)
 - Very clear, big cards: Post listing · My listings · Messages · Statistics · Telegram alerts.
@@ -108,4 +133,6 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - index.html – page shell, header, footer, bottom menu · styles.css + header.css – design · app.js – the whole app
   (hash routes: #/ · #/search · #/l/<id> · #/post · #/edit/<id> · #/account · #/saved · #/experts · #/agent/<slug> · #/terms · #/privacy · #/support)
 - i18n.js – all UI text in 5 languages (missing keys fall back to English).
-- Supabase tables: yh_listings, yh_inquiries, yh_events (statistics), yh_alerts, yh_agents; storage bucket yh-photos.
+- Supabase tables: yh_listings, yh_inquiries, yh_events (statistics), yh_alerts, yh_agents, yh_verify_requests,
+  yh_partner_requests, yh_projects, yh_project_leads; storage bucket yh-photos.
+- partners.js + partners.css – Become a partner page and New projects (PT.* hooks in app.js).

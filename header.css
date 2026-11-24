@@ -39,3 +39,5 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .brand-i{flex:none;filter:drop-shadow(0 2px 6px rgba(15,23,42,.08))}
 .brand{font-family:"Plus Jakarta Sans",system-ui,sans-serif;white-space:nowrap;color:#0f172a}
 .brand em{font-style:normal;color:#E00025}
+@media (max-width:1180px){.hdr-prj{display:none}}
+.drawer a.dr-prj{color:#032EA1}

@@ -2,6 +2,7 @@ import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js
 import { T } from './i18n.js';
 import * as AG from './agents.js';
 import * as POP from './popup.js';
+import * as PT from './partners.js';
 
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';
@@ -239,7 +240,9 @@ async function viewHome() {
     + block(t('cheapest'), [...rent].sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
     + block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')
     + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale');
-  document.getElementById('blocks').innerHTML = html || `<div class="empty">${t('noResults')}</div>`;
+  const prj = await PT.homeBlock();   // New projects block (owner, 2026-11-24)
+  const b0 = document.getElementById('blocks'); if (!b0) return;
+  b0.innerHTML = (html + prj) || `<div class="empty">${t('noResults')}</div>`;
 }
 
 async function viewSearch() {
@@ -645,11 +648,15 @@ async function route() {
     else if (parts[0] === 'saved') await viewSaved();
     else if (parts[0] === 'experts') await viewExperts();
     else if (parts[0] === 'agent' && parts[1]) await AG.viewAgent(decodeURIComponent(parts[1]));
+    else if (parts[0] === 'partners') PT.viewPartners();
+    else if (parts[0] === 'projects') await PT.viewProjects();
+    else if (parts[0] === 'project' && parts[1]) await PT.viewProject(decodeURIComponent(parts[1]));
     else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${PAGES[parts[0]]()}</div></div>`;
     else await viewHome();
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
+PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on); b.textContent = on ? '♥' : '♡'; }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });

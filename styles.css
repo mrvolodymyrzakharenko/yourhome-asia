@@ -334,3 +334,24 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .deal-tabs.prj-tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));row-gap:6px!important;width:100%}
   .prj-tabs a:nth-of-type(odd)::before{display:none}
 }
+/* FILTERS = TWO ROWS, TEXT WITH DIVIDERS (owner, 2026-11-24: "ne gombozd be… maximálisan közel… kisebb a vonal és a szó között…
+   egy sor… a következő sor a more filters, és mellette a listing és a maps view – csak két sor"):
+   row 1 = quick filters (phones: 1+ bed · 2+ beds · 3+ beds · Furnished; the amenities and Owner only move into More filters),
+   row 2 = More filters | Listings | Map. No boxes: grey text, thin dividers, small padding; picked = pink patch, red 600 text. */
+.chipbox .chips.qrow{display:flex;flex-wrap:wrap;justify-content:center;gap:0;row-gap:4px}
+.frow{display:flex;justify-content:center;align-items:center;margin-top:6px}
+.chipbox .qrow .chip,.frow .chip,.frow .vsw a{position:relative;border:0!important;background:none!important;box-shadow:none!important;color:#5B6478!important;font-weight:400!important;padding:6px 9px!important;border-radius:10px!important;letter-spacing:-.025em}
+.chipbox .qrow .chip+.chip::before,.frow .vsw a::before{content:"";position:absolute;left:0;top:30%;bottom:30%;width:1px;background:#D5DAE3}
+.chipbox .qrow .chip.on,.frow .chip.on,.frow .vsw a.on{background:#FDE4E7!important;color:#E00025!important;font-weight:600!important;box-shadow:0 6px 18px rgba(15,23,42,.08),0 1px 4px rgba(15,23,42,.05)!important}
+.chipbox .qrow .chip.on::before,.chipbox .qrow .chip.on+.chip::before,.frow .vsw a.on::before,.frow .chip.on+.vsw a:first-child::before,.frow .vsw a.on+a::before{display:none}
+.chipbox .qrow .chip:not(.on):hover,.frow .chip:not(.on):hover,.frow .vsw a:not(.on):hover{color:#E00025!important}
+.frow .vsw{display:flex;margin:0;padding:0;gap:0;background:none;box-shadow:none;border-radius:0;width:auto}
+.frow .vsw a{gap:6px}
+.frow .chip svg,.frow .vsw svg{width:16px;height:16px}
+.mp-q{display:none!important}
+@media (max-width:720px){
+  .chipbox .qrow{flex-wrap:nowrap!important;overflow:hidden}
+  .chipbox .qrow .q-x{display:none!important}
+  .chipbox .qrow .chip{flex:none}
+  .mp-q{display:inline-flex!important}
+}

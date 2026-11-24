@@ -185,13 +185,15 @@ function chipRow(st, deal) {
   const chip = (k, v, label) => `<button type="button" class="chip ${on(k, v) ? 'on' : ''}" data-k="${k}" data-v="${v}">${label}</button>`;
   const nMore = MORE_KEYS.filter(k => st[k]).length + amen.filter(a => !quick.includes(a)).length;
   const sel = (k, opts, lab) => `<label>${lab}<select data-k="${k}"><option value="">${t('any')}</option>${opts.map(([v, l]) => `<option value="${v}" ${String(st[k] ?? '') === String(v) ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></label>`;
-  return `<div class="chips">
+  // two rows only (owner, 2026-11-24): 1) quick filters as text with dividers – on phones beds + furnished, the rest move
+  // into More filters (.q-x / .mp-q); 2) More filters | Listings | Map
+  return `<div class="chips qrow">
     ${chip('beds', '1', t('bed1'))}${['2', '3'].map(n => chip('beds', n, t('bedN', { n }))).join('')}
     ${deal === 'sale' ? chip('foreign', '1', t('f_foreign')) : chip('furn', '1', t('furnished'))}
-    ${quick.map(a => chip('amen', a, t('am_' + a))).join('')}
-    ${chip('by', 'owner', t('f_owner'))}
-    <button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}${t('moreFilters')}${nMore ? ` (${nMore})` : ''}</button>
+    ${quick.map(a => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip q-x')).join('')}
+    ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
+  <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}${t('moreFilters')}${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>
   <div class="more-panel" ${panelOpen ? '' : 'hidden'}>
     <div class="mp-grid">
       ${sel('baths', [1, 2, 3].map(n => [n, n + '+']), t('bathrooms'))}
@@ -200,7 +202,7 @@ function chipRow(st, deal) {
       ${sel('days', [1, 7, 30].map(n => [n, t('d_' + n)]), t('listedWithin'))}
     </div>
     <div class="mp-lab">${t('amenities')}</div>
-    <div class="chips">${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, t('am_' + a))).join('')}${chip('photos', '1', '📷 ' + t('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
+    <div class="chips">${quick.map(a => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, t('am_' + a))).join('')}${chip('photos', '1', '📷 ' + t('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
     <div class="mp-act"><button type="button" class="btn ghost sm" data-reset>${t('resetFilters')}</button><button type="button" class="btn blue sm" data-more>${t('close')}</button></div>
   </div>`;
 }
@@ -222,7 +224,7 @@ function block(title, list, more) {
   if (!list.length) return '';
   return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${fill4(list)}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }
-const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(26px,3.7vw,46px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}${viewSwitch(p)}</section>`;
+const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(26px,3.7vw,46px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}</section>`;
 // List / Map switch under the search card on the homepage and the results page (owner, 2026-11-24: "hiányzik a térképes
 // nézetgomb és a listing… legyen kiírva map… nagyon fontos")
 const viewSwitch = (p = {}) => { const m = p.view === 'map'; return `<div class="vsw" role="group" aria-label="View"><a href="#/search" data-v="grid" class="${m ? '' : 'on'}">${ICON.grid}<span>${t('listings')}</span></a><a href="#/search?view=map" data-v="map" class="${m ? 'on' : ''}">${ICON.map}<span>${t('mapNav')}</span></a></div>`; };
@@ -277,7 +279,7 @@ async function viewSearch() {
   };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
-  document.querySelectorAll('.vsw a').forEach(b => b.onclick = e => { e.preventDefault(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); });
+  document.getElementById('chipBox').addEventListener('click', e => { const b = e.target.closest('.vsw a'); if (!b) return; e.preventDefault(); e.stopPropagation(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); }, true);
   document.getElementById('notifyBtn').onclick = () => alertModal(p);
   const list = await fetchListings(p);
   document.getElementById('rc').textContent = t('results', { n: list.length });

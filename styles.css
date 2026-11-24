@@ -794,3 +794,6 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .heart{width:21px!important;height:21px!important}
 .heart svg{width:13px!important;height:11px!important}
 @media (max-width:720px){.card .heart{width:23px!important;height:23px!important}}
+/* Photo labels 10% taller (owner, 2026-11-24 20:41) */
+.yb{padding-top:7.3px!important;padding-bottom:7.3px!important}
+.prj-badges .yb,.prj-tags .yb{padding-top:6.3px!important;padding-bottom:6.3px!important}

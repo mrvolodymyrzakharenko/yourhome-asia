@@ -57,6 +57,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Wording: "Also on Booking.com". "✓ Verified on …" and the "Verified" badge only when OUR team set yh_agents.verified_at
   (admin / service key only; changing name, kind or company removes it). NEVER "Verified by Booking" – that would say the
   other company checked it.
+- PULL BEFORE EDITING app.js: other sessions also work here – `git pull` first, never push an older copy of app.js (that drops the AG.* hooks).
 - Code: agents.js (all agent UI + its own 5-language texts TX), agents.css; app.js only calls AG.* (listing page #agBox /
   #agLinks, post form block, dashboard tab, #/agent route, experts page).
 

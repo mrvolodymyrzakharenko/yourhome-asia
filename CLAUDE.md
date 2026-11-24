@@ -70,7 +70,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (owner, 2026-11-24; fonts.css .hero h1 em::after). Under the card: filter chips
   1+ bed · 2+ beds · 3+ beds · … · More filters – no bed icon, no Studio chip.
 - FILTERS PANEL (owner, 2026-11-24 17:27 Chisinau: no Reset / Close row any more; the × is red and centred; a wrapped amenity line
-  never starts with a divider – markLineStarts() in app.js; its four selects open OUR rounded list (picker.js) on every screen, a 300px card on PC). Earlier (20:11): no white box – full width; Bathrooms · Min. size · Rental term · Listed within in
+  never starts with a divider – markLineStarts() in app.js; its four selects – and the search-card selects and Newest – open OUR rounded list (picker.js) on EVERY screen, a 300px card on PC; owner: "legyen egységesen szép"). Earlier (20:11): no white box – full width; Bathrooms · Min. size · Rental term · Listed within in
   ONE row of four columns (grey label, borderless value + small chevron, thin dividers); amenities and Reset | Close as grey
   words with thin dividers like the quick filters (picked = pink patch). No buttons, no outlines – only the thin strips. A round × top-right closes it; Pool/Gym (row 1) are not repeated.
 - PC SEARCH AREA (owner, 2026-11-24 evening): the search card is 972px wide and ~10% lower; the 10 categories above it and the

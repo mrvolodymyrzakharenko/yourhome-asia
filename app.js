@@ -367,7 +367,7 @@ async function viewPost(editId) {
     if (!data) { app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px">404</div></div>`; return; }
     l = data;
   } else {
-    const last = store.get('yh_contact', {}); Object.assign(l, last);
+    const last = store.get('yh_contact', null) || user?.user_metadata?.contact || {}; Object.assign(l, last);
   }
   let photos = [...(l.photos || [])];
   const agBlock = await AG.postBlock(l, !editId);
@@ -455,6 +455,11 @@ async function viewAccount() {
     sb.from('yh_listings').select(LISTING_COLS).eq('owner_id', user.id).order('created_at', { ascending: false }),
     sb.from('yh_alerts').select('*').eq('user_id', user.id).eq('kind', 'my_messages'),
   ]);
+  const [{ data: vreqs = [] }, { data: myAgents = [] }] = await Promise.all([
+    sb.from('yh_verify_requests').select('status,method,created_at').eq('user_id', user.id).order('created_at', { ascending: false }).limit(1),
+    sb.from('yh_agents').select('verified_at').eq('owner_id', user.id),
+  ]);
+  const vState = (myAgents || []).some(a => a.verified_at) || vreqs?.[0]?.status === 'verified' ? 'done' : vreqs?.[0]?.status === 'pending' ? 'pending' : vreqs?.[0]?.status === 'rejected' ? 'rejected' : '';
   const ids = (mine || []).map(l => l.id);
   const [{ data: ev = [] }, { data: inq = [] }] = ids.length ? await Promise.all([
     sb.from('yh_events').select('listing_id,kind,visitor,source,device,lang,created_at').in('listing_id', ids).gte('created_at', since).order('created_at', { ascending: false }).limit(5000),
@@ -465,8 +470,8 @@ async function viewAccount() {
   const contacts = ev.filter(e => ['phone', 'telegram', 'whatsapp'].includes(e.kind));
   const uniq = new Set(views.map(e => e.visitor)).size;
   const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="panel" style="text-decoration:none;color:inherit;display:block;margin:0;${red ? 'background:var(--red);color:#fff' : ''}"><div style="font-size:30px">${icon}</div><div style="font-weight:800;font-size:19px;margin-top:6px">${title}</div><div style="opacity:.75;font-size:14px">${sub}</div></a>`;
-  const tabs = ['overview', 'agent', 'listings', 'messages', 'stats', 'telegram'];
-  const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts') };
+  const tabs = ['overview', 'agent', 'listings', 'messages', 'stats', 'telegram', 'settings'];
+  const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: '⚙️ ' + t('settings') };
   let body = '';
   if (tab === 'overview') {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
@@ -476,6 +481,7 @@ async function viewAccount() {
       ${bigCard('#/account?tab=messages', '✉️', t('inquiries'), String(inq.length))}
       ${bigCard('#/account?tab=stats', '📊', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
       ${bigCard('#/account?tab=telegram', '🔔', t('tgAlerts'), alerts.length ? `${t('tgActive')} ${esc(alerts[0].telegram)}` : t('tgAlertsSub'))}
+      ${bigCard('#/account?tab=settings', '⚙️', t('settings'), vState === 'done' ? t('v_done') : vState === 'pending' ? t('v_pending') : t('settingsSub'))}
     </div>${statTiles()}`;
   } else if (tab === 'listings') {
     body = mine.length ? mine.map(l => `<div class="mine"><a href="#/l/${l.id}" class="ph">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="">` : '<span class="noimg">🏠</span>'}</a>
@@ -504,6 +510,28 @@ async function viewAccount() {
       </table></div></div>` : `<div class="empty">${t('noStats')}</div>`);
   } else if (tab === 'agent') {
     body = '<div id="agTab"></div>';
+  } else if (tab === 'settings') {
+    const md = user.user_metadata || {}, c = Object.assign({}, md.contact || {}, store.get('yh_contact', {}));
+    const vBox = vState === 'done' ? `<p style="margin:0;font-weight:700;color:var(--red)">${t('v_done')}</p>`
+      : vState === 'pending' ? `<p style="margin:0;font-weight:700">⏳ ${t('v_pending')}</p>`
+      : `${vState === 'rejected' ? `<p style="margin:0;color:var(--muted)">${t('v_rejected')}</p>` : ''}
+        <label>${t('v_method')}<select name="method">${['phone', 'video', 'telegram', 'whatsapp'].map(m => `<option value="${m}">${t('m_' + m)}</option>`).join('')}</select></label>
+        <label>${t('v_contact')}<input name="contact" required minlength="3" maxlength="80" value="${esc(c.contact_phone || c.contact_telegram || '')}"></label>
+        <label>${t('v_time')}<input name="time" maxlength="120" placeholder="${esc(t('v_timePh'))}"></label>
+        <label>${t('v_note')}<textarea name="note" maxlength="1000" rows="3"></textarea></label>
+        <button class="btn red">${t('v_send')}</button>`;
+    body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start">
+      <form class="panel form" id="setform" style="margin:0"><h3>👤 ${t('s_account')}</h3>
+        <label>${t('s_name')}<input name="name" maxlength="80" value="${esc(md.full_name || '')}"></label>
+        <label>${t('s_email')}<input value="${esc(user.email || '')}" disabled></label>
+        <h3 style="margin-top:10px">📇 ${t('s_contacts')}</h3><p style="margin:0;color:var(--muted)">${t('s_contactsSub')}</p>
+        <label>${t('s_phone')}<input name="contact_phone" maxlength="40" value="${esc(c.contact_phone || '')}"></label>
+        <label>Telegram<input name="contact_telegram" maxlength="64" placeholder="@username" value="${esc(c.contact_telegram || '')}"></label>
+        <label>WhatsApp<input name="contact_whatsapp" maxlength="40" value="${esc(c.contact_whatsapp || '')}"></label>
+        <button class="btn blue">${t('s_save')}</button>
+        <button type="button" class="btn ghost sm" id="logout2" style="justify-self:start">${t('s_signout')}</button></form>
+      <form class="panel form" id="verform" style="margin:0"><h3>✓ ${t('v_title')}</h3><p style="margin:0;color:var(--muted)">${t('v_sub')}</p>${vBox}</form>
+    </div>`;
   } else if (tab === 'telegram') {
     body = `<form class="panel form" id="tgform" style="max-width:560px"><h3>🔔 ${t('tgAlerts')}</h3><p style="margin:0;color:var(--muted)">${t('tgAlertsSub')}</p>
       ${alerts.length ? `<p style="margin:0;font-weight:700">✓ ${t('tgActive')} ${esc(alerts[0].telegram)}</p>` : ''}
@@ -515,12 +543,28 @@ async function viewAccount() {
     return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
   }
   app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh"><div><div style="color:var(--muted);font-weight:700">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    <div class="bh"><div><div style="color:var(--muted);font-weight:700">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">⚙️ ${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
   if (tab === 'agent') AG.accountTab(document.getElementById('agTab'));
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
   document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };
+  const lo2 = document.getElementById('logout2'); if (lo2) lo2.onclick = async () => { await sb.auth.signOut(); go('#/'); };
+  const sf = document.getElementById('setform');
+  if (sf) sf.onsubmit = async e => {
+    e.preventDefault(); const f = new FormData(sf), name = String(f.get('name') || '').trim();
+    const contact = { contact_name: name, contact_phone: String(f.get('contact_phone') || '').trim(), contact_telegram: String(f.get('contact_telegram') || '').trim(), contact_whatsapp: String(f.get('contact_whatsapp') || '').trim() };
+    const { error } = await sb.auth.updateUser({ data: { full_name: name, contact } });
+    if (error) return toast(t('error') + error.message);
+    store.set('yh_contact', contact); toast(t('savedOk')); route();
+  };
+  const vf = document.getElementById('verform');
+  if (vf && vf.querySelector('[name=contact]')) vf.onsubmit = async e => {
+    e.preventDefault(); const f = new FormData(vf), contact = String(f.get('contact') || '').trim(); if (contact.length < 3) return toast(t('required'));
+    const { error } = await sb.from('yh_verify_requests').insert({ method: f.get('method'), contact, preferred_time: String(f.get('time') || '').trim() || null, note: String(f.get('note') || '').trim() || null });
+    if (error) return toast(t('error') + error.message);
+    toast(t('v_sent'), 5000); route();
+  };
   app.querySelectorAll('[data-status]').forEach(s => s.onchange = async () => { const { error } = await sb.from('yh_listings').update({ status: s.value }).eq('id', s.dataset.status); toast(error ? t('error') + error.message : t('savedOk')); });
   app.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => { if (!confirm(t('confirmDel'))) return; const { error } = await sb.from('yh_listings').delete().eq('id', b.dataset.del); if (error) return toast(t('error') + error.message); route(); });
   const tf = document.getElementById('tgform');

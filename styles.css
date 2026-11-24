@@ -790,3 +790,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .heart{width:27px!important;height:27px!important}
 .heart svg{width:17.5px!important;height:15px!important}
 @media (max-width:720px){.card .heart{width:30px!important;height:30px!important}}
+/* Heart another 25% smaller (owner, 2026-11-24 20:41) */
+.heart{width:21px!important;height:21px!important}
+.heart svg{width:13px!important;height:11px!important}
+@media (max-width:720px){.card .heart{width:23px!important;height:23px!important}}

@@ -804,3 +804,9 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .heart svg{width:13px!important;height:11px!important}
 /* Address row lighter (owner, 2026-11-24 20:44: "a cím… sötéttel… lehet világosabb"): street address mid-grey, city light grey */
 @media (max-width:720px){.ymeta .ya2{color:#64748b!important}.ymeta .ya1{color:#a3adbd!important}}
+/* Phone card: name and address CENTRED, one under the other (owner, 2026-11-24 21:11) */
+@media (max-width:720px){
+  .yname{text-align:center!important}
+  .yfoot,.yfoot .ymeta{justify-content:center!important;text-align:center}
+  .yfoot .ymeta .yaddr{flex:0 1 auto!important}
+}

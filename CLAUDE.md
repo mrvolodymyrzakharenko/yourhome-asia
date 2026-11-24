@@ -99,7 +99,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   PHONE CARD = VIETRENT 3 ROWS (owner, 2026-11-24 20:00, replaces the 6-fact version; vietrent screenshot): NO date pill at the
   top of any card – on phones the date is written on the photo bottom-left, dots in the middle, price bottom-right (.ydate,
   no camera count; owner 20:01); 1) bold "Apartment for rent in BKK1" / "… for sale in …" (17px/700, nameRent/nameSale + inPlace), 2) pin + "Phnom Penh, <street
-  address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02); rows 1–2 LEFT aligned like vietrent (owner 20:07) and each FILLS the card width from edge to edge – fitCards() in app.js
+  address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02); rows 1–2 CENTRED one under the other (owner 21:11; was left like vietrent) and each FILLS the card width from edge to edge – fitCards() in app.js
   sizes the name 15–26px and the address 11–17px (owner 20:12), address row: city light grey, street address mid-grey (lighter since 20:44), one line each with … at the end; the demo
   listings have sample street addresses,
   3) hairline + FOUR marks: bed · bath · two amenity icons (gym, wifi, pool, parking, air-con; AM_ICON; m² only if fewer

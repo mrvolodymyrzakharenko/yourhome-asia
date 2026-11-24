@@ -95,6 +95,14 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js (loaded before
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.
+- NOTHING STICKS OUT ON PHONES, EVERY LANGUAGE – BASE RULE (owner, 2026-11-24 20:26: "semmi sem lóghat ki, semmi!!!"): fitRows()
+  in app.js (run with fitCards) – a row of words (quick filters, filter row, deal/category row, panel selects) whose items pass the
+  screen first gets smaller letters (down to 11px), then wraps centred (.fitwrap, no divider at a line start); the header first
+  tightens (body.hfit1), and only if still too wide drops the "Menu" word (hfit2). Check EN/KM/ZH/FR/TH at 360/390/412 after a change.
+- HERO LINE under "Find your home in Cambodia" = ONE short line in every language (owner, 2026-11-24 20:29; heroSub in i18n.js,
+  nowrap + shrink in fitRows). The filters panel has no "Amenities" heading (owner 20:27).
+- DISTRICTS FOR EVERY CITY (owner, 2026-11-24 20:28): the District list (search card and post form) shows the picked city's own
+  districts – Phnom Penh DISTRICTS, other cities CITY_DIST in app.js (sangkat names from Wikipedia "List of communes in Cambodia").
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
 - CITIES (owner, 2026-11-24 20:17 Tbilisi: "legyen az összes nagy város a listában, de a kezdő Phnom Penh"): the search card's
   City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh

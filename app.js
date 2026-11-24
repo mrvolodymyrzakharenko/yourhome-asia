@@ -14,7 +14,10 @@ const CITIES = [['Phnom Penh',11.5564,104.9282],['Siem Reap',13.3633,103.8564],[
 const CITY_NAMES = CITIES.map(c => c[0]);
 const cityCenter = c => { const x = CITIES.find(k => k[0] === c); return x ? [x[1], x[2]] : PP; };
 const cityLabel = c => !c || c === 'Phnom Penh' ? t('cityPP') : c;
-const districtOpts = (city, cur) => `<option value="">${t('any')}</option>` + (city === 'Phnom Penh' ? (cur && !DISTRICTS.includes(cur) ? [cur, ...DISTRICTS] : DISTRICTS) : (cur ? [cur] : [])).map(d => `<option value="${esc(d)}"${d === cur ? ' selected' : ''}>${esc(d)}</option>`).join('');
+// Districts (sangkats) of every city (owner, 2026-11-24 20:28) – names from Wikipedia 'List of communes in Cambodia'; Phnom Penh keeps DISTRICTS
+const CITY_DIST = {"Siem Reap": ["Sla Kram", "Svay Dankum", "Kok Chak", "Sala Kamreuk", "Nokor Thum", "Chreav", "Chong Khnies", "Sambuor", "Siem Reap", "Srangae", "Krabei Riel", "Tuek Vil"], "Sihanoukville": ["Sangkat 1", "Sangkat 2", "Sangkat 3", "Sangkat 4"], "Battambang": ["Tuol Ta Ek", "Prek Preah Sdach", "Rattanak", "Chamkar Samraong", "Sla Ket", "Kdol Doun Teav", "Ou Mal", "Wat Kor", "Ou Char", "Svay Por"], "Kampot": ["Kampong Kandal", "Krang Ampil", "Kampong Bay", "Andoung Khmer", "Traeuy Kaoh"], "Kep": ["Kep", "Prey Thum", "Ou Krasar"], "Kampong Cham": ["Boeng Kok", "Kampong Cham", "Sambuor Meas", "Veal Vong"], "Poipet": ["Nimitt", "Poipet", "Phsar Kandal", "Ou Chrov", "Ou Ruessei"], "Bavet": ["Bati", "Bavet", "Chrak Mtes", "Prasat", "Prey Angkunh"], "Koh Kong": ["Smach Mean Chey", "Dang Tong", "Stueng Veaeng"], "Takeo": ["Baray", "Roka Knong", "Roka Krau"], "Kampong Speu": ["Chbar Mon", "Kandaol Dom", "Rokar Thum", "Sopoar Tep", "Svay Kravan"], "Kampong Chhnang": ["Phsar Chhnang", "Kampong Chhnang", "B'er", "Khsam"], "Kampong Thom": ["Damrei Choan Khla", "Kampong Thum", "Kampong Roteh", "Ou Kanthor", "Kampong Krabau", "Prey Ta Hu", "Achar Leak", "Srayov"], "Pursat": ["Chamraeun Phal", "Lolok Sa", "Phteah Prey", "Prey Nhi", "Roleab", "Svay At", "Banteay Dei"], "Prey Veng": ["Baray", "Cheung Tuek", "Kampong Leav", "Ta Kao"], "Svay Rieng": ["Svay Rieng", "Prey Chhlak", "Koy Trabaek", "Pou Ta Hao", "Chek", "Svay Toea", "Sangkhoar"], "Kratie": ["Kaoh Trong", "Krakor", "Kratie", "Ou Ruessei", "Roka Kandal"], "Stung Treng": ["Stung Treng", "Srah Ruessei", "Preah Bat", "Sameakki"], "Banlung": ["Kachanh", "Labansiek", "Yeak Laom", "Boeng Kansaeng"], "Sen Monorom": ["Monourom", "Sokh Dom", "Spean Mean Chey", "Romonea"], "Preah Vihear": ["Kampong Pranak", "Pal Hal"], "Serei Saophoan": ["Kampong Svay", "Kaoh Pong Satv", "Mkak", "Ou Ambel", "Phniet", "Preah Ponlea", "Tuek Thla"], "Samraong": ["Bansay Reak", "Bos Sbov", "Koun Kriel", "Samraong", "Ou Smach"], "Pailin": ["Pailin", "Ou Ta Vau", "Tuol Lvea", "Bar Yakha"], "Suong": ["Suong", "Vihear Luong"]};
+const distList = city => city === 'Phnom Penh' || !city ? DISTRICTS : (CITY_DIST[city] || []);
+const districtOpts = (city, cur) => `<option value="">${t('any')}</option>` + (cur && !distList(city).includes(cur) ? [cur, ...distList(city)] : distList(city)).map(d => `<option value="${esc(d)}"${d === cur ? ' selected' : ''}>${esc(d)}</option>`).join('');
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 const TYPES = ['apartment','condo','house','villa','room','shophouse','office','land'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
@@ -305,7 +308,6 @@ function chipRow(st, deal) {
       ${deal === 'sale' ? sel('title', ['hard', 'soft', 'strata'].map(x => [x, t('tt_' + x)]), t('titleType')) : sel('lease', LEASE.map(x => [x, t('l_' + x)]), t('lease'))}
       ${sel('days', [1, 7, 30].map(n => [n, t('d_' + n)]), t('listedWithin'))}
     </div>
-    <div class="mp-lab">${t('amenities')}</div>
     <div class="chips mp-am">${quick.slice(2).map(a => chip('amen', a, sl('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', sl('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, sl('am_' + a))).join('')}${chip('photos', '1', sl('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
 
   </div>`;
@@ -528,7 +530,7 @@ async function viewPost(editId) {
     <div><div class="mp-lab" style="margin-top:0">${t('amenities')}</div><div class="amen-pick">${AMEN.map(a => `<label class="chk"><input type="checkbox" name="amen" value="${a}" ${(l.amenities || []).includes(a) ? 'checked' : ''}> ${t('am_' + a)}</label>`).join('')}</div></div>
     <label>${t('description')}<textarea name="description" maxlength="5000">${esc(l.description || '')}</textarea></label>
     <div class="row"><label>${t('city')} *<select name="city" id="pCity" required>${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (l.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></label>
-      <label>${t('district')} *<select name="district" id="pDist"${(l.city || 'Phnom Penh') === 'Phnom Penh' ? ' required' : ' hidden disabled'}><option value="">—</option>${DISTRICTS.map(d => `<option ${l.district === d ? 'selected' : ''}>${d}</option>`).join('')}</select><input name="district" id="pDistTxt" maxlength="80" value="${esc((l.city || 'Phnom Penh') !== 'Phnom Penh' ? (l.district || '') : '')}"${(l.city || 'Phnom Penh') === 'Phnom Penh' ? ' hidden disabled' : ' required'}></label></div>
+      <label>${t('district')} *<select name="district" id="pDist" required><option value="">—</option>${(l.district && !distList(l.city || 'Phnom Penh').includes(l.district) ? [l.district, ...distList(l.city || 'Phnom Penh')] : distList(l.city || 'Phnom Penh')).map(d => `<option ${l.district === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select></label></div>
     <label>${t('address')}<input name="address" maxlength="200" value="${esc(l.address || '')}"></label>
     <label>${t('pickMap')}<div class="pick-map" id="pmap"></div></label>
     <label>${t('photos')}<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple></label>
@@ -541,9 +543,8 @@ async function viewPost(editId) {
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
   const m = L.map('pmap').setView(pos || cityCenter(l.city || 'Phnom Penh'), pos ? 16 : 13); tiles(m); maps.push(m);
-  document.getElementById('pCity').addEventListener('change', e => {   // Phnom Penh = district list, other cities = typed district
-    const pp = e.target.value === 'Phnom Penh', sd = document.getElementById('pDist'), td = document.getElementById('pDistTxt');
-    sd.hidden = sd.disabled = !pp; sd.required = pp; td.hidden = td.disabled = pp; td.required = !pp;
+  document.getElementById('pCity').addEventListener('change', e => {   // every city has its own district list (owner, 2026-11-24 20:28)
+    document.getElementById('pDist').innerHTML = '<option value="">—</option>' + distList(e.target.value).map(d => `<option>${esc(d)}</option>`).join('');
     if (!pos) m.setView(cityCenter(e.target.value), 13);
   });
   let mk = pos ? L.marker(pos).addTo(m) : null;
@@ -862,7 +863,7 @@ function markLineStarts() {
   document.querySelectorAll('.more-panel .chips, .dtabs').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
 }
 function fitCards() {
-  markLineStarts();
+  markLineStarts(); fitRows();
   if (innerWidth > 720) { document.querySelectorAll('.yname,.ymeta .yaddr').forEach(e => e.style.removeProperty('font-size')); return; }
   // ONE size on every card (owner, 2026-11-24 19:55: "egyfajta méretűek legyenek, minden kiírás mint a BKK1 nagyságú"): the size
   // that makes "Apartment for rent in BKK1" fill the card is used for every name (a longer name stays on ONE line and ends with …), and the
@@ -877,6 +878,25 @@ function fitCards() {
   const aSize = refSize('.card .ymeta .yaddr', t('cityPP') + ', No. 24, Street 278', 11, 17, true);
   if (nSize) document.querySelectorAll('.card .yname').forEach(e => { e.style.setProperty('font-size', (nSize - 2) + 'px', 'important'); e.style.setProperty('white-space', 'nowrap', 'important'); e.style.setProperty('overflow', 'hidden', 'important'); e.style.setProperty('text-overflow', 'ellipsis', 'important'); });   // ONE line, … if it does not fit (owner 20:05)
   if (aSize) document.querySelectorAll('.card .ymeta .yaddr').forEach(e => e.style.setProperty('font-size', (aSize - 2) + 'px', 'important'));
+}
+// NOTHING MAY STICK OUT on phones, in any language (owner, 2026-11-24 20:26): a row whose items run past the screen first gets
+// smaller letters (down to 11px), then wraps centred; the header first tightens, then drops the "Menu" word.
+function fitRows() {
+  const W = innerWidth, out = el => [...el.children].some(c => { if (!c.offsetWidth) return false; const r = c.getBoundingClientRect(); return r.left < -0.5 || r.right > W + 0.5; });
+  const rows = document.querySelectorAll('#chipBox .qrow, #chipBox .frow, .deal-tabs, .more-panel .mp-grid');
+  rows.forEach(row => {
+    const kids = [...row.querySelectorAll(':scope > *, :scope > .vsw > *')];
+    row.classList.remove('fitwrap'); kids.forEach(k => k.style.removeProperty('font-size'));
+    if (W > 720 || !out(row)) return;
+    let fs = parseFloat(getComputedStyle(kids.find(k => k.offsetWidth) || row).fontSize) || 13;
+    while (fs > 11 && out(row)) { fs -= 0.5; kids.forEach(k => k.style.setProperty('font-size', fs + 'px', 'important')); }
+    if (out(row)) row.classList.add('fitwrap');
+  });
+  document.querySelectorAll('.hero > p').forEach(p => { p.style.removeProperty('font-size'); let fs = parseFloat(getComputedStyle(p).fontSize) || 13; while (fs > 10 && p.scrollWidth > p.clientWidth + 0.5) { fs -= 0.5; p.style.setProperty('font-size', fs + 'px', 'important'); } });   // hero line: ONE line (owner 20:29)
+  const b = document.body, hdr = document.querySelector('.hdr-in');
+  if (hdr) { b.classList.remove('hfit1', 'hfit2'); const ho = () => hdr.scrollWidth > hdr.clientWidth + 0.5 || [...hdr.querySelectorAll('.hdr-r > *')].some(c => c.offsetWidth && c.getBoundingClientRect().right > W + 0.5);
+    if (W <= 720 && ho()) { b.classList.add('hfit1'); if (ho()) b.classList.add('hfit2'); } }
+  document.querySelectorAll('.fitwrap').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
 }
 const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };
 new MutationObserver(queueFit).observe(document.getElementById('app'), { childList: true, subtree: true });

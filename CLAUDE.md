@@ -159,6 +159,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 
 ## Dashboard (owner, 2026-11-24)
 - Very clear, big cards: Post listing · My listings · Messages · Statistics · Telegram alerts.
+  LOOK (owner, 2026-11-24 19:48: "mi ez a kinézet? javítsd"): compact header; tabs as grey words with thin dividers (picked =
+  pink patch, red text), no pill box; tiles .dtile = line icon in a soft round badge (blue / red alternating), title, one line;
+  Post listing tile red; 2 per row on phones, 4 on PC (styles.css "DASHBOARD"). No emoji icons.
 - Statistics: views per day, unique visitors, who viewed (anonymous: device, language, traffic source), when, which
   listing, contact clicks (phone / Telegram / WhatsApp), messages. Recent activity table.
 - Telegram alerts are stored as requests (yh_alerts); sending needs the Telegram bot to be connected (not done yet).

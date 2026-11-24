@@ -595,20 +595,23 @@ async function viewAccount() {
   const views = ev.filter(e => e.kind === 'view');
   const contacts = ev.filter(e => ['phone', 'telegram', 'whatsapp'].includes(e.kind));
   const uniq = new Set(views.map(e => e.visitor)).size;
-  const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="panel" style="text-decoration:none;color:inherit;display:block;margin:0;${red ? 'background:var(--red);color:#fff' : ''}"><div style="font-size:30px">${icon}</div><div style="font-weight:600;font-size:13px;letter-spacing:-.025em;margin-top:6px">${title}</div><div style="opacity:.75;font-size:13px">${sub}</div></a>`;
+  // Dashboard tiles (owner, 2026-11-24 19:48: "mi ez a kinézet? javítsd"): clean white tiles, a line icon in a soft round badge,
+  // title + one short line; 2 per row on phones, 4 on PC (styles.css "DASHBOARD")
+  const DI = { post: '<path d="M12 5v14M5 12h14"/>', verify: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>', agent: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>', listings: '<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>', messages: '<path d="M4 5h16v11H8l-4 4z"/>', stats: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', telegram: '<path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/>', settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.8 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.8-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.8H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.2-2.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.8-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.8 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.8H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>' };
+  const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="dtile${red ? ' dt-red' : ''}"><span class="dti"><svg viewBox="0 0 24 24" aria-hidden="true">${DI[icon] || DI.post}</svg></span><b>${title}</b><small>${sub}</small></a>`;
   const tabs = ['overview', 'agent', 'listings', 'messages', 'stats', 'telegram', 'settings'];
-  const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: '⚙️ ' + t('settings') };
+  const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: t('settings') };
   let body = '';
   if (tab === 'overview') {
-    body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
-      ${bigCard('#/post', '＋', t('post'), t('postSub'))}
-      ${bigCard('#/account?tab=settings&v=1', vState === 'done' ? '✅' : '🛡️', vState === 'done' ? t('v_done') : t('v_cardTitle'), vState === 'pending' ? '⏳ ' + t('v_pending') : vState === 'done' ? t('v_cardDone') : t('v_cardSub'))}
-      ${bigCard('#/account?tab=agent', '👤', AG.label('myAgent'), AG.label('agentSub'))}
-      ${bigCard('#/account?tab=listings', '🏠', t('my'), String(mine.length))}
-      ${bigCard('#/account?tab=messages', '✉️', t('inquiries'), String(inq.length))}
-      ${bigCard('#/account?tab=stats', '📊', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
-      ${bigCard('#/account?tab=telegram', '🔔', t('tgAlerts'), alerts.length ? `${t('tgActive')} ${esc(alerts[0].telegram)}` : t('tgAlertsSub'))}
-      ${bigCard('#/account?tab=settings', '⚙️', t('settings'), vState === 'done' ? t('v_done') : vState === 'pending' ? t('v_pending') : t('settingsSub'))}
+    body = `<div class="dtiles">
+      ${bigCard('#/post', 'post', t('post'), t('postSub'), true)}
+      ${bigCard('#/account?tab=settings&v=1', 'verify', vState === 'done' ? t('v_done') : t('v_cardTitle'), vState === 'pending' ? '⏳ ' + t('v_pending') : vState === 'done' ? t('v_cardDone') : t('v_cardSub'))}
+      ${bigCard('#/account?tab=agent', 'agent', AG.label('myAgent'), AG.label('agentSub'))}
+      ${bigCard('#/account?tab=listings', 'listings', t('my'), String(mine.length))}
+      ${bigCard('#/account?tab=messages', 'messages', t('inquiries'), String(inq.length))}
+      ${bigCard('#/account?tab=stats', 'stats', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
+      ${bigCard('#/account?tab=telegram', 'telegram', t('tgAlerts'), alerts.length ? `${t('tgActive')} ${esc(alerts[0].telegram)}` : t('tgAlertsSub'))}
+      ${bigCard('#/account?tab=settings', 'settings', t('settings'), vState === 'done' ? t('v_done') : vState === 'pending' ? t('v_pending') : t('settingsSub'))}
     </div>${statTiles()}`;
   } else if (tab === 'listings') {
     body = mine.length ? mine.map(l => `<div class="mine"><a href="#/l/${l.id}" class="ph">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="">` : '<span class="noimg">🏠</span>'}</a>
@@ -669,9 +672,9 @@ async function viewAccount() {
     const tile = (n, lab) => `<div class="panel" style="margin:0;text-align:center"><div style="font-size:13px;font-weight:600;letter-spacing:-.025em;color:var(--blue)">${n}</div><div style="color:var(--muted);font-size:13px;font-weight:600">${lab}</div></div>`;
     return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
   }
-  app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">⚙️ ${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
-    <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
+  app.innerHTML = `<div class="wrap dash" style="margin-top:26px">
+    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    <div class="dtabs">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
   if (tab === 'agent') AG.accountTab(document.getElementById('agTab'));
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
@@ -838,7 +841,7 @@ function fitLine(el, min, max) {
 let fitRaf = 0;
 // Wrapped rows of words with thin dividers: the first word of every line gets no divider (owner, 2026-11-24 17:27)
 function markLineStarts() {
-  document.querySelectorAll('.more-panel .chips').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
+  document.querySelectorAll('.more-panel .chips, .dtabs').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
 }
 function fitCards() {
   markLineStarts();

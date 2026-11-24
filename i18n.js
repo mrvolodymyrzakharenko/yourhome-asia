@@ -4,7 +4,7 @@ export const T = {
 en: {
   topbar: '24/7 support. Questions or feedback?', contactUs: 'Contact us →',
   experts: 'Experts', post: 'Post listing', postShort: 'Post',
-  heroTitle: 'All homes in Cambodia in <em>one</em> search.',
+  heroTitle: 'Find your home in <em>Cambodia</em>.',
   heroSub: 'Apartments, houses, condos and rooms from owners and agents across Phnom Penh.',
   city: 'City', cityPP: 'Phnom Penh', addrPh: 'Address or district (e.g. BKK1)', type: 'Property type', budget: 'Budget', any: 'Any', search: 'Search',
   ctaText: 'Want to rent out faster? Post a listing for free!', ctaBtn: 'Post now',
@@ -35,7 +35,7 @@ en: {
 km: {
   topbar: 'ជំនួយ 24/7។ មានសំណួរ ឬមតិយោបល់?', contactUs: 'ទាក់ទងមកយើង →',
   experts: 'អ្នកជំនាញ', post: 'ដាក់ប្រកាស', postShort: 'ប្រកាស',
-  heroTitle: 'ផ្ទះទាំងអស់នៅកម្ពុជា ក្នុងការស្វែងរក<em>តែមួយ</em>។',
+  heroTitle: 'ស្វែងរកផ្ទះនៅ<em>កម្ពុជា</em>',
   heroSub: 'ផ្ទះល្វែង ផ្ទះ ខុនដូ និងបន្ទប់ ពីម្ចាស់ និងភ្នាក់ងារនៅទូទាំងភ្នំពេញ។',
   city: 'ទីក្រុង', cityPP: 'ភ្នំពេញ', addrPh: 'អាសយដ្ឋាន ឬខណ្ឌ (ឧ. BKK1)', type: 'ប្រភេទអចលនទ្រព្យ', budget: 'ថវិកា', any: 'ទាំងអស់', search: 'ស្វែងរក',
   ctaText: 'ចង់ជួលចេញលឿនជាងនេះ? ដាក់ប្រកាសដោយឥតគិតថ្លៃ!', ctaBtn: 'ប្រកាសឥឡូវ',
@@ -65,7 +65,7 @@ km: {
 zh: {
   topbar: '24/7 客服。有问题或建议？', contactUs: '联系我们 →',
   experts: '专家', post: '发布房源', postShort: '发布',
-  heroTitle: '柬埔寨所有房源，<em>一次</em>搜索。',
+  heroTitle: '在<em>柬埔寨</em>找到您的家',
   heroSub: '金边各区业主和中介的公寓、住宅、公寓楼和单间。',
   city: '城市', cityPP: '金边', addrPh: '地址或区域（如 BKK1）', type: '房产类型', budget: '预算', any: '不限', search: '搜索',
   ctaText: '想更快租出去？免费发布房源！', ctaBtn: '立即发布',
@@ -95,7 +95,7 @@ zh: {
 fr: {
   topbar: 'Support 24h/24. Une question ou un avis ?', contactUs: 'Contactez-nous →',
   experts: 'Experts', post: 'Publier une annonce', postShort: 'Publier',
-  heroTitle: 'Tous les logements du Cambodge en <em>une</em> recherche.',
+  heroTitle: 'Votre logement au <em>Cambodge</em>.',
   heroSub: 'Appartements, maisons, condos et chambres de propriétaires et d’agences à Phnom Penh.',
   city: 'Ville', cityPP: 'Phnom Penh', addrPh: 'Adresse ou quartier (ex. BKK1)', type: 'Type de bien', budget: 'Budget', any: 'Tous', search: 'Rechercher',
   ctaText: 'Vous voulez louer plus vite ? Publiez gratuitement !', ctaBtn: 'Publier',
@@ -125,7 +125,7 @@ fr: {
 th: {
   topbar: 'บริการ 24/7 มีคำถามหรือข้อเสนอแนะ?', contactUs: 'ติดต่อเรา →',
   experts: 'ผู้เชี่ยวชาญ', post: 'ลงประกาศ', postShort: 'ลงประกาศ',
-  heroTitle: 'ที่พักทั้งหมดในกัมพูชา ใน<em>การค้นหาเดียว</em>',
+  heroTitle: 'หาบ้านของคุณใน<em>กัมพูชา</em>',
   heroSub: 'อพาร์ตเมนต์ บ้าน คอนโด และห้องเช่า จากเจ้าของและนายหน้าทั่วพนมเปญ',
   city: 'เมือง', cityPP: 'พนมเปญ', addrPh: 'ที่อยู่หรือย่าน (เช่น BKK1)', type: 'ประเภทอสังหาฯ', budget: 'งบประมาณ', any: 'ทั้งหมด', search: 'ค้นหา',
   ctaText: 'อยากปล่อยเช่าเร็วขึ้น? ลงประกาศฟรี!', ctaBtn: 'ลงประกาศเลย',

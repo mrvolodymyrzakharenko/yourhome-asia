@@ -56,3 +56,10 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .dr-close{display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-bottom:1px solid var(--line);background:#fff5f6;color:var(--red);font:inherit;font-size:13px;font-weight:600;padding:10px 14px;border-radius:10px 10px 0 0;cursor:pointer;margin:-2px -2px 6px}
 .dr-close svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 @media (max-width:900px){.drawer{left:auto!important;right:12px!important;width:70vw;min-width:0;max-height:calc(100vh - 150px);overflow-y:auto}}
+
+/* MENU IN TWO COLUMNS (owner, 2026-11-24 21:02: "menüpontok két sorban lehetnek"): the links sit two per row;
+   Close menu and Currency stay full width */
+.drawer{grid-template-columns:1fr 1fr;column-gap:4px;min-width:340px}
+.drawer>.dr-close,.drawer>.dr-cur{grid-column:1/-1}
+.drawer a{padding:10px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+@media (max-width:900px){.drawer{min-width:0}.drawer a{padding:10px 10px}}

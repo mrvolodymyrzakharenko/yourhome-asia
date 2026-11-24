@@ -117,6 +117,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   today's rate (open.er-api.com, cached 12 h in yh_rates); without a live rate it shows USD. Choice saved in yh_cur.
 - MENU LIST (owner, 2026-11-24 20:59): on phones/tablets the open Menu is 70% of the screen wide (right side), scrolls if long;
   its first row is a red "✕ Close menu" button (#drClose, closeMenu in i18n.js).
+  The menu links sit in TWO COLUMNS (owner 21:02: "menüpontok két sorban"); Close menu and Currency span both (end of header.css).
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
 - CITIES (owner, 2026-11-24 20:17 Tbilisi: "legyen az összes nagy város a listában, de a kezdő Phnom Penh"): the search card's
   City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh

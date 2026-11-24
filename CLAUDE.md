@@ -85,7 +85,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   kettő egy sorba, tökre úgy nézzen ki"): under 720px every listing grid (.row4, .grid, .row-scroll) is ONE card per row, the
   Study .pcard look: light pills on the photo in CAMBODIAN COLOURS (owner, 2026-11-24): price = faint red field + red text,
   bedrooms/stage = faint blue field + royal-blue text, type = white field + grey text, TOP solid red, DEMO dark, white round
-  heart (a WIDE drawn heart icon, outline → solid RED when saved, owner 2026-11-24; HEART in app.js), camera count bottom-right, then THREE ROWS like vietrent (owner, 2026-11-24): bold "1 bedroom · Apartment · Rent"
+  heart (a WIDE drawn heart icon, outline → solid RED when saved, 20% smaller since 20:29 – 30px circle on phones; HEART in app.js), camera count bottom-right, then THREE ROWS like vietrent (owner, 2026-11-24): bold "1 bedroom · Apartment · Rent"
   (bedrooms blue, type dark, deal red) as THREE EQUAL CENTRED COLUMNS with thin dividers and a hairline under them,
   red pin + "District, Phnom Penh" centred, red "View apartment →" centred; ~10% roomier padding (owner: "szépen elosztva") (no title / bathrooms line on
   phones). PHOTO SLIDER like vietrent (owner, 2026-11-24): up to 12 photos per listing

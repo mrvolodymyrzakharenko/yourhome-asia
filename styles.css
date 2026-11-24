@@ -786,3 +786,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .ypk-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
 .ypk-x:active{background:#FDE4E7;color:#E00025}
 .ypk-l button{padding:11px 10px}
+/* Heart 20% smaller (owner, 2026-11-24 20:29: "túl nagy… kisebb 20%-kal") – circle and icon */
+.heart{width:27px!important;height:27px!important}
+.heart svg{width:17.5px!important;height:15px!important}
+@media (max-width:720px){.card .heart{width:30px!important;height:30px!important}}

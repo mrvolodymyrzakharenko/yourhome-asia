@@ -65,7 +65,11 @@
   const st = document.createElement('style');
   st.textContent = '.yh-sr{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--yh-sd,0ms)}.yh-sr.yh-sv{opacity:1;transform:none}';
   document.head.appendChild(st);
-  const SEL = '.bh,.row4>*,.grid>*,.row-scroll>*,.mp-grid>*,.panel,.cta,.exp,.mine,.page,.empty,.block-more,.ftr-in';
+  // "minden tartalom" (owner, 2026-11-24 17:38): cards, headings, panels, About/How/FAQ blocks, partner and project
+  // sections and the footer columns + bottom row – each piece on its own, so rows come one after another
+  const SEL = ['.bh', '.row4>*', '.grid>*', '.row-scroll>*', '.mp-grid>*', '.panel', '.cta', '.exp', '.mine', '.page>*', '.empty',
+    '.block-more', '.ab>*:not(.ab-grid)', '.ab-grid>*', '.pp-sec>*', '.pp-full>*', '.prj-main>*', '.prj-side>*', '.crumbs',
+    '#app h2', '.yft-g>*', '.yft-b>*'].join(',');
   const reveal = el => {
     if (el.classList.contains('yh-sv')) return;
     io.unobserve(el); el.classList.add('yh-sv');

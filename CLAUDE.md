@@ -22,7 +22,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
   icons 21px; six equal columns Home · Map · Saved · Post (red plus, red label – always visible) · Experts · Account; the round
-  blue Search button floats above the middle with no label (→ #/search). index.html .bnav, styles.css "Bottom menu" block.
+  blue Search button floats above the middle with no label (→ #/search). ALWAYS VISIBLE (owner, 2026-11-24: "az alsó menü mindig
+  látható legyen") – from the first second, never hidden at the top of a page or on scroll (unlike the Study portal's fade-in). index.html .bnav, styles.css "Bottom menu" block.
 - Homepage category blocks are UNIFORM (owner, 2026-11-24: "minden kategória legyen egységes – nincs két nagy kép, sem egy"):
   every block shows at most 4 equal cards in one row (2 per row on phones), never stretched or scrolling, then a
   "<category> · See all" button (.row4 / .block-more). Dashboard big cards are all the same white card (no red one).

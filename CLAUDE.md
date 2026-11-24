@@ -19,7 +19,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Header: small white header like the Study portal – NO coloured top strip. Logo "YourHome / Cambodia", language select
   (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown.
 - Footer like vietrent: logo + © line, links Listings · Experts · Terms · Privacy · Support.
-- Phones: bottom menu with 6 buttons – Home · Map · Experts · (+ Post, red, raised, in the middle) · Saved · Account.
+- Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
+  akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
+  icons 21px; six equal columns Home · Map · Saved · Post (red plus, red label – always visible) · Experts · Account; the round
+  blue Search button floats above the middle with no label (→ #/search). index.html .bnav, styles.css "Bottom menu" block.
+- Homepage category blocks are UNIFORM (owner, 2026-11-24: "minden kategória legyen egységes – nincs két nagy kép, sem egy"):
+  every block shows at most 4 equal cards in one row (2 per row on phones), never stretched or scrolling, then a
+  "<category> · See all" button (.row4 / .block-more). Dashboard big cards are all the same white card (no red one).
 - Posting a listing must always be visible straight away (header button, bottom menu, banner on the homepage).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   "Want to rent out faster?" banner → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.

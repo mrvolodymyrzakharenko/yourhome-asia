@@ -145,7 +145,7 @@ function wireSearchBox(onSubmit) {
 }
 function block(title, list, more) {
   if (!list.length) return '';
-  return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row-scroll">${list.slice(0, 8).map(card).join('')}</div></section>`;
+  return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${list.slice(0, 4).map(card).join('')}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }
 async function viewHome() {
   app.innerHTML = `<div class="wrap"><section class="hero"><h1>${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox()}</section>
@@ -380,7 +380,7 @@ async function viewAccount() {
   let body = '';
   if (tab === 'overview') {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px">
-      ${bigCard('#/post', '＋', t('post'), t('postSub'), true)}
+      ${bigCard('#/post', '＋', t('post'), t('postSub'))}
       ${bigCard('#/account?tab=listings', '🏠', t('my'), String(mine.length))}
       ${bigCard('#/account?tab=messages', '✉️', t('inquiries'), String(inq.length))}
       ${bigCard('#/account?tab=stats', '📊', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
@@ -483,7 +483,7 @@ async function route() {
   document.title = 'YourHome.asia — ' + t('heroTitle').replace(/<[^>]+>/g, '');
   const path = (location.hash.slice(1).split('?')[0] || '/').replace(/\/+$/, '') || '/';
   const parts = path.split('/').filter(Boolean);
-  const nav = parts[0] === 'search' && qs().get('view') === 'map' ? 'map' : ({ '': 'home', post: 'post', saved: 'saved', experts: 'experts', account: 'account' }[parts[0] || ''] || '');
+  const nav = parts[0] === 'search' ? (qs().get('view') === 'map' ? 'map' : 'search') : ({ '': 'home', post: 'post', saved: 'saved', experts: 'experts', account: 'account' }[parts[0] || ''] || '');
   document.querySelectorAll('.bnav a').forEach(a => a.classList.toggle('on', a.dataset.nav === nav));
   window.scrollTo(0, 0);
   try {

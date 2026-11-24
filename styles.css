@@ -557,3 +557,11 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .card:not([href="#/post"]) .specs-row span+span::before{content:"";position:absolute;left:0;top:15%;bottom:15%;width:1px;background:#D5DAE3}
   .card:not([href="#/post"]) .specs-row svg{width:20px;height:20px;stroke:#94a3b8}
 }
+/* PHONE PHOTO BOTTOM (owner, 2026-11-24: "a dátum a képen bal oldalt, jobb oldalt az ár, középen a pöttyök"): date bottom-left,
+   dots in the middle, price bottom-right; the camera count is left out (the dots show the photos). */
+.ydate{display:none}
+@media (max-width:720px){
+  .ydate{display:block;position:absolute;left:18px;bottom:13px;z-index:3;color:#fff;font-size:12px;font-weight:600;letter-spacing:.02em;line-height:1;text-shadow:0 1px 6px rgba(0,0,0,.4)}
+  .yprice{left:auto!important;right:18px;text-align:right}
+  .ycount{display:none!important}
+}

@@ -96,6 +96,7 @@ function card(l) {
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
       ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, 12).map((u, i) => `<img src="${esc(u)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots">${l.photos.slice(0, 12).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}` : ''}
+      <span class="ydate">${shortDate(l.created_at)}</span>
       <div class="yprice">${money(l.price)}${priceSuffix(l) ? `<small>${esc(priceSuffix(l))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
     </div>

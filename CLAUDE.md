@@ -91,7 +91,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   phones). PHOTO SLIDER like vietrent (owner, 2026-11-24): up to 12 photos per listing
   (post form allows 12), swipe sideways inside the card, dots in the middle at the bottom – the current one a white dash – a
   tapped dot moves there; the PRICE is written on the photo bottom-left in white ("$200 /month", 19px – the owner's exception to
-  the 13px rule, like vietrent), no price pill at the top on phones. Sample listings: "Sample" pill + a pale-yellow note above the lists (sampleNote) (card() extra .yb*/.y* elements,
+  the 13px rule, like vietrent), no price pill at the top on phones. Sample listings: "Sample" pill only (the yellow note above the lists and the "N listings" count were removed – owner 21:58) (card() extra .yb*/.y* elements,
   shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
 
 - CARDS LIKE VIETRENT (owner, 2026-11-24): every listing card 24px corners + soft deep shadow (styles.css "CARDS LIKE VIETRENT";

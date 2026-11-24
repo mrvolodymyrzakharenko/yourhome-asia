@@ -308,7 +308,7 @@ async function viewHome() {
     + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale');
   const prj = await PT.homeBlock();   // New projects block (owner, 2026-11-24)
   const b0 = document.getElementById('blocks'); if (!b0) return;
-  b0.innerHTML = (all.some(l => l.is_demo) ? `<p class="ysample">${t('sampleNote')}</p>` : '') + ((html + prj) || `<div class="empty">${t('noResults')}</div>`);
+  b0.innerHTML = ((html + prj) || `<div class="empty">${t('noResults')}</div>`);
 }
 
 async function viewSearch() {
@@ -317,7 +317,6 @@ async function viewSearch() {
   const deal = p.deal || '';
   const cat = p.beds === '0' ? 'studio' : (CATS.some(([k]) => k === p.type) ? p.type : '');
   app.innerHTML = `<div class="wrap">${hero(p, deal, cat)}
-    <div class="bh"><h2 id="rc">${t('loading')}</h2></div>
     <div id="res"></div></div>`;
   // Results tools in the filters' second row (owner, 2026-11-24: "a Telegram alerts oda nem kell kiírni, hanem egy Telegram
   // logó… ha rámegy, kiírja… ne legyen kiírva, hogy sort, csak newest… lenyílik… két sorba, nem háromba"):
@@ -338,11 +337,10 @@ async function viewSearch() {
   document.getElementById('chipBox').addEventListener('click', e => { const b = e.target.closest('.vsw a'); if (!b) return; e.preventDefault(); e.stopPropagation(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); }, true);
   document.getElementById('notifyBtn').onclick = () => alertModal(p);
   const list = await fetchListings(p);
-  document.getElementById('rc').textContent = t('results', { n: list.length });
   const res = document.getElementById('res');
   if (!list.length) { res.innerHTML = `<div class="empty">${t('noResults')}<br><br><a class="btn red" href="#/post">+ ${t('post')}</a></div>`; return; }
   if (view === 'map') { res.innerHTML = '<div id="map"></div>'; listingsMap(document.getElementById('map'), list); }
-  else res.innerHTML = (list.some(l => l.is_demo) ? `<p class="ysample">${t('sampleNote')}</p>` : '') + `<div class="grid">${list.map(card).join('')}</div>`;
+  else res.innerHTML = `<div class="grid">${list.map(card).join('')}</div>`;
 }
 function alertModal(filters) {
   const wrap = document.createElement('div');

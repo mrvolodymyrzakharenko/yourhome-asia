@@ -20,3 +20,13 @@
   .rb[aria-label="Contact"]{display:none}
   .drawer{right:12px;left:12px}
 }
+
+:root{--blue:#E00025;--blue-d:#b8001e;--blue-l:#fff0f2;--bg:#fffafa;--line:#f3e6e8}
+input:focus,select:focus,textarea:focus{outline-color:#ffc2cb}
+.cta{background:#fff0f2!important;color:var(--ink)!important;border:1px solid #ffd6dc}
+.cta .ic{background:var(--red);color:#fff}
+.ph,.gal .main{background:linear-gradient(135deg,#ffe4e8,#fff6f7)}
+a.card[href="#/post"]{border-color:#ffc2cb!important;background:#fffafa!important}
+a.card[href="#/post"] .ph{background:#fff0f2!important}
+.hero h1 em{text-decoration-color:#ffc2cb}
+.btn.blue{box-shadow:0 6px 16px rgba(224,0,37,.22)}

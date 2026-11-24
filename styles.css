@@ -305,3 +305,10 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .sbox input::placeholder{text-align:center}
   .sbox .btn{padding:13px 24px!important}
 }
+/* LIST / MAP SWITCH (owner, 2026-11-24: "legyen kiírva map… és legyen a listing… nagyon fontos"): one white pill under the
+   search card on the homepage and the results page – grid icon + "Listings" | map icon + "Map", the active one red. */
+.vsw{display:flex;width:max-content;margin:14px auto 0;padding:4px;gap:4px;background:#fff;border-radius:99px;box-shadow:0 6px 18px rgba(15,23,42,.10),0 1px 4px rgba(15,23,42,.06)}
+.vsw a{display:inline-flex;align-items:center;gap:8px;padding:9px 20px;border-radius:99px;color:var(--ink);text-decoration:none;font-size:13px;font-weight:600;letter-spacing:-.025em}
+.vsw a.on{background:#E00025;color:#fff}
+.vsw a:not(.on):hover{background:#fff0f2;color:#E00025}
+.vsw svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}

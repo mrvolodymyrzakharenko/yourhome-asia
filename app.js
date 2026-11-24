@@ -222,7 +222,10 @@ function block(title, list, more) {
   if (!list.length) return '';
   return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${fill4(list)}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }
-const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(26px,3.7vw,46px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}</section>`;
+const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(26px,3.7vw,46px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}${viewSwitch(p)}</section>`;
+// List / Map switch under the search card on the homepage and the results page (owner, 2026-11-24: "hiányzik a térképes
+// nézetgomb és a listing… legyen kiírva map… nagyon fontos")
+const viewSwitch = (p = {}) => { const m = p.view === 'map'; return `<div class="vsw" role="group" aria-label="View"><a href="#/search" data-v="grid" class="${m ? '' : 'on'}">${ICON.grid}<span>${t('listings')}</span></a><a href="#/search?view=map" data-v="map" class="${m ? 'on' : ''}">${ICON.map}<span>${t('mapNav')}</span></a></div>`; };
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
     <div class="cta"><div><span class="ic">+</span>${t('ctaText')}</div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>
@@ -259,7 +262,6 @@ async function viewSearch() {
     <div class="bh"><h2 id="rc">${t('loading')}</h2>
       <div class="tools">
         <button class="notify" id="notifyBtn">🔔 ${t('notify')}</button>
-        <div class="seg"><button data-v="grid" class="${view === 'grid' ? 'on' : ''}" aria-label="Grid">${ICON.grid}</button><button data-v="map" class="${view === 'map' ? 'on' : ''}" aria-label="Map">${ICON.map}</button></div>
         <select id="sortSel"><option value="new">${t('sort')}: ${t('sortNew')}</option><option value="cheap" ${p.sort === 'cheap' ? 'selected' : ''}>${t('sortCheap')}</option><option value="exp" ${p.sort === 'exp' ? 'selected' : ''}>${t('sortExp')}</option></select>
       </div></div>
     <div id="res"></div></div>`;
@@ -275,7 +277,7 @@ async function viewSearch() {
   };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
-  document.querySelectorAll('.seg button').forEach(b => b.onclick = () => upd({ view: b.dataset.v === 'map' ? 'map' : '' }));
+  document.querySelectorAll('.vsw a').forEach(b => b.onclick = e => { e.preventDefault(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); });
   document.getElementById('notifyBtn').onclick = () => alertModal(p);
   const list = await fetchListings(p);
   document.getElementById('rc').textContent = t('results', { n: list.length });

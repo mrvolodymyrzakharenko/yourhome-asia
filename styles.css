@@ -185,6 +185,10 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
    is the same grid – 4 equal cards per row on PC/tablet, 2 on phones, never stretched, no sideways scrolling – then a button */
 .row4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
 .block-more{display:flex;justify-content:center;margin-top:16px}
+.deal-tabs{align-items:center}
+.dt-sep{width:1px;height:18px;background:var(--line);margin:0 4px;flex:none}
+.deal-tabs .dt-cat{color:var(--ink)}
+.deal-tabs .dt-cat:hover{background:var(--bg)}
 @media (max-width:900px){
   .sbox{grid-template-columns:1fr 1fr;gap:6px}
   .sbox .f{border-right:0;background:var(--bg);border-radius:14px;padding:8px 12px}
@@ -200,6 +204,8 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   #map{height:62vh}
 }
 @media (max-width:720px){
+  .hero .deal-tabs{display:flex;max-width:100%;overflow-x:auto;scrollbar-width:none;justify-content:flex-start}
+  .hero .deal-tabs button{flex:none;padding:8px 14px}
   .hide-sm,.hdr-r .btn.red{display:none}
   .hero{padding:28px 0 10px}
   .cta{flex-direction:column;align-items:flex-start}

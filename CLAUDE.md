@@ -32,6 +32,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   buttons 13px / 500 (phones 600). Only the homepage hero H1 and icon glyphs/emoji/initials keep their size. Card price =
   white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
   classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
+- SEARCH ROW (owner, 2026-11-24): Rent · Buy · Rooms | Apartment · Studio · Villa · House in one pill row (CATS in app.js);
+  a category opens the results at once (deal of the active tab; Studio = bedrooms 0). Under the card: filter chips
+  1+ bed · 2+ beds · 3+ beds · … · More filters – no bed icon, no Studio chip.
 - Posting a listing must always be visible straight away (header button, bottom menu, banner on the homepage).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   "Want to rent out faster?" banner → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.

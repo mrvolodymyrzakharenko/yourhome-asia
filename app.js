@@ -10,6 +10,7 @@ const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','T
 const TYPES = ['apartment','condo','house','villa','room','shophouse','office','land'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
 const QUICK = { rent: ['edc','pool','gym','pets','parking'], room: ['edc','private_bath','wifi','aircon','female_only'], sale: ['pool','parking','security'], '': ['edc','pool','gym','pets','parking'] };
+const CATS = [['apartment', 't_apartment'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
 const LEASE = ['day','month','6m','1y'];
@@ -147,7 +148,7 @@ async function fetchListings(f = {}) {
 
 function searchBox(p = {}) {
   const deal = p.deal || 'rent';
-  return `<div class="deal-tabs" id="dealTabs">${['rent','sale','room'].map(d => `<button data-deal="${d}" class="${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}</div>
+  return `<div class="deal-tabs" id="dealTabs">${['rent','sale','room'].map(d => `<button data-deal="${d}" class="${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat" data-cat="${k}">${t(lab)}</button>`).join('')}</div>
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select disabled><option>${t('cityPP')}</option></select></div>
     <div class="f addr"><label>📍 ${t('district')}</label><input name="q" list="dl" placeholder="${esc(t('addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist></div>
@@ -160,7 +161,7 @@ function searchBox(p = {}) {
 const budgetOpts = (deal, cur) => `<option value="">${t('any')}</option>` + BUDGET[deal].map(v => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('');
 function wireSearchBox(onSubmit) {
   let deal = document.querySelector('#dealTabs .on').dataset.deal;
-  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
+  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: deal === 'room' ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); onSubmit(deal); };
   return () => deal;
 }

@@ -754,3 +754,12 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   #dealTabs button:nth-of-type(1)::before,#dealTabs .dt-deal+.dt-sep+.dt-cat::before,#dealTabs button:nth-of-type(5)::before{display:none!important}
   #dealTabs button.on::before,#dealTabs button.on+button::before{display:none!important}
 }
+/* 10 CATEGORIES = 5 + 5 (owner, 2026-11-24: "10-re… 5-5 kategória… egymás alatt hasonló szélességben… középre… egyenlő
+   távolság"): Rent · Daily · Buy · Rooms · Projects over Apartment · Condo · Studio · Villa · House. Phones: two rows of five
+   equal centred columns, so the words stand exactly under each other; thin dividers only inside a row. PC: one row. */
+@media (max-width:720px){
+  #dealTabs.deal-tabs{grid-template-columns:repeat(5,minmax(0,1fr))!important;row-gap:8px!important}
+  #dealTabs .dt-deal,#dealTabs .dt-cat{grid-column:auto!important;text-align:center;justify-content:center;padding:9px 2px!important;font-size:12.5px!important}
+  #dealTabs button::before{display:block!important}
+  #dealTabs button:nth-of-type(5n+1)::before,#dealTabs button.on::before,#dealTabs button.on+button::before{display:none!important}
+}

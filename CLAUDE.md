@@ -45,10 +45,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   buttons 13px / 500 (phones 600). Only the homepage hero H1 and icon glyphs/emoji/initials keep their size. Card price =
   white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
   classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
-- SEARCH ROW (owner, 2026-11-24): Rent · Daily · Buy · Rooms | Apartment · Condo · Studio · Villa · House in one row
+- SEARCH ROW (owner, 2026-11-24): Rent · Daily · Buy · Rooms · Projects | Apartment · Condo · Studio · Villa · House –
+  10 items, phones 5 + 5 in equal centred columns (owner: "egymás alatt… egyenlő távolság"); Projects → #/projects
   (DAILY RENT, owner 2026-11-24: "egyből látható legyen" – Daily = deal_type 'rent' with price_period 'day'; deal=daily in the
-  URL; post form "Daily rent"; homepage block "Daily rentals & short stays" after Rooms; phones: 4 deal tabs on row 1, the
-  5 property types on row 2) (CATS in
+  URL; post form "Daily rent"; homepage block "Daily rentals & short stays" after Rooms; phones: 5 + 5) (CATS in
   app.js; Condo = 8th item, owner 2026-11-24). TEXT WITH DIVIDERS like the Study search-type tabs (owner, 2026-11-24 screenshot:
   "ne legyen begombozva"): no box, grey text, thin 1px dividers, the picked one a light pink patch with RED 600 text; phones
   4 per row (styles.css "CATEGORY ROW = TEXT WITH DIVIDERS"). On phones the row, the chips and the project tabs

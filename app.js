@@ -119,6 +119,8 @@ function card(l) {
       <span class="ylink">${esc(t('clickView', { x: t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase() }))} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
     </div></a>`;
 }
+// 10 categories, 5 + 5 (owner, 2026-11-24): the 5th top item "Projects" opens New projects
+document.addEventListener('click', e => { const b = e.target.closest('#dealTabs [data-go]'); if (!b) return; e.preventDefault(); e.stopPropagation(); location.hash = b.dataset.go; }, true);
 // Phone card photo slider like vietrent (owner, 2026-11-24: "pöttyök… ha rákattint a pöttyre, a képek mozognak a kártyán belül"):
 // swipe the photos sideways or tap a dot; the dots follow. A tap on the photo itself still opens the listing.
 document.addEventListener('click', e => {
@@ -184,7 +186,7 @@ async function fetchListings(f = {}) {
   return data;
 }
 
-const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','daily','sale','room'].map(d => `<button type="button" data-deal="${d}" class="dt-deal ${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
+const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','daily','sale','room'].map(d => `<button type="button" data-deal="${d}" class="dt-deal ${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<button type="button" class="dt-deal dt-prj" data-go="#/projects">${t('projectsShort')}</button><span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">

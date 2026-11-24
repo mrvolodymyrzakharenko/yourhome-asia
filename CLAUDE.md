@@ -61,6 +61,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   clamp(26px,3.7vw,46px)
   (owner, 2026-11-24; fonts.css .hero h1 em::after). Under the card: filter chips
   1+ bed · 2+ beds · 3+ beds · … · More filters – no bed icon, no Studio chip.
+- PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),
+  then Post listing + Search in the row below.
 - Posting a listing must always be visible straight away (header button, bottom menu, banner on the homepage, and a white
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →

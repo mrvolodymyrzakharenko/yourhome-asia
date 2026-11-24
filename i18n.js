@@ -218,3 +218,6 @@ for (const k of Object.keys(NM)) Object.assign(T[k], NM[k]);
 /* "… for rent in BKK1" + "Phnom Penh, <street address>" (owner, 2026-11-24 20:02) */
 const IN = { en:{inPlace:'in {d}',cambodia:'Cambodia'}, km:{inPlace:'នៅ {d}',cambodia:'កម្ពុជា'}, zh:{inPlace:'· {d}',cambodia:'柬埔寨'}, fr:{inPlace:'à {d}',cambodia:'Cambodge'}, th:{inPlace:'ที่ {d}',cambodia:'กัมพูชา'} };
 for (const k of Object.keys(IN)) Object.assign(T[k], IN[k]);
+/* short "Type" label for the one-row phone search card (owner, 2026-11-24 20:08) */
+const TS = { en:{typeShort:'Type'}, km:{typeShort:'ប្រភេទ'}, zh:{typeShort:'类型'}, fr:{typeShort:'Type'}, th:{typeShort:'ประเภท'} };
+for (const k of Object.keys(TS)) Object.assign(T[k], TS[k]);

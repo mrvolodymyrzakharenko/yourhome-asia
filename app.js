@@ -188,8 +188,8 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select disabled><option>${t('cityPP')}</option></select></div>
-    <div class="f addr"><label>📍 ${t('district')}</label><select name="q" aria-label="${esc(t('district'))}"><option value="">${t('any')}</option>${(p.q && !DISTRICTS.includes(p.q) ? [p.q, ...DISTRICTS] : DISTRICTS).map(d => `<option value="${esc(d)}"${d === p.q ? ' selected' : ''}>${esc(d)}</option>`).join('')}</select></div>
-    <div class="f"><label>${t('type')}</label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
+    <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" aria-label="${esc(t('district'))}"><option value="">${t('any')}</option>${(p.q && !DISTRICTS.includes(p.q) ? [p.q, ...DISTRICTS] : DISTRICTS).map(d => `<option value="${esc(d)}"${d === p.q ? ' selected' : ''}>${esc(d)}</option>`).join('')}</select></div>
+    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <div class="sbtns"><a href="#/post" class="btn red sb-post">+ ${t('post')}</a><button class="btn blue">${t('search')} →</button></div>
   </form>

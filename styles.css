@@ -612,3 +612,15 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .card:not([href="#/post"]) .specs-row .sp-a2{display:none!important}
   .card:not([href="#/post"]) .specs-row span,.card:not([href="#/post"]) .specs-row .sp-am{flex:1 1 0!important}
 }
+/* PHONE SEARCH CARD = FIELDS IN ONE ROW (owner, 2026-11-24 20:08: "kifér-e egy sorba a City, District, Type… csak egy sor
+   lesz a mezőkből"): City · District · Type · Budget side by side in four equal columns, short labels, small arrows;
+   the Post listing + Search buttons stay in the row below. */
+@media (max-width:720px){
+  .sbox{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:5px!important}
+  .sbox .f{grid-column:auto!important;padding:7px 3px 6px!important;min-width:0}
+  .sbox label{font-size:9.5px!important;letter-spacing:.04em!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sbox select{font-size:12.5px!important;padding:2px 13px 2px 2px!important;background-position:right 2px center!important;background-size:9px!important;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+  .sbox select:disabled{padding-right:2px!important;background-image:none!important}
+  .sbtns{grid-column:1/-1!important}
+}
+@media (max-width:720px){.sbox{grid-template-columns:1.4fr 1fr 1fr 1fr!important}}

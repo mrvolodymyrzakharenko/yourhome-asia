@@ -75,3 +75,8 @@ label{font-weight:500}
 .hdr .logo,.yft .logo{align-items:center}
 @media (max-width:720px){.hdr .brand .b1,.yft .brand .b1{font-size:12px;font-weight:600}.hdr .brand em,.yft .brand em{font-size:9px!important;letter-spacing:.14em!important}}
 @media (max-width:339px){.hdr .brand .b1{font-size:11px}}
+/* CAMBODIA centred under www.yourhome.asia and ~10% bigger (owner, 2026-11-24 20:39 Tbilisi) */
+.hdr .brand,.yft .brand{align-items:center!important;text-align:center!important}
+.hdr .brand em,.yft .brand em{font-size:11px!important}
+@media (max-width:720px){.hdr .brand em,.yft .brand em{font-size:10px!important}}
+.hdr .brand em,.yft .brand em{padding-left:.16em}

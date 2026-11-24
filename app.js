@@ -173,7 +173,7 @@ function chipRow(st, deal) {
   const nMore = MORE_KEYS.filter(k => st[k]).length + amen.filter(a => !quick.includes(a)).length;
   const sel = (k, opts, lab) => `<label>${lab}<select data-k="${k}"><option value="">${t('any')}</option>${opts.map(([v, l]) => `<option value="${v}" ${String(st[k] ?? '') === String(v) ? 'selected' : ''}>${esc(l)}</option>`).join('')}</select></label>`;
   return `<div class="chips">
-    <span class="chip-grp"><span class="chip-ic">${ICON.bed}</span>${chip('beds', '0', t('studio'))}${['1', '2', '3'].map(n => chip('beds', n, n + '+')).join('')}</span>
+    ${chip('beds', '1', t('bed1'))}${['2', '3'].map(n => chip('beds', n, t('bedN', { n }))).join('')}
     ${deal === 'sale' ? chip('foreign', '1', t('f_foreign')) : chip('furn', '1', t('furnished'))}
     ${quick.map(a => chip('amen', a, t('am_' + a))).join('')}
     ${chip('by', 'owner', t('f_owner'))}

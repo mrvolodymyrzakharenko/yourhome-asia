@@ -56,3 +56,37 @@
   };
   document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
 })();
+
+/* Scroll reveal (owner, 2026-11-24: "az összes tartalom ahogy lefelé görgetek fade in"): content that starts below
+   the screen stays hidden until it scrolls into view, then fades up; cards in one row come one after another.
+   Content already on screen is left to the load fade above. Off for "reduce motion". */
+(() => {
+  if ((window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) || !('IntersectionObserver' in window)) return;
+  const st = document.createElement('style');
+  st.textContent = '.yh-sr{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--yh-sd,0ms)}.yh-sr.yh-sv{opacity:1;transform:none}';
+  document.head.appendChild(st);
+  const SEL = '.bh,.row4>*,.grid>*,.row-scroll>*,.mp-grid>*,.panel,.cta,.exp,.mine,.page,.empty,.block-more,.ftr-in';
+  const io = new IntersectionObserver(es => es.forEach(e => {
+    if (!e.isIntersecting) return;
+    const el = e.target; io.unobserve(el); el.classList.add('yh-sv');
+    setTimeout(() => { el.classList.remove('yh-sr', 'yh-sv'); el.style.removeProperty('--yh-sd'); }, 1300);
+  }), { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  const seen = new WeakSet();
+  const scan = () => {
+    const vh = innerHeight, rows = new Map();
+    document.querySelectorAll(SEL).forEach(el => {
+      if (seen.has(el) || el.closest('.leaflet-container') || (el.parentElement && el.parentElement.closest('.yh-sr'))) return;
+      const r = el.getBoundingClientRect();
+      if (!r.height) return;
+      seen.add(el);
+      if (r.top < vh * 0.92) return;
+      const p = el.parentElement, k = rows.get(p) || 0; rows.set(p, k + 1);
+      el.style.setProperty('--yh-sd', Math.min(k, 6) * 80 + 'ms');
+      el.classList.add('yh-sr'); io.observe(el);
+    });
+  };
+  let q = 0;
+  const later = () => { if (!q) q = requestAnimationFrame(() => { q = 0; scan(); }); };
+  const start = () => { scan(); new MutationObserver(later).observe(document.body, { childList: true, subtree: true }); };
+  document.readyState === 'loading' ? document.addEventListener('DOMContentLoaded', start) : start();
+})();

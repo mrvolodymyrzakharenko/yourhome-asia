@@ -212,3 +212,5 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Supabase tables: yh_listings, yh_inquiries, yh_events (statistics), yh_alerts, yh_agents, yh_verify_requests,
   yh_partner_requests, yh_projects, yh_project_leads; storage bucket yh-photos.
 - partners.js + partners.css – Become a partner page and New projects (PT.* hooks in app.js).
+- Scroll fade (owner, 2026-11-24: "az összes tartalom ahogy lefelé görgetek fade in"): everything below the screen fades up
+  as it scrolls into view (fade.js, second block); cards in a row one after another; off for "reduce motion".

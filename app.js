@@ -35,6 +35,8 @@ const store = {
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
 let lang = store.get('yh_lang', null) || (['km','zh','fr','th'].find(l => (navigator.language || '').startsWith(l)) || 'en');
+// Short labels for the filters panel (owner, 2026-11-24 20:23: amenities in 3 rows) – s_<key>, else the full text
+const sl = k => (T[lang] && T[lang]['s_' + k]) ?? (lang === 'en' ? T.en['s_' + k] : null) ?? t(k);
 const t = (k, vars) => { let s = (T[lang] && T[lang][k]) ?? T.en[k] ?? k; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
 const money = n => '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
@@ -296,7 +298,7 @@ function chipRow(st, deal) {
     ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
   <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}<span class="mf-l">${t('moreFilters')}</span><span class="mf-s">${t('filters')}</span>${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>
-  <div class="more-panel" ${panelOpen ? '' : 'hidden'}><button type="button" class="mp-x" data-more aria-label="${esc(t('close'))}" title="${esc(t('close'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7l10 10M17 7 7 17"/></svg></button>
+  <div class="more-panel" ${panelOpen ? '' : 'hidden'}>
     <div class="mp-grid">
       ${sel('baths', [1, 2, 3].map(n => [n, n + '+']), t('bathrooms'))}
       ${sel('area', [30, 50, 80, 120, 200].map(n => [n, n + '+ m²']), t('minArea'))}
@@ -304,7 +306,7 @@ function chipRow(st, deal) {
       ${sel('days', [1, 7, 30].map(n => [n, t('d_' + n)]), t('listedWithin'))}
     </div>
     <div class="mp-lab">${t('amenities')}</div>
-    <div class="chips">${quick.slice(2).map(a => chip('amen', a, t('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, t('am_' + a))).join('')}${chip('photos', '1', '📷 ' + t('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
+    <div class="chips mp-am">${quick.slice(2).map(a => chip('amen', a, sl('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', sl('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, sl('am_' + a))).join('')}${chip('photos', '1', sl('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
 
   </div>`;
 }

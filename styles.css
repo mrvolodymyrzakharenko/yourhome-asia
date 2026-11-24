@@ -956,3 +956,11 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 @media (max-width:720px){.dash.wrap{padding-left:12px!important;padding-right:12px!important}}
 /* the "…" at the end of a long card name takes the name's own colour (owner, 2026-11-24 20:06) */
 @media (max-width:720px){.card .yname{color:#032EA1!important}.card:nth-child(even) .yname{color:#E00025!important}}
+/* No × on the filters panel: "Filters" turns red (pink patch) while it is open and closes it; no empty row (owner, 2026-11-24 20:22) */
+#chipBox .chip.more[aria-expanded="true"]{background:#FDE4E7!important;color:#E00025!important;font-weight:600!important;box-shadow:0 6px 18px rgba(15,23,42,.08),0 1px 4px rgba(15,23,42,.05)!important}
+#chipBox .chip.more[aria-expanded="true"]::before,#chipBox .chip.more[aria-expanded="true"]+*::before{display:none!important}
+.more-panel .mp-grid{margin-top:6px!important;padding-right:0!important}
+/* Amenities in the filters panel: short labels, tighter – 3 rows on phones (owner, 2026-11-24 20:23) */
+.more-panel .chips.mp-am{gap:2px 0!important;justify-content:center!important}
+.more-panel .chips.mp-am .chip{padding:5px 8px!important}
+@media (max-width:719px){.more-panel .chips.mp-am .chip{padding:5px 6.5px!important;font-size:12.5px!important}}

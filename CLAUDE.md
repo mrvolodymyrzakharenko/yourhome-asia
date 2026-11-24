@@ -71,7 +71,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Stay safe note, Contact section with #agBox, Telegram/WhatsApp/call and the message form → yh_inquiries), a fixed price bar
   with Contact owner (scrolls to the contact section), round close button and the share column (share, Telegram, Facebook,
   WhatsApp, copy link, save). #/l/<id> = the popup (pushState; Back/Escape/× close it and the page below stays as it was);
-  a shared link opens it over the homepage. The old full listing page (viewListing) is no longer routed.
+  a shared link opens it over the homepage.
+  Colours: red for the pin, section headings, Contact hover and Save; BLUE used sparingly (owner, 2026-11-24: "legyen benne
+  kék is ritkán"): type tag, underline under the city, the Bedrooms/Bathrooms/Area icons, share-column hover. The old full listing page (viewListing) is no longer routed.
 
 ## Rules for listings
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin

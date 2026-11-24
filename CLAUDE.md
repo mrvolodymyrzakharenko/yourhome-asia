@@ -16,7 +16,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 ## Design (owner, 2026-11-24)
 - Structure copies vietrent.net (portal look), but in Cambodian flag colours: royal blue #032EA1 (main), red #E00025
   (accents: TOP badge, prices, Post buttons), white background.
-- Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + "YourHome Cambodia" on ONE line, bold portal font, "Cambodia" red (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language select
+- Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + "YourHome Cambodia" on ONE line, header text 16px / 500 like the Menu button (phones 14px), "Cambodia" red (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language select
   (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown (the word "Menu" shows on phones too – owner 21:29).
   Language pill: own small chevron close to the code with room after it (owner, 2026-11-24). "Become a partner" (white pill,
   → #/partners) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).

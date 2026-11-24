@@ -71,7 +71,7 @@ const ICON = {
   map: '<svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg>',
   sliders: '<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
 };
-const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city';
+const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id';
 
 function applyStatic() {
   document.documentElement.lang = lang;
@@ -95,6 +95,28 @@ const AM_ICON = {
   aircon: '<svg viewBox="0 0 24 24"><path d="M12 2v20M4 6l16 12M20 6 4 18M9 3.5 12 6l3-2.5M9 20.5 12 18l3 2.5"/></svg>',
   parking: '<svg viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="17" height="17" rx="3.5"/><path d="M9.5 17V7.5h3.2a3 3 0 0 1 0 6H9.5"/></svg>',
 };
+// Agent bar at the bottom of every card (owner, 2026-11-24 21:24, khmer24-style screenshot): photo (agent profile photo or
+// initials), name, and round Call · WhatsApp · Telegram buttons. The card is a link, so the buttons are spans that open
+// their link themselves (no nested <a>). Clicks are counted like in the popup.
+function agentBar(l) {
+  const ag = l._agent || null;
+  const name = (ag && ag.name) || l.contact_name || '';
+  const ph = digits(l.contact_phone || (ag && ag.phone)), wa = digits(l.contact_whatsapp || (ag && ag.whatsapp)), tgRaw = l.contact_telegram || (ag && ag.telegram), tg = tgHandle(tgRaw) || (/^\+?\d{8,15}$/.test(String(tgRaw || '').replace(/[\s-]/g, '')) ? '+' + digits(tgRaw).replace('+', '') : null);
+  if (!name && !ph && !wa && !tg) return '';
+  const ini = (name || '?').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
+  const av = ag && ag.photo ? `<img src="${esc(ag.photo)}" alt="" loading="lazy">` : `<i>${esc(ini)}</i>`;
+  const b = (href, ev, cls, svg, lab) => `<span class="yab ${cls}" role="link" tabindex="0" data-href="${esc(href)}" data-ev="${ev}" data-id="${l.id}" aria-label="${esc(lab)}">${svg}</span>`;
+  return `<div class="yagent"><span class="yav">${av}</span><span class="yan">${esc(name || t('by_owner'))}</span><span class="yabs">${
+    ph ? b('tel:' + ph, 'phone', 'yab-ph', '<svg viewBox="0 0 24 24"><path d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 7.1 7.1l1.4-2.3L21 15.5V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>', t('call')) : ''}${
+    wa ? b('https://wa.me/' + wa.replace('+', ''), 'whatsapp', 'yab-wa', '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12z"/><path d="M9 9.5c.3 2 2.5 4.2 4.5 4.5l1-1 1.5.7-.3 1.3c-3 .4-6.9-3.5-6.5-6.5l1.3-.3.7 1.5z"/></svg>', 'WhatsApp') : ''}${
+    tg ? b('https://t.me/' + tg, 'telegram', 'yab-tg', '<svg viewBox="0 0 24 24"><path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/><path d="m9 13 7-5"/></svg>', 'Telegram') : ''}</span></div>`;
+}
+document.addEventListener('click', e => {
+  const b = e.target.closest('.yab'); if (!b) return;
+  e.preventDefault(); e.stopPropagation();
+  try { track({ id: b.dataset.id, status: 'active' }, b.dataset.ev); } catch (_) {}
+  const h = b.dataset.href; if (h.startsWith('tel:')) location.href = h; else window.open(h, '_blank', 'noopener');
+}, true);
 function card(l) {
   const ph = l.photos && l.photos[0] ? `<img src="${esc(l.photos[0])}" alt="" loading="lazy">` : `<span class="noimg">🏠</span>`;
   const dots = l.photos && l.photos.length > 1 ? `<div class="dots">${l.photos.slice(0, 5).map(() => '<i></i>').join('')}</div>` : '';
@@ -119,6 +141,7 @@ function card(l) {
       <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span class="yty">${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : l.price_period === 'day' ? 'daily' : 'rent'))}</em><b>${l.bathrooms ?? '–'} ${esc(t('bathrooms').toLowerCase())}</b><b>${l.area_m2 ? Math.round(l.area_m2) + ' m²' : '– m²'}</b><b>${esc(l.posted_by ? t('by_' + l.posted_by) : shortDate(l.created_at))}</b></p>
       <div class="yfoot"><p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span class="yaddr"><span class="ya1">${esc(!l.city || l.city === 'Phnom Penh' ? t('cityPP') : l.city)},</span> <span class="ya2">${esc(l.address || t('cambodia'))}</span></span></p>
       <span class="ylink">${esc(t('clickView', { x: t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase() }))} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
+      ${agentBar(l)}
     </div></a>`;
 }
 // 10 categories, 5 + 5 (owner, 2026-11-24): the 5th top item "Projects" opens New projects
@@ -185,6 +208,8 @@ async function fetchListings(f = {}) {
   q = sort === 'cheap' ? q.order('price', { ascending: true }) : sort === 'exp' ? q.order('price', { ascending: false }) : q.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
   const { data, error } = await q.limit(f.limit || 300);
   if (error) { toast(t('error') + error.message); return []; }
+  const aids = [...new Set(data.map(l => l.agent_id).filter(Boolean))];   // agent photo + name for the card's agent bar
+  if (aids.length) { const { data: ags } = await sb.from('yh_agents').select('id,name,photo,phone,whatsapp,telegram').in('id', aids); const m = Object.fromEntries((ags || []).map(a => [a.id, a])); data.forEach(l => { l._agent = m[l.agent_id] || null; }); }
   return data;
 }
 

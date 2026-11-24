@@ -107,6 +107,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   name blue + icons red, even cards name red + icons blue; the icon-row NUMBERS take the icons' colour (owner 20:16); the name is
   2px under the full-width fit and the address 2px under its fit (owner 20:56) with slightly wider letter spacing. Phone corners 36px + soft deep shadow
   (measured from the screenshot); PC 24px.
+- AGENT BAR ON EVERY CARD (owner, 2026-11-24 21:24, khmer24 screenshot): hairline, round photo (yh_agents.photo of the listing's
+  agent_id, else initials), name (agent name, else contact_name), three round outline buttons Call (blue) · WhatsApp (green) ·
+  Telegram (sky) from the listing's contact fields (agent's as fallback; a phone number works as t.me/+…). The card is a link,
+  so they are .yab spans opening their own link (click counted in yh_events). agentBar() in app.js; fetchListings attaches
+  l._agent. Demo listings: "YourHome Team" with the portal number.
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
   ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | grid icon + Listing | map icon + Map (icons on phones too; phones hide the Filters icon) | Telegram logo + "Subscribe" (owner, 2026-11-24 19:56) | Newest – the Telegram button
   (#notifyBtn, name in a bubble on hover) | "Newest ▾" select (no "Sort:" word); no separate tools row under the heading.

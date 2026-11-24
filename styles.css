@@ -778,3 +778,11 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   #dealTabs .dt-cat[data-cat=apartment]:not(.on)::before{display:block!important}
   #dealTabs .dt-cat[data-cat=villa].on+button::before,#dealTabs .dt-cat.on[data-cat=villa]~.dt-cat[data-cat=apartment]::before{display:none!important}
 }
+/* Search-card list a little bigger, with an X at the very top (owner, 2026-11-24: "picit nagyobbak… X gomb… a legtetején") */
+.ypk-w{top:20vh;bottom:20vh;left:16vw;right:16vw}
+@media (max-width:420px){.ypk-w{left:16vw;right:16vw}}
+.ypk-h{position:relative;display:flex;align-items:center;justify-content:center;min-height:52px;padding:10px 52px 8px;font-size:11.5px}
+.ypk-x{position:absolute;top:8px;right:8px;width:36px;height:36px;border:0;border-radius:50%;background:#F2F4F8;color:#0b1d51;display:grid;place-items:center;cursor:pointer}
+.ypk-x svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.ypk-x:active{background:#FDE4E7;color:#E00025}
+.ypk-l button{padding:11px 10px}

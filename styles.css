@@ -889,3 +889,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .sbox select{width:auto!important;max-width:100%;display:inline-block;text-align:center;text-align-last:center;padding:2px 20px 2px 4px!important;background-position:right 2px center!important}
   .sbox .sbtns{padding-left:8px}
 }
+/* PC search card +5% height (owner, 2026-11-24 17:26: "most túl szűk") */
+@media (min-width:901px){.sbox{padding:9px 7px!important}.sbox .f{padding-top:4px!important;padding-bottom:4px!important}.sbox .btn{padding-top:12px!important;padding-bottom:12px!important}}
+/* the banner between two blocks keeps the block spacing */
+#blocks>.cta{margin:6px 0 26px!important}

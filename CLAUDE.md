@@ -75,14 +75,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - PC SEARCH AREA (owner, 2026-11-24 evening): the search card is 972px wide and ~10% lower; the 10 categories above it and the
   filters under it are exactly as WIDE AS THE CARD, every item an equal column; on PC the quick filters and More filters |
   Listing | Map | Subscribe | Newest share ONE full-width line (styles.css "PC: the rows around the search card").
-  The four fields are EQUAL, label + value centred, the small filled triangle right after the value (owner: "lélegezzen, de ne ennyire").
+  The card is ~5% taller again (owner: "túl szűk"). The four fields are EQUAL, label + value centred, the small filled triangle right after the value (owner: "lélegezzen, de ne ennyire").
 - PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),
   then Post listing + Search in the row below.
 - Posting a listing must always be visible straight away (header button – on phones a compact red "+ Post" before Menu,
   the header account icon then left to the bottom menu (owner, 2026-11-24 20:13) –, bottom menu, banner on the homepage, and a white
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
-  "Want to rent out faster?" banner (phones: ONE compact row, text at most 2 lines, small "Post now" pill right – owner 21:12) → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
+  category blocks, with the "Want to rent out faster?" banner BETWEEN the first and second block (owner 17:26; phones: ONE compact
+  row, text at most 2 lines, small "Post now" pill right – owner 21:12). Blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
 - FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js (loaded before
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.

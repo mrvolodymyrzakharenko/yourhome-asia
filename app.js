@@ -316,6 +316,9 @@ async function viewHome() {
   const prj = await PT.homeBlock();   // New projects block (owner, 2026-11-24)
   const b0 = document.getElementById('blocks'); if (!b0) return;
   b0.innerHTML = ((html + prj) || `<div class="empty">${t('noResults')}</div>`);
+  // "Want to rent out faster?" banner sits BETWEEN the first two category blocks, not under the search (owner, 2026-11-24 17:26)
+  const cta = app.querySelector('.cta'), first = b0.querySelector('section.block');
+  if (cta && first) first.after(cta);
 }
 
 // Subscribe (Telegram) + Newest in the filters' second row – on the homepage too (owner, 2026-11-24 22:21: "hova tűnt?")

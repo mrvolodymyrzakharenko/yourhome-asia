@@ -68,7 +68,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 
 - PHONES = STUDY PORTAL MOBILE CARDS (owner, 2026-11-24: "vedd ki a mobilos nézetet a Study and Work portáról… nem lehet
   kettő egy sorba, tökre úgy nézzen ki"): under 720px every listing grid (.row4, .grid, .row-scroll) is ONE card per row, the
-  Study .pcard look: pastel pills on the photo (price yellow · bedrooms blue · type green, TOP red, DEMO dark), white round
+  Study .pcard look: light pills on the photo in CAMBODIAN COLOURS (owner, 2026-11-24): price = faint red field + red text,
+  bedrooms/stage = faint blue field + royal-blue text, type = white field + grey text, TOP solid red, DEMO dark, white round
   heart, camera count bottom-right, then title, bathrooms · m², pin + district, red "View →" (card() extra .yb*/.y* elements,
   shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
 

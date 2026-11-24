@@ -365,3 +365,12 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .ypk-l{flex:1;overflow-y:auto;padding:0 8px 8px;overscroll-behavior:contain}
 .ypk-l button{display:block;width:100%;padding:9px 10px;border:0;background:none;border-radius:10px;font:inherit;font-size:13px;font-weight:500;letter-spacing:-.025em;color:var(--ink);text-align:center;cursor:pointer}
 .ypk-l button.on{background:#FDE4E7;color:#E00025;font-weight:600}
+/* PHOTO LABELS IN CAMBODIAN COLOURS (owner, 2026-11-24: "a címkék fehérek, világosak… a betűk a kambodzsai zászló színei…
+   a mező enyhén pirosos, enyhén kékes"): every pill on a card photo is light – price: faint red field, red text; bedrooms /
+   stage: faint blue field, royal-blue text; type: white field, grey-ink text. TOP solid red, SAMPLE/DEMO dark grey. */
+.yb{border:0!important;box-shadow:0 2px 8px rgba(15,23,42,.14);backdrop-filter:blur(4px)}
+.yb-price{background:rgba(255,240,242,.96)!important;color:#E00025!important}
+.yb-beds{background:rgba(236,241,255,.96)!important;color:#032EA1!important}
+.yb-type{background:rgba(255,255,255,.96)!important;color:#475569!important}
+.yb-top{background:#E00025!important;color:#fff!important}
+.yb-demo{background:rgba(51,65,85,.92)!important;color:#fff!important}

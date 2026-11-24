@@ -45,7 +45,17 @@ let lang = store.get('yh_lang', null) || (['km','zh','fr','th'].find(l => (navig
 const sl = k => (T[lang] && T[lang]['s_' + k]) ?? (lang === 'en' ? T.en['s_' + k] : null) ?? t(k);
 const t = (k, vars) => { let s = (T[lang] && T[lang][k]) ?? T.en[k] ?? k; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; };
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
-const money = n => '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 });
+// CURRENCY like realestate.com.kh (owner, 2026-11-24 20:55): prices are stored in USD and shown in the picked currency with
+// today's rate (open.er-api.com, cached 12 h). No live rate yet → USD is shown, never a guessed rate.
+const CURS = [['USD', 'US Dollar', '$'], ['KHR', 'Cambodian Riel', '៛'], ['THB', 'Thai Baht', '฿'], ['CNY', 'Chinese Yuan', 'CN¥'], ['JPY', 'Japanese Yen', '¥'], ['EUR', 'Euro', '€']];
+let cur = (() => { try { const c = JSON.parse(localStorage.getItem('yh_cur')); return CURS.some(k => k[0] === c) ? c : 'USD'; } catch { return 'USD'; } })();
+let rates = (() => { try { const c = JSON.parse(localStorage.getItem('yh_rates')); return c && c.r ? c.r : null; } catch { return null; } })();
+const money = n => {
+  const k = rates && rates[cur] ? cur : 'USD', c = CURS.find(x => x[0] === k), v = Number(n) * (k === 'USD' ? 1 : rates[k]);
+  const s = v.toLocaleString('en-US', { maximumFractionDigits: v < 100 && k !== 'KHR' && k !== 'JPY' ? 2 : 0 });
+  return k === 'KHR' ? s + ' ៛' : c[2] + s;
+};
+window.yhMoney = money;
 const priceSuffix = l => l.price_period === 'month' ? t('perMonth') : l.price_period === 'day' ? t('perDay') : '';
 const shortDate = d => { const x = new Date(d); return `${x.getFullYear()}. ${x.getMonth()+1}. ${x.getDate()}.`; };
 const dateTime = d => new Date(d).toLocaleString(lang === 'km' ? 'km-KH' : lang, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
@@ -94,6 +104,28 @@ function applyStatic() {
   document.getElementById('lang').value = lang;
   document.getElementById('year').textContent = new Date().getFullYear();
 }
+async function loadRates() {
+  try { const c = JSON.parse(localStorage.getItem('yh_rates')); if (c && c.r && Date.now() - c.t < 12 * 36e5) return; } catch {}
+  try {
+    const j = await fetch('https://open.er-api.com/v6/latest/USD').then(r => r.json());
+    const r = {}; CURS.forEach(([k]) => { r[k] = j && j.rates ? Number(j.rates[k]) : NaN; });
+    if (!Object.values(r).every(x => Number.isFinite(x) && x > 0)) return;
+    rates = r; try { localStorage.setItem('yh_rates', JSON.stringify({ t: Date.now(), r })); } catch {}
+    if (cur !== 'USD') route();
+  } catch {}
+}
+function setCur(k) {
+  if (!CURS.some(c => c[0] === k)) return;
+  cur = k; try { localStorage.setItem('yh_cur', JSON.stringify(k)); } catch {}
+  const s = document.getElementById('cur'); if (s) s.value = k;
+  document.querySelectorAll('[data-cur]').forEach(b => b.classList.toggle('on', b.dataset.cur === k));
+  route();
+}
+(() => {
+  const s = document.getElementById('cur'); if (s) { s.value = cur; s.addEventListener('change', e => setCur(e.target.value)); }
+  document.querySelectorAll('[data-cur]').forEach(b => { b.classList.toggle('on', b.dataset.cur === cur); b.addEventListener('click', () => setCur(b.dataset.cur)); });
+  loadRates();
+})();
 document.getElementById('lang').addEventListener('change', e => { lang = e.target.value; store.set('yh_lang', lang); applyStatic(); route(); });
 // TELEGRAM CHANNEL (owner, 2026-11-24: "kellene egy telegram gomb – amivel fel tud iratkozni a yourhome.asia csatornára"):
 // the bottom menu's first button and the footer Telegram icon ([data-tgch]) open a small card "Join our Telegram channel"

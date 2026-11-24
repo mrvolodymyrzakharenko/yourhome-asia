@@ -112,6 +112,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (TYPES / SEARCH_TYPES in app.js, t_* in i18n.js, yh_listings_property_type_check in the database).
 - SORTING (owner, 2026-11-24 20:51, tokki.house): Newest · Price: low to high · Price: high to low · Area: largest first ·
   Area: smallest first (#sortSel, SORTS in app.js, so_* in i18n.js; listings without an area come last).
+- CURRENCY (owner, 2026-11-24 20:55, realestate.com.kh menu): USD · KHR · THB · CNY · JPY · EUR – always in the Menu list
+  (2 columns, .dr-cur), in the header (#cur) only on screens ≥1320px. Prices stay USD in the database; money() converts with
+  today's rate (open.er-api.com, cached 12 h in yh_rates); without a live rate it shows USD. Choice saved in yh_cur.
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
 - CITIES (owner, 2026-11-24 20:17 Tbilisi: "legyen az összes nagy város a listában, de a kezdő Phnom Penh"): the search card's
   City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh

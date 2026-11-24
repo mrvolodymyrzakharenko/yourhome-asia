@@ -217,7 +217,7 @@ export function viewPartners() {
 // ---------- New projects ----------
 const STAGE = { presale: 'Pre-sale', construction: 'Under construction', ready: 'Ready to move in' };
 const STAGE_C = { presale: 'yb-price', construction: 'yb-beds', ready: 'yb-type' };
-const fmt = n => n ? '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 }) : '';
+const fmt = n => n ? (window.yhMoney ? window.yhMoney(n) : '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })) : '';
 function pcard(p) {
   const { esc } = C; const img = p.photos && p.photos[0];
   const href = '#/project/' + encodeURIComponent(p.slug);

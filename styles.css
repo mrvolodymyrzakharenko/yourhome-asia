@@ -802,3 +802,5 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .heart{width:29px!important;height:29px!important}
 @media (max-width:720px){.card .heart{width:29px!important;height:29px!important;top:12px!important}}
 .heart svg{width:13px!important;height:11px!important}
+/* Address row lighter (owner, 2026-11-24 20:44: "a cím… sötéttel… lehet világosabb"): street address mid-grey, city light grey */
+@media (max-width:720px){.ymeta .ya2{color:#64748b!important}.ymeta .ya1{color:#a3adbd!important}}

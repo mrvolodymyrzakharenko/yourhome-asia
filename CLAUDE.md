@@ -46,7 +46,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
   classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
 - SEARCH ROW (owner, 2026-11-24): Rent · Daily · Buy · Rooms · Projects | Apartment · Condo · Studio · Villa · House –
-  10 items, phones 5 + 5 in equal centred columns (owner: "egymás alatt… egyenlő távolság"); Projects → #/projects
+  10 items, phones 5 + 5 in equal centred columns (owner: "egymás alatt… egyenlő távolság"); Projects → #/projects;
+  phones row 2 = House · Condo · Studio · Villa · Apartment (House under Rent, Apartment under Projects – CSS order)
   (DAILY RENT, owner 2026-11-24: "egyből látható legyen" – Daily = deal_type 'rent' with price_period 'day'; deal=daily in the
   URL; post form "Daily rent"; homepage block "Daily rentals & short stays" after Rooms; phones: 5 + 5) (CATS in
   app.js; Condo = 8th item, owner 2026-11-24). TEXT WITH DIVIDERS like the Study search-type tabs (owner, 2026-11-24 screenshot:

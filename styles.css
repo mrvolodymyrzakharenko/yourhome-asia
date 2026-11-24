@@ -769,3 +769,12 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .heart svg{width:22px;height:19px;fill:none;stroke:#0b1d51;stroke-width:1.9;stroke-linejoin:round;transition:transform .2s ease,fill .2s ease,stroke .2s ease}
 .heart.on svg{fill:#E00025;stroke:#E00025;transform:scale(1.06)}
 .heart:active svg{transform:scale(.9)}
+/* Phones: House under Rent, Apartment under Projects (owner, 2026-11-24) – row 2 reads House · Condo · Studio · Villa · Apartment */
+@media (max-width:720px){
+  #dealTabs .dt-cat{order:2}
+  #dealTabs .dt-cat[data-cat=house]{order:1}
+  #dealTabs .dt-cat[data-cat=apartment]{order:3}
+  #dealTabs .dt-cat[data-cat=house]::before{display:none!important}
+  #dealTabs .dt-cat[data-cat=apartment]:not(.on)::before{display:block!important}
+  #dealTabs .dt-cat[data-cat=villa].on+button::before,#dealTabs .dt-cat.on[data-cat=villa]~.dt-cat[data-cat=apartment]::before{display:none!important}
+}

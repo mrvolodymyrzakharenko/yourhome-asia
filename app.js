@@ -147,17 +147,16 @@ async function fetchListings(f = {}) {
 }
 
 const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','sale','room'].map(d => `<button type="button" data-deal="${d}" class="${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
-function searchBox(p = {}) {
-  const deal = p.deal || 'rent';
-  return `${dealRow(deal, '', 'dealTabs')}
+function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
+  return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select disabled><option>${t('cityPP')}</option></select></div>
     <div class="f addr"><label>📍 ${t('district')}</label><input name="q" list="dl" placeholder="${esc(t('addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist></div>
     <div class="f"><label>${t('type')}</label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
-    <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal, p.max)}</select></div>
+    <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <button class="btn blue">${t('search')} →</button>
   </form>
-  <div class="chipbox home" id="chipBox">${chipRow({}, deal)}</div>`;
+  <div class="chipbox home" id="chipBox">${chipRow(p, deal)}</div>`;
 }
 const budgetOpts = (deal, cur) => `<option value="">${t('any')}</option>` + BUDGET[deal].map(v => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('');
 function wireSearchBox(onSubmit) {
@@ -211,8 +210,9 @@ function block(title, list, more) {
   if (!list.length) return '';
   return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${fill4(list)}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }
+const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(22px,5vw,56px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}</section>`;
 async function viewHome() {
-  app.innerHTML = `<div class="wrap"><section class="hero"><h1 style="white-space:nowrap;font-size:clamp(22px,5vw,56px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox()}</section>
+  app.innerHTML = `<div class="wrap">${hero()}
     <div class="cta"><div><span class="ic">+</span>${t('ctaText')}</div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>
     <div id="blocks"><div class="empty">${t('loading')}</div></div></div>`;
   let st = {};
@@ -241,13 +241,7 @@ async function viewSearch() {
   const view = p.view === 'map' ? 'map' : 'grid';
   const deal = p.deal || '';
   const cat = p.beds === '0' ? 'studio' : (CATS.some(([k]) => k === p.type) ? p.type : '');
-  app.innerHTML = `<div class="wrap"><div class="srow">${dealRow(deal, cat, 'dealTabsS')}</div><div class="fbox">
-    <form class="fbar" id="fbar">
-      <input name="q" list="dl2" placeholder="${esc(t('addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl2">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist>
-      <select name="type"><option value="">${t('type')}: ${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select>
-      <select name="max"><option value="">${t('budget')}: ${t('any')}</option>${BUDGET[deal || 'sale'].concat(deal ? [] : BUDGET.rent).sort((a, b) => a - b).map(v => `<option value="${v}" ${String(p.max) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('')}</select>
-    </form>
-    <div class="chipbox" id="chipBox">${chipRow(p, deal)}</div></div>
+  app.innerHTML = `<div class="wrap">${hero(p, deal, cat)}
     <div class="bh"><h2 id="rc">${t('loading')}</h2>
       <div class="tools">
         <button class="notify" id="notifyBtn">🔔 ${t('notify')}</button>
@@ -256,17 +250,16 @@ async function viewSearch() {
       </div></div>
     <div id="res"></div></div>`;
   const upd = ch => { const n = new URLSearchParams(qs()); for (const k in ch) ch[k] ? n.set(k, ch[k]) : n.delete(k); go('#/search?' + n); };
-  document.getElementById('fbar').onchange = () => { const f = new FormData(document.getElementById('fbar')); upd(Object.fromEntries(f)); };
   const st = {}; FKEYS.forEach(k => { if (p[k]) st[k] = p[k]; });
   wireChips(document.getElementById('chipBox'), st, s => upd(Object.fromEntries(FKEYS.map(k => [k, s[k] || '']))));
-  document.getElementById('dealTabsS').onclick = e => {
+  document.getElementById('dealTabs').onclick = e => {
     const b = e.target.closest('button'); if (!b) return;
-    if (b.dataset.deal) return upd({ deal: b.dataset.deal === deal ? '' : b.dataset.deal, max: '' });
+    if (b.dataset.deal) return upd({ deal: b.dataset.deal, max: '' });
     const k = b.dataset.cat;
     if (k === 'studio') return upd({ beds: p.beds === '0' ? '' : '0' });
     upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds });
   };
-  document.getElementById('fbar').onsubmit = e => { e.preventDefault(); document.getElementById('fbar').onchange(); };
+  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
   document.querySelectorAll('.seg button').forEach(b => b.onclick = () => upd({ view: b.dataset.v === 'map' ? 'map' : '' }));
   document.getElementById('notifyBtn').onclick = () => alertModal(p);

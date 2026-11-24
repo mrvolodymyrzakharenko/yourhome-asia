@@ -45,7 +45,7 @@ label{font-weight:500}
 /* Hero title in the Study portal style (owner, 2026-11-24 – "ilyen stílusú legyen"): heavy navy text, the country in red
    with a hand-drawn red swoosh under it, red full stop */
 .hero h1{font-weight:800;color:#0b1d51;letter-spacing:-.035em}
-.hero h1 em{font-style:normal;color:#E00025;text-decoration:none;position:relative;display:inline-block;padding-bottom:.06em}
-.hero h1 em::after{content:"";position:absolute;left:-.04em;right:-.02em;bottom:-.14em;height:.24em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16' preserveAspectRatio='none'%3E%3Cpath d='M3 11C8 6 14 8 22 9c45 3 110 1 175-5' fill='none' stroke='%23E00025' stroke-width='3.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
+.hero h1 em{font-style:normal;font-weight:800;color:#E00025;text-decoration:none;position:relative;display:inline-block;padding-bottom:.06em}
+.hero h1 em::after{content:"";position:absolute;left:-.02em;right:-.02em;bottom:-.2em;height:.28em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M4 5C40 15 75 17 108 16C140 15 170 11 196 4' fill='none' stroke='%23032EA1' stroke-width='4.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
 .hero h1 i{font-style:normal;color:#E00025}
 .hero p{color:#1e293b}

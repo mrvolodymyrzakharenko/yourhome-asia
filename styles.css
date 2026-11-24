@@ -810,3 +810,14 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .yfoot,.yfoot .ymeta{justify-content:center!important;text-align:center}
   .yfoot .ymeta .yaddr{flex:0 1 auto!important}
 }
+/* "Want to rent out faster?" banner on phones = at most TWO lines, compact (owner, 2026-11-24 21:12: "maximum 2 sor, ne
+   legyen ekkora nagy a hely"): one row – small + icon, the text (wraps to 2 lines at most), small "Post now" pill on the right;
+   less space above it. */
+@media (max-width:720px){
+  .cta{flex-direction:row!important;align-items:center!important;gap:10px!important;padding:9px 10px 9px 12px!important;border-radius:16px!important;margin-top:14px!important;margin-bottom:14px!important}
+  .cta>div{display:flex;align-items:center;gap:9px;flex:1 1 auto;min-width:0;font-size:12.5px!important;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .cta .ic{float:left;width:22px!important;height:22px!important;margin-right:8px!important;font-size:14px;line-height:22px;text-align:center}
+  .cta .btn{flex:none;padding:7px 12px!important;min-height:0!important;font-size:12px!important;border-radius:99px!important;white-space:nowrap}
+  .ysample{margin-bottom:12px!important;padding:7px 12px!important;font-size:12px!important}
+  .frow{margin-bottom:0}
+}

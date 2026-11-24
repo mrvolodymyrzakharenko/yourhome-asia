@@ -78,7 +78,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   the header account icon then left to the bottom menu (owner, 2026-11-24 20:13) –, bottom menu, banner on the homepage, and a white
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
-  "Want to rent out faster?" banner → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
+  "Want to rent out faster?" banner (phones: ONE compact row, text at most 2 lines, small "Post now" pill right – owner 21:12) → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
 
 - PHONES = STUDY PORTAL MOBILE CARDS (owner, 2026-11-24: "vedd ki a mobilos nézetet a Study and Work portáról… nem lehet

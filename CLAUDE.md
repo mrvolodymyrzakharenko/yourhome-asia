@@ -86,7 +86,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   15px) · deal (red) / bathrooms · m² · Owner/Agent (date if unknown); last row: pin + "District, Phnom Penh" left, red 14px
   "Click to view apartment →" right (.yfoot; clickView in i18n.js).
 - FILTERS = TWO ROWS ON THE RESULTS PAGE TOO (owner, 2026-11-24: "Telegram alerts… csak egy Telegram logó, ha rámegy kiírja…
-  ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | Listings | Map | Telegram logo
+  ne legyen kiírva, hogy sort, csak newest… két sorba, nem háromba"): row 2 = More filters | list icon (no "Listings" word – owner, 2026-11-24: "vedd ki") | Map | Telegram logo
   (#notifyBtn, name in a bubble on hover) | "Newest ▾" select (no "Sort:" word); no separate tools row under the heading.
   Phones: row 1 shows one more quick filter (first amenity, .q-x1, from 390px), "More filters" reads "Filters"; both rows
   fit one line each from 360px.

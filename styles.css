@@ -470,7 +470,6 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 /* phones: "More filters" reads "Filters" so row 2 (Filters | Listings | Map | Telegram | Newest) fits one line from 360px */
 .mf-s{display:none}
 @media (max-width:720px){.mf-l{display:none}.mf-s{display:inline}}
-@media (max-width:374px){.frow .vsw a[data-v="grid"] span{display:none}}
 @media (max-width:720px){.frow .ftg{padding:4px 5px}.frow .fsort select{padding:6px 16px 6px 3px;background-position:right 2px center}}
 @media (max-width:720px){.frow .vsw a,.frow .chip{gap:4px!important}}
 .frow .fsort select{field-sizing:content;min-width:0}

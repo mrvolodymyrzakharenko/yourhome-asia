@@ -114,7 +114,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   no camera count; owner 20:01); 1) bold "Apartment for rent in BKK1" / "… for sale in …" (17px/700, nameRent/nameSale + inPlace), 2) pin + "Phnom Penh, <street
   address the advertiser typed>" (no address: "Phnom Penh, Cambodia"; owner 20:02); rows 1–2 CENTRED one under the other (owner 21:11; was left like vietrent) and each FILLS the card width from edge to edge – fitCards() in app.js
   sizes them – since 19:55 ONE size on every card: the size at which "Apartment for rent in BKK1" fills the card is used for every
-  name (ONE line – a longer name ends with …, owner 20:05) and the size at which "Phnom Penh, No. 24, Street 278" fills it for every address (longer end with …), address row: city light grey, street address mid-grey (lighter since 20:44), one line each with … at the end; the demo
+  name (ONE line – a longer name ends with … in the name's own colour, owner 20:05–20:06) and the size at which "Phnom Penh, No. 24, Street 278" fills it for every address (longer end with …), address row: city light grey, street address mid-grey (lighter since 20:44), one line each with … at the end; the demo
   listings have sample street addresses,
   3) hairline + FOUR marks: bed · bath · two amenity icons (gym, wifi, pool, parking, air-con; AM_ICON; m² only if fewer
   than two) in equal columns with dividers. Name row ONE colour, 800 weight (owner 20:07: "nem lehet fele-fele"): odd cards

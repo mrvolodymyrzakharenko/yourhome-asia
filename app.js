@@ -204,7 +204,7 @@ function chipRow(st, deal) {
   return `<div class="chips qrow">
     ${chip('beds', '1', t('bed1'))}${['2', '3'].map(n => chip('beds', n, t('bedN', { n }))).join('')}
     ${deal === 'sale' ? chip('foreign', '1', t('f_foreign')) : chip('furn', '1', t('furnished'))}
-    ${quick.map((a, i) => chip('amen', a, a === 'edc' ? `<span class="mf-l">${t('am_edc')}</span><span class="mf-s">EDC</span>` : t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i < 2 ? ' q-x1' : ''))).join('')}
+    ${quick.map((a, i) => chip('amen', a, a === 'edc' ? `<span class="mf-l">${t('am_edc')}</span><span class="mf-s">EDC</span>` : t('am_' + a)).replace('class="chip', 'class="chip q-x' + (i < 1 ? ' q-x1' : ''))).join('')}
     ${chip('by', 'owner', t('f_owner')).replace('class="chip', 'class="chip q-x')}
   </div>
   <div class="frow"><button type="button" class="chip more ${nMore ? 'on' : ''}" data-more aria-expanded="${panelOpen}">${ICON.sliders}<span class="mf-l">${t('moreFilters')}</span><span class="mf-s">${t('filters')}</span>${nMore ? ` (${nMore})` : ''}</button>${viewSwitch(st)}</div>

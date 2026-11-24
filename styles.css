@@ -507,3 +507,9 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .chipbox .qrow{margin:0!important;width:100%}
   .chipbox .qrow .chip:not(.q-x),.chipbox .qrow .chip.q-x1{flex:1 1 auto!important;justify-content:center;text-align:center}
 }
+/* ROW 1 = FIVE QUICK FILTERS ON EVERY SCREEN (owner, 2026-11-24 19:55: "csak azt az ötöt írja ki"): 1+ bed · 2+ beds ·
+   3+ beds · Furnished · Pool (first amenity, .q-x1); the other amenities and Owner only are in More filters. Phones: the five
+   share the search card's width. */
+.chipbox .qrow .q-x:not(.q-x1){display:none!important}
+.more-panel .chips .mp-q{display:inline-flex!important}
+.more-panel .chips .mp-q:first-child{display:none!important}

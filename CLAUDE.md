@@ -46,7 +46,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   "ne legyen begombozva"): no box, grey text, thin 1px dividers, the picked one a light pink patch with RED 600 text; phones
   4 per row (styles.css "CATEGORY ROW = TEXT WITH DIVIDERS"). On phones the row, the chips and the project tabs
   WRAP centred – never sideways scrolling (owner: "nem lehet sor elcsúszva jobbra"). Search card on phones/tablets: City | District
-  side by side (District = a real list: Any + DISTRICTS; every search-card select has a small FILLED triangle arrow, no outline chevron), Type | Budget under them, fields ~5% lower, every label and value centred, select arrows inside with room after them (styles.css last blocks);
+  side by side (District = a real list: Any + DISTRICTS; on phones/tablets every search-card select opens OUR small list in the middle
+  of the screen – 25% free on every side, never the phone's full-screen picker (picker.js, .ypk); every search-card select has a small FILLED triangle arrow, no outline chevron), Type | Budget under them, fields ~5% lower, every label and value centred, select arrows inside with room after them (styles.css last blocks);
   FILTERS = TWO ROWS (owner, 2026-11-24: "ne gombozd be… csak két sor"): under the card row 1 = quick filters as text with
   thin dividers, tight (phones: 1+ bed · 2+ beds · 3+ beds · Furnished on ONE line – the quick amenities and Owner only move
   into More filters, .q-x / .mp-q), row 2 = More filters | ▦ Listings | 🗺 Map (LIST / MAP SWITCH – owner: "nagyon fontos";

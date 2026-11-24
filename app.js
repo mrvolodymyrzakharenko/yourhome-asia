@@ -283,7 +283,6 @@ function wireSearchBox(onSubmit) {
   document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: deal === 'room' ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); onSubmit(deal); };
   const cs = document.getElementById('citySel'), ds = document.getElementById('distSel');
-  if (cs && ds) cs.addEventListener('change', () => { ds.innerHTML = districtOpts(cs.value); });
   return () => deal;
 }
 let panelOpen = false;
@@ -900,6 +899,8 @@ function fitRows() {
     if (W <= 720 && ho()) { b.classList.add('hfit1'); if (ho()) b.classList.add('hfit2'); } }
   document.querySelectorAll('.fitwrap').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
 }
+// City → its own districts, on EVERY page with the search card (home and results; owner, 2026-11-24 20:35)
+document.addEventListener('change', e => { if (e.target.id !== 'citySel') return; const ds = document.getElementById('distSel'); if (ds) ds.innerHTML = districtOpts(e.target.value); });
 const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };
 new MutationObserver(queueFit).observe(document.getElementById('app'), { childList: true, subtree: true });
 addEventListener('resize', queueFit);

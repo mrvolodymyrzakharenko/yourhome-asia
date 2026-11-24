@@ -146,9 +146,10 @@ async function fetchListings(f = {}) {
   return data;
 }
 
+const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','sale','room'].map(d => `<button type="button" data-deal="${d}" class="${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
 function searchBox(p = {}) {
   const deal = p.deal || 'rent';
-  return `<div class="deal-tabs" id="dealTabs">${['rent','sale','room'].map(d => `<button data-deal="${d}" class="${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat" data-cat="${k}">${t(lab)}</button>`).join('')}</div>
+  return `${dealRow(deal, '', 'dealTabs')}
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select disabled><option>${t('cityPP')}</option></select></div>
     <div class="f addr"><label>📍 ${t('district')}</label><input name="q" list="dl" placeholder="${esc(t('addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist></div>
@@ -239,9 +240,9 @@ async function viewSearch() {
   const p = Object.fromEntries(qs());
   const view = p.view === 'map' ? 'map' : 'grid';
   const deal = p.deal || '';
-  app.innerHTML = `<div class="wrap"><div class="fbox">
+  const cat = p.beds === '0' ? 'studio' : (CATS.some(([k]) => k === p.type) ? p.type : '');
+  app.innerHTML = `<div class="wrap"><div class="srow">${dealRow(deal, cat, 'dealTabsS')}</div><div class="fbox">
     <form class="fbar" id="fbar">
-      <select name="deal"><option value="">${t('all')}</option>${['rent','sale','room'].map(d => `<option value="${d}" ${deal === d ? 'selected' : ''}>${t(d === 'sale' ? 'buy' : d)}</option>`).join('')}</select>
       <input name="q" list="dl2" placeholder="${esc(t('addrPh'))}" value="${esc(p.q || '')}"><datalist id="dl2">${DISTRICTS.map(d => `<option value="${d}">`).join('')}</datalist>
       <select name="type"><option value="">${t('type')}: ${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select>
       <select name="max"><option value="">${t('budget')}: ${t('any')}</option>${BUDGET[deal || 'sale'].concat(deal ? [] : BUDGET.rent).sort((a, b) => a - b).map(v => `<option value="${v}" ${String(p.max) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('')}</select>
@@ -258,6 +259,13 @@ async function viewSearch() {
   document.getElementById('fbar').onchange = () => { const f = new FormData(document.getElementById('fbar')); upd(Object.fromEntries(f)); };
   const st = {}; FKEYS.forEach(k => { if (p[k]) st[k] = p[k]; });
   wireChips(document.getElementById('chipBox'), st, s => upd(Object.fromEntries(FKEYS.map(k => [k, s[k] || '']))));
+  document.getElementById('dealTabsS').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.deal) return upd({ deal: b.dataset.deal === deal ? '' : b.dataset.deal, max: '' });
+    const k = b.dataset.cat;
+    if (k === 'studio') return upd({ beds: p.beds === '0' ? '' : '0' });
+    upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds });
+  };
   document.getElementById('fbar').onsubmit = e => { e.preventDefault(); document.getElementById('fbar').onchange(); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
   document.querySelectorAll('.seg button').forEach(b => b.onclick = () => upd({ view: b.dataset.v === 'map' ? 'map' : '' }));

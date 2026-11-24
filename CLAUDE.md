@@ -73,7 +73,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   heart, camera count bottom-right, then THREE ROWS like vietrent (owner, 2026-11-24): bold "1 bedroom · Apartment · Rent"
   (bedrooms blue, type dark, deal red) as THREE EQUAL CENTRED COLUMNS with thin dividers and a hairline under them,
   red pin + "District, Phnom Penh" centred, red "View apartment →" centred; ~10% roomier padding (owner: "szépen elosztva") (no title / bathrooms line on
-  phones). Sample listings: "Sample" pill + a pale-yellow note above the lists (sampleNote) (card() extra .yb*/.y* elements,
+  phones). PHOTO SLIDER like vietrent (owner, 2026-11-24): up to 12 photos per listing
+  (post form allows 12), swipe sideways inside the card, dots in the middle at the bottom – the current one a white dash – a
+  tapped dot moves there; the PRICE is written on the photo bottom-left in white ("$200 /month", 19px – the owner's exception to
+  the 13px rule, like vietrent), no price pill at the top on phones. Sample listings: "Sample" pill + a pale-yellow note above the lists (sampleNote) (card() extra .yb*/.y* elements,
   shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
 
 - STUDY PORTAL = THE DESIGN REFERENCE (owner, 2026-11-24: "az összes betűtípust, az összes megjelenést vedd ki a Study
@@ -124,7 +127,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   WhatsApp, copy link, save). #/l/<id> = the popup (pushState; Back/Escape/× close it and the page below stays as it was);
   a shared link opens it over the homepage.
   Colours: red for the pin, section headings, Contact hover and Save; BLUE used sparingly (owner, 2026-11-24: "legyen benne
-  kék is ritkán"): type tag, underline under the city, the Bedrooms/Bathrooms/Area icons, share-column hover. The old full listing page (viewListing) is no longer routed.
+  kék is ritkán"): type tag, underline under the city, the Bedrooms/Bathrooms/Area icons, share-column hover.
+  CAMBODIAN DESIGN (owner, 2026-11-24, vietrent screenshots: "hasonló, de legyen szebb"): light tags like the cards, the three
+  facts as soft cards, white price bar with a RED 20px price (owner's exception) and a red "Contact owner" pill (no black
+  button); phones: 46% photo, rounded white sheet over it, full-width text (popup.css last block). The old full listing page (viewListing) is no longer routed.
 
 ## Rules for listings
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin

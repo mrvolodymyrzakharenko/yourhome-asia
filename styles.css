@@ -398,3 +398,22 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .ymeta{justify-content:center;margin:0!important}
   .ylink{align-self:center;margin:0!important}
 }
+/* PHONE CARD PHOTO = VIETRENT SLIDER (owner, 2026-11-24: "az ár legyen a képen… balra… középen pöttyök… 12 kép… görgetni jobbra
+   vagy balra… amelyik kép gördül, annak a pöttye csíkká válik"): up to 12 photos swipe sideways inside the card (scroll-snap),
+   dots in the middle at the bottom – the current one is a short white dash – a tap on a dot moves there; the price is written
+   on the photo bottom-left in white ("$200 /month", the one larger text on the card – owner asked for it like vietrent); the
+   price pill at the top is gone on phones. */
+.ygal,.ydots,.yprice{display:none}
+@media (max-width:720px){
+  .card .ph:has(.ygal)>img{display:none}
+  .ygal{display:flex;position:absolute;inset:0;z-index:0;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+  .ygal::-webkit-scrollbar{display:none}
+  .ygal img{flex:0 0 100%;width:100%;height:100%;object-fit:cover;scroll-snap-align:start;scroll-snap-stop:always;position:static!important}
+  .card .ph::after{display:block!important;content:"";position:absolute;left:0;right:0;bottom:0;height:42%;z-index:1;pointer-events:none;background:linear-gradient(transparent,rgba(0,0,0,.45))}
+  .ydots{display:flex;position:absolute;left:50%;bottom:16px;transform:translateX(-50%);z-index:3;gap:6px;align-items:center}
+  .ydots button{width:7px;height:7px;padding:0;border:0;border-radius:99px;background:rgba(255,255,255,.6);cursor:pointer;transition:width .25s ease,background .25s ease}
+  .ydots button.on{width:20px;background:#fff}
+  .yprice{display:block;position:absolute;left:16px;bottom:11px;z-index:3;color:#fff;font-size:19px!important;font-weight:600;letter-spacing:-.02em;line-height:1;text-shadow:0 1px 8px rgba(0,0,0,.35)}
+  .yprice small{font-size:11px;font-weight:600;margin-left:3px;opacity:.95;letter-spacing:.02em}
+  .yb-price{display:none!important}
+}

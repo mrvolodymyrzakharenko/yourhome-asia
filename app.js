@@ -95,6 +95,8 @@ function card(l) {
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${isSaved(l.id) ? '♥' : '♡'}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
+      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, 12).map((u, i) => `<img src="${esc(u)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots">${l.photos.slice(0, 12).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}` : ''}
+      <div class="yprice">${money(l.price)}${priceSuffix(l) ? `<small>${esc(priceSuffix(l))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
     </div>
     <div class="cb">
@@ -106,6 +108,18 @@ function card(l) {
       <span class="ylink">${esc(t('view'))} ${esc(t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase())} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </div></a>`;
 }
+// Phone card photo slider like vietrent (owner, 2026-11-24: "pöttyök… ha rákattint a pöttyre, a képek mozognak a kártyán belül"):
+// swipe the photos sideways or tap a dot; the dots follow. A tap on the photo itself still opens the listing.
+document.addEventListener('click', e => {
+  const d = e.target.closest('.ydots button'); if (!d) return;
+  e.preventDefault(); e.stopPropagation();
+  const g = d.closest('.ph').querySelector('.ygal'); g.scrollTo({ left: g.clientWidth * Number(d.dataset.yd), behavior: 'smooth' });
+}, true);
+document.addEventListener('scroll', e => {
+  const g = e.target; if (!g.classList || !g.classList.contains('ygal')) return;
+  const i = Math.round(g.scrollLeft / Math.max(1, g.clientWidth));
+  g.parentElement.querySelectorAll('.ydots button').forEach((b, k) => b.classList.toggle('on', k === i));
+}, true);
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-save]'); if (!b) return;
   e.preventDefault(); e.stopPropagation();
@@ -429,7 +443,7 @@ async function viewPost(editId) {
   drawPrev();
   document.getElementById('prev').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) { photos.splice(+b.dataset.rm, 1); drawPrev(); } };
   document.getElementById('files').onchange = async e => {
-    const files = [...e.target.files].slice(0, 10 - photos.length);
+    const files = [...e.target.files].slice(0, 12 - photos.length);   // up to 12 photos (owner, 2026-11-24)
     for (const f of files) {
       if (f.size > 5 * 1024 * 1024) { toast('> 5 MB: ' + f.name); continue; }
       const ext = (f.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');

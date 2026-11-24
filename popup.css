@@ -97,3 +97,46 @@ html.apm-on{overflow:hidden}
 }
 @media (max-width:600px){.apm-tgo span{display:none}.apm-tgo{padding:0 12px}}
 @media (prefers-reduced-motion:reduce){.apm-back,.apm-box,.apm-img,.apm-blur{transition:none}}
+/* LISTING POPUP IN CAMBODIAN DESIGN (owner, 2026-11-24, vietrent screenshots: "csináld meg a kambodzsai dizájnra… hasonló, de
+   legyen szebb"): light Cambodian-colour tags like the cards, the three facts as soft cards (blue icon, grey label, dark value),
+   a white price bar with a red price and a RED "Contact owner" pill (no black button). Phones: taller swipe photo, a rounded
+   white sheet over it, full-width text (the share column sits over the photo), price bar with the safe-area gap. */
+.apm-tags .tag{border:0;padding:5px 11px;border-radius:10px;font-size:11.5px;font-weight:600;letter-spacing:-.02em;box-shadow:0 2px 8px rgba(15,23,42,.08)}
+.apm-tags .tag.top{background:#E00025;color:#fff}
+.apm-tags .tag.demo{background:#334155;color:#fff}
+.apm-tags .apm-kind{background:#ECF1FF!important;color:#032EA1!important}
+.apm-title{color:#0b1d51}
+.apm-stats{gap:10px;border-bottom:0;padding:26px 0}
+.apm-stats>div{padding:16px 6px 14px;border-radius:18px;background:#F6F8FC}
+.apm-stats span{width:44px;height:44px;margin:0 auto 10px;background:#fff;box-shadow:0 4px 12px rgba(3,46,161,.10)}
+.apm-stats span svg{width:22px;height:22px}
+.apm-stats small{font-size:10.5px;letter-spacing:.12em}
+.apm-stats b{margin-top:6px;color:#0b1d51}
+.apm-bar{background:#fff;border-top:0;box-shadow:0 -10px 30px rgba(15,23,42,.08)}
+.apm-bar small{font-size:10.5px;letter-spacing:.14em;color:#8A93A6}
+.apm-bar b{font-size:20px!important;font-weight:600;color:#E00025;letter-spacing:-.02em}
+.apm-contact{background:#E00025!important;text-transform:none;letter-spacing:-.025em;box-shadow:0 10px 22px rgba(224,0,37,.28)}
+.apm-contact:hover{background:#b8001e!important}
+@media (max-width:900px){
+  .apm-gal{flex-basis:46vh;flex-basis:46dvh}
+  .apm-side{border-radius:28px 28px 0 0;margin-top:-28px;box-shadow:0 -8px 24px rgba(15,23,42,.10)}
+  .apm-scroll{padding:24px 20px 18px}
+  .apm-title{margin-bottom:14px}
+  .apm-loc{padding-bottom:18px}
+  .apm-stats{padding:18px 0 6px}
+  .apm-h,.apm-am h3,.apm-ag h3{margin:24px 0 12px}
+  .apm-dots{bottom:42px}
+  .apm-dots button{width:7px;height:7px}
+  .apm-dots button[aria-current]{width:22px}
+  .apm-bar{padding:12px 18px calc(12px + env(safe-area-inset-bottom))}
+  .apm-contact{min-height:48px;padding:0 24px}
+}
+.apm-stats span svg{stroke:#032EA1!important}
+@media (max-width:900px){
+  .apm-tools{position:fixed;top:70px;right:14px;flex-direction:column;padding:6px 3px;border-radius:24px;z-index:3}
+  .apm-tools button{width:40px;height:40px}
+  .apm-tools svg{width:18px;height:18px}
+  .apm-nav{width:40px;height:40px;margin-top:-20px;background:rgba(15,23,42,.45)}
+  .apm-prev{left:12px}.apm-next{right:64px}
+  .apm-close{outline:0;border:0}
+}

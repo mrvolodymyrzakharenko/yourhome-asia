@@ -18,6 +18,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (accents: TOP badge, prices, Post buttons), white background.
 - Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + "YourHome Cambodia" on ONE line, bold portal font, "Cambodia" red (owner, 2026-11-24; header.css + fonts.css .brand), language select
   (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown.
+  Language pill: own small chevron close to the code with room after it (owner, 2026-11-24). "Become a partner" (white pill,
+  → #/account?tab=agent) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).
 - Footer like vietrent: logo + © line, links Listings · Experts · Terms · Privacy · Support.
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,

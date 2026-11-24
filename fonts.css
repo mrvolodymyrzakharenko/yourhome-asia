@@ -41,7 +41,7 @@ label{font-weight:500}
 .brand{font-size:20px;font-weight:800;letter-spacing:-.035em;line-height:1}
 .brand em{font-weight:700}
 .ftr .brand{font-size:17px}
-@media (max-width:480px){.hdr .brand{font-size:15px;letter-spacing:-.04em}.hdr .brand-i{width:30px;height:30px}.hdr .logo{gap:7px}.hdr-r{gap:6px}.hdr .lang{padding:8px 4px}}
+@media (max-width:480px){.hdr .brand{font-size:15px;letter-spacing:-.04em}.hdr .brand-i{width:30px;height:30px}.hdr .logo{gap:7px}.hdr-r{gap:6px}.hdr .lang{width:60px;padding:8px 22px 8px 11px;background-position:right 9px center}}
 /* Hero title in the Study portal style (owner, 2026-11-24 – "ilyen stílusú legyen"): heavy navy text, the country in red
    with a hand-drawn red swoosh under it, red full stop */
 .hero h1{font-weight:800;color:#0b1d51;letter-spacing:-.035em}

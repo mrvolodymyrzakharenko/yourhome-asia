@@ -387,3 +387,14 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .ylink{margin-top:10px!important}
 }
 .ysample{display:block;margin:0 auto 18px;max-width:760px;padding:9px 14px;border-radius:12px;background:#FFF8E1;color:#7a5b00;font-size:12.5px;text-align:center}
+/* PHONE CARD BOTTOM, EVENLY SPREAD (owner, 2026-11-24: "az alja nagyobb egy 10%-kal, szépen elosztva, nem összezsúfolva balra,
+   kis elválasztó csíkkal"): ~10% more room; row 1 = three equal columns (bedrooms | type | deal) centred with thin dividers,
+   a hairline under it like vietrent; location and "View apartment →" centred. */
+@media (max-width:720px){
+  .card:not([href="#/post"]) .cb{padding:18px 18px 20px!important;gap:12px!important;align-items:stretch}
+  .yl1{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:0!important;text-align:center;padding-bottom:12px;border-bottom:1px solid #EEF1F5}
+  .yl1>*{position:relative;padding:2px 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .yl1>*+*::before{content:"";position:absolute;left:0;top:15%;bottom:15%;width:1px;background:#D5DAE3}
+  .ymeta{justify-content:center;margin:0!important}
+  .ylink{align-self:center;margin:0!important}
+}

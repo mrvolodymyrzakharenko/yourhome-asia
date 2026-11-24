@@ -513,3 +513,6 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .chipbox .qrow .q-x:not(.q-x1){display:none!important}
 .more-panel .chips .mp-q{display:inline-flex!important}
 .more-panel .chips .mp-q:first-child{display:none!important}
+/* ROW 1 = 1+ bed · 2+ beds · 3+ beds · Furnished · Pool · Gym on every tab (Rent, Buy, Rooms) and screen (owner, 2026-11-24:
+   "nem a private bedroom kell, hanem gym és pool"); the other amenities stay in More filters. */
+.more-panel .chips .mp-q:nth-child(2){display:none!important}

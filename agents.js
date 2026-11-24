@@ -202,7 +202,7 @@ export async function viewExperts() {
   const others = Object.entries(g).sort((a, b) => b[1].n - a[1].n);
   const res = document.getElementById('res');
   res.innerHTML = (list.length ? `<div class="ag-grid">${list.map(a => agentCard(a, cnt[a.id])).join('')}</div>` : `<div class="empty">${tx('needAgentFirst')}<br><br><a class="btn red" href="#/account?tab=agent">+ ${tx('createAgent')}</a></div>`)
-    + (others.length ? `<div class="bh" style="margin-top:30px"><h2>${tx('otherAdvertisers')}</h2></div><div class="grid">${others.map(([id, x]) => `<a class="exp" href="#/search?owner=${C.esc(id)}" style="text-decoration:none;color:inherit"><div class="av">${C.esc((x.name || '?').trim()[0]?.toUpperCase() || '?')}</div><div><div style="font-weight:800">${C.esc(x.name || 'YourHome')}</div><div style="color:var(--muted);font-size:13px">${C.t('listingsCount', { n: x.n })}${C.tgHandle(x.tg) ? ' · @' + C.esc(C.tgHandle(x.tg)) : ''}</div></div></a>`).join('')}</div>` : '');
+    + (others.length ? `<div class="bh" style="margin-top:30px"><h2>${tx('otherAdvertisers')}</h2></div><div class="grid">${others.map(([id, x]) => `<a class="exp" href="#/search?owner=${C.esc(id)}" style="text-decoration:none;color:inherit"><div class="av">${C.esc((x.name || '?').trim()[0]?.toUpperCase() || '?')}</div><div><div style="font-weight:600">${C.esc(x.name || 'YourHome')}</div><div style="color:var(--muted);font-size:13px">${C.t('listingsCount', { n: x.n })}${C.tgHandle(x.tg) ? ' · @' + C.esc(C.tgHandle(x.tg)) : ''}</div></div></a>`).join('')}</div>` : '');
 }
 
 // ---------- Listing page extras ----------

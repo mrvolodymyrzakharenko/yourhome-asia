@@ -302,7 +302,7 @@ async function viewListing(id) {
     <div class="panel" style="margin-top:18px">
       <div class="tags" style="position:static;display:flex;gap:6px">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}<span class="tag" style="background:var(--blue-l);color:var(--blue)">${esc(t(l.deal_type === 'sale' ? 'buy' : l.deal_type))} · ${esc(t('t_' + l.property_type))}</span></div>
       <h1>${esc(l.title)}</h1>
-      <div class="loc" style="font-size:14px"><b>●</b> ${esc([l.address, l.district, t('cityPP')].filter(Boolean).join(', '))}</div>
+      <div class="loc" style="font-size:13px"><b>●</b> ${esc([l.address, l.district, t('cityPP')].filter(Boolean).join(', '))}</div>
       <div class="bigprice">${money(l.price)} <small>${priceSuffix(l)}</small></div>
       <div class="specs"><div class="spec"><b>${esc(beds)}</b><span>${t('bedrooms')}</span></div><div class="spec"><b>${l.bathrooms ?? '–'}</b><span>${t('bathrooms')}</span></div><div class="spec"><b>${l.area_m2 ? Math.round(l.area_m2) : '–'}</b><span>${t('area')}</span></div><div class="spec"><b>${l.furnished ? '✓' : '–'}</b><span>${t('furnished')}</span></div></div>
       ${detailFacts(l)}
@@ -311,7 +311,7 @@ async function viewListing(id) {
     ${l.lat && l.lng ? `<div class="panel"><h3>${t('location')}</h3><div class="mini-map" id="mmap"></div></div>` : ''}
   </div>
   <aside><div class="sticky"><div id="agBox"></div>
-    <div class="panel"><h3>${t('contactOwner')}</h3>${l.contact_name ? `<p style="margin:0 0 12px;font-weight:700">${esc(l.contact_name)}</p>` : ''}
+    <div class="panel"><h3>${t('contactOwner')}</h3>${l.contact_name ? `<p style="margin:0 0 12px;font-weight:600">${esc(l.contact_name)}</p>` : ''}
       <div class="contact">
         ${tg ? `<a class="btn tg wide" data-ev="telegram" href="https://t.me/${tg}" target="_blank" rel="noopener">Telegram @${esc(tg)}</a>` : ''}
         ${wa ? `<a class="btn wa wide" data-ev="whatsapp" href="https://wa.me/${wa.replace('+', '')}" target="_blank" rel="noopener">WhatsApp</a>` : ''}
@@ -469,7 +469,7 @@ async function viewAccount() {
   const views = ev.filter(e => e.kind === 'view');
   const contacts = ev.filter(e => ['phone', 'telegram', 'whatsapp'].includes(e.kind));
   const uniq = new Set(views.map(e => e.visitor)).size;
-  const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="panel" style="text-decoration:none;color:inherit;display:block;margin:0;${red ? 'background:var(--red);color:#fff' : ''}"><div style="font-size:30px">${icon}</div><div style="font-weight:800;font-size:19px;margin-top:6px">${title}</div><div style="opacity:.75;font-size:14px">${sub}</div></a>`;
+  const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="panel" style="text-decoration:none;color:inherit;display:block;margin:0;${red ? 'background:var(--red);color:#fff' : ''}"><div style="font-size:30px">${icon}</div><div style="font-weight:600;font-size:13px;letter-spacing:-.025em;margin-top:6px">${title}</div><div style="opacity:.75;font-size:13px">${sub}</div></a>`;
   const tabs = ['overview', 'agent', 'listings', 'messages', 'stats', 'telegram', 'settings'];
   const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: '⚙️ ' + t('settings') };
   let body = '';
@@ -485,7 +485,7 @@ async function viewAccount() {
     </div>${statTiles()}`;
   } else if (tab === 'listings') {
     body = mine.length ? mine.map(l => `<div class="mine"><a href="#/l/${l.id}" class="ph">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="">` : '<span class="noimg">🏠</span>'}</a>
-      <div style="min-width:0"><div class="ct">${esc(l.title)}</div><div style="color:var(--red);font-weight:800">${money(l.price)}${priceSuffix(l)}</div>
+      <div style="min-width:0"><div class="ct">${esc(l.title)}</div><div style="color:var(--red);font-weight:600">${money(l.price)}${priceSuffix(l)}</div>
       <div class="loc" style="margin:2px 0 0">👁 ${views.filter(e => e.listing_id === l.id).length} · 📞 ${contacts.filter(e => e.listing_id === l.id).length} · ✉️ ${inq.filter(i => i.listing_id === l.id).length} · ${shortDate(l.created_at)}</div></div>
       <div class="mine-act"><select data-status="${l.id}" ${l.status === 'rejected' ? 'disabled' : ''}>${['active', 'hidden', l.deal_type === 'sale' ? 'sold' : 'rented', ...(l.status === 'rejected' ? ['rejected'] : [])].map(s => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${t('s_' + s)}</option>`).join('')}</select>
       <a class="btn ghost sm" href="#/edit/${l.id}">${t('edit')}</a><button class="btn ghost sm" data-del="${l.id}">${t('del')}</button></div></div>`).join('')
@@ -500,7 +500,7 @@ async function viewAccount() {
         ${breakdown(t('devices'), views, e => t(e.device || 'desktop'))}
         ${breakdown(t('languages'), views, e => (e.lang || '?').toUpperCase())}
       </div>
-      <div class="panel"><h3>${t('perListing')}</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:14px">
+      <div class="panel"><h3>${t('perListing')}</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
         <tr style="text-align:left;color:var(--muted)"><th style="padding:6px">${t('what')}</th><th>👁 ${t('views')}</th><th>${t('visitors')}</th><th>📞 ${t('contacts')}</th><th>✉️</th></tr>
         ${mine.map(l => { const v = views.filter(e => e.listing_id === l.id); return `<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px"><a href="#/l/${l.id}">${esc(l.title)}</a></td><td>${v.length}</td><td>${new Set(v.map(e => e.visitor)).size}</td><td>${contacts.filter(e => e.listing_id === l.id).length}</td><td>${inq.filter(i => i.listing_id === l.id).length}</td></tr>`; }).join('')}
       </table></div></div>
@@ -512,8 +512,8 @@ async function viewAccount() {
     body = '<div id="agTab"></div>';
   } else if (tab === 'settings') {
     const md = user.user_metadata || {}, c = Object.assign({}, md.contact || {}, store.get('yh_contact', {}));
-    const vBox = vState === 'done' ? `<p style="margin:0;font-weight:700;color:var(--red)">${t('v_done')}</p>`
-      : vState === 'pending' ? `<p style="margin:0;font-weight:700">⏳ ${t('v_pending')}</p>`
+    const vBox = vState === 'done' ? `<p style="margin:0;font-weight:600;color:var(--red)">${t('v_done')}</p>`
+      : vState === 'pending' ? `<p style="margin:0;font-weight:600">⏳ ${t('v_pending')}</p>`
       : `${vState === 'rejected' ? `<p style="margin:0;color:var(--muted)">${t('v_rejected')}</p>` : ''}
         <label>${t('v_method')}<select name="method">${['phone', 'video', 'telegram', 'whatsapp'].map(m => `<option value="${m}">${t('m_' + m)}</option>`).join('')}</select></label>
         <label>${t('v_contact')}<input name="contact" required minlength="3" maxlength="80" value="${esc(c.contact_phone || c.contact_telegram || '')}"></label>
@@ -534,16 +534,16 @@ async function viewAccount() {
     </div>`;
   } else if (tab === 'telegram') {
     body = `<form class="panel form" id="tgform" style="max-width:560px"><h3>🔔 ${t('tgAlerts')}</h3><p style="margin:0;color:var(--muted)">${t('tgAlertsSub')}</p>
-      ${alerts.length ? `<p style="margin:0;font-weight:700">✓ ${t('tgActive')} ${esc(alerts[0].telegram)}</p>` : ''}
+      ${alerts.length ? `<p style="margin:0;font-weight:600">✓ ${t('tgActive')} ${esc(alerts[0].telegram)}</p>` : ''}
       <label>${t('tgUser')}<input name="tg" placeholder="@username" value="${esc(alerts[0]?.telegram || '')}" required></label>
       <button class="btn blue">${t('tgSave')}</button></form>`;
   }
   function statTiles() {
-    const tile = (n, lab) => `<div class="panel" style="margin:0;text-align:center"><div style="font-size:30px;font-weight:800;color:var(--blue)">${n}</div><div style="color:var(--muted);font-size:13px;font-weight:700">${lab}</div></div>`;
+    const tile = (n, lab) => `<div class="panel" style="margin:0;text-align:center"><div style="font-size:13px;font-weight:600;letter-spacing:-.025em;color:var(--blue)">${n}</div><div style="color:var(--muted);font-size:13px;font-weight:600">${lab}</div></div>`;
     return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
   }
   app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh"><div><div style="color:var(--muted);font-weight:700">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">⚙️ ${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    <div class="bh"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">⚙️ ${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
   if (tab === 'agent') AG.accountTab(document.getElementById('agTab'));
@@ -591,7 +591,7 @@ function dayChart(views) {
 function breakdown(title, list, keyFn) {
   const m = {}; list.forEach(e => { const k = keyFn(e); m[k] = (m[k] || 0) + 1; });
   const rows = Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 8); const tot = list.length || 1;
-  return `<div class="panel"><h3>${title}</h3>${rows.length ? rows.map(([k, v]) => `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700"><span>${esc(k)}</span><span>${v}</span></div><div style="height:6px;background:var(--bg);border-radius:99px"><div style="height:6px;width:${(v / tot) * 100}%;background:var(--blue);border-radius:99px"></div></div></div>`).join('') : '–'}</div>`;
+  return `<div class="panel"><h3>${title}</h3>${rows.length ? rows.map(([k, v]) => `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600"><span>${esc(k)}</span><span>${v}</span></div><div style="height:6px;background:var(--bg);border-radius:99px"><div style="height:6px;width:${(v / tot) * 100}%;background:var(--blue);border-radius:99px"></div></div></div>`).join('') : '–'}</div>`;
 }
 
 async function viewSaved() {

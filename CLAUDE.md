@@ -27,6 +27,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Homepage category blocks are UNIFORM (owner, 2026-11-24: "minden kategória legyen egységes – nincs két nagy kép, sem egy"):
   every block shows at most 4 equal cards in one row (2 per row on phones), never stretched or scrolling, then a
   "<category> · See all" button (.row4 / .block-more). Dashboard big cards are all the same white card (no red one).
+- FONT SIZES = STUDY PORTAL – BASE RULE (owner, 2026-11-24: "betűk túl nagyok – legyenek olyanok, mint a study portálon"):
+  no text larger than 13px anywhere; headings and bold text 13px / 600, letter-spacing -.025em; other text max 13px / 400;
+  buttons 13px / 500 (phones 600). Only the homepage hero H1 and icon glyphs/emoji/initials keep their size. Card price =
+  white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
+  classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
 - Posting a listing must always be visible straight away (header button, bottom menu, banner on the homepage).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   "Want to rent out faster?" banner → category blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.

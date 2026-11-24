@@ -4,7 +4,7 @@ export const T = {
 en: {
   topbar: '24/7 support. Questions or feedback?', contactUs: 'Contact us →',
   experts: 'Experts', post: 'Post listing', postShort: 'Post',
-  heroTitle: 'Find your home in <em>Cambodia</em>.',
+  heroTitle: 'Find your home in <em>Cambodia</em><i>.</i>',
   heroSub: 'Apartments, houses, condos and rooms from owners and agents across Phnom Penh.',
   city: 'City', cityPP: 'Phnom Penh', addrPh: 'Address or district (e.g. BKK1)', type: 'Property type', budget: 'Budget', any: 'Any', search: 'Search',
   ctaText: 'Want to rent out faster? Post a listing for free!', ctaBtn: 'Post now',
@@ -95,7 +95,7 @@ zh: {
 fr: {
   topbar: 'Support 24h/24. Une question ou un avis ?', contactUs: 'Contactez-nous →',
   experts: 'Experts', post: 'Publier une annonce', postShort: 'Publier',
-  heroTitle: 'Votre logement au <em>Cambodge</em>.',
+  heroTitle: 'Votre logement au <em>Cambodge</em><i>.</i>',
   heroSub: 'Appartements, maisons, condos et chambres de propriétaires et d’agences à Phnom Penh.',
   city: 'Ville', cityPP: 'Phnom Penh', addrPh: 'Adresse ou quartier (ex. BKK1)', type: 'Type de bien', budget: 'Budget', any: 'Tous', search: 'Rechercher',
   ctaText: 'Vous voulez louer plus vite ? Publiez gratuitement !', ctaBtn: 'Publier',

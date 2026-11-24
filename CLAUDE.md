@@ -103,6 +103,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   nowrap + shrink in fitRows). The filters panel has no "Amenities" heading (owner 20:27).
 - DISTRICTS FOR EVERY CITY (owner, 2026-11-24 20:28): the District list (search card and post form) shows the picked city's own
   districts – Phnom Penh DISTRICTS, other cities CITY_DIST in app.js (sangkat names from Wikipedia "List of communes in Cambodia").
+- PROPERTY TYPES (owner, 2026-11-24 20:34, realestate.com.kh "All types"): Apartment · Condo · House · Villa · Twin Villa ·
+  Link House · Flat House · Flat · Penthouse · (Studio – search only, = 0 bedrooms) · Shophouse · Room · Office · Land
+  (TYPES / SEARCH_TYPES in app.js, t_* in i18n.js, yh_listings_property_type_check in the database).
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
 - CITIES (owner, 2026-11-24 20:17 Tbilisi: "legyen az összes nagy város a listában, de a kezdő Phnom Penh"): the search card's
   City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh

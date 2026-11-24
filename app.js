@@ -19,7 +19,9 @@ const CITY_DIST = {"Siem Reap": ["Sla Kram", "Svay Dankum", "Kok Chak", "Sala Ka
 const distList = city => city === 'Phnom Penh' || !city ? DISTRICTS : (CITY_DIST[city] || []);
 const districtOpts = (city, cur) => `<option value="">${t('any')}</option>` + (cur && !distList(city).includes(cur) ? [cur, ...distList(city)] : distList(city)).map(d => `<option value="${esc(d)}"${d === cur ? ' selected' : ''}>${esc(d)}</option>`).join('');
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
-const TYPES = ['apartment','condo','house','villa','room','shophouse','office','land'];
+// property types like realestate.com.kh "All types" (owner, 2026-11-24 20:34); Studio is search-only (= 0 bedrooms)
+const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land'];
+const SEARCH_TYPES = [...TYPES.slice(0, 9), 'studio', ...TYPES.slice(9)];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
 const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wifi','aircon'], room: ['pool','gym','private_bath','wifi','aircon','female_only'], sale: ['pool','gym','parking','security'], '': ['pool','gym','pets','parking'] };  // row 1 always shows Pool + Gym; EDC only in Filters (owner, 2026-11-24)
 const CATS = [['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
@@ -235,7 +237,7 @@ async function fetchListings(f = {}) {
   if (f.deal === 'daily') q = q.eq('deal_type', 'rent').eq('price_period', 'day');   // Daily rent tab (owner, 2026-11-24)
   else if (f.deal) q = q.eq('deal_type', f.deal);
   if (f.city && CITY_NAMES.includes(f.city)) q = q.eq('city', f.city);
-  if (f.type) q = q.eq('property_type', f.type);
+  if (f.type === 'studio') q = q.eq('bedrooms', 0); else if (f.type) q = q.eq('property_type', f.type);
   if (f.max) q = q.lte('price', Number(f.max));
   if (f.beds) q = f.beds === '0' ? q.eq('bedrooms', 0) : q.gte('bedrooms', Number(f.beds));
   if (f.furn) q = q.eq('furnished', true);
@@ -269,7 +271,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
     <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
-    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t('t_' + x)}</option>`).join('')}</select></div>
+    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${SEARCH_TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t(x === 'studio' ? 'studio' : 't_' + x)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <div class="sbtns"><a href="#/post" class="btn red sb-post">+ ${t('post')}</a><button class="btn blue">${t('search')} →</button></div>
   </form>

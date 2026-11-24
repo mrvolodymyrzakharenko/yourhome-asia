@@ -80,3 +80,5 @@ label{font-weight:500}
 .hdr .brand em,.yft .brand em{font-size:11px!important}
 @media (max-width:720px){.hdr .brand em,.yft .brand em{font-size:10px!important}}
 .hdr .brand em,.yft .brand em{padding-left:.16em}
+/* CAMBODIA a little bolder (owner, 2026-11-24 20:41 Tbilisi) */
+.hdr .brand em,.yft .brand em{font-weight:700!important}

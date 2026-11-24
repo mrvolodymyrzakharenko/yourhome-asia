@@ -422,7 +422,7 @@ async function viewAccount() {
     return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
   }
   app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh"><div><div style="color:var(--muted);font-weight:700">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><button class="btn ghost sm" id="logout">${t('logout')}</button></div>
+    <div class="bh"><div><div style="color:var(--muted);font-weight:700">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));

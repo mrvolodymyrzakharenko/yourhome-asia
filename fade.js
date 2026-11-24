@@ -66,11 +66,16 @@
   st.textContent = '.yh-sr{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.7,.2,1);transition-delay:var(--yh-sd,0ms)}.yh-sr.yh-sv{opacity:1;transform:none}';
   document.head.appendChild(st);
   const SEL = '.bh,.row4>*,.grid>*,.row-scroll>*,.mp-grid>*,.panel,.cta,.exp,.mine,.page,.empty,.block-more,.ftr-in';
-  const io = new IntersectionObserver(es => es.forEach(e => {
-    if (!e.isIntersecting) return;
-    const el = e.target; io.unobserve(el); el.classList.add('yh-sv');
+  const reveal = el => {
+    if (el.classList.contains('yh-sv')) return;
+    io.unobserve(el); el.classList.add('yh-sv');
     setTimeout(() => { el.classList.remove('yh-sr', 'yh-sv'); el.style.removeProperty('--yh-sd'); }, 1300);
-  }), { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  };
+  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) reveal(e.target); }),
+    { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+  // backup for browsers where the observer is late: check on every scroll / resize
+  const check = () => { const vh = innerHeight; document.querySelectorAll('.yh-sr:not(.yh-sv)').forEach(el => { if (el.getBoundingClientRect().top < vh * 0.95) reveal(el); }); };
+  addEventListener('scroll', check, { passive: true }); addEventListener('resize', check);
   const seen = new WeakSet();
   const scan = () => {
     const vh = innerHeight, rows = new Map();

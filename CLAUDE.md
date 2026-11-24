@@ -16,7 +16,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 ## Design (owner, 2026-11-24)
 - Structure copies vietrent.net (portal look), but in Cambodian flag colours: royal blue #032EA1 (main), red #E00025
   (accents: TOP badge, prices, Post buttons), white background.
-- Header: small white header like the Study portal – NO coloured top strip. Logo "YourHome / Cambodia", language select
+- Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + "YourHome Cambodia" on ONE line, bold portal font, "Cambodia" red (owner, 2026-11-24; header.css + fonts.css .brand), language select
   (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown.
 - Footer like vietrent: logo + © line, links Listings · Experts · Terms · Privacy · Support.
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz

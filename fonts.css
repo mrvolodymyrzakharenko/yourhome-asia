@@ -37,3 +37,8 @@ label{font-weight:500}
   .row4 .ct,.row4 .pov{font-size:13px}
   .row4 .specs-row{font-size:11.5px}
 }
+/* Logo wordmark is a graphic, not text – exception to the 13px rule (owner, 2026-11-24: "logó egy sorba, szép portálos betűvel") */
+.brand{font-size:20px;font-weight:800;letter-spacing:-.035em;line-height:1}
+.brand em{font-weight:700}
+.ftr .brand{font-size:17px}
+@media (max-width:480px){.hdr .brand{font-size:15px;letter-spacing:-.04em}.hdr .brand-i{width:30px;height:30px}.hdr .logo{gap:7px}.hdr-r{gap:6px}.hdr .lang{padding:8px 4px}}

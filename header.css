@@ -30,3 +30,8 @@ a.card[href="#/post"]{border-color:#ffc2cb!important;background:#fffafa!importan
 a.card[href="#/post"] .ph{background:#fff0f2!important}
 .hero h1 em{text-decoration-color:#ffc2cb}
 .btn.blue{box-shadow:0 6px 16px rgba(224,0,37,.22)}
+/* Logo (owner, 2026-11-24): one line "YourHome Cambodia" in a portal-style font, the house in a white square, house in 3 colours */
+.logo{gap:10px}
+.brand-i{flex:none;filter:drop-shadow(0 2px 6px rgba(15,23,42,.08))}
+.brand{font-family:"Plus Jakarta Sans",system-ui,sans-serif;white-space:nowrap;color:#0f172a}
+.brand em{font-style:normal;color:#E00025}

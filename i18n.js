@@ -2,6 +2,7 @@ export const LANGS = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', 
 
 export const T = {
 en: {
+  bedroomOne: 'bedroom', forSaleShort: 'For sale', sampleNote: 'Sample listings – for illustration only, not real offers. Real listings appear as owners and agents post them.',
   addrPhS: 'e.g. BKK1',
   newProjects: 'New projects',
   topbar: '24/7 support. Questions or feedback?', contactUs: 'Contact us →',
@@ -18,7 +19,7 @@ en: {
   t_apartment: 'Apartment', t_condo: 'Condo', t_house: 'House', t_villa: 'Villa', t_room: 'Room', t_shophouse: 'Shophouse', t_office: 'Office', t_land: 'Land',
   bedrooms: 'Bedrooms', bathrooms: 'Bathrooms', area: 'Area m²', furnished: 'Furnished', district: 'District', studio: 'Studio',
   contactOwner: 'Contact the advertiser', call: 'Call', sendMsg: 'Send a message', yourName: 'Your name', yourContact: 'Phone, Telegram or email', message: 'Message', send: 'Send',
-  sent: 'Message sent. The advertiser will contact you.', demo: 'Demo', top: 'TOP', description: 'Description', location: 'Location',
+  sent: 'Message sent. The advertiser will contact you.', demo: 'Sample', top: 'TOP', description: 'Description', location: 'Location',
   backSite: '← Back to site', login: 'Sign in', email: 'Email', sendLink: 'Send sign-in link', linkSent: 'Check your email and open the sign-in link.', google: 'Continue with Google', logout: 'Sign out', or: 'or',
   loginNeeded: 'Sign in to post and manage your listings. Posting is free.',
   my: 'My listings', saved: 'Saved', home: 'Home', mapNav: 'Map', account: 'Account',
@@ -35,6 +36,7 @@ en: {
   supportBody: 'Questions, feedback or a problem with a listing? Write to us and we reply within 24 hours.',
 },
 km: {
+  bedroomOne: 'បន្ទប់គេង', forSaleShort: 'លក់', sampleNote: 'ប្រកាសគំរូ – សម្រាប់បង្ហាញតែប៉ុណ្ណោះ មិនមែនការផ្តល់ជូនពិតទេ។',
   addrPhS: 'ឧ. BKK1',
   newProjects: 'គម្រោងថ្មី',
   topbar: 'ជំនួយ 24/7។ មានសំណួរ ឬមតិយោបល់?', contactUs: 'ទាក់ទងមកយើង →',
@@ -67,6 +69,7 @@ km: {
   required: 'សូមបំពេញព័ត៌មានចាំបាច់។', error: 'មានបញ្ហា៖ ', notifySoon: 'ការជូនដំណឹង Telegram នឹងមកដល់ឆាប់ៗ។',
 },
 zh: {
+  bedroomOne: '卧室', forSaleShort: '出售', sampleNote: '示例房源——仅供展示，并非真实房源。业主和中介发布后将显示真实房源。',
   addrPhS: '如 BKK1',
   newProjects: '新楼盘',
   topbar: '24/7 客服。有问题或建议？', contactUs: '联系我们 →',
@@ -99,6 +102,7 @@ zh: {
   required: '请填写必填项。', error: '出错了：', notifySoon: 'Telegram 提醒即将上线。',
 },
 fr: {
+  bedroomOne: 'chambre', forSaleShort: 'À vendre', sampleNote: 'Annonces d’exemple – à titre d’illustration uniquement, pas de vraies offres.',
   addrPhS: 'ex. BKK1',
   newProjects: 'Programmes neufs',
   topbar: 'Support 24h/24. Une question ou un avis ?', contactUs: 'Contactez-nous →',
@@ -115,7 +119,7 @@ fr: {
   t_apartment: 'Appartement', t_condo: 'Condo', t_house: 'Maison', t_villa: 'Villa', t_room: 'Chambre', t_shophouse: 'Compartiment', t_office: 'Bureau', t_land: 'Terrain',
   bedrooms: 'Chambres', bathrooms: 'Salles de bain', area: 'Surface m²', furnished: 'Meublé', district: 'Quartier', studio: 'Studio',
   contactOwner: 'Contacter l’annonceur', call: 'Appeler', sendMsg: 'Envoyer un message', yourName: 'Votre nom', yourContact: 'Téléphone, Telegram ou e-mail', message: 'Message', send: 'Envoyer',
-  sent: 'Message envoyé. L’annonceur vous contactera.', demo: 'Démo', top: 'TOP', description: 'Description', location: 'Emplacement',
+  sent: 'Message envoyé. L’annonceur vous contactera.', demo: 'Exemple', top: 'TOP', description: 'Description', location: 'Emplacement',
   backSite: '← Retour au site', login: 'Se connecter', email: 'E-mail', sendLink: 'Envoyer le lien de connexion', linkSent: 'Ouvrez le lien de connexion reçu par e-mail.', google: 'Continuer avec Google', logout: 'Se déconnecter', or: 'ou',
   loginNeeded: 'Connectez-vous pour publier et gérer vos annonces. La publication est gratuite.',
   my: 'Mes annonces', saved: 'Favoris', home: 'Accueil', mapNav: 'Carte', account: 'Compte',
@@ -131,6 +135,7 @@ fr: {
   required: 'Veuillez remplir les champs obligatoires.', error: 'Une erreur est survenue : ', notifySoon: 'Les alertes Telegram arrivent bientôt.',
 },
 th: {
+  bedroomOne: 'ห้องนอน', forSaleShort: 'ขาย', sampleNote: 'ประกาศตัวอย่าง – เพื่อแสดงตัวอย่างเท่านั้น ไม่ใช่ข้อเสนอจริง',
   addrPhS: 'เช่น BKK1',
   newProjects: 'โครงการใหม่',
   topbar: 'บริการ 24/7 มีคำถามหรือข้อเสนอแนะ?', contactUs: 'ติดต่อเรา →',

@@ -94,16 +94,16 @@ function card(l) {
       <span class="tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}${l.status !== 'active' ? `<span class="tag st">${esc(t('s_' + l.status))}</span>` : ''}</span>
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${isSaved(l.id) ? '♥' : '♡'}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
-      <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t('bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
+      <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
     </div>
     <div class="cb">
       <h3 class="ct">${esc(l.title)}</h3>
       <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || t('cityPP'))}</div>
       <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span>${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span></div>
-      ${[l.bathrooms ? l.bathrooms + ' ' + t('bathrooms').toLowerCase() : '', l.area_m2 ? Math.round(l.area_m2) + ' m²' : ''].filter(Boolean).length ? `<p class="yfacts">${esc([l.bathrooms ? l.bathrooms + ' ' + t('bathrooms').toLowerCase() : '', l.area_m2 ? Math.round(l.area_m2) + ' m²' : ''].filter(Boolean).join(' · '))}</p>` : ''}
+      <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><i>·</i><span>${esc(t('t_' + l.property_type))}</span><i>·</i><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : 'rent'))}</em></p>
       <p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>${esc([l.district, t('cityPP')].filter(Boolean).join(', '))}</p>
-      <span class="ylink">${esc(t('view'))} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+      <span class="ylink">${esc(t('view'))} ${esc(t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase())} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
     </div></a>`;
 }
 document.addEventListener('click', e => {
@@ -252,7 +252,7 @@ async function viewHome() {
     + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale');
   const prj = await PT.homeBlock();   // New projects block (owner, 2026-11-24)
   const b0 = document.getElementById('blocks'); if (!b0) return;
-  b0.innerHTML = (html + prj) || `<div class="empty">${t('noResults')}</div>`;
+  b0.innerHTML = (all.some(l => l.is_demo) ? `<p class="ysample">${t('sampleNote')}</p>` : '') + ((html + prj) || `<div class="empty">${t('noResults')}</div>`);
 }
 
 async function viewSearch() {
@@ -286,7 +286,7 @@ async function viewSearch() {
   const res = document.getElementById('res');
   if (!list.length) { res.innerHTML = `<div class="empty">${t('noResults')}<br><br><a class="btn red" href="#/post">+ ${t('post')}</a></div>`; return; }
   if (view === 'map') { res.innerHTML = '<div id="map"></div>'; listingsMap(document.getElementById('map'), list); }
-  else res.innerHTML = `<div class="grid">${list.map(card).join('')}</div>`;
+  else res.innerHTML = (list.some(l => l.is_demo) ? `<p class="ysample">${t('sampleNote')}</p>` : '') + `<div class="grid">${list.map(card).join('')}</div>`;
 }
 function alertModal(filters) {
   const wrap = document.createElement('div');

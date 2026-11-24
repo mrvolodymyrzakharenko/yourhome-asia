@@ -374,3 +374,16 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .yb-type{background:rgba(255,255,255,.96)!important;color:#475569!important}
 .yb-top{background:#E00025!important;color:#fff!important}
 .yb-demo{background:rgba(51,65,85,.92)!important;color:#fff!important}
+/* PHONE CARD BOTTOM = 3 ROWS like vietrent (owner, 2026-11-24: "összesen 3 sor… 1 bedroom, stúdió… Phnom Penh, district…
+   view apartment"): 1) bold "1 bedroom · Apartment · Rent" (bedrooms royal blue, type dark, deal red), 2) red pin +
+   "District, Phnom Penh" grey, 3) red "View apartment →". The listing title and the bathrooms line are not shown on phones. */
+.yl1,.ysample{display:none}
+@media (max-width:720px){
+  .card:not([href="#/post"]) .ct,.yfacts{display:none!important}
+  .yl1{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;margin:0;font-size:13px;font-weight:600;letter-spacing:-.025em;color:#0b1d51}
+  .yl1 b{color:#032EA1;font-weight:600}.yl1 i{font-style:normal;color:#cbd5e1}.yl1 em{font-style:normal;color:#E00025}
+  .ymeta{margin-top:4px!important;color:#64748b!important}
+  .ymeta svg{stroke:#E00025!important}
+  .ylink{margin-top:10px!important}
+}
+.ysample{display:block;margin:0 auto 18px;max-width:760px;padding:9px 14px;border-radius:12px;background:#FFF8E1;color:#7a5b00;font-size:12.5px;text-align:center}

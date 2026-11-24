@@ -223,7 +223,7 @@ function pcard(p) {
   const href = '#/project/' + encodeURIComponent(p.slug);
   return `<a class="card prj-card" href="${href}">
     <div class="ph">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : '<span class="noimg">🏗</span>'}
-      <span class="prj-badges">${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}<span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">DEMO</span>' : ''}</span>
+      <span class="prj-badges">${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}<span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</span>
       ${p.price_from ? `<span class="prj-price">from ${fmt(p.price_from)}</span>` : ''}
       ${p.photos && p.photos.length > 1 ? `<span class="prj-count">${I.camera}${p.photos.length}</span>` : ''}
     </div>
@@ -276,7 +276,7 @@ export async function viewProject(slug) {
     <div class="prj-gal">${ph.length ? ph.slice(0, 3).map((u, i) => `<img src="${esc(u)}" alt="${esc(p.name)} photo ${i + 1}" ${i ? 'loading="lazy"' : ''}>`).join('') : '<div class="prj-noimg">🏗</div>'}</div>
     <div class="prj-main">
       <div>
-        <div class="prj-tags"><span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">DEMO</span>' : ''}</div>
+        <div class="prj-tags"><span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</div>
         <h1>${esc(p.name)}</h1>
         <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}${p.developer ? ' · by ' + esc(p.developer) : ''}</p>
         ${facts.length ? `<div class="prj-facts4">${facts.map(([ic, k, v]) => `<div>${ic}<span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>` : ''}

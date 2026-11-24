@@ -70,7 +70,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   kettő egy sorba, tökre úgy nézzen ki"): under 720px every listing grid (.row4, .grid, .row-scroll) is ONE card per row, the
   Study .pcard look: light pills on the photo in CAMBODIAN COLOURS (owner, 2026-11-24): price = faint red field + red text,
   bedrooms/stage = faint blue field + royal-blue text, type = white field + grey text, TOP solid red, DEMO dark, white round
-  heart, camera count bottom-right, then title, bathrooms · m², pin + district, red "View →" (card() extra .yb*/.y* elements,
+  heart, camera count bottom-right, then THREE ROWS like vietrent (owner, 2026-11-24): bold "1 bedroom · Apartment · Rent"
+  (bedrooms blue, type dark, deal red), red pin + "District, Phnom Penh", red "View apartment →" (no title / bathrooms line on
+  phones). Sample listings: "Sample" pill + a pale-yellow note above the lists (sampleNote) (card() extra .yb*/.y* elements,
   shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
 
 - STUDY PORTAL = THE DESIGN REFERENCE (owner, 2026-11-24: "az összes betűtípust, az összes megjelenést vedd ki a Study

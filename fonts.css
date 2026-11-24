@@ -4,7 +4,7 @@
    (.hero h1) and icon glyphs / emoji / initials avatars (graphics). Loaded LAST – keep it the last stylesheet. */
 body{font-size:13px}
 h1,h2,h3,h4,h5,h6,b,strong,th,legend{font-size:13px;font-weight:600;letter-spacing:-.025em}
-.hero h1{font-size:clamp(22px,5vw,56px);font-weight:720;letter-spacing:-.03em}
+.hero h1{font-size:clamp(26px,3.7vw,46px);font-weight:720;letter-spacing:-.03em}
 .hero p{font-size:13px}
 p,li,td,label,input,select,textarea,.desc,.inq,.sep,.loc,.chk,.toast,.page,.page p{font-size:13px}
 label{font-weight:500}
@@ -45,7 +45,7 @@ label{font-weight:500}
 /* Hero title in the Study portal style (owner, 2026-11-24 – "ilyen stílusú legyen"): heavy navy text, the country in red
    with a hand-drawn red swoosh under it, red full stop */
 .hero h1{font-weight:800;color:#0b1d51;letter-spacing:-.035em}
-.hero h1 em{font-style:normal;font-weight:800;color:#E00025;text-decoration:none;position:relative;display:inline-block;padding-bottom:.06em}
-.hero h1 em::after{content:"";position:absolute;left:-.02em;right:-.02em;bottom:-.2em;height:.28em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 20' preserveAspectRatio='none'%3E%3Cpath d='M4 5C40 15 75 17 108 16C140 15 170 11 196 4' fill='none' stroke='%23032EA1' stroke-width='4.2' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
+.hero h1 em{font-style:normal;font-weight:800;color:#E00025;text-decoration:none;position:relative;display:inline-block}
+.hero h1 em::after{content:"";position:absolute;left:-2%;bottom:-.14em;width:104%;height:.22em;overflow:visible;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 10' preserveAspectRatio='none' overflow='visible'%3E%3Cpath d='M2 7 C 30 2, 70 2, 98 6' fill='none' stroke='%23032EA1' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center/100% 100%}
 .hero h1 i{font-style:normal;color:#E00025}
 .hero p{color:#1e293b}

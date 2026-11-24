@@ -210,7 +210,7 @@ function block(title, list, more) {
   if (!list.length) return '';
   return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${fill4(list)}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }
-const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(22px,5vw,56px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}</section>`;
+const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-space:nowrap;font-size:clamp(26px,3.7vw,46px)">${t('heroTitle')}</h1><p>${t('heroSub')}</p>${searchBox(p, deal, cat)}</section>`;
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
     <div class="cta"><div><span class="ic">+</span>${t('ctaText')}</div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>

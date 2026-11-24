@@ -744,3 +744,13 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .ab-btns .btn.ghost{background:#fff!important;color:#032EA1!important;border:0}
 @media (max-width:900px){.ab-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.ab-steps{grid-template-columns:1fr}}
 @media (max-width:480px){.ab-grid{grid-template-columns:1fr}.page:has(.ab){padding:0 2px}}
+/* DAILY RENT TAB (owner, 2026-11-24: "déli rent… egyből látható legyen"): the row is Rent · Daily · Buy · Rooms | Apartment ·
+   Condo · Studio · Villa · House. Phones: two tidy rows – the 4 deal tabs on top, the 5 property types under them. */
+@media (max-width:720px){
+  #dealTabs.deal-tabs{grid-template-columns:repeat(20,minmax(0,1fr))!important}
+  #dealTabs .dt-deal{grid-column:span 5}
+  #dealTabs .dt-cat{grid-column:span 4}
+  #dealTabs button:nth-of-type(4n+1)::before{display:block}
+  #dealTabs button:nth-of-type(1)::before,#dealTabs .dt-deal+.dt-sep+.dt-cat::before,#dealTabs button:nth-of-type(5)::before{display:none!important}
+  #dealTabs button.on::before,#dealTabs button.on+button::before{display:none!important}
+}

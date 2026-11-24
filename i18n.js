@@ -2,6 +2,7 @@ export const LANGS = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', 
 
 export const T = {
 en: {
+  daily: 'Daily', dailyRent: 'Daily rent', dailyBlock: 'Daily rentals & short stays',
   bedroomOne: 'bedroom', forSaleShort: 'For sale', sampleNote: 'Sample listings – for illustration only, not real offers. Real listings appear as owners and agents post them.',
   addrPhS: 'e.g. BKK1',
   newProjects: 'New projects',
@@ -36,6 +37,7 @@ en: {
   supportBody: 'Questions, feedback or a problem with a listing? Write to us and we reply within 24 hours.',
 },
 km: {
+  daily: 'ប្រចាំថ្ងៃ', dailyRent: 'ជួលប្រចាំថ្ងៃ', dailyBlock: 'ជួលប្រចាំថ្ងៃ និងស្នាក់នៅខ្លី',
   bedroomOne: 'បន្ទប់គេង', forSaleShort: 'លក់', sampleNote: 'ប្រកាសគំរូ – សម្រាប់បង្ហាញតែប៉ុណ្ណោះ មិនមែនការផ្តល់ជូនពិតទេ។',
   addrPhS: 'ឧ. BKK1',
   newProjects: 'គម្រោងថ្មី',
@@ -69,6 +71,7 @@ km: {
   required: 'សូមបំពេញព័ត៌មានចាំបាច់។', error: 'មានបញ្ហា៖ ', notifySoon: 'ការជូនដំណឹង Telegram នឹងមកដល់ឆាប់ៗ។',
 },
 zh: {
+  daily: '日租', dailyRent: '日租', dailyBlock: '日租与短住',
   bedroomOne: '卧室', forSaleShort: '出售', sampleNote: '示例房源——仅供展示，并非真实房源。业主和中介发布后将显示真实房源。',
   addrPhS: '如 BKK1',
   newProjects: '新楼盘',
@@ -102,6 +105,7 @@ zh: {
   required: '请填写必填项。', error: '出错了：', notifySoon: 'Telegram 提醒即将上线。',
 },
 fr: {
+  daily: 'À la journée', dailyRent: 'Location à la journée', dailyBlock: 'Locations à la journée et courts séjours',
   bedroomOne: 'chambre', forSaleShort: 'À vendre', sampleNote: 'Annonces d’exemple – à titre d’illustration uniquement, pas de vraies offres.',
   addrPhS: 'ex. BKK1',
   newProjects: 'Programmes neufs',
@@ -135,6 +139,7 @@ fr: {
   required: 'Veuillez remplir les champs obligatoires.', error: 'Une erreur est survenue : ', notifySoon: 'Les alertes Telegram arrivent bientôt.',
 },
 th: {
+  daily: 'รายวัน', dailyRent: 'เช่ารายวัน', dailyBlock: 'เช่ารายวันและพักระยะสั้น',
   bedroomOne: 'ห้องนอน', forSaleShort: 'ขาย', sampleNote: 'ประกาศตัวอย่าง – เพื่อแสดงตัวอย่างเท่านั้น ไม่ใช่ข้อเสนอจริง',
   addrPhS: 'เช่น BKK1',
   newProjects: 'โครงการใหม่',

@@ -11,12 +11,12 @@ const PP = [11.5564, 104.9282];
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 const TYPES = ['apartment','condo','house','villa','room','shophouse','office','land'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
-const QUICK = { rent: ['pool','gym','pets','parking'], room: ['pool','gym','private_bath','wifi','aircon','female_only'], sale: ['pool','gym','parking','security'], '': ['pool','gym','pets','parking'] };  // row 1 always shows Pool + Gym; EDC only in Filters (owner, 2026-11-24)
+const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wifi','aircon'], room: ['pool','gym','private_bath','wifi','aircon','female_only'], sale: ['pool','gym','parking','security'], '': ['pool','gym','pets','parking'] };  // row 1 always shows Pool + Gym; EDC only in Filters (owner, 2026-11-24)
 const CATS = [['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
 const LEASE = ['day','month','6m','1y'];
-const BUDGET = { rent: [200,400,700,1000,2000,5000], room: [100,200,300,500], sale: [50000,100000,200000,500000,1000000] };
+const BUDGET = { rent: [200,400,700,1000,2000,5000], daily: [20,40,60,100,200], room: [100,200,300,500], sale: [50000,100000,200000,500000,1000000] };
 
 const sb = createClient(SB_URL, SB_KEY, { auth: { flowType: 'pkce', persistSession: true, detectSessionInUrl: true } });
 const app = document.getElementById('app');
@@ -114,7 +114,7 @@ function card(l) {
       <div class="loc"><b>●</b> ${esc(t('t_' + l.property_type))} · ${esc(l.district || t('cityPP'))}</div>
       <div class="specs-row"><span>${ICON.bed}${esc(beds)}</span><span>${ICON.bath}${l.bathrooms ?? '–'}</span><span class="${AM_ICON_ORDER.filter(a => (l.amenities || []).includes(a)).length >= 2 ? 'sp-a2' : ''}">${ICON.area}${l.area_m2 ? Math.round(l.area_m2) + 'm²' : '–'}</span>${AM_ICON_ORDER.filter(a => (l.amenities || []).includes(a)).slice(0, 2).map(a => `<span class="sp-am" title="${esc(t('am_' + a))}" aria-label="${esc(t('am_' + a))}">${AM_ICON[a]}</span>`).join('')}</div>
       <p class="yname"><span class="yn1">${esc(t(l.deal_type === 'sale' ? 'nameSale' : 'nameRent', { x: t('t_' + (l.deal_type === 'room' ? 'room' : l.property_type)) }))}</span>${l.district ? ` <span class="yn2">${esc(t('inPlace', { d: l.district }))}</span>` : ''}</p>
-      <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span class="yty">${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : 'rent'))}</em><b>${l.bathrooms ?? '–'} ${esc(t('bathrooms').toLowerCase())}</b><b>${l.area_m2 ? Math.round(l.area_m2) + ' m²' : '– m²'}</b><b>${esc(l.posted_by ? t('by_' + l.posted_by) : shortDate(l.created_at))}</b></p>
+      <p class="yl1"><b>${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</b><span class="yty">${esc(t('t_' + l.property_type))}</span><em>${esc(t(l.deal_type === 'sale' ? 'forSaleShort' : l.deal_type === 'room' ? 't_room' : l.price_period === 'day' ? 'daily' : 'rent'))}</em><b>${l.bathrooms ?? '–'} ${esc(t('bathrooms').toLowerCase())}</b><b>${l.area_m2 ? Math.round(l.area_m2) + ' m²' : '– m²'}</b><b>${esc(l.posted_by ? t('by_' + l.posted_by) : shortDate(l.created_at))}</b></p>
       <div class="yfoot"><p class="ymeta"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span class="yaddr"><span class="ya1">${esc(!l.city || l.city === 'Phnom Penh' ? t('cityPP') : l.city)},</span> <span class="ya2">${esc(l.address || t('cambodia'))}</span></span></p>
       <span class="ylink">${esc(t('clickView', { x: t(l.deal_type === 'room' || l.property_type === 'room' ? 't_room' : ['house', 'villa'].includes(l.property_type) ? 't_' + l.property_type : 't_apartment').toLowerCase() }))} <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div>
     </div></a>`;
@@ -156,7 +156,8 @@ function listingsMap(el, list) {
 
 async function fetchListings(f = {}) {
   let q = sb.from('yh_listings').select(LISTING_COLS).eq('status', 'active').eq('country', 'KH');
-  if (f.deal) q = q.eq('deal_type', f.deal);
+  if (f.deal === 'daily') q = q.eq('deal_type', 'rent').eq('price_period', 'day');   // Daily rent tab (owner, 2026-11-24)
+  else if (f.deal) q = q.eq('deal_type', f.deal);
   if (f.type) q = q.eq('property_type', f.type);
   if (f.max) q = q.lte('price', Number(f.max));
   if (f.beds) q = f.beds === '0' ? q.eq('bedrooms', 0) : q.gte('bedrooms', Number(f.beds));
@@ -183,7 +184,7 @@ async function fetchListings(f = {}) {
   return data;
 }
 
-const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','sale','room'].map(d => `<button type="button" data-deal="${d}" class="${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
+const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','daily','sale','room'].map(d => `<button type="button" data-deal="${d}" class="dt-deal ${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
@@ -272,8 +273,9 @@ async function viewHome() {
   const rent = all.filter(l => l.deal_type === 'rent');
   const html = block(t('recommended'), all.filter(l => l.is_featured).concat(all.filter(l => !l.is_featured)), '#/search?sort=new')
     + block(t('newest'), [...all].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)), '#/search?sort=new')
-    + block(t('cheapest'), [...rent].sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
+    + block(t('cheapest'), rent.filter(l => l.price_period !== 'day').sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
     + block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')
+    + block(t('dailyBlock'), rent.filter(l => l.price_period === 'day'), '#/search?deal=daily')
     + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale');
   const prj = await PT.homeBlock();   // New projects block (owner, 2026-11-24)
   const b0 = document.getElementById('blocks'); if (!b0) return;
@@ -419,7 +421,7 @@ async function viewPost(editId) {
   const sel = (name, opts, cur) => `<select name="${name}">${opts.map(([v, lab]) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
   app.innerHTML = `<div class="wrap"><form class="narrow panel form" id="pform">
     <h1 style="margin:0">${editId ? t('editTitle') : t('postTitle')}</h1>
-    <div class="row"><label>${t('dealType')} *${sel('deal_type', [['rent', t('rent')], ['sale', t('buy')], ['room', t('room')]], l.deal_type)}</label>
+    <div class="row"><label>${t('dealType')} *${sel('deal_type', [['rent', t('rent')], ['daily', t('dailyRent')], ['sale', t('buy')], ['room', t('room')]], l.deal_type === 'rent' && l.price_period === 'day' ? 'daily' : l.deal_type)}</label>
       <label>${t('propType')} *${sel('property_type', TYPES.map(x => [x, t('t_' + x)]), l.property_type)}</label></div>
     <label>${t('title')} *<input name="title" required minlength="5" maxlength="140" placeholder="${esc(t('titlePh'))}" value="${esc(l.title || '')}"></label>
     <div class="row"><label>${t('price')} *<input name="price" type="number" min="0" step="1" required value="${l.price ?? ''}"></label>
@@ -470,8 +472,8 @@ async function viewPost(editId) {
     const fd = new FormData(e.target); const f = Object.fromEntries(fd);
     const num = v => v === '' || v == null ? null : Number(v);
     const row = {
-      deal_type: f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
-      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.price_period,
+      deal_type: f.deal_type === 'daily' ? 'rent' : f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
+      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.deal_type === 'daily' ? 'day' : f.price_period,
       bedrooms: num(f.bedrooms), bathrooms: num(f.bathrooms), area_m2: num(f.area_m2), furnished: !!f.furnished,
       amenities: fd.getAll('amen').filter(a => AMEN.includes(a)), posted_by: f.posted_by || null,
       min_lease: f.deal_type === 'sale' ? null : (f.min_lease || null),

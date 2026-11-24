@@ -300,8 +300,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .sbox .f{padding:7px 12px!important;text-align:center}
   .sbox label{display:block;text-align:center}
   .sbox select,.sbox input{width:100%;text-align:center;text-align-last:center}
-  .sbox select{-webkit-appearance:none;appearance:none;padding:2px 30px!important;
-    background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%230f172a' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 14px center/12px}
+  .sbox select{padding:2px 30px!important;background-position:right 14px center!important}
   .sbox input::placeholder{text-align:center}
   .sbox .btn{padding:13px 24px!important}
 }
@@ -312,3 +311,7 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .vsw a.on{background:#E00025;color:#fff}
 .vsw a:not(.on):hover{background:#fff0f2;color:#E00025}
 .vsw svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2}
+/* Search card arrows (owner, 2026-11-24: "legyen valami szép kurzorjel… háromszög, csak egy vonal nélkül"): every select of
+   the search card has a small FILLED triangle (no outline chevron), every screen. District is a real list (Any + districts). */
+.sbox select{-webkit-appearance:none;appearance:none;cursor:pointer;padding-right:26px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M0 0h10L5 6z' fill='%230f172a'/%3E%3C/svg%3E") no-repeat right 6px center/10px 6px}

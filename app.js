@@ -258,7 +258,9 @@ async function fetchListings(f = {}) {
   if (ors.length === 1) q = q.or(ors[0]); else if (ors.length) q = q.or(`and(${ors.map(o => `or(${o})`).join(',')})`);
   if (f.ids) q = q.in('id', f.ids);
   const sort = f.sort || 'new';
-  q = sort === 'cheap' ? q.order('price', { ascending: true }) : sort === 'exp' ? q.order('price', { ascending: false }) : q.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
+  q = sort === 'cheap' ? q.order('price', { ascending: true }) : sort === 'exp' ? q.order('price', { ascending: false })
+    : sort === 'big' ? q.order('area_m2', { ascending: false, nullsFirst: false }) : sort === 'small' ? q.order('area_m2', { ascending: true, nullsFirst: false })
+    : q.order('is_featured', { ascending: false }).order('created_at', { ascending: false });
   const { data, error } = await q.limit(f.limit || 300);
   if (error) { toast(t('error') + error.message); return []; }
   const aids = [...new Set(data.map(l => l.agent_id).filter(Boolean))];   // agent photo + name for the card's agent bar
@@ -375,7 +377,9 @@ async function viewHome() {
 }
 
 // Subscribe (Telegram) + Newest in the filters' second row – on the homepage too (owner, 2026-11-24 22:21: "hova tűnt?")
-const resultTools = p => `<button type="button" class="ftg" id="notifyBtn" aria-label="${esc(t('notify'))}" data-tip="${esc(t('notify'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5zM8.9 13.6l8.6-5.4c.4-.3.8-.1.5.2l-7.4 6.7-.3 3.1-1.4-4.6z"/></svg><span>${t('subscribe')}</span></button><label class="fsort"><select id="sortSel" aria-label="${esc(t('sort'))}"><option value="new">${t('sortNew')}</option><option value="cheap" ${p.sort === 'cheap' ? 'selected' : ''}>${t('sortCheap')}</option><option value="exp" ${p.sort === 'exp' ? 'selected' : ''}>${t('sortExp')}</option></select></label>`;
+// sorting like tokki.house (owner, 2026-11-24 20:51): Newest · Price low→high · Price high→low · Area largest · Area smallest
+const SORTS = ['cheap', 'exp', 'big', 'small'];
+const resultTools = p => `<button type="button" class="ftg" id="notifyBtn" aria-label="${esc(t('notify'))}" data-tip="${esc(t('notify'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5zM8.9 13.6l8.6-5.4c.4-.3.8-.1.5.2l-7.4 6.7-.3 3.1-1.4-4.6z"/></svg><span>${t('subscribe')}</span></button><label class="fsort"><select id="sortSel" aria-label="${esc(t('sort'))}"><option value="new">${t('sortNew')}</option>${SORTS.map(k => `<option value="${k}" ${p.sort === k ? 'selected' : ''}>${t('so_' + k)}</option>`).join('')}</select></label>`;
 async function viewSearch() {
   const p = Object.fromEntries(qs());
   const view = p.view === 'map' ? 'map' : 'grid';

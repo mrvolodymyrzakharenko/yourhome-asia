@@ -61,6 +61,8 @@ function track(l, kind) {
 }
 const tgHandle = s => { const m = String(s || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, ''); return /^[A-Za-z0-9_]{3,32}$/.test(m) ? m : null; };
 const digits = s => String(s || '').replace(/[^\d+]/g, '');
+// Wide heart (owner, 2026-11-24: "ne ilyen magas, hanem szélesebb… legyen piros, ha megnyomják")
+const HEART = '<svg viewBox="0 0 26 22" aria-hidden="true"><path d="M13 20.5S2 14.2 2 7.3A5.3 5.3 0 0 1 13 4.6a5.3 5.3 0 0 1 11 2.7C24 14.2 13 20.5 13 20.5z"/></svg>';
 const ICON = {
   bed: '<svg viewBox="0 0 24 24"><path d="M3 18V7m0 7h18v4M21 14v-2a3 3 0 0 0-3-3h-7v5M7 11.5a1.5 1.5 0 1 0 0-.01"/></svg>',
   bath: '<svg viewBox="0 0 24 24"><path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4zM6 12V5a2 2 0 0 1 4 0M7 19l-1 2M17 19l1 2"/></svg>',
@@ -101,7 +103,7 @@ function card(l) {
     <div class="ph">${ph}
       <span class="date">${shortDate(l.created_at)}</span>
       <span class="tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}${l.status !== 'active' ? `<span class="tag st">${esc(t('s_' + l.status))}</span>` : ''}</span>
-      <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${isSaved(l.id) ? '♥' : '♡'}</button>
+      <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${HEART}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
       ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, 12).map((u, i) => `<img src="${esc(u)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots">${l.photos.slice(0, 12).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}` : ''}
@@ -139,7 +141,7 @@ document.addEventListener('click', e => {
   const id = b.dataset.save; let s = saved();
   if (s.includes(id)) s = s.filter(x => x !== id); else { s.unshift(id); track({ id, status: 'active' }, 'save'); }
   store.set('yh_saved', s.slice(0, 200));
-  b.classList.toggle('on', s.includes(id)); b.textContent = s.includes(id) ? '♥' : '♡';
+  b.classList.toggle('on', s.includes(id));
 });
 
 function clearMaps() { maps.forEach(m => m.remove()); maps = []; }
@@ -730,7 +732,7 @@ async function route() {
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
-const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on); b.textContent = on ? '♥' : '♡'; }); return on; };
+const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });
 

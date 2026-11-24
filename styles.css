@@ -763,3 +763,9 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   #dealTabs button::before{display:block!important}
   #dealTabs button:nth-of-type(5n+1)::before,#dealTabs button.on::before,#dealTabs button.on+button::before{display:none!important}
 }
+/* HEART (owner, 2026-11-24): a wide, low heart drawn as an icon (not the tall ♡ glyph) – outline when not saved, solid RED when
+   saved, on every card; the popup's save heart turns red too. */
+.heart{display:grid!important;place-items:center}
+.heart svg{width:22px;height:19px;fill:none;stroke:#0b1d51;stroke-width:1.9;stroke-linejoin:round;transition:transform .2s ease,fill .2s ease,stroke .2s ease}
+.heart.on svg{fill:#E00025;stroke:#E00025;transform:scale(1.06)}
+.heart:active svg{transform:scale(.9)}

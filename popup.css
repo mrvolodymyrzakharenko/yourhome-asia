@@ -140,3 +140,5 @@ html.apm-on{overflow:hidden}
   .apm-prev{left:12px}.apm-next{right:64px}
   .apm-close{outline:0;border:0}
 }
+.apm-tools [data-apm=save][aria-pressed=true]{color:#E00025!important}
+.apm-tools [data-apm=save][aria-pressed=true] svg{fill:#E00025!important;stroke:#E00025!important}

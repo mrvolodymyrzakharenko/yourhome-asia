@@ -624,3 +624,38 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .sbtns{grid-column:1/-1!important}
 }
 @media (max-width:720px){.sbox{grid-template-columns:1.4fr 1fr 1fr 1fr!important}}
+/* FILTERS PANEL = NO WHITE BOX, TEXT WITH DIVIDERS (owner, 2026-11-24 20:11, screenshot: "ne legyen fehér sávon… a kategóriákat
+   egy sorba… a teljes szélességbe… nincs gomb, nincs vonal, csak csík… minden legyen egységes"): the panel has no background,
+   border or shadow and uses the full width; Bathrooms · Min. size · Rental term · Listed within sit in ONE row of four equal
+   columns (small grey label, borderless value with a small chevron, thin dividers between); amenities are grey words with
+   thin dividers like the quick filters (picked = pink patch, red text); Reset | Close as words too. */
+.more-panel,.chipbox.home .more-panel{background:none!important;border:0!important;box-shadow:none!important;border-radius:0!important;padding:4px 0 0!important;margin-top:8px!important}
+.more-panel .mp-grid{display:grid!important;grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:0!important}
+.more-panel .mp-grid label{position:relative;display:flex;flex-direction:column;align-items:center;gap:2px;min-width:0;padding:2px 4px;font-size:11px!important;font-weight:400!important;color:#94a3b8;letter-spacing:0;text-align:center;white-space:nowrap}
+.more-panel .mp-grid label+label::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:1px;background:#D5DAE3}
+.more-panel .mp-grid select{width:auto;max-width:100%;border:0!important;box-shadow:none!important;background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6478' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 0 center/11px!important;padding:3px 15px 3px 2px!important;font:inherit;font-size:13px!important;font-weight:600;color:#0b1d51;letter-spacing:-.025em;text-align:center;text-align-last:center;text-overflow:ellipsis;-webkit-appearance:none;appearance:none;cursor:pointer;field-sizing:content}
+.more-panel .mp-lab{text-align:center;margin:16px 0 6px!important;font-size:11px!important;font-weight:400!important;color:#94a3b8;letter-spacing:.06em}
+.more-panel .chips{display:flex!important;flex-wrap:wrap!important;justify-content:center;gap:0!important;row-gap:4px!important;overflow:visible!important}
+.more-panel .chips .chip{position:relative;border:0!important;background:none!important;box-shadow:none!important;color:#5B6478!important;font-weight:400!important;padding:6px 9px!important;border-radius:10px!important;letter-spacing:-.025em}
+.more-panel .chips .chip::before{content:"";position:absolute;left:0;top:30%;bottom:30%;width:1px;background:#D5DAE3}
+.more-panel .chips .chip.on{background:#FDE4E7!important;color:#E00025!important;font-weight:600!important;box-shadow:0 6px 18px rgba(15,23,42,.08),0 1px 4px rgba(15,23,42,.05)!important}
+.more-panel .chips .chip.on::before,.more-panel .chips .chip.on+.chip::before{display:none}
+.more-panel .chips .chip:not(.on):hover{color:#E00025!important}
+.more-panel .mp-act{justify-content:center!important;gap:0!important;margin-top:12px!important}
+.more-panel .mp-act .btn{position:relative;background:none!important;border:0!important;box-shadow:none!important;color:#5B6478!important;padding:6px 14px!important;font-weight:500}
+.more-panel .mp-act .btn+.btn::before{content:"";position:absolute;left:0;top:28%;bottom:28%;width:1px;background:#D5DAE3}
+.more-panel .mp-act .btn.blue{color:#E00025!important;font-weight:600}
+@media (max-width:720px){
+  .more-panel .mp-grid label{padding:2px 2px;font-size:10.5px!important}
+  .more-panel .mp-grid select{font-size:12.5px!important;padding:3px 13px 3px 1px!important;background-size:10px!important}
+  .more-panel .chips .chip{padding:6px 7px!important}
+}
+/* Filters panel: the two amenities already in row 1 (Pool, Gym) are not repeated; an × top-right closes the panel
+   (owner, 2026-11-24 20:11: "legyen X, hogy be lehessen csukni"); no divider before the first word. */
+.more-panel{position:relative}
+.more-panel .chips .mp-q,.more-panel .chips .mp-q:first-child,.more-panel .chips .mp-q:nth-child(2),.more-panel .chips .mp-q:nth-child(-n+2){display:inline-flex!important}
+.more-panel .chips .chip:first-child::before{display:none}
+.mp-x{position:absolute;top:-2px;right:0;z-index:2;width:30px;height:30px;display:grid;place-items:center;border:0;border-radius:50%;background:#fff;color:#5B6478;font-size:20px;line-height:1;cursor:pointer;box-shadow:0 4px 12px rgba(15,23,42,.12)}
+.mp-x:hover{color:#E00025}
+.more-panel .mp-grid{padding-right:34px}
+@media (max-width:720px){.more-panel .mp-grid{padding-right:0;margin-top:36px}.mp-x{top:0}}

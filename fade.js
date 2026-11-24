@@ -4,6 +4,7 @@
    photos fade in once they have loaded. Leaflet map internals are left alone. Off for "reduce motion". */
 (() => {
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const STILL = '.hero, #chipBox, .chipbox, .deal-tabs, #sbox, .more-panel';
   const SKIP = /^(SCRIPT|STYLE|LINK|META|TEMPLATE|BR|OPTION)$/;
   const isMap = el => (el.className && typeof el.className === 'string' && el.className.indexOf('leaflet') > -1) ||
     (el.closest && el.closest('.leaflet-container'));
@@ -21,6 +22,10 @@
     let i = 0;
     for (const el of list) {
       if (el.nodeType !== 1 || SKIP.test(el.tagName) || isMap(el)) continue;
+      // the search area (title, category rows, search card, the two filter rows, filters panel) never fades – only the
+      // listings do (owner, 2026-11-24 20:49); a whole page that holds it fades piece by piece around it
+      if (el.closest && el.closest(STILL)) continue;
+      if (el.querySelector && el.querySelector(STILL)) { fade(el.children); continue; }
       if (el.tagName === 'IMG') { img(el); continue; }
       el.style.setProperty('--yh-d', Math.min(i++, 8) * 40 + 'ms');
       el.classList.remove('yh-in'); void el.offsetWidth; el.classList.add('yh-in');

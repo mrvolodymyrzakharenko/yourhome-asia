@@ -97,6 +97,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js (loaded before
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.
+  The SEARCH AREA never fades (owner, 2026-11-24 20:49: title, category rows, search card, the two filter rows, filters panel –
+  STILL in fade.js); after a category / filter click only the listings fade in.
 - NOTHING STICKS OUT ON PHONES, EVERY LANGUAGE – BASE RULE (owner, 2026-11-24 20:26: "semmi sem lóghat ki, semmi!!!"): fitRows()
   in app.js (run with fitCards) – a row of words (quick filters, filter row, deal/category row, panel selects) whose items pass the
   screen first gets smaller letters (down to 11px), then wraps centred (.fitwrap, no divider at a line start); the header first

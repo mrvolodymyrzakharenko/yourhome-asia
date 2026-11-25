@@ -814,7 +814,7 @@ async function setRole(role, terms, kind) {
 // (then Owner / Agent / Agency), REQUIRED Terms tick, Continue. Opens on sign-in on any page and on the dashboard.
 const needsRole = () => { const m = user?.user_metadata || {}; return !!user && (!['seeker', 'advertiser'].includes(m.role) || !m.terms_accepted_at); };
 function rolePopup(onDash) {
-  if (!needsRole() || document.querySelector('.rpop')) return;
+  if (!needsRole() || document.querySelector('.rpop') || /^\/admin/.test(location.pathname)) return;   // never over the admin page (owner, 2026-11-25)
   const m = user.user_metadata || {};
   let pick = m.role === 'seeker' ? 'seeker' : m.role === 'advertiser' ? 'advertiser' : '', kind = ['owner', 'agent', 'agency'].includes(m.adv_kind) ? m.adv_kind : 'owner';
   const w = document.createElement('div'); w.className = 'rpop'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true');
@@ -1182,7 +1182,7 @@ AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LIS
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
 // ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
 let ADMP = null;
-const adminMod = () => ADMP || (ADMP = import('./admin.js?v=1').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL }); return m; }));
+const adminMod = () => ADMP || (ADMP = import('./admin.js?v=2').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });

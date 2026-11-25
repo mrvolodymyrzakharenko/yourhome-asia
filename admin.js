@@ -137,7 +137,7 @@ export async function view() {
   if (!user) return C.viewLogin('admin');
   C.app.innerHTML = `<div class="wrap adm"><div class="aempty" style="margin-top:30px">Loading…</div></div>`;
   const { data: ok } = await C.sb.rpc('yh_is_admin');
-  if (!ok) { C.app.innerHTML = `<div class="wrap adm"><section class="apanel" style="margin-top:30px;text-align:center"><h3>Admin only</h3><p class="amut">You are signed in as ${esc(user.email)}, which is not an admin account.</p><a class="btn blue sm" href="#/">Back to site</a></section></div>`; return; }
+  if (!ok) { C.app.innerHTML = `<div class="wrap adm"><section class="apanel" style="margin-top:30px;text-align:center"><h3>Admin only</h3><p class="amut">You are signed in as <b>${esc(user.email)}</b>, which is not the admin account. Sign out, then sign in with Google using the admin Gmail address.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn red sm" id="aSwitch">Sign out and switch account</button><a class="btn ghost sm" href="#/">Back to site</a></div></section></div>`; document.getElementById('aSwitch').onclick = () => C.signOut(); return; }
   try { localStorage.setItem('yh_noct', '1'); } catch {}       // the admin's own visits never count
   const qs = C.qs();
   if (qs.get('s') && SECTIONS.some(x => x[0] === qs.get('s'))) S.sec = qs.get('s');

@@ -98,7 +98,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   category blocks, with the "Want to rent out faster?" banner BETWEEN the first and second block (owner 17:26; phones: ONE compact
-  row: NO "+" circle, ONE line of call to action (ctaShort: "Post your listing for free!") + "Post now" pill, vertically centred – owner 2026-11-25). Blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
+  row: NO "+" circle, ONE line of call to action + button pill, vertically centred – owner 2026-11-25; now the random strips below). Blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
 - FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js (loaded before
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.
@@ -123,6 +123,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - MENU LIST (owner, 2026-11-24 20:59): on phones/tablets the open Menu is 70% of the screen wide (right side), scrolls if long;
   its first row is a red "✕ Close menu" button (#drClose, closeMenu in i18n.js).
   The menu links sit in TWO COLUMNS (owner 21:02: "menüpontok két sorban"); Close menu and Currency span both (end of header.css).
+- CALL-TO-ACTION STRIPS BETWEEN LISTINGS (owner, 2026-11-25): no fixed banner any more – placeCtas() in app.js puts a RANDOM strip
+  after every 4–6 listings on phones and every 8–12 on PC/tablet (PC: only after a full row / a whole homepage block), never the same
+  kind twice in a row: post a listing · daily rental · sale · spare room · become a partner (#/partners) · post your project
+  (#/partners?type=developers) · become a verified advertiser (#/account?tab=settings&v=1). Texts cv_/cvs_ (short phone line)/cvb_
+  (button) in i18n.js, 5 languages. Homepage blocks and the results grid.
+- MENU LIST: "Become a partner" spans both columns as the last link row (pale blue), the rest two columns; long names wrap
+  onto a second line on phones – never "…" (owner, 2026-11-25).
 - ROUND × BUTTONS (owner, 2026-11-25): every close / remove × is a DRAWN X (svg .xic or the popup/picker icons) in the exact
   centre of its circle – never the text character "×" (it sits off-centre).
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.

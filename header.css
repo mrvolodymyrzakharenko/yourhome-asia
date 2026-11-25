@@ -74,3 +74,7 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
   .hdr-r a.rb[aria-label="Account"]{display:none!important}   /* account = bottom menu on phones (the old #/account selector missed the clean /account link) */
   body .hdr .hdr-r .menu-btn span{display:inline!important;font-size:13px!important;font-weight:600!important;letter-spacing:-.01em}
 }
+/* Menu list: "Become a partner" spans both columns as the LAST row – never cut off with "…" (owner, 2026-11-25) */
+.drawer a.dr-partner{grid-column:1/-1;order:99;text-align:center;overflow:visible!important;text-overflow:clip!important;background:#F1F4FC;margin-top:4px}
+.drawer .dr-cur{order:100}
+@media (max-width:900px){.drawer a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.25}}

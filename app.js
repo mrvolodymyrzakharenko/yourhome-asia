@@ -434,9 +434,37 @@ const viewSwitch = (p = {}) => { const m = p.view === 'map'; return `<div class=
 const SKC = '<div class="card sk-card" aria-hidden="true"><div class="ph sk"></div><div class="cb"><span class="sk sk-l"></span><span class="sk sk-s"></span><span class="sk sk-s2"></span></div></div>';
 const skelRow = (head = true) => `<section class="block skel-block" aria-busy="true">${head ? '<div class="bh"><span class="sk sk-h"></span></div>' : ''}<div class="row4">${SKC.repeat(4)}</div></section>`;
 window.yhSkel = skelRow;
+// CALL-TO-ACTION STRIPS BETWEEN THE LISTINGS (owner, 2026-11-25): a random strip (post a listing / daily rental / sale / room /
+// become a partner / post a project / get verified) after every 4–6 listings on phones and every 8–12 on PC/tablet –
+// never two of the same kind in a row. Texts CTA_V in i18n.js (cv_<key>, cvs_<key> = short phone line, cvb_<key> = button).
+const CTA_KINDS = [['rent', '#/post'], ['daily', '#/post'], ['sale', '#/post'], ['room', '#/post'], ['partner', '#/partners'], ['project', '#/partners?type=developers'], ['verify', '#/account?tab=settings&v=1']];
+let ctaLast = '';
+function ctaStrip() {
+  let k; do { k = CTA_KINDS[Math.floor(Math.random() * CTA_KINDS.length)]; } while (k[0] === ctaLast); ctaLast = k[0];
+  const d = document.createElement('div'); d.className = 'cta cta-x cta-' + k[0];
+  d.innerHTML = `<div><span class="ic">+</span><span class="cta-l">${esc(t('cv_' + k[0]))}</span><span class="cta-s">${esc(t('cvs_' + k[0]))}</span></div><a href="${k[1]}" class="btn">${esc(t('cvb_' + k[0]))} →</a>`;
+  return d;
+}
+function placeCtas(root) {
+  if (!root) return;
+  root.querySelectorAll('.cta-x').forEach(x => x.remove());
+  const phone = innerWidth <= 720, gap = () => phone ? 4 + Math.floor(Math.random() * 3) : 8 + Math.floor(Math.random() * 5);
+  const cards = [...root.querySelectorAll('.row4 > .card, .grid > .card, .row-scroll > .card')].filter(c => c.offsetParent !== null);
+  let n = 0, next = gap();
+  cards.forEach((c, i) => {
+    if (++n < next || i === cards.length - 1) return;
+    const box = c.parentElement, blk = c.closest('section.block');
+    if (phone) c.after(ctaStrip());
+    else if (blk && box.classList.contains('row4')) { if ([...box.querySelectorAll(':scope > .card')].pop() !== c) return; blk.after(ctaStrip()); }
+    else { const nx = c.nextElementSibling; if (nx && nx.offsetTop === c.offsetTop) return; c.after(ctaStrip()); }
+    n = 0; next = gap();
+  });
+}
+let ctaW = innerWidth <= 720;
+addEventListener('resize', () => { const p = innerWidth <= 720; if (p !== ctaW) { ctaW = p; document.querySelectorAll('#blocks, #res').forEach(placeCtas); } });
+
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
-    <div class="cta"><div><span class="ic">+</span><span class="cta-l">${t('ctaText')}</span><span class="cta-s">${t('ctaShort')}</span></div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>
     <div id="blocks">${skelRow()}${skelRow()}</div></div>`;
   let st = {};
   const box = document.getElementById('chipBox');
@@ -469,8 +497,7 @@ async function viewHome() {
   const b0 = document.getElementById('blocks'); if (!b0) return;
   b0.innerHTML = html;
   // "Want to rent out faster?" banner sits BETWEEN the first two category blocks, not under the search (owner, 2026-11-24 17:26)
-  const cta = app.querySelector('.cta'), first = b0.querySelector('section.block');
-  if (cta && first) first.after(cta);
+  placeCtas(b0);
   const prj = await PT.homeBlock();
   if (!b0.isConnected) return;
   if (prj) b0.insertAdjacentHTML('beforeend', prj);
@@ -515,6 +542,7 @@ async function viewSearch() {
   if (!list.length) { res.innerHTML = `<div class="empty">${t('noResults')}<br><br><a class="btn red" href="#/post">+ ${t('post')}</a></div>`; return; }
   if (view === 'map') { res.innerHTML = '<div id="map"></div>'; listingsMap(document.getElementById('map'), list); }
   else res.innerHTML = `<div class="grid">${list.map(card).join('')}</div>`;
+  placeCtas(res);
 }
 function alertModal(filters) {
   const wrap = document.createElement('div');

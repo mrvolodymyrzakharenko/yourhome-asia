@@ -133,8 +133,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   heart (a WIDE drawn heart icon, outline → solid RED when saved, the circle is as tall as the photo labels (29px), only the heart drawing is small (13×11px) – owner 20:43; HEART in app.js), camera count bottom-right, then THREE ROWS like vietrent (owner, 2026-11-24): bold "1 bedroom · Apartment · Rent"
   (bedrooms blue, type dark, deal red) as THREE EQUAL CENTRED COLUMNS with thin dividers and a hairline under them,
   red pin + "District, Phnom Penh" centred, red "View apartment →" centred; ~10% roomier padding (owner: "szépen elosztva") (no title / bathrooms line on
-  phones). PHOTO SLIDER like vietrent (owner, 2026-11-24): up to 12 photos per listing
-  (post form allows 12), swipe sideways inside the card, dots in the middle at the bottom – the current one a white dash – a
+  phones). PHOTO SLIDER like vietrent (owner, 2026-11-24): every photo of the listing (max 15 since 2026-11-25), swipe sideways inside the card, dots in the middle at the bottom – the current one a white dash – a
   tapped dot moves there; the PRICE is written on the photo bottom-left in white ("$200 /month", 19px – the owner's exception to
   the 13px rule, like vietrent), no price pill at the top on phones. Sample listings: "Sample" pill only (the yellow note above the lists and the "N listings" count were removed – owner 21:58) (card() extra .yb*/.y* elements,
   shown only on phones – styles.css last block). Only one "Post listing" filler card per block on phones.
@@ -290,6 +289,16 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   modulepreload links in index.html start supabase-js and our modules early.
 - The first load keeps the server's <title> (route() only sets document.title on later navigations).
 - Photo alt text never empty: photoAlt() in app.js ("Apartment for rent in BKK1, Phnom Penh – photo 2").
+
+## Photos (owner, 2026-11-25: "12-15 kép az ideális… a képeket automatikusan optimalizálja… ne legyen a vercelen, se a GitHub-on nagy forgalom… a kártyákon akár az összeset")
+- A listing has up to 15 photos (MAX_PHOTOS in app.js); the post form says 12–15 is ideal (photosHint, "n of 15" counter).
+- UPLOADS ARE OPTIMIZED IN THE BROWSER (Study portal SWImageOpt rule): shrinkPhoto() in app.js turns each photo upright,
+  resizes and re-encodes it as WebP (JPEG fallback), EXIF/location dropped – a large copy "<id>-L.webp" (1600px, q .8, max 2 MB)
+  and a small card copy "<id>-s.webp" (800px, q .72) in Supabase Storage yh-photos. Photos never go into the repo or through Vercel.
+- imgSrc(url, width) picks the needed size: Unsplash via ?w=, our uploads "-L.webp" → "-s.webp" for cards/thumbnails; the popup uses the large copy.
+- EVERY photo is on the card (phones swipe, PC/tablet round arrows on hover + real dots; >8 photos = smaller dots). Only the
+  first two load at once – the rest load when the visitor gets near them (yLoad()).
+- Sample listings: long descriptions (apartment, building, price and terms, "This is a sample listing…") and 12 photos each.
 
 ## Files
 - index.html – page shell, header, footer, bottom menu · styles.css + header.css – design · app.js – the whole app

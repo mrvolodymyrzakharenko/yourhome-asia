@@ -203,8 +203,30 @@ document.addEventListener('click', e => {
 }, true);
 // Photo alt text is never empty (seo-rules.md): "<type> for <rent/sale> in <district>, <city>" (+ photo number)
 const photoAlt = (l, i) => `${t('t_' + (l.deal_type === 'room' ? 'room' : l.property_type))} ${l.deal_type === 'sale' ? 'for sale' : 'for rent'} in ${[l.district, l.city || 'Phnom Penh'].filter(Boolean).join(', ')}${i ? ' – photo ' + (i + 1) : ''}`;
+// PHOTOS (owner, 2026-11-25: "12-15 kép az ideális… a kártyákon akár az összeset"): up to MAX_PHOTOS per listing, every one
+// swipeable on the card. imgSrc() asks for the size that is needed: Unsplash via ?w=, our own uploads via the small copy
+// made in the browser at upload ("…-s.webp" next to "….webp"); old uploads without a small copy are used as they are.
+const MAX_PHOTOS = 15;
+function imgSrc(u, w) {
+  if (!u) return u;
+  if (/^https:\/\/images\.unsplash\.com\//.test(u)) { try { const x = new URL(u); x.searchParams.set('w', w); x.searchParams.set('q', w > 1000 ? '75' : '70'); x.searchParams.set('auto', 'format'); x.searchParams.set('fit', 'crop'); return x.toString(); } catch { return u; } }
+  if (w <= 800 && /\/yh-photos\/.+-L\.webp$/.test(u)) return u.replace(/-L\.webp$/, '-s.webp');
+  return u;
+}
+window.yhImg = imgSrc;
+async function shrinkPhoto(file, edge, q) {
+  try {
+    const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
+    const k = Math.min(1, edge / Math.max(bmp.width, bmp.height)), w = Math.max(1, Math.round(bmp.width * k)), h = Math.max(1, Math.round(bmp.height * k));
+    const c = document.createElement('canvas'); c.width = w; c.height = h;
+    const x = c.getContext('2d'); x.imageSmoothingQuality = 'high'; x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(bmp, 0, 0, w, h); if (bmp.close) bmp.close();
+    const enc = type => new Promise(ok => c.toBlob(ok, type, q));
+    let b = await enc('image/webp'); if (!b || b.type !== 'image/webp') b = await enc('image/jpeg');
+    return b;
+  } catch { return file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp' ? (file.size <= 2 * 1024 * 1024 ? file : null) : null; }
+}
 function card(l) {
-  const ph = l.photos && l.photos[0] ? `<img src="${esc(l.photos[0])}" alt="${esc(photoAlt(l, 0))}" loading="lazy">` : `<span class="noimg">🏠</span>`;
+  const ph = l.photos && l.photos[0] ? `<img src="${esc(imgSrc(l.photos[0], 800))}" alt="${esc(photoAlt(l, 0))}" loading="lazy">` : `<span class="noimg">🏠</span>`;
   const dots = l.photos && l.photos.length > 1 ? `<div class="dots">${l.photos.slice(0, 5).map(() => '<i></i>').join('')}</div>` : '';
   const beds = l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–');
   return `<a class="card" href="${YH.listingPath(l)}">
@@ -214,7 +236,7 @@ function card(l) {
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${HEART}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
-      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, 12).map((u, i) => `<img src="${esc(u)}" alt="${esc(photoAlt(l, i))}" loading="${i ? 'lazy' : 'eager'}" decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots">${l.photos.slice(0, 12).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}` : ''}
+      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(imgSrc(u, 800))}" alt="${esc(photoAlt(l, i))}" ${i ? 'loading="lazy" ' : ''}decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots${l.photos.length > 8 ? ' many' : ''}">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}` : ''}
       <span class="ydate">${shortDate(l.created_at)}</span>
       <div class="yprice">${money(l.price)}${priceSuffix(l) ? `<small>${esc(priceSuffix(l))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
@@ -237,11 +259,21 @@ document.addEventListener('click', e => { const b = e.target.closest('#dealTabs 
 document.addEventListener('click', e => {
   const d = e.target.closest('.ydots button'); if (!d) return;
   e.preventDefault(); e.stopPropagation();
-  const g = d.closest('.ph').querySelector('.ygal'); g.scrollTo({ left: g.clientWidth * Number(d.dataset.yd), behavior: 'smooth' });
+  const g = d.closest('.ph').querySelector('.ygal'); yLoad(g, Number(d.dataset.yd)); g.scrollTo({ left: g.clientWidth * Number(d.dataset.yd), behavior: 'smooth' });
+}, true);
+// photos after the first two load only when the visitor gets near them (no traffic for photos nobody looks at)
+function yLoad(g, i) { [i - 1, i, i + 1, i + 2].forEach(k => { const im = g.children[k]; if (im && im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } }); }
+// PC: round arrows on the photo (shown on hover) – same slider as the phone swipe
+document.addEventListener('click', e => {
+  const a = e.target.closest('.yarr'); if (!a) return;
+  e.preventDefault(); e.stopPropagation();
+  const g = a.closest('.ph').querySelector('.ygal'), n = g.children.length, w = Math.max(1, g.clientWidth);
+  const i = (Math.round(g.scrollLeft / w) + Number(a.dataset.yarr) + n) % n; yLoad(g, i);
+  g.scrollTo({ left: w * i, behavior: Math.abs(i - g.scrollLeft / w) > 1.5 ? 'auto' : 'smooth' });
 }, true);
 document.addEventListener('scroll', e => {
   const g = e.target; if (!g.classList || !g.classList.contains('ygal')) return;
-  const i = Math.round(g.scrollLeft / Math.max(1, g.clientWidth));
+  const i = Math.round(g.scrollLeft / Math.max(1, g.clientWidth)); yLoad(g, i);
   g.parentElement.querySelectorAll('.ydots button').forEach((b, k) => b.classList.toggle('on', k === i));
 }, true);
 document.addEventListener('click', e => {
@@ -260,7 +292,7 @@ function listingsMap(el, list) {
   const pts = [];
   list.filter(l => l.lat && l.lng).forEach(l => {
     const icon = L.divIcon({ className: '', html: `<span class="pin ${l.is_featured ? 'top' : ''}">${money(l.price)}</span>`, iconSize: [0, 0] });
-    L.marker([l.lat, l.lng], { icon }).addTo(m).bindPopup(`<div class="pop">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="${esc(photoAlt(l, 0))}">` : ''}<b>${money(l.price)}${priceSuffix(l)}</b><br><a href="${YH.listingPath(l)}">${esc(l.title)}</a></div>`);
+    L.marker([l.lat, l.lng], { icon }).addTo(m).bindPopup(`<div class="pop">${l.photos?.[0] ? `<img src="${esc(imgSrc(l.photos[0], 800))}" alt="${esc(photoAlt(l, 0))}">` : ''}<b>${money(l.price)}${priceSuffix(l)}</b><br><a href="${YH.listingPath(l)}">${esc(l.title)}</a></div>`);
     pts.push([l.lat, l.lng]);
   });
   if (pts.length > 1) m.fitBounds(pts, { padding: [40, 40], maxZoom: 15 });
@@ -612,6 +644,7 @@ async function viewPost(editId) {
     <label>${t('address')}<input name="address" maxlength="200" value="${esc(l.address || '')}"></label>
     <label>${t('pickMap')}<div class="pick-map" id="pmap"></div></label>
     <label>${t('photos')}<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple></label>
+    <p class="phint">${esc(t('photosHint'))} <b id="pcount"></b></p>
     <div class="prev" id="prev"></div>
     <div class="row"><label>${t('contactName')}<input name="contact_name" maxlength="80" value="${esc(l.contact_name || '')}"></label>
       <label>${t('phone')}<input name="contact_phone" maxlength="30" value="${esc(l.contact_phone || '')}" placeholder="+855 …"></label></div>
@@ -628,20 +661,29 @@ async function viewPost(editId) {
   let mk = pos ? L.marker(pos).addTo(m) : null;
   m.on('click', e => { pos = [e.latlng.lat, e.latlng.lng]; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); });
   setTimeout(() => m.invalidateSize(), 60);
-  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(p)}" alt=""><button type="button" data-rm="${i}">×</button></div>`).join(''); };
+  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(imgSrc(p, 800))}" alt=""><button type="button" data-rm="${i}">×</button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
   drawPrev();
   document.getElementById('prev').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) { photos.splice(+b.dataset.rm, 1); drawPrev(); } };
+  // UPLOADED PHOTOS ARE OPTIMIZED IN THE BROWSER (owner, 2026-11-25 – the Study portal's SWImageOpt rule: "ne legyen nagy
+  // vercel, github forgalom"): each photo is turned upright, resized and re-encoded as WebP (JPEG where WebP cannot be made),
+  // camera EXIF/location dropped, BEFORE it leaves the phone: a large copy (long edge 1600px, quality .8 → "…-L.webp") for the
+  // popup and a small copy (800px, .72 → "…-s.webp") for the cards. Only Supabase Storage holds photos – never the repo.
   document.getElementById('files').onchange = async e => {
-    const files = [...e.target.files].slice(0, 12 - photos.length);   // up to 12 photos (owner, 2026-11-24)
+    const files = [...e.target.files].slice(0, MAX_PHOTOS - photos.length);
+    if (e.target.files.length > files.length) toast(t('photosCount', { n: MAX_PHOTOS }));
+    const hint = document.getElementById('pcount'); if (hint && files.length) hint.textContent = t('photosWait');
     for (const f of files) {
-      if (f.size > 5 * 1024 * 1024) { toast('> 5 MB: ' + f.name); continue; }
-      const ext = (f.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg');
-      const path = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}.${ext}`;
-      const { error } = await sb.storage.from('yh-photos').upload(path, f, { contentType: f.type, cacheControl: '31536000' });
+      if (!/^image\/(jpeg|png|webp|heic|heif)$/.test(f.type) || f.size > 30 * 1024 * 1024) { toast(t('error') + f.name); continue; }
+      const big = await shrinkPhoto(f, 1600, .8), small = await shrinkPhoto(f, 800, .72);
+      if (!big || big.size > 2 * 1024 * 1024) { toast(t('error') + f.name); continue; }
+      const webp = big.type === 'image/webp', base = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+      const path = webp ? base + '-L.webp' : base + '.jpg';
+      const { error } = await sb.storage.from('yh-photos').upload(path, big, { contentType: big.type, cacheControl: '31536000' });
       if (error) { toast(t('error') + error.message); continue; }
+      if (webp && small && small.type === 'image/webp') await sb.storage.from('yh-photos').upload(base + '-s.webp', small, { contentType: 'image/webp', cacheControl: '31536000' });
       photos.push(sb.storage.from('yh-photos').getPublicUrl(path).data.publicUrl); drawPrev();
     }
-    e.target.value = '';
+    drawPrev(); e.target.value = '';
   };
   document.getElementById('pform').onsubmit = async e => {
     e.preventDefault(); const btn = document.getElementById('pbtn'); btn.disabled = true;
@@ -752,7 +794,7 @@ async function viewAccount() {
       ${bigCard('#/account?tab=settings', 'settings', t('settings'), vState === 'done' ? t('v_done') : vState === 'pending' ? t('v_pending') : t('settingsSub'))}
     </div>${statTiles()}`;
   } else if (tab === 'listings') {
-    body = mine.length ? mine.map(l => `<div class="mine"><a href="#/l/${l.id}" class="ph">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="">` : '<span class="noimg">🏠</span>'}</a>
+    body = mine.length ? mine.map(l => `<div class="mine"><a href="#/l/${l.id}" class="ph">${l.photos?.[0] ? `<img src="${esc(imgSrc(l.photos[0], 800))}" alt="">` : '<span class="noimg">🏠</span>'}</a>
       <div style="min-width:0"><div class="ct">${esc(l.title)}</div><div style="color:var(--red);font-weight:600">${money(l.price)}${priceSuffix(l)}</div>
       <div class="loc" style="margin:2px 0 0">👁 ${views.filter(e => e.listing_id === l.id).length} · 📞 ${contacts.filter(e => e.listing_id === l.id).length} · ✉️ ${inq.filter(i => i.listing_id === l.id).length} · ${shortDate(l.created_at)}</div></div>
       <div class="mine-act"><select data-status="${l.id}" ${l.status === 'rejected' ? 'disabled' : ''}>${['active', 'hidden', l.deal_type === 'sale' ? 'sold' : 'rented', ...(l.status === 'rejected' ? ['rejected'] : [])].map(s => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${t('s_' + s)}</option>`).join('')}</select>

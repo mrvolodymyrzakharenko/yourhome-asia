@@ -39,7 +39,13 @@ body.adm-mode .adm{padding-bottom:40px}
 .aico{width:34px;height:34px;border-radius:50%;border:0;background:#fff;color:var(--ab);display:inline-grid;place-items:center;box-shadow:0 6px 18px rgba(15,23,42,.10),0 1px 4px rgba(15,23,42,.06);text-decoration:none;flex:none}
 .aico:hover{color:var(--red)}
 .aico.on{background:var(--red);color:#fff}
-.aico.spin svg{animation:aspin .8s linear infinite}
+.atb{border:0;height:34px;padding:0 13px;border-radius:999px;background:#fff;color:var(--ab);display:inline-flex;align-items:center;gap:6px;font:inherit;font-size:13px;font-weight:500;letter-spacing:-.025em;text-decoration:none;box-shadow:0 6px 18px rgba(15,23,42,.10),0 1px 4px rgba(15,23,42,.06);white-space:nowrap;cursor:pointer}
+.atb svg{width:16px;height:16px}
+.atb:hover{color:var(--red)}
+.atb-out{color:var(--red)}
+.atb.on{background:var(--red);color:#fff}
+.alca .atb{padding:0 10px}
+.aico.spin svg,.atb.spin svg{animation:aspin .8s linear infinite}
 @keyframes aspin{to{transform:rotate(360deg)}}
 
 /* section cards – the way to move around */
@@ -216,7 +222,7 @@ a.arow:hover b{color:var(--ab)}
 .alcs{display:flex;gap:14px;margin-top:6px;font-size:12px;color:var(--muted)}
 .alcs span{display:inline-flex;align-items:center;gap:4px}
 .alcs svg{width:14px;height:14px;color:var(--ab)}
-.alca{display:flex;gap:8px;align-items:center;padding:8px 14px 14px;margin-top:auto}
+.alca{display:flex;gap:8px;align-items:center;flex-wrap:wrap;padding:8px 14px 14px;margin-top:auto}
 .alca select{flex:1}
 .awarn{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;background:#fff7e0;border-radius:14px;padding:10px 14px;font-size:13px;margin-bottom:12px}
 .awarn .btn{display:inline-flex;align-items:center;gap:6px}
@@ -262,14 +268,17 @@ a.arow:hover b{color:var(--ab)}
   .agrid3{grid-template-columns:1fr}
   .apanel{padding:14px;border-radius:18px}
   .atop{gap:10px}
-  .atr{width:100%;justify-content:space-between}
-  .aper{flex:1}
+  .atr{width:100%;flex-wrap:wrap;justify-content:space-between}
+  .aper{flex:1 1 100%}
+  .atb{flex:1;justify-content:center;padding:0 8px}
   .aper button{flex:1;padding:6px 4px}
   .alcards{grid-template-columns:1fr}
   .alc{display:grid;grid-template-columns:104px 1fr;grid-template-rows:auto auto}
   .alcp{grid-row:1 / span 2;height:auto;min-height:118px}
   .alcb{padding:10px 12px 2px}
   .alca{padding:6px 12px 10px}
+  .alca select{flex:1 1 100%}
+  .alca .atb,.alca .btn{flex:1;justify-content:center}
   .atop1,.ademo{top:8px;left:8px;right:auto;font-size:10px;padding:2px 7px}
   .ademo{top:auto;bottom:8px}
   .arow .aaca{max-width:50%}

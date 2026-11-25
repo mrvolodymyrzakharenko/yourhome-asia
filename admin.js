@@ -52,7 +52,7 @@ const since = days => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(
 
 function css() {
   if (document.getElementById('admcss')) return;
-  const l = document.createElement('link'); l.id = 'admcss'; l.rel = 'stylesheet'; l.href = '/admin.css?v=2'; document.head.appendChild(l);
+  const l = document.createElement('link'); l.id = 'admcss'; l.rel = 'stylesheet'; l.href = '/admin.css?v=3'; document.head.appendChild(l);
 }
 
 // ---------- contact helpers: one-tap answer buttons from whatever the visitor typed ----------
@@ -197,8 +197,9 @@ function draw(keepScroll) {
     <div class="atop">
       <div class="atl"><span class="alogo">${I.agents}</span><div><b>YourHome Admin</b><small>Updated ${d.at.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · <span class="alive"><i></i>${fmt(v.now || 0)} online now</span></small></div></div>
       <div class="atr"><div class="aper">${PERIODS.map(([n, l]) => `<button data-days="${n}" class="${S.days === n ? 'on' : ''}">${l}</button>`).join('')}</div>
-        <button class="aico" id="aRef" title="Refresh" aria-label="Refresh">${I.refresh}</button>
-        <a class="aico" href="#/" title="Back to site" aria-label="Back to site">${I.back}</a></div>
+        <button class="atb" id="aRef">${I.refresh}<span>Refresh</span></button>
+        <a class="atb" href="#/">${I.back}<span>Back to site</span></a>
+        <button class="atb atb-out" id="aOut">${SV('<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 16l-4-4 4-4M6 12h10"/>')}<span>Sign out</span></button></div>
     </div>
     <nav class="acards" aria-label="Admin sections">${SECTIONS.map(([k, l]) => `<button data-sec="${k}" class="acard${S.sec === k ? ' on' : ''}"><span class="aci">${I[k]}</span><b>${l}</b><small>${sub[k]}</small>${badge[k] ? `<em class="abadge">${badge[k]}</em>` : ''}</button>`).join('')}</nav>
     <div id="asec" class="asec">${SEC[S.sec]()}</div></div>`;
@@ -212,6 +213,7 @@ function bind() {
   root.querySelectorAll('[data-go]').forEach(b => b.onclick = () => { const [s, f] = b.dataset.go.split(':'); S.sec = s; if (f) { if (s === 'inbox') S.inbox.f = f; if (s === 'listings') S.lst.f = f; if (s === 'accounts') S.acc.f = f; } draw(); $('asec')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   root.querySelectorAll('[data-days]').forEach(b => b.onclick = async () => { S.days = +b.dataset.days; b.parentNode.querySelectorAll('button').forEach(x => x.classList.toggle('on', x === b)); await load(); draw(true); });
   $('aRef').onclick = async () => { $('aRef').classList.add('spin'); await load(); draw(true); C.toast('Updated'); };
+  $('aOut').onclick = async () => { await C.sb.auth.signOut(); C.toast('Signed out'); gate(); };
   (BIND[S.sec] || (() => {}))(root);
 }
 
@@ -373,8 +375,8 @@ SEC.listings = () => {
           <small class="amut">${esc(o?.email || l.contact_name || 'Owner')} · ${when(l.created_at)}</small>
           <div class="alcs"><span title="Views ${PERIODS.find(p => p[0] === S.days)[1]}">${I.visitors}${cnt(l.id, 'view')}</span><span title="Contact clicks">${I.phone}${cnt(l.id, 'c')}</span><span title="Messages">${I.msg}${inq(l.id)}</span><span title="Saved">${I.star}${cnt(l.id, 'save')}</span></div></div>
         <div class="alca"><select data-lst="${l.id}" aria-label="Status">${['active', 'hidden', 'rented', 'sold', 'rejected'].map(s => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${({ active: 'Live', hidden: 'Hidden', rented: 'Rented', sold: 'Sold', rejected: 'Rejected' })[s]}</option>`).join('')}</select>
-          <button class="aico${l.is_featured ? ' on' : ''}" data-top="${l.id}" title="${l.is_featured ? 'Remove TOP' : 'Make TOP'}">${I.top}</button>
-          <button class="aico" data-ldel="${l.id}" title="Delete">${I.trash}</button></div></div>`; }).join('') : empty('No listings here')}</div>`)}`;
+          <button class="atb${l.is_featured ? ' on' : ''}" data-top="${l.id}">${I.top}<span>${l.is_featured ? 'TOP on' : 'Make TOP'}</span></button>
+          <button class="atb atb-out" data-ldel="${l.id}">${I.trash}<span>Delete</span></button></div></div>`; }).join('') : empty('No listings here')}</div>`)}`;
 };
 BIND.listings = root => {
   const st = S.lst;
@@ -391,7 +393,7 @@ BIND.listings = root => {
 function accRow(u) {
   const role = u.role === 'advertiser' ? (u.adv_kind === 'agent' ? 'Agent' : u.adv_kind === 'agency' ? 'Agency' : 'Owner / landlord') : u.role === 'seeker' ? 'Tenant / buyer' : 'Not chosen yet';
   return `<div class="arow acc"><span class="aav">${esc((u.name || u.email || '?').trim()[0]?.toUpperCase() || '?')}</span><div><b>${esc(u.name || u.email)}${u.verified ? ' <i class="aver">✓ Verified</i>' : ''}</b><small>${esc(role)} · ${esc(u.provider)} · joined ${when(u.created_at)}${u.listings ? ' · ' + u.listings + ' listing' + (u.listings > 1 ? 's' : '') : ''}</small></div>
-    <div class="aaca">${u.email && !/@telegram\./.test(u.email) ? `<a class="aico" href="mailto:${esc(u.email)}" title="Email">${I.mail}</a>` : ''}${u.tg ? `<a class="aico" href="https://t.me/${esc(String(u.tg).replace(/^@/, ''))}" target="_blank" rel="noopener" title="Telegram">${I.telegram}</a>` : ''}</div></div>`;
+    <div class="aaca">${u.email && !/@telegram\./.test(u.email) ? `<a class="atb" href="mailto:${esc(u.email)}">${I.mail}<span>Email</span></a>` : ''}${u.tg ? `<a class="atb" href="https://t.me/${esc(String(u.tg).replace(/^@/, ''))}" target="_blank" rel="noopener">${I.telegram}<span>Telegram</span></a>` : ''}</div></div>`;
 }
 SEC.accounts = () => {
   const us = S.data.users, st = S.acc, q = st.q.trim().toLowerCase();
@@ -427,7 +429,7 @@ SEC.agents = () => {
     </div>
     ${panel(`Verification requests – waiting (${pend.length})`, pend.length ? `<div class="alist">${pend.map(vrow).join('')}</div>` : `<div class="aok">${I.check} No request is waiting.</div>`)}
     ${panel('Agent & agency profiles', d.agents.length ? `<div class="alist">${d.agents.map(a => `<div class="arow"><span class="aav">${a.photo && /^https:/.test(a.photo) ? `<img src="${esc(a.photo)}" alt="">` : esc((a.name || '?')[0])}</span><div><b>${esc(a.name)}${a.verified_at ? ' <i class="aver">✓ Verified</i>' : ''}</b><small>${esc(a.kind || '')}${a.company ? ' · ' + esc(a.company) : ''} · ${d.listings.filter(l => l.agent_id === a.id).length} listings · ${when(a.created_at)}</small></div>
-      <div class="aaca"><a class="aico" href="#/agent/${esc(a.slug)}" title="Open profile">${I.open}</a><button class="btn ${a.verified_at ? 'ghost' : 'blue'} sm" data-agv="${a.id}" data-on="${a.verified_at ? 1 : 0}">${a.verified_at ? 'Remove ✓' : '✓ Verify'}</button></div></div>`).join('')}</div>` : empty('No agent profiles yet'))}
+      <div class="aaca"><a class="atb" href="#/agent/${esc(a.slug)}">${I.open}<span>Open profile</span></a><button class="btn ${a.verified_at ? 'ghost' : 'blue'} sm" data-agv="${a.id}" data-on="${a.verified_at ? 1 : 0}">${a.verified_at ? 'Remove ✓' : '✓ Verify'}</button></div></div>`).join('')}</div>` : empty('No agent profiles yet'))}
     ${done.length ? panel('Decided requests', `<div class="alist">${done.slice(0, 30).map(vrow).join('')}</div>`) : ''}`;
 };
 BIND.agents = root => {
@@ -453,7 +455,7 @@ SEC.partners = () => {
     </div>
     ${panel('New projects', d.projects.length ? `<div class="alcards">${d.projects.map(p => `<div class="alc"><a class="alcp" href="#/project/${esc(p.slug)}">${thumb(p)}${p.is_featured ? '<i class="atop1">TOP</i>' : ''}${p.is_demo ? '<i class="ademo">DEMO</i>' : ''}</a>
       <div class="alcb"><b>${esc(p.name)}</b><small>${esc(p.developer || '')} · ${esc(p.district || '')}${p.price_from ? ' · from ' + C.money(p.price_from) : ''}</small><small class="amut">${esc(p.stage || '')} · ${d.leads.filter(l => l.project_id === p.id).length} questions</small></div>
-      <div class="alca"><button class="btn ${p.active ? 'ghost' : 'blue'} sm" data-pact="${p.id}" data-on="${p.active ? 1 : 0}">${p.active ? 'Hide' : 'Show'}</button><button class="aico${p.is_featured ? ' on' : ''}" data-ptop="${p.id}" data-on="${p.is_featured ? 1 : 0}" title="TOP">${I.top}</button></div></div>`).join('')}</div>` : empty('No projects yet'))}`;
+      <div class="alca"><button class="btn ${p.active ? 'ghost' : 'blue'} sm" data-pact="${p.id}" data-on="${p.active ? 1 : 0}">${p.active ? 'Hide' : 'Show'}</button><button class="atb${p.is_featured ? ' on' : ''}" data-ptop="${p.id}" data-on="${p.is_featured ? 1 : 0}">${I.top}<span>${p.is_featured ? 'TOP on' : 'Make TOP'}</span></button></div></div>`).join('')}</div>` : empty('No projects yet'))}`;
 };
 BIND.partners = root => {
   root.querySelectorAll('[data-msg]').forEach(b => b.onclick = () => { S.sec = 'inbox'; S.inbox.open = b.dataset.msg; draw(); });

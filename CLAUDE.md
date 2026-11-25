@@ -285,6 +285,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   menu (body.adm-mode, set in route()), never shows the account-type popup (rolePopup skips /admin), and has its OWN sign-in card
   (gate() in admin.js: "Sign in with Google" → back to /admin, Google account chooser) and its own "not the admin account" card with
   "Switch to the admin Google account". Admin = mr.volodymyrzakharenko@gmail.com (yh_admins), signed in with Google.
+- OWNER'S OWN ACCOUNTS NEVER COUNT (owner, 2026-11-25: "az én accountjaimat ne mutasd… ne legyen statisztika sem, semmi"):
+  euroworkcenter@gmail.com + mr.volodymyrzakharenko@gmail.com are in table yh_admin_hidden – left out of Accounts
+  (yh_admin_users) and every account number; signing in with one marks that device (app.js markOwnDevice → RPC yh_me_hidden →
+  localStorage yh_noct), so its page views AND listing views/clicks (track()) are never recorded. A new own account → yh_admin_hidden.
+- EVERY ADMIN BUTTON HAS ITS WORD (owner, 2026-11-25: "írd ki a gombokra hogy mi mi… refresh is kiírva"): Refresh · Back to site ·
+  Sign out in the top bar, Make TOP / TOP on · Delete on listings, Email · Telegram · Open profile – icon + word (.atb), never an icon alone.
 - Moving around = 8 big SECTION CARDS on top (PC one row of 8, tablet 4, phones 2 per row; picked card royal blue; red badge =
   waiting): Overview · Inbox · Visitors · Listings · Accounts · Verification · Partners · Telegram. Top bar: period Today / 7 / 30
   / 90 days, refresh, back to site, "N online now". Auto refresh every 60 s (not while typing).

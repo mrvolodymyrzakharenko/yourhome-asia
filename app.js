@@ -120,6 +120,7 @@ function pageView() {
 })();
 function track(l, kind) {
   if (!l || l.status !== 'active' || (user && l.owner_id === user.id)) return;
+  try { if (localStorage.getItem('yh_noct')) return; } catch {}   // the owner's own devices never count
   if (kind === 'view') { const k = 'yh_v_' + l.id; try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch {} }
   sb.from('yh_events').insert({ listing_id: l.id, kind, visitor: visitorId(), source: trafficSource(), device: device(), lang }).then(() => {});
 }
@@ -1238,7 +1239,7 @@ AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LIS
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
 // ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
 let ADMP = null;
-const adminMod = () => ADMP || (ADMP = import('./admin.js?v=3').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
+const adminMod = () => ADMP || (ADMP = import('./admin.js?v=4').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });
@@ -1265,6 +1266,10 @@ sb.auth.onAuthStateChange((ev, s) => {
     setTimeout(() => rolePopup(false), 400);
   }
 });
+// The owner's own accounts (yh_admin_hidden) never count in any statistics: signing in with one marks this device (yh_noct)
+const markOwnDevice = () => user && sb.rpc('yh_me_hidden').then(({ data }) => { if (data) try { localStorage.setItem('yh_noct', '1'); } catch {} });
+markOwnDevice();
+sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN') setTimeout(markOwnDevice, 0); });
 if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
 const next0 = user && store.get('yh_next', null);
 if (next0 && location.pathname === '/') { store.set('yh_next', null); go('#/' + next0); } else route();

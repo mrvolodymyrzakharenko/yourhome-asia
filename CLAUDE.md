@@ -267,6 +267,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - LOADING = SKELETON CARDS (owner, 2026-11-25: "betöltésnél ilyen megjelenés van, szerintem ez hiba"): never the big white
   "Loading…" box for listing lists – skelRow() / window.yhSkel in app.js (pale shimmering cards in the real cards' place, 4 on
   PC, 1 on phones; styles.css "LOADING = SKELETON CARDS").
+- The hidden server HTML (div.ssr) is never faded in by fade.js and is visibility:hidden (owner, 2026-11-25: "még mindig valami
+  szöveg bevillan") – the visitor sees nothing until the app draws the page.
 - The first load keeps the server's <title> (route() only sets document.title on later navigations).
 - Photo alt text never empty: photoAlt() in app.js ("Apartment for rent in BKK1, Phnom Penh – photo 2").
 

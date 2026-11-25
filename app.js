@@ -809,7 +809,7 @@ async function viewPost(editId) {
 // user_metadata.role; the Looking · Advertising switch on top of the dashboard changes it any time.
 const ROLE_I = { seeker: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>', advertiser: '<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/><path d="M12 11v5M9.5 13.5h5"/>', agent: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>' };
 ROLE_I.owner = ROLE_I.advertiser;
-const roleSwitch = role => `<div class="deal-tabs role-sw">${['seeker', 'advertiser'].map(r => `<button type="button" data-as="${r}" class="${r === role ? 'on' : ''}">${t('r_' + r + 'Short')}</button>`).join('')}</div>`;
+const roleSwitch = role => `<div class="deal-tabs role-sw">${['seeker', 'advertiser'].map(r => `<button type="button" data-as="${r}" class="${r === role ? 'on' : ''}"><svg class="rsi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ROLE_I[r]}</svg>${t('r_' + r + 'Short').replace(/^[^\p{L}]+/u, '')}</button>`).join('')}</div>`;   // drawn icon, never the emoji (2026-11-25)
 function bindRoleSwitch() { app.querySelectorAll('[data-as]').forEach(b => b.onclick = () => go('#/account?as=' + b.dataset.as)); }
 // Terms must be accepted once (owner, 2026-11-25: "el kell fogadni a terms and conditions is") – stored with its version
 const TERMS_V = '2026-11-25';
@@ -1079,55 +1079,79 @@ function breakdown(title, list, keyFn) {
 }
 
 // SEEKER DASHBOARD: search, saved homes, new-listing alerts (yh_alerts kind new_listings), my details, become an advertiser
+// SEEKER DASHBOARD = THE ADVERTISER / ADMIN LOOK (owner, 2026-11-25: screenshot of the old tile page + "javítsd"): admin.css,
+// top bar (hello + "Looking for a home", Back to site · Sign out), the Looking / Advertising switch, big SECTION CARDS
+// (Overview · Find a home · Saved · New listing alerts · Map · Settings · I want to advertise) and the section under them.
+// Overview = "What needs you now" + number tiles + newest listings. Data: saved homes (this browser), yh_alerts new_listings.
 async function viewSeeker() {
   const tab = qs().get('tab') || 'overview', md = user.user_metadata || {};
-  app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px">${t('loading')}</div></div>`;
-  const { data: subs = [] } = await sb.from('yh_alerts').select('*').eq('user_id', user.id).eq('kind', 'new_listings').order('created_at', { ascending: false });
-  const sv = saved();
-  const I = { search: ROLE_I.seeker, saved: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>', bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>', map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/>', adv: ROLE_I.advertiser, settings: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>' };
-  const tileS = (href, icon, title, sub, red) => `<a href="${href}" class="dtile${red ? ' dt-red' : ''}"><span class="dti"><svg viewBox="0 0 24 24" aria-hidden="true">${I[icon]}</svg></span><b>${title}</b><small>${sub}</small></a>`;
-  const tabs = ['overview', 'saved', 'alerts', 'settings'];
-  const label = { overview: t('overview'), saved: t('saved'), alerts: t('sk_alerts'), settings: t('settings') };
+  app.innerHTML = `<div class="wrap">${window.yhSkel ? window.yhSkel() : ''}</div>`;
+  if (!document.getElementById('admcss')) { const lk = document.createElement('link'); lk.id = 'admcss'; lk.rel = 'stylesheet'; lk.href = '/admin.css?v=2'; document.head.appendChild(lk); }
+  const since7 = new Date(Date.now() - 7 * 864e5).toISOString();
+  const [{ data: subs0 }, { count: newWeek }] = await Promise.all([
+    sb.from('yh_alerts').select('*').eq('user_id', user.id).eq('kind', 'new_listings').order('created_at', { ascending: false }),
+    sb.from('yh_listings').select('id', { count: 'exact', head: true }).eq('status', 'active').eq('country', 'KH').gte('created_at', since7),
+  ]);
+  const subs = subs0 || [], sv = saved();
+  const SV = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const DI = { overview: SV('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
+    find: SV(ROLE_I.seeker), saved: SV('<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>'), alerts: SV('<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>'),
+    map: SV('<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/>'), settings: SV('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>'),
+    adv: SV(ROLE_I.advertiser), telegram: SV('<path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/><path d="m9 13 8-6"/>'), check: SV('<path d="m5 12 5 5 9-10"/>'),
+    back: SV('<path d="M19 12H5M11 6l-6 6 6 6"/>'), out: SV('<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/>'), shield: SV('<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/>'), home: SV('<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>') };
+  const SECS = ['overview', 'find', 'saved', 'alerts', 'map', 'settings', 'adv'];
+  const href = { overview: '#/account', find: '#/search', saved: '#/account?tab=saved', alerts: '#/account?tab=alerts', map: '#/search?view=map', settings: '#/account?tab=settings', adv: '#/account?as=advertiser' };
+  const secName = { overview: t('overview'), find: t('sk_find'), saved: t('saved'), alerts: t('sk_alerts'), map: t('mapNav'), settings: t('settings'), adv: t('sk_becomeAdv') };
+  const secSub = { overview: `${newWeek || 0} ${t('sk_newShort')}`, find: t('sk_findSub'), saved: String(sv.length), alerts: subs.length ? `${subs.length} · ${t('dx_on')}` : t('dx_off'), map: t('sk_mapSub'), settings: t('sk_setSub'), adv: t('sk_becomeAdvSub') };
+  const panel = (title, inner, extra = '') => `<section class="apanel"><div class="aph"><h3>${title}</h3>${extra}</div>${inner}</section>`;
+  const emptyB = x => `<div class="aempty">${x}</div>`;
+  const kpi = (n, label, sub, col, go) => `<a href="${go}" class="akpi k-${col}"><b>${n}</b><span>${label}</span>${sub ? `<small>${sub}</small>` : ''}</a>`;
+  const alertWhat = a => { const f = a.filters || {}; return [f.deal ? t(f.deal === 'sale' ? 'buy' : f.deal) : '', f.city && f.city !== 'Phnom Penh' ? f.city : '', f.type ? t('t_' + f.type) : '', f.q || '', f.max ? '≤ ' + money(f.max) : ''].filter(Boolean).join(' · ') || t('all'); };
+  const botBtn = `<a class="adb ad-tg" href="https://t.me/${TG_BOT}?start=alerts" target="_blank" rel="noopener">${DI.telegram}${esc(t('tgOpenBot'))}</a>`;
   let body = '';
   if (tab === 'overview') {
-    body = `<div class="dtiles">
-      ${tileS('#/search', 'search', t('sk_find'), t('sk_findSub'), true)}
-      ${tileS('#/account?tab=saved', 'saved', t('saved'), String(sv.length))}
-      ${tileS('#/account?tab=alerts', 'bell', t('sk_alerts'), subs.length ? String(subs.length) : t('sk_alertsSub'))}
-      ${tileS('#/search?view=map', 'map', t('mapNav'), t('sk_mapSub'))}
-      ${tileS('#/account?tab=settings', 'settings', t('settings'), t('sk_setSub'))}
-      ${tileS('#/account?as=advertiser', 'adv', t('sk_becomeAdv'), t('sk_becomeAdvSub'))}
-    </div>`;
+    const need = [
+      !subs.length && [t('newListingsAlert'), t('sk_alertsSub'), '#/account?tab=alerts', 'red', DI.alerts],
+      subs.length && [t('sk_tgConnect'), t('sk_tgConnectSub'), 'https://t.me/' + TG_BOT + '?start=alerts', 'blue', DI.telegram],
+      !sv.length && [t('sk_noSavedT'), t('sk_noSavedS'), '#/search', 'blue', DI.saved],
+    ].filter(Boolean);
+    body = `${panel(t('dx_need'), need.length ? `<div class="aneed">${need.map(([tt, ss, go, col, ic]) => `<a class="aneedi n-${col}" href="${go}"${/^https:/.test(go) ? ' target="_blank" rel="noopener"' : ''}><span>${ic}</span><div><b>${esc(tt)}</b><small>${esc(ss)}</small></div><em>›</em></a>`).join('')}</div>` : `<div class="aok">${DI.check}<b>${t('dx_allGood')}</b></div>`)}
+      <div class="akpis">
+        ${kpi(newWeek || 0, t('sk_newWeek'), t('last7'), 'blue', '#/search')}
+        ${kpi(sv.length, t('saved'), t('sk_savedSub'), 'red', '#/account?tab=saved')}
+        ${kpi(subs.length, t('sk_alerts'), subs.length ? t('dx_on') : t('dx_off'), 'blue', '#/account?tab=alerts')}
+        ${kpi('+', t('sk_becomeAdv'), t('sk_becomeAdvSub'), 'red', '#/account?as=advertiser')}
+      </div>
+      ${panel(t('sk_newest'), '<div id="skNew"></div>', `<a class="alink" href="#/search">${t('sk_find')} ›</a>`)}`;
   } else if (tab === 'saved') {
-    body = '<div id="skSaved"></div>';
+    body = panel(t('saved'), '<div id="skSaved"></div>', `<a class="alink" href="#/search">${t('sk_find')} ›</a>`);
   } else if (tab === 'alerts') {
-    body = `<div class="panel"><h3>${t('sk_alerts')}</h3><p style="margin:0 0 10px;color:var(--muted)">${t('sk_alertsSub')}</p>
-      ${subs.length ? subs.map(a => { const f = a.filters || {}; const what = [f.deal ? t(f.deal === 'sale' ? 'buy' : f.deal) : '', f.type ? t('t_' + f.type) : '', f.q || '', f.max ? '≤ ' + money(f.max) : ''].filter(Boolean).join(' · ') || t('all');
-        return `<div class="inq" style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><b>${esc(what)}</b><div style="color:var(--muted);font-size:12px">${esc(a.telegram)} · ${shortDate(a.created_at)}</div></div><button class="btn ghost sm" data-delalert="${a.id}">${t('del')}</button></div>`; }).join('')
-        : `<div class="empty" style="padding:18px 0">${t('sk_noAlerts')}</div>`}
-      <button class="btn blue" id="skNewAlert" style="margin-top:10px">+ ${t('newListingsAlert')}</button></div>`;
+    body = panel(t('sk_alerts'), `<p class="asub">${t('sk_alertsSub')}</p>
+      ${subs.length ? `<div class="alist">${subs.map(a => `<div class="arow"><span class="ath"><span class="anoimg">${DI.alerts}</span></span><div><b>${esc(alertWhat(a))}</b><small>${esc(a.telegram || '')} · ${shortDate(a.created_at)}</small></div><button class="atb" data-delalert="${a.id}">${esc(t('del'))}</button></div>`).join('')}</div>` : emptyB(t('sk_noAlerts'))}
+      <div class="adbs" style="margin-top:12px"><button class="adb ad-call" id="skNewAlert">${DI.alerts}${esc(t('newListingsAlert'))}</button>${botBtn}</div>
+      <p class="asub" style="margin-top:10px">${t('sk_tgConnectSub')}</p>`);
   } else if (tab === 'settings') {
-    body = `<form class="panel form" id="sksetform" style="max-width:560px"><h3>${t('s_account')}</h3>
+    body = panel(t('s_account'), `<form class="form" id="sksetform" style="max-width:560px">
       <label>${t('s_name')}<input name="name" maxlength="80" value="${esc(md.full_name || '')}"></label>
       <label>${t('s_email')}<input value="${esc(shownEmail(user))}" disabled></label>
-      <button class="btn blue">${t('s_save')}</button>
-      <button type="button" class="btn ghost sm" id="logout2" style="justify-self:start">${t('s_signout')}</button></form>`;
+      <button class="btn blue">${t('s_save')}</button></form>`);
   }
-  app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(md.full_name || shownEmail(user))}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+  app.innerHTML = `<div class="wrap adm dx">
+    <div class="atop"><div class="atl"><span class="alogo">${DI.home}</span><div><b>${t('hello')}, ${esc(md.full_name || shownEmail(user))}</b><small>${t('dash')} · ${esc(t('sk_role'))}</small></div></div>
+      <div class="atr dx-btns">${await adminCheck() ? `<a class="dxb" href="#/admin">${DI.shield}<span>Admin</span></a>` : ''}<a class="dxb" href="#/">${DI.back}<span>${esc(t('backSite').replace(/^←\s*/, ''))}</span></a><button class="dxb dxb-out" id="logout">${DI.out}<span>${esc(t('logout'))}</span></button></div></div>
     ${roleSwitch('seeker')}
-    <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${label[x]}</button>`).join('')}</div>
-    <div>${body}</div></div>`;
+    <nav class="acards" aria-label="${esc(t('dash'))}">${SECS.map(k => `<a href="${href[k]}" class="acard${tab === k ? ' on' : ''}${k === 'adv' ? ' dx-post' : ''}"><span class="aci">${DI[k]}</span><b>${secName[k]}</b><small>${esc(secSub[k])}</small>${k === 'saved' && sv.length ? `<em class="abadge">${sv.length}</em>` : ''}</a>`).join('')}</nav>
+    <div id="asec" class="asec">${body}</div></div>`;
   bindRoleSwitch();
-  app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
-  const out = async () => { await sb.auth.signOut(); go('#/'); };
-  document.getElementById('logout').onclick = out;
-  const lo2 = document.getElementById('logout2'); if (lo2) lo2.onclick = out;
+  document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };
   const box = document.getElementById('skSaved');
   if (box) {
-    if (!sv.length) box.innerHTML = `<div class="empty">${t('savedEmpty')}</div>`;
-    else { const list = await fetchListings({ ids: sv.slice(0, 100) }); box.innerHTML = list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="empty">${t('savedEmpty')}</div>`; }
+    if (!sv.length) box.innerHTML = emptyB(t('savedEmpty'));
+    else { const list = await fetchListings({ ids: sv.slice(0, 100) }); box.innerHTML = list.length ? `<div class="grid">${list.map(card).join('')}</div>` : emptyB(t('savedEmpty')); }
   }
+  const nb = document.getElementById('skNew');
+  if (nb) { const list = (await fetchListings({})).slice(0, 4); nb.innerHTML = list.length ? `<div class="row4">${list.map(card).join('')}</div>` : emptyB(t('noResults') || '—'); }
+  if (typeof fitCards === 'function') try { fitCards(); } catch {}
   const na = document.getElementById('skNewAlert'); if (na) na.onclick = () => alertModal({});
   app.querySelectorAll('[data-delalert]').forEach(b => b.onclick = async () => { const { error } = await sb.from('yh_alerts').delete().eq('id', b.dataset.delalert); if (error) return toast(t('error') + error.message); route(); });
   const sf = document.getElementById('sksetform');

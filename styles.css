@@ -1118,3 +1118,10 @@ body.rpop-open{overflow:hidden}
 @media (max-width:720px){.dx .dxb{white-space:nowrap;gap:5px;padding:10px 6px}.dx .dxb svg{width:15px;height:15px}}
 @media (max-width:379px){.dx .dxb{font-size:12px;gap:4px;padding:10px 4px}.dx .dxb svg{width:14px;height:14px}}
 @media (max-width:379px){.role-sw button{padding:12px 4px!important;font-size:12px!important;white-space:nowrap}}
+/* SEEKER DASHBOARD in the advertiser/admin look (2026-11-25) + drawn icons in the Looking / Advertising switch */
+.dx .adbs{display:flex;flex-wrap:wrap;gap:8px}
+.dx button.adb{border:0;font-family:inherit;cursor:pointer}
+.dx .asub{margin:0 0 10px;color:var(--muted);font-size:13px}
+.dx .arow .atb{margin-left:auto}
+.role-sw button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
+.role-sw .rsi{width:16px;height:16px;flex:none}

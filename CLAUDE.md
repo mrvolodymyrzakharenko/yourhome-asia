@@ -275,6 +275,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Stored as user_metadata.role (seeker | advertiser) + adv_kind (owner | agent). The "🔍 Looking for a home · 🏠 Advertising"
   switch on top of every dashboard changes the role any time (#/account?as=seeker|advertiser). SEEKER dashboard (viewSeeker):
   Find a home · Saved · New listing alerts (yh_alerts new_listings – list, add, delete) · Map · Settings · I want to advertise.
+  SEEKER LOOK = ADVERTISER / ADMIN LOOK (owner, 2026-11-25 "javítsd" on the old tile page): viewSeeker draws .wrap.adm.dx – top bar
+  (hello + "Looking for a home", Back to site · Sign out), switch, 7 section cards (Overview · Find a home · Saved · New listing alerts ·
+  Map · Settings · I want to advertise), Overview = What needs you now (first alert / connect @yourhomeasiabot / save homes) + 4 number
+  tiles + Newest listings (4 cards). The Looking / Advertising switch shows drawn icons, never emoji. Texts sk_* in i18n.js.
   ADVERTISER dashboard = the full one; for an agent/agency without a profile the first (red) tile is "Create your agent or
   agency page" and choosing Agent opens the agent profile tab.
   POPUP (owner, 2026-11-25 11:03: "legyen az az ablak, amit már beillesztettem… bérel vagy kiad… a landlord mellé agency vagy

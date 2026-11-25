@@ -40,6 +40,137 @@ function caption(l) {
   return { text: lines.join('\n').slice(0, 1000), url };
 }
 
+// ---------- PERSONAL TELEGRAM ALERTS (yh_alerts) ----------
+// new_listings: every new live non-demo listing (last 2 days, posted after the alert was saved) that matches the alert's
+// saved search is sent once (yh_alert_sends) to the person's chat. my_messages: every new message (yh_inquiries) about a
+// listing of the alert's owner. The chat = yh_tg_chats row whose username equals the typed @handle (they pressed Start in
+// @yourhomeasiabot), else the Telegram id of an account that signed in with Telegram. No chat yet = waits (nothing is lost
+// for 2 days). Max MAX_ALERTS messages per run.
+const MAX_ALERTS = 60;
+const LEASE = ['day', 'month', '6m', '1y'];
+function matches(l, f) {
+  f = f || {};
+  if (f.deal === 'daily') { if (!(l.deal_type === 'rent' && l.price_period === 'day')) return false; }
+  else if (f.deal && l.deal_type !== f.deal) return false;
+  if (f.city && l.city !== f.city) return false;
+  if (f.type === 'studio') { if (l.bedrooms !== 0) return false; } else if (f.type && l.property_type !== f.type) return false;
+  if (f.max && !(Number(l.price) <= Number(f.max))) return false;
+  if (f.beds) { if (f.beds === '0' ? l.bedrooms !== 0 : !(l.bedrooms >= Number(f.beds))) return false; }
+  if (f.furn && !l.furnished) return false;
+  const amen = String(f.amen || '').split(',').filter(Boolean);
+  if (amen.length && !amen.every(a => (l.amenities || []).includes(a))) return false;
+  if ((f.by === 'owner' || f.by === 'agent') && l.posted_by !== f.by) return false;
+  if (f.foreign && !l.foreigner_ok) return false;
+  if (f.baths && !(l.bathrooms >= Number(f.baths))) return false;
+  if (f.area && !(Number(l.area_m2) >= Number(f.area))) return false;
+  if (f.photos && !(l.photos || []).length) return false;
+  if (['hard', 'soft', 'strata'].includes(f.title) && l.title_type !== f.title) return false;
+  if (LEASE.includes(f.lease) && l.min_lease && !LEASE.slice(0, LEASE.indexOf(f.lease) + 1).includes(l.min_lease)) return false;
+  if (f.q) { const s = String(f.q).trim().toLowerCase(); if (s && ![l.district, l.title, l.address].some(v => String(v || '').toLowerCase().includes(s))) return false; }
+  return true;
+}
+const handle = s => String(s || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '').toLowerCase();
+async function chatFor(a, chats, tgIds) {
+  const h = handle(a.telegram);
+  const c = h && chats.find(x => String(x.username || '').toLowerCase() === h);
+  if (c) return c.blocked ? null : c.chat_id;
+  if (a.user_id) {
+    if (!tgIds.has(a.user_id)) {
+      let id = null;
+      try {
+        const r = await fetch(SB_URL + '/auth/v1/admin/users/' + a.user_id, { headers: H(), signal: AbortSignal.timeout(6000) });
+        const u = r.ok ? await r.json() : null;
+        const t = u && u.user_metadata && u.user_metadata.telegram_id;
+        if (/^\d{3,20}$/.test(String(t || ''))) id = Number(t);
+      } catch {}
+      tgIds.set(a.user_id, id);
+    }
+    const id = tgIds.get(a.user_id);
+    const c2 = id && chats.find(x => Number(x.chat_id) === id);
+    if (c2 && c2.blocked) return null;
+    return id;   // signed in with Telegram + "allow the bot to message me" – works even without pressing Start
+  }
+  return null;
+}
+async function sendAlerts() {
+  const subs = await rest('yh_alerts?select=id,user_id,kind,telegram,filters,created_at&active=is.true&limit=2000');
+  if (!subs || !subs.length) return { subscribers: 0, sent: 0 };
+  const chats = await rest('yh_tg_chats?select=chat_id,username,blocked&limit=10000');
+  const tgIds = new Map();
+  const since = new Date(Date.now() - 2 * 864e5).toISOString();
+  const sentRows = await rest(`yh_alert_sends?select=alert_id,ref_id&sent_at=gte.${new Date(Date.now() - 4 * 864e5).toISOString()}&limit=20000`);
+  const sent = new Set((sentRows || []).map(r => r.alert_id + ':' + r.ref_id));
+  let n = 0, waiting = 0; const errs = [];
+  const send = async (a, refId, chat, payload) => {
+    const claimed = await rest('yh_alert_sends?on_conflict=alert_id,ref_id', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=representation' }, body: JSON.stringify({ alert_id: a.id, ref_id: refId, chat_id: chat }) });
+    if (!claimed || !claimed.length) return;
+    let r = payload.photo ? await tg('sendPhoto', { chat_id: chat, photo: payload.photo, caption: payload.text, parse_mode: 'HTML', reply_markup: payload.kb }) : null;
+    if (!r || !r.ok) r = await tg('sendMessage', { chat_id: chat, text: payload.text, parse_mode: 'HTML', reply_markup: payload.kb, link_preview_options: { is_disabled: true } });
+    await rest(`yh_alert_sends?alert_id=eq.${a.id}&ref_id=eq.${refId}`, { method: 'PATCH', body: JSON.stringify({ ok: !!r.ok, error: r.ok ? null : String(r.description || 'failed').slice(0, 300) }) });
+    if (!r.ok && r.error_code === 403) await rest(`yh_tg_chats?chat_id=eq.${chat}`, { method: 'PATCH', body: JSON.stringify({ blocked: true }) }).catch(() => {});
+    if (r.ok) n++; else errs.push(String(r.description || 'failed').slice(0, 80));
+  };
+
+  // 1) new listings that match a saved search
+  const nl = subs.filter(a => a.kind === 'new_listings');
+  if (nl.length) {
+    const cols = 'id,city,district,deal_type,property_type,title,price,price_period,period_note,bedrooms,bathrooms,area_m2,photos,posted_by,created_at,furnished,amenities,foreigner_ok,title_type,min_lease,address';
+    const list = await rest(`yh_listings?select=${cols}&status=eq.active&is_demo=eq.false&created_at=gte.${since}&order=created_at.asc&limit=200`) || [];
+    for (const a of nl) {
+      const todo = list.filter(l => new Date(l.created_at) >= new Date(a.created_at) && !sent.has(a.id + ':' + l.id) && matches(l, a.filters));
+      if (!todo.length) continue;
+      const chat = await chatFor(a, chats, tgIds);
+      if (!chat) { waiting++; continue; }
+      for (const l of todo) {
+        if (n >= MAX_ALERTS) break;
+        const c = caption(l);
+        const url = c.url.replace('utm_medium=channel', 'utm_medium=alert');
+        await send(a, l.id, chat, {
+          text: ('🔔 <b>New listing for your alert</b>\n\n' + c.text.replace(/utm_medium=channel/g, 'utm_medium=alert')).slice(0, 1000),
+          photo: ((l.photos || []).find(p => /^https:\/\//.test(p)) && S.img((l.photos || []).find(p => /^https:\/\//.test(p)), 1200)) || null,
+          kb: { inline_keyboard: [[{ text: '👀 View listing', url }], [{ text: '🔕 Manage alerts', url: S.ORIGIN + '/account' }]] },
+        });
+      }
+    }
+  }
+
+  // 2) new messages to the advertiser
+  const mm = subs.filter(a => a.kind === 'my_messages' && a.user_id);
+  if (mm.length && n < MAX_ALERTS) {
+    const inq = await rest(`yh_inquiries?select=id,listing_id,name,contact,message,created_at&created_at=gte.${since}&order=created_at.asc&limit=300`) || [];
+    if (inq.length) {
+      const ids = [...new Set(inq.map(i => i.listing_id).filter(Boolean))];
+      const ls = ids.length ? await rest(`yh_listings?select=id,owner_id,city,district,deal_type,property_type,bedrooms,price_period&id=in.(${ids.join(',')})`) || [] : [];
+      const byId = new Map(ls.map(l => [l.id, l]));
+      for (const a of mm) {
+        const todo = inq.filter(i => { const l = byId.get(i.listing_id); return l && l.owner_id === a.user_id && new Date(i.created_at) >= new Date(a.created_at) && !sent.has(a.id + ':' + i.id); });
+        if (!todo.length) continue;
+        const chat = await chatFor(a, chats, tgIds);
+        if (!chat) { waiting++; continue; }
+        for (const i of todo) {
+          if (n >= MAX_ALERTS) break;
+          const l = byId.get(i.listing_id);
+          const text = ['📩 <b>New message about your listing</b>', `🏠 ${esc(S.listingName(l))} – ${esc(S.place(l))}`, '',
+            `👤 ${esc(String(i.name || 'Visitor').slice(0, 80))}`, i.contact ? `☎️ ${esc(String(i.contact).slice(0, 80))}` : '',
+            i.message ? `\n💬 ${esc(String(i.message).slice(0, 500))}` : ''].filter(Boolean).join('\n');
+          await send(a, i.id, chat, { text, kb: { inline_keyboard: [[{ text: '📬 Open in my dashboard', url: S.ORIGIN + '/account?tab=messages&m=' + i.id }]] } });
+        }
+      }
+    }
+  }
+  return { subscribers: subs.length, sent: n, waiting_for_start: waiting, errors: errs.slice(0, 5) };
+}
+
+// The bot's webhook (api/tg-bot.js) – set once, checked every run (cheap getWebhookInfo).
+async function ensureWebhook(req) {
+  const want = S.ORIGIN + '/api/tg-bot';
+  const info = await tg('getWebhookInfo', {});
+  if (info.ok && info.result && info.result.url === want) return 'ok';
+  const secret = require('crypto').createHash('sha256').update('yh-webhook:' + token()).digest('hex').slice(0, 48);   // = api/tg-bot.js secret()
+  const r = await tg('setWebhook', { url: want, secret_token: secret, allowed_updates: ['message', 'my_chat_member'], drop_pending_updates: false });
+  return r.ok ? 'set' : 'failed: ' + (r.description || '');
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (!token() || !key()) { res.statusCode = 503; return res.end('not configured'); }
@@ -78,8 +209,11 @@ module.exports = async (req, res) => {
       await rest(`yh_channel_posts?listing_id=eq.${l.id}&chat=eq.${encodeURIComponent(CHANNEL)}`, { method: 'PATCH', body: JSON.stringify(r.ok ? { message_id: r.result.message_id, error: null } : { error: String(r.description || 'failed').slice(0, 300) }) });
       out.push({ id: l.id, ok: !!r.ok, err: r.ok ? undefined : r.description });
     }
+    // personal alerts (owner, 2026-11-25 "élesítsd"): new matching listings + new messages to advertisers, then the bot webhook
+    const alerts = await sendAlerts().catch(e => ({ error: String(e.message || e).slice(0, 200) }));
+    const hook = await ensureWebhook(req).catch(e => String(e.message || e).slice(0, 120));
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ channel: CHANNEL, posted: out }));
+    res.end(JSON.stringify({ channel: CHANNEL, posted: out, alerts, webhook: hook }));
   } catch (e) {
     res.statusCode = 500; res.end(JSON.stringify({ error: String(e.message || e).slice(0, 300), posted: out }));
   }

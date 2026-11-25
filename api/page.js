@@ -185,6 +185,9 @@ module.exports = async (req, res) => {
   p = ('/' + p.replace(/^\/+/, '')).replace(/\/+$/, '') || '/';
   url.searchParams.delete('p');
   const q = url.searchParams.toString();
+  // addresses people type by hand that are not our real ones → 301 to the real page (never a 404)
+  const ALIASES = { '/listings': '/search', '/listing': '/search', '/homes': '/search', '/map': '/search?view=map', '/experts': '/agents', '/how': '/how-it-works', '/login': '/account', '/signin': '/account', '/dashboard': '/account', '/contact': '/support', '/partner': '/partners', '/project': '/projects', '/agent': '/agents' };
+  if (ALIASES[p]) { const to = ALIASES[p]; res.statusCode = 301; res.setHeader('Location', to + (q ? (to.includes('?') ? '&' : '?') + q : '')); res.setHeader('Cache-Control', 'public, max-age=3600'); return res.end(); }
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   try {
     const p0 = p.split('/').filter(Boolean)[0] || '';

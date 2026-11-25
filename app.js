@@ -173,6 +173,7 @@ document.getElementById('lang').addEventListener('change', e => { lang = e.targe
 // the bottom menu's first button and the footer Telegram icon ([data-tgch]) open a small card "Join our Telegram channel"
 // + "Join on Telegram". TG_CHANNEL = the channel's public username without @ – until it is filled in, the card says
 // "coming soon" and its button is hidden. Once set, the card also opens by itself once per visitor (3 s after load, 7 s).
+const TG_BOT = 'yourhomeasiabot';   // the YourHome bot – sends the personal alerts (api/tg-sync.js, api/tg-bot.js)
 const TG_CHANNEL = 'yourhomeasia';   // t.me/yourhomeasia – "www.yourhome.asia – Cambodia" (owner, 2026-11-25)
 function tgCard() {
   let c = document.getElementById('tgch');
@@ -597,10 +598,12 @@ function alertModal(filters) {
   wrap.onclick = e => { if (e.target === wrap) wrap.remove(); };
   wrap.querySelector('form').onsubmit = async e => {
     e.preventDefault(); const h = tgHandle(new FormData(e.target).get('tg')); if (!h) return toast(t('required'));
-    const f = {}; for (const k of ['deal','type','max','q', ...FKEYS]) if (filters[k]) f[k] = filters[k];
+    const f = {}; for (const k of ['deal','city','type','max','q', ...FKEYS]) if (filters[k]) f[k] = filters[k];
     const { error } = await sb.from('yh_alerts').insert({ kind: 'new_listings', telegram: '@' + h, filters: f });
     if (error) return toast(t('error') + error.message);
-    wrap.remove(); toast(t('tgSaved'), 5000);
+    // alerts are live (2026-11-25): Telegram can only write to people who pressed Start in the bot → show that last step
+    wrap.querySelector('form').innerHTML = `<h3>✅ ${t('tgSaved')}</h3><div style="display:flex;gap:8px"><a class="btn blue" href="https://t.me/${TG_BOT}?start=alerts" target="_blank" rel="noopener">${t('tgOpenBot')}</a><button type="button" class="btn ghost" data-x>OK</button></div>`;
+    wrap.querySelector('[data-x]').onclick = () => wrap.remove();
   };
 }
 
@@ -1010,7 +1013,7 @@ async function viewAccount() {
     </div>`;
   } else if (tab === 'telegram') {
     body = `<form class="panel form" id="tgform" style="max-width:560px"><h3>🔔 ${t('tgAlerts')}</h3><p style="margin:0;color:var(--muted)">${t('tgAlertsSub')}</p>
-      ${alerts.length ? `<p style="margin:0;font-weight:600">✓ ${t('tgActive')} ${esc(alerts[0].telegram)}</p>` : ''}
+      ${alerts.length ? `<p style="margin:0;font-weight:600">✓ ${t('tgActive')} ${esc(alerts[0].telegram)}</p><p style="margin:0"><a class="btn blue" href="https://t.me/${TG_BOT}?start=messages" target="_blank" rel="noopener">${t('tgOpenBot')}</a></p>` : ''}
       <label>${t('tgUser')}<input name="tg" placeholder="@username" value="${esc(alerts[0]?.telegram || '')}" required></label>
       <button class="btn blue">${t('tgSave')}</button></form>`;
   }
@@ -1051,7 +1054,7 @@ async function viewAccount() {
     const res = alerts.length ? await sb.from('yh_alerts').update({ telegram: '@' + h, active: true }).eq('id', alerts[0].id)
                               : await sb.from('yh_alerts').insert({ kind: 'my_messages', telegram: '@' + h });
     if (res.error) return toast(t('error') + res.error.message);
-    toast(t('tgSaved'), 5000); route();
+    toast(t('tgSaved'), 8000); route();
   };
 }
 function contactHref(c) {
@@ -1280,6 +1283,13 @@ if (user) sb.auth.getUser().then(async ({ error }) => {
 const markOwnDevice = () => user && sb.rpc('yh_me_hidden').then(({ data }) => { if (data) try { localStorage.setItem('yh_noct', '1'); } catch {} });
 markOwnDevice();
 sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN') setTimeout(markOwnDevice, 0); });
+// GOOGLE SIGN-UPS = YOURHOME ACCOUNTS (owner, 2026-11-25 "old meg"): Google cannot carry signup_site at sign-up, so a brand-new
+// account (created < 15 min ago) without it gets user_metadata.signup_site 'yourhome' on its first load here. The Study portal's
+// "New account" alert already skips it in the database (alert_new_account reads the Google sign-in's yourhome.asia referrer).
+const tagSignup = () => { const u = user; if (!u || (u.user_metadata || {}).signup_site || Date.now() - new Date(u.created_at).getTime() > 9e5) return;
+  sb.auth.updateUser({ data: { signup_site: 'yourhome' } }).catch(() => {}); };
+tagSignup();
+sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN') setTimeout(tagSignup, 0); });
 if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
 const next0 = user && store.get('yh_next', null);
 if (next0 && location.pathname === '/') { store.set('yh_next', null); go('#/' + next0); } else route();

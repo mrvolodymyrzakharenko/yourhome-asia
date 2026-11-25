@@ -232,7 +232,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   listings = rows with status select, Edit, Delete. Only the advertiser's own data. Texts dx_* in i18n.js (5 languages).
 - Statistics: views per day, unique visitors, who viewed (anonymous: device, language, traffic source), when, which
   listing, contact clicks (phone / Telegram / WhatsApp), messages. Recent activity table.
-- Telegram alerts are stored as requests (yh_alerts); sending needs the Telegram bot to be connected (not done yet).
+- TELEGRAM ALERTS ARE LIVE (owner, 2026-11-25 "élesítsd"): yh_alerts (new_listings = saved search incl. city; my_messages =
+  new messages to the advertiser) are sent by @yourhomeasiabot from the same cron as the channel (api/tg-sync.js sendAlerts():
+  matching new live non-demo listings / new yh_inquiries of the last 2 days, each once – table yh_alert_sends, max 60 per run).
+  Telegram can only write to someone who pressed Start, by chat id: api/tg-bot.js (bot webhook, secret header; tg-sync sets the
+  webhook itself) stores every Start in yh_tg_chats (chat_id, username, blocked; /stop or blocking = blocked). Chat = yh_tg_chats
+  username = the typed @handle, else the Telegram id of an account that signed in with Telegram. After saving an alert the site
+  shows "Open @yourhomeasiabot" (TG_BOT in app.js, tgOpenBot / tgSaved in i18n.js).
 - SETTINGS ALWAYS VISIBLE (owner, 2026-11-24: "my account – settings – ez legyen mindig látható, legyen ott verification kérés
   is"): "⚙️ Settings" is the last dashboard tab, a button in the dashboard header (Back to site · Settings · Sign out) and an
   overview card. It holds: name + sign-in email, contact details for listings (saved in user_metadata.contact, prefill the post
@@ -344,7 +350,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   BotFather mini app → Login Widget → OpenID Connect: Redirect URI https://yourhome.asia/auth/telegram/callback, Trusted Origin
   https://yourhome.asia). ONLY THE YOURHOME BOT for YourHome (owner, 2026-11-25: "a másik bot nem kellene működjön! csak a kambodzsai
   tg"): new Telegram and email accounts get user_metadata.signup_site 'yourhome' and the Study portal's "New account" alert
-  (Supabase alert_new_account) skips them; Google sign-ups cannot carry it yet. All 4 env values set (also TELEGRAM_BOT_TOKEN for the channel/bot steps). First test login worked.
+  (Supabase alert_new_account) skips them; Google sign-ups too (since 2026-11-25: alert_new_account skips a Google sign-up whose newest Google sign-in flow of the last 15 min came from yourhome.asia – auth.flow_state.referrer – and app.js tagSignup() writes signup_site 'yourhome' on a new account's first load). All 4 env values set (also TELEGRAM_BOT_TOKEN for the channel/bot steps). First test login worked.
 - TELEGRAM CHANNEL t.me/yourhomeasia (owner, 2026-11-25: name "www.yourhome.asia – Cambodia", whole Cambodia not only Phnom Penh;
   @yourhomeasiabot is its admin with Post messages): TG_CHANNEL in app.js (bottom-menu Telegram card, footer icon) and CHANNEL in
   api/tg-sync.js. AUTO-POST: Vercel cron every 10 min → api/tg-sync.js posts every new live non-demo listing of the last 2 days
@@ -371,6 +377,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   #agLinks, post form block, dashboard tab, #/agent route, experts page).
 
 ## Clean URLs + server HTML (owner, 2026-11-25: "mehet" – SEO rules in the project doc claude/seo-rules.md)
+- HAND-TYPED ADDRESSES (2026-11-25): /listings, /listing, /homes, /map, /experts, /how, /login, /signin, /dashboard, /contact,
+  /partner, /project, /agent answer 301 to the real page (ALIASES in api/page.js) – never a 404.
 - Real addresses, no "#": / · /rent · /buy · /rooms · /daily · /search · /listing/<id>-<slug> · /agents · /agent/<slug> ·
   /projects · /project/<slug> · /partners · /about · /how-it-works · /safety · /faq · /support · /terms · /privacy ·
   /account · /post · /edit/<id> · /saved. Old "#/…" links are turned into these on load (never break).

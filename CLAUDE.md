@@ -272,6 +272,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
    átláthatóbb, több funkció" – the Study portal admin as the model)
 - /admin (#/admin; old #/account?tab=admin redirects) – only for emails in yh_admins; the dashboard header "🛡 Admin" leads there.
   admin.js + admin.css, loaded ON DEMAND by app.js (adminMod(), dynamic import) – visitors never download them. English only.
+- OWN PANEL (owner, 2026-11-25: "ez ne ugorjon ki adminra… legyen saját panelem"): /admin hides the site header, footer and bottom
+  menu (body.adm-mode, set in route()), never shows the account-type popup (rolePopup skips /admin), and has its OWN sign-in card
+  (gate() in admin.js: "Sign in with Google" → back to /admin, Google account chooser) and its own "not the admin account" card with
+  "Switch to the admin Google account". Admin = mr.volodymyrzakharenko@gmail.com (yh_admins), signed in with Google.
 - Moving around = 8 big SECTION CARDS on top (PC one row of 8, tablet 4, phones 2 per row; picked card royal blue; red badge =
   waiting): Overview · Inbox · Visitors · Listings · Accounts · Verification · Partners · Telegram. Top bar: period Today / 7 / 30
   / 90 days, refresh, back to site, "N online now". Auto refresh every 60 s (not while typing).

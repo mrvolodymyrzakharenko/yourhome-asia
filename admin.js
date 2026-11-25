@@ -52,7 +52,7 @@ const since = days => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(
 
 function css() {
   if (document.getElementById('admcss')) return;
-  const l = document.createElement('link'); l.id = 'admcss'; l.rel = 'stylesheet'; l.href = '/admin.css?v=1'; document.head.appendChild(l);
+  const l = document.createElement('link'); l.id = 'admcss'; l.rel = 'stylesheet'; l.href = '/admin.css?v=2'; document.head.appendChild(l);
 }
 
 // ---------- contact helpers: one-tap answer buttons from whatever the visitor typed ----------
@@ -131,13 +131,29 @@ const pill = (on, val, label, n, attr = 'data-f') => `<button class="apill${on ?
 const thumb = l => l?.photos?.[0] ? `<img src="${esc(C.imgSrc(l.photos[0], 400))}" alt="" loading="lazy">` : `<span class="anoimg">${I.listings}</span>`;
 
 // ---------- page ----------
+const GICON = '<svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>';
+// OWN ADMIN PANEL (owner, 2026-11-25: "legyen saját panelem"): /admin never shows the site's login page or the account-type
+// popup – it has its own sign-in card (Google, back to /admin) and its own "not the admin account" card.
+function gate(email) {
+  document.body.classList.add('adm-mode');
+  C.app.innerHTML = `<div class="agate"><div class="agc">
+    <span class="alogo">${I.agents}</span><b>YourHome Admin</b>
+    ${email ? `<p>You are signed in as <b>${esc(email)}</b>. This is not the admin account.</p><button class="agbtn" id="agSw">${GICON}Switch to the admin Google account</button>`
+      : `<p>Admin panel of yourhome.asia. Sign in with the admin Google account.</p><button class="agbtn" id="agG">${GICON}Sign in with Google</button>`}
+    <a class="aglink" href="#/">${I.back} Back to the site</a></div></div>`;
+  const google = async () => { const { error } = await C.sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin + '/admin', queryParams: { prompt: 'select_account' } } }); if (error) C.toast('Error: ' + error.message); };
+  const g = $('agG'); if (g) g.onclick = google;
+  const sw = $('agSw'); if (sw) sw.onclick = async () => { await C.sb.auth.signOut(); google(); };
+}
 export async function view() {
   css();
+  document.body.classList.add('adm-mode');
   const user = C.user();
-  if (!user) return C.viewLogin('admin');
+  if (!user) return gate();
   C.app.innerHTML = `<div class="wrap adm"><div class="aempty" style="margin-top:30px">Loading…</div></div>`;
   const { data: ok } = await C.sb.rpc('yh_is_admin');
-  if (!ok) { C.app.innerHTML = `<div class="wrap adm"><section class="apanel" style="margin-top:30px;text-align:center"><h3>Admin only</h3><p class="amut">You are signed in as <b>${esc(user.email)}</b>, which is not the admin account. Sign out, then sign in with Google using the admin Gmail address.</p><div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px"><button class="btn red sm" id="aSwitch">Sign out and switch account</button><a class="btn ghost sm" href="#/">Back to site</a></div></section></div>`; document.getElementById('aSwitch').onclick = () => C.signOut(); return; }
+  if (!ok) return gate(user.email || 'this account');
+  document.querySelector('.rpop')?.remove(); document.body.classList.remove('rpop-open');
   try { localStorage.setItem('yh_noct', '1'); } catch {}       // the admin's own visits never count
   const qs = C.qs();
   if (qs.get('s') && SECTIONS.some(x => x[0] === qs.get('s'))) S.sec = qs.get('s');

@@ -282,3 +282,13 @@ fr: { p_hour:'heure', p_week:'semaine', p_other:'autre…', p_otherNote:'Autre p
 th: { p_hour:'ชั่วโมง', p_week:'สัปดาห์', p_other:'อื่นๆ…', p_otherNote:'ระยะเวลาอื่น', p_otherPh:'เช่น 3 เดือน สุดสัปดาห์ คืน', perHour:'/ชั่วโมง', perWeek:'/สัปดาห์' },
 };
 for (const k of Object.keys(PP)) Object.assign(T[k], PP[k]);
+
+/* POST FORM RENT KINDS (owner, 2026-11-25) */
+const DK = {
+en: { d_weekly:'Weekly rent', d_monthly:'Monthly rent', d_longterm:'Long-term rent', d_other:'Other rental (on request)' },
+km: { d_weekly:'ជួលប្រចាំសប្តាហ៍', d_monthly:'ជួលប្រចាំខែ', d_longterm:'ជួលរយៈពេលវែង', d_other:'ការជួលផ្សេងទៀត (តាមសំណើ)' },
+zh: { d_weekly:'按周出租', d_monthly:'按月出租', d_longterm:'长期出租', d_other:'其他租期（面议）' },
+fr: { d_weekly:'Location à la semaine', d_monthly:'Location au mois', d_longterm:'Location longue durée', d_other:'Autre location (sur demande)' },
+th: { d_weekly:'เช่ารายสัปดาห์', d_monthly:'เช่ารายเดือน', d_longterm:'เช่าระยะยาว', d_other:'เช่าแบบอื่น (ตามคำขอ)' },
+};
+for (const k of Object.keys(DK)) Object.assign(T[k], DK[k]);

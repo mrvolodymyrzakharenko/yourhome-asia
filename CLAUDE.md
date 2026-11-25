@@ -269,6 +269,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
 
 ## Rules for listings
+- RENT KINDS IN THE POST FORM (owner, 2026-11-25: "daily rent, weekly rent, monthly rent, long term rent… other request"):
+  the listing type list is Daily rent · Weekly rent · Monthly rent · Long-term rent · Other rental (on request) · Buy · Room. A rent
+  kind sets the period itself (day / week / month / month + min. term 1 year (or 6 months) / other + the "Other period" text) and
+  hides "Price per"; only Room keeps that choice. Stored as deal_type 'rent' + price_period (+ min_lease); postDeal() reads it back.
 - POST FORM CHOICES (owner, 2026-11-25: "kevés az opció… stúdió, one bedroom… daily, weekly, monthly, other… hourly"):
   Bedrooms = list Studio · 1 · 2 · 3 · 4 · 5+ (stored 0–5), Bathrooms = 1 · 2 · 3 · 4 · 5+. "Price per" = day · week · month ·
   other… (an "Other period" text field appears, yh_listings.period_note, max 40) · total price (sale only). Suffixes /hour /week

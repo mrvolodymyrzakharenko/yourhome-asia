@@ -56,6 +56,9 @@ const money = n => {
   return k === 'KHR' ? s + ' ៛' : c[2] + s;
 };
 window.yhMoney = money;
+// which rent kind a saved listing shows in the post form
+const postDeal = l => l.deal_type !== 'rent' ? l.deal_type : l.price_period === 'day' ? 'daily' : l.price_period === 'week' ? 'weekly'
+  : l.price_period === 'other' ? 'rentother' : ['6m', '1y'].includes(l.min_lease) ? 'longterm' : 'rent';
 const priceSuffix = l => ({ month: t('perMonth'), day: t('perDay'), week: t('perWeek'), hour: t('perHour') })[l.price_period] || (l.price_period === 'other' && l.period_note ? ' / ' + l.period_note : '');
 const shortDate = d => { const x = new Date(d); return `${x.getFullYear()}. ${x.getMonth()+1}. ${x.getDate()}.`; };
 const dateTime = d => new Date(d).toLocaleString(lang === 'km' ? 'km-KH' : lang, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
@@ -652,11 +655,11 @@ async function viewPost(editId) {
   const sel = (name, opts, cur) => `<select name="${name}">${opts.map(([v, lab]) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
   app.innerHTML = `<div class="wrap"><form class="narrow panel form" id="pform">
     <h1 style="margin:0">${editId ? t('editTitle') : t('postTitle')}</h1>
-    <div class="row"><label>${t('dealType')} *${sel('deal_type', [['rent', t('rent')], ['daily', t('dailyRent')], ['sale', t('buy')], ['room', t('room')]], l.deal_type === 'rent' && l.price_period === 'day' ? 'daily' : l.deal_type)}</label>
+    <div class="row"><label>${t('dealType')} *${sel('deal_type', [['daily', t('dailyRent')], ['weekly', t('d_weekly')], ['rent', t('d_monthly')], ['longterm', t('d_longterm')], ['rentother', t('d_other')], ['sale', t('buy')], ['room', t('room')]], postDeal(l))}</label>
       <label>${t('propType')} *${sel('property_type', TYPES.map(x => [x, t('t_' + x)]), l.property_type)}</label></div>
     <label>${t('title')} *<input name="title" required minlength="5" maxlength="140" placeholder="${esc(t('titlePh'))}" value="${esc(l.title || '')}"></label>
     <div class="row"><label>${t('price')} *<input name="price" type="number" min="0" step="1" required value="${l.price ?? ''}"></label>
-      <label>${t('period')}${sel('price_period', [['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>
+      <label id="pPerL">${t('period')}${sel('price_period', [['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>
     <label id="pNoteL"${l.price_period === 'other' ? '' : ' hidden'}>${t('p_otherNote')} *<input name="period_note" maxlength="40" placeholder="${esc(t('p_otherPh'))}" value="${esc(l.period_note || '')}"></label>
     <div class="row3"><label>${t('bedrooms')}${sel('bedrooms', [['', t('notSet')], ['0', t('studio')], ['1', '1 ' + t('bedroomOne')], ['2', '2 ' + t('bedrooms').toLowerCase()], ['3', '3 ' + t('bedrooms').toLowerCase()], ['4', '4 ' + t('bedrooms').toLowerCase()], ['5', '5+ ' + t('bedrooms').toLowerCase()], ...(l.bedrooms > 5 ? [[String(l.bedrooms), l.bedrooms + ' ' + t('bedrooms').toLowerCase()]] : [])], l.bedrooms ?? '')}</label>
       <label>${t('bathrooms')}${sel('bathrooms', [['', t('notSet')], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5+'], ...(l.bathrooms > 5 || l.bathrooms === 0 ? [[String(l.bathrooms), String(l.bathrooms)]] : [])], l.bathrooms ?? '')}</label>
@@ -682,7 +685,12 @@ async function viewPost(editId) {
     ${agBlock}
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
   { const pf = document.getElementById('pform'), per = pf.price_period, dl = pf.deal_type, noteL = document.getElementById('pNoteL');
-    const sync = () => { if (dl.value === 'daily') per.value = 'day'; if (dl.value === 'sale') per.value = 'total'; else if (per.value === 'total') per.value = 'month';
+    // RENT KINDS (owner, 2026-11-25: "daily rent, weekly rent, monthly rent, long term rent… other request"): the rent kind sets
+    // the price period itself; only Rooms keep the "Price per" choice
+    const KP = { daily: 'day', weekly: 'week', rent: 'month', longterm: 'month', rentother: 'other', sale: 'total' };
+    const sync = e => { if (KP[dl.value]) per.value = KP[dl.value]; else if (per.value === 'total') per.value = 'month';
+      if (e?.target === dl && dl.value === 'longterm' && !['6m', '1y'].includes(pf.min_lease.value)) pf.min_lease.value = '1y';
+      document.getElementById('pPerL').hidden = !!KP[dl.value];
       noteL.hidden = per.value !== 'other'; noteL.querySelector('input').required = per.value === 'other'; };
     per.addEventListener('change', sync); dl.addEventListener('change', sync); sync(); }
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
@@ -723,12 +731,12 @@ async function viewPost(editId) {
     const fd = new FormData(e.target); const f = Object.fromEntries(fd);
     const num = v => v === '' || v == null ? null : Number(v);
     const row = {
-      deal_type: f.deal_type === 'daily' ? 'rent' : f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
-      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.deal_type === 'daily' ? 'day' : f.price_period,
-      period_note: f.price_period === 'other' && f.deal_type !== 'sale' ? (String(f.period_note || '').trim().slice(0, 40) || null) : null,
+      deal_type: ['daily', 'weekly', 'longterm', 'rentother'].includes(f.deal_type) ? 'rent' : f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
+      price: Number(f.price), price_period: ({ sale: 'total', daily: 'day', weekly: 'week', rent: 'month', longterm: 'month', rentother: 'other' })[f.deal_type] || f.price_period,
+      period_note: (f.deal_type === 'rentother' || (f.deal_type === 'room' && f.price_period === 'other')) ? (String(f.period_note || '').trim().slice(0, 40) || null) : null,
       bedrooms: num(f.bedrooms), bathrooms: num(f.bathrooms), area_m2: num(f.area_m2), furnished: !!f.furnished,
       amenities: fd.getAll('amen').filter(a => AMEN.includes(a)), posted_by: f.posted_by || null,
-      min_lease: f.deal_type === 'sale' ? null : (f.min_lease || null),
+      min_lease: f.deal_type === 'sale' ? null : f.deal_type === 'longterm' && !['6m', '1y'].includes(f.min_lease) ? '1y' : (f.min_lease || null),
       title_type: f.deal_type === 'sale' ? (f.title_type || null) : null, foreigner_ok: f.deal_type === 'sale' ? !!f.foreigner_ok : null,
       city: CITY_NAMES.includes(f.city) ? f.city : 'Phnom Penh', district: f.district, address: f.address.trim() || null, lat: pos ? pos[0] : null, lng: pos ? pos[1] : null, photos,
       contact_name: f.contact_name.trim() || null, contact_phone: f.contact_phone.trim() || null,

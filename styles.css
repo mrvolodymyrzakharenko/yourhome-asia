@@ -1114,3 +1114,7 @@ body.rpop-open{overflow:hidden}
 .dash .role-sw,.dx .role-sw,.wrap>.role-sw{display:flex;justify-content:center;width:100%;max-width:560px;margin:6px auto 20px!important;padding:5px;box-sizing:border-box}
 .role-sw button{flex:1;padding:14px 18px!important;font-size:13px!important;font-weight:600!important;border-radius:999px}
 @media (max-width:720px){.dx .atop{flex-direction:column;align-items:stretch}.dx-btns{display:grid;grid-template-columns:repeat(auto-fit,minmax(0,1fr));width:100%}.dxb{justify-content:center;padding:10px 8px}.role-sw button{padding:12px 8px!important}}
+@media (max-width:720px){.dx .atr.dx-btns{display:flex;width:100%;gap:8px}.dx .dxb{flex:1 1 0;min-width:0}.dx .acard b{white-space:normal;overflow:visible;line-height:1.3}}
+@media (max-width:720px){.dx .dxb{white-space:nowrap;gap:5px;padding:10px 6px}.dx .dxb svg{width:15px;height:15px}}
+@media (max-width:379px){.dx .dxb{font-size:12px;gap:4px;padding:10px 4px}.dx .dxb svg{width:14px;height:14px}}
+@media (max-width:379px){.role-sw button{padding:12px 4px!important;font-size:12px!important;white-space:nowrap}}

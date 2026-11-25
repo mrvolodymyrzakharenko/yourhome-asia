@@ -347,6 +347,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   other… (an "Other period" text field appears, yh_listings.period_note, max 40) · total price (sale only). Suffixes /hour /week
   (priceSuffix in app.js, per in api/_seo.js). NO hourly rent in Cambodia (owner, 2026-11-25: "nem erőltetjük" – short-time
   rentals would bring the wrong listings); the database still accepts 'hour' but the form never offers it.
+- SALE LISTINGS OPEN TO EVERYONE FOR NOW (owner, 2026-11-25 18:52: "bárki kérheti, és majd később módosítjuk"): a verified-only
+  sale rule was tried and removed the same evening; the database keeps yh_is_verified(uid) for a later paid / verified-only rule.
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.

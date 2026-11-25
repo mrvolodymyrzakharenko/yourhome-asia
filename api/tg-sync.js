@@ -8,7 +8,9 @@ const S = require('./_seo');
 const CHANNEL = '@yourhomeasia';
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const MAX_PER_RUN = 5;
-const token = () => String(process.env.TELEGRAM_BOT_TOKEN || '').trim();
+// the token is taken out of whatever was pasted ("bot123:ABC…", quotes, "TELEGRAM_BOT_TOKEN=…", spaces) – Telegram answers
+// "Not Found" to anything that is not exactly <digits>:<secret>
+const token = () => { const v = String(process.env.TELEGRAM_BOT_TOKEN || ''); const m = v.match(/\d{6,12}:[A-Za-z0-9_-]{30,}/); return m ? m[0] : v.trim(); };
 const key = () => String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
 const H = () => ({ apikey: key(), Authorization: 'Bearer ' + key(), 'Content-Type': 'application/json' });
 const esc = s => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -164,6 +166,10 @@ async function sendAlerts() {
 // The bot's webhook (api/tg-bot.js) – set once, checked every run (cheap getWebhookInfo).
 async function ensureWebhook(req) {
   const want = S.ORIGIN + '/api/tg-bot';
+  const me = await tg('getMe', {});
+  if (!me.ok) { const v = String(process.env.TELEGRAM_BOT_TOKEN || '');   // never shows the token – only what is wrong with it
+    return `bot token refused by Telegram (${me.description || 'error'}) – TELEGRAM_BOT_TOKEN has ${v.length} characters, ${/\d{6,12}:[A-Za-z0-9_-]{30,}/.test(v) ? 'looks like a bot token: it is revoked or belongs to no bot – copy it again from @BotFather → /mybots → API Token' : 'does NOT look like a bot token (123456789:AA…) – copy it from @BotFather → /mybots → API Token'}`; }
+  if (me.result.username && me.result.username.toLowerCase() !== 'yourhomeasiabot') return 'wrong bot: the token belongs to @' + me.result.username + ' – use the @yourhomeasiabot token';
   const info = await tg('getWebhookInfo', {});
   if (info.ok && info.result && info.result.url === want) return 'ok';
   const secret = require('crypto').createHash('sha256').update('yh-webhook:' + token()).digest('hex').slice(0, 48);   // = api/tg-bot.js secret()

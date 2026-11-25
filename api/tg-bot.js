@@ -10,7 +10,9 @@ const crypto = require('crypto');
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const ORIGIN = 'https://yourhome.asia';
 const CHANNEL = '@yourhomeasia';
-const token = () => String(process.env.TELEGRAM_BOT_TOKEN || '').trim();
+// the token is taken out of whatever was pasted ("bot123:ABC…", quotes, "TELEGRAM_BOT_TOKEN=…", spaces) – Telegram answers
+// "Not Found" to anything that is not exactly <digits>:<secret>
+const token = () => { const v = String(process.env.TELEGRAM_BOT_TOKEN || ''); const m = v.match(/\d{6,12}:[A-Za-z0-9_-]{30,}/); return m ? m[0] : v.trim(); };
 const key = () => String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim();
 const secret = () => crypto.createHash('sha256').update('yh-webhook:' + token()).digest('hex').slice(0, 48);
 

@@ -11,6 +11,7 @@ const $ = id => document.getElementById(id);
 const esc = s => C.esc(s);
 const SV = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
 const I = {
+  live: SV('<circle cx="12" cy="12" r="2.5"/><path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14"/>'),
   overview: SV('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
   inbox: SV('<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v6H3v-6z"/>'),
   visitors: SV('<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'),
@@ -35,7 +36,7 @@ const I = {
   x: SV('<path d="M6 6l12 12M18 6 6 18"/>'),
 };
 const SECTIONS = [
-  ['overview', 'Overview'], ['inbox', 'Inbox'], ['visitors', 'Visitors'], ['listings', 'Listings'],
+  ['live', 'Live now'], ['overview', 'Overview'], ['inbox', 'Inbox'], ['visitors', 'Visitors'], ['listings', 'Listings'],
   ['accounts', 'Accounts'], ['agents', 'Verification'], ['partners', 'Partners'], ['telegram', 'Telegram'],
 ];
 const PERIODS = [[1, 'Today'], [7, '7 days'], [30, '30 days'], [90, '90 days']];
@@ -52,7 +53,7 @@ const since = days => { const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(
 
 function css() {
   if (document.getElementById('admcss')) return;
-  const l = document.createElement('link'); l.id = 'admcss'; l.rel = 'stylesheet'; l.href = '/admin.css?v=3'; document.head.appendChild(l);
+  const l = document.createElement('link'); l.id = 'admcss'; l.rel = 'stylesheet'; l.href = '/admin.css?v=4'; document.head.appendChild(l);
 }
 
 // ---------- contact helpers: one-tap answer buttons from whatever the visitor typed ----------
@@ -183,6 +184,7 @@ function draw(keepScroll) {
   const d = S.data, c = counts(), v = d.vis || {};
   const y = keepScroll ? scrollY : 0;
   const sub = {
+    live: `${fmt(v.now || 0)} on the site`,
     overview: `${fmt(v.visitors)} visitors`,
     inbox: c.unread ? `${c.unread} unread` : `${d.msgs.length} messages`,
     visitors: `${fmt(v.now || 0)} online now`,
@@ -192,7 +194,7 @@ function draw(keepScroll) {
     partners: c.partnerNew ? `${c.partnerNew} new` : `${d.projects.length} projects`,
     telegram: `${d.alerts.filter(a => a.active !== false).length} subscribers`,
   };
-  const badge = { inbox: c.unread, agents: c.verifyWait, partners: c.partnerNew };
+  const badge = { live: v.now || 0, inbox: c.unread, agents: c.verifyWait, partners: c.partnerNew };
   C.app.innerHTML = `<div class="wrap adm">
     <div class="atop">
       <div class="atl"><span class="alogo">${I.agents}</span><div><b>YourHome Admin</b><small>Updated ${d.at.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · <span class="alive"><i></i>${fmt(v.now || 0)} online now</span></small></div></div>
@@ -201,7 +203,7 @@ function draw(keepScroll) {
         <a class="atb" href="#/">${I.back}<span>Back to site</span></a>
         <button class="atb atb-out" id="aOut">${SV('<path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 16l-4-4 4-4M6 12h10"/>')}<span>Sign out</span></button></div>
     </div>
-    <nav class="acards" aria-label="Admin sections">${SECTIONS.map(([k, l]) => `<button data-sec="${k}" class="acard${S.sec === k ? ' on' : ''}"><span class="aci">${I[k]}</span><b>${l}</b><small>${sub[k]}</small>${badge[k] ? `<em class="abadge">${badge[k]}</em>` : ''}</button>`).join('')}</nav>
+    <nav class="acards" aria-label="Admin sections">${SECTIONS.map(([k, l]) => `<button data-sec="${k}" class="acard${k === 'live' ? ' acard-live' : ''}${S.sec === k ? ' on' : ''}"><span class="aci">${I[k]}</span><b>${l}</b><small>${sub[k]}</small>${badge[k] ? `<em class="abadge">${badge[k]}</em>` : ''}</button>`).join('')}</nav>
     <div id="asec" class="asec">${SEC[S.sec]()}</div></div>`;
   bind();
   if (keepScroll) scrollTo(0, y);
@@ -485,4 +487,48 @@ SEC.telegram = () => {
       ${panel('Requests by type', bars(kinds, 'n', 'k', 6))}
     </div>
     ${panel('Alert subscribers', al.length ? `<div class="atable"><table><tr><th>When</th><th>Telegram</th><th>Type</th><th>Filters</th><th>Status</th></tr>${al.map(a => `<tr><td>${when(a.created_at)}</td><td>${a.telegram ? `<a href="https://t.me/${esc(String(a.telegram).replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(a.telegram)}</a>` : '–'}</td><td>${esc(({ my_messages: 'New messages', new_listings: 'New listings' })[a.kind] || a.kind)}</td><td class="tp">${esc(a.filters ? Object.entries(a.filters).filter(([, v]) => v !== '' && v != null).map(([k, v]) => k + ': ' + v).join(' · ') : '')}</td><td>${a.active === false ? 'Paused' : 'Active'}</td></tr>`).join('')}</table></div>` : empty('No Telegram alert requests yet'))}`;
+};
+
+// ================= LIVE NOW (owner, 2026-11-25: "mutasd a live-okat, honnan vannak – külön menü") =================
+// Who is on the site right now: every visitor of the chosen window (5 / 30 / 60 min, 24 h) with where they are from, the page
+// they are on, the pages they went through, the listings they opened, device, language, source. RPC yh_admin_live(); the
+// section refreshes itself every 15 s while open. "Online" = a page opened in the last 5 minutes.
+const LIVE = { win: 30, data: null, timer: null };
+const PAGE_NAME = p => { const x = String(p || '/').split('?')[0]; if (x === '/') return 'Homepage'; if (x.startsWith('/listing/')) return 'Listing'; if (x.startsWith('/agent/')) return 'Agent page'; if (x.startsWith('/project/')) return 'Project'; return x.replace(/^\//, '').replace(/-/g, ' ').replace(/\//g, ' › ').replace(/^./, c => c.toUpperCase()); };
+const ago = d => { const s = Math.max(0, (Date.now() - new Date(d)) / 1000); return s < 60 ? Math.floor(s) + ' s ago' : s < 3600 ? Math.floor(s / 60) + ' min ago' : Math.floor(s / 3600) + ' h ago'; };
+async function loadLive() { const { data, error } = await C.sb.rpc('yh_admin_live', { p_minutes: LIVE.win }); if (!error) LIVE.data = data; return LIVE.data; }
+function liveHtml() {
+  const L = LIVE.data;
+  if (!L) return panel('Live now', empty('Loading…'));
+  const ss = L.sessions || [], on = ss.filter(x => x.online);
+  const win = [[5, '5 min'], [30, '30 min'], [60, '1 hour'], [1440, '24 hours']];
+  const card = x => `<div class="alv${x.online ? ' on' : ''}">
+      <div class="alvh"><span class="alvf">${flag(x.country)}</span><div><b>${esc(x.city || (x.country ? COUNTRY(x.country) : 'Unknown place'))}${x.city && x.country ? `, ${esc(COUNTRY(x.country))}` : ''}</b>
+        <small>${x.online ? '<i class="alvdot"></i>Online now' : 'Last seen ' + ago(x.last)} · ${x.new ? 'new visitor' : 'returning'} · #${esc(x.v)}</small></div></div>
+      <div class="alvnow"><span>Now on</span><a href="${esc(x.cur || '/')}" target="_blank" rel="noopener">${esc(PAGE_NAME(x.cur))}</a></div>
+      <div class="alvtags"><span>${esc((x.device || '?')[0].toUpperCase() + (x.device || '?').slice(1))}</span><span>${esc(x.browser || '')}</span><span>${esc(x.os || '')}</span><span>${esc((x.lang || '').toUpperCase())}</span><span class="t-src">From: ${esc(x.ref === 'direct' || !x.ref ? 'direct / typed' : x.ref)}</span>${x.utm ? `<span class="t-src">${esc(x.utm)}</span>` : ''}</div>
+      <div class="alvtrail">${(x.trail || []).map(p => `<span>${esc(PAGE_NAME(p))}</span>`).join('<em>›</em>')}${x.pages > 12 ? '<em>…</em>' : ''}</div>
+      ${(x.listings || []).length ? `<div class="alvl"><span>Listings opened</span>${x.listings.slice(0, 5).map(l => `<a href="#/l/${esc(l.id)}">${esc(l.title)}${l.kind !== 'view' ? ` <i>${esc(l.kind)}</i>` : ''}</a>`).join('')}</div>` : ''}
+      <div class="alvf2">${x.pages} page${x.pages > 1 ? 's' : ''} · came ${ago(x.first)}</div></div>`;
+  return `<div class="alivebar"><div class="alvbig"><i class="alvdot"></i><b>${fmt(L.now)}</b><span>online now</span></div>
+      <div class="alvsm"><b>${fmt(L.recent)}</b><span>visitors · last ${win.find(w => w[0] === LIVE.win)[1]}</span></div>
+      <div class="alvsm"><b>${fmt(L.views)}</b><span>page views</span></div>
+      <div class="aper">${win.map(([n, l]) => `<button data-lwin="${n}" class="${LIVE.win === n ? 'on' : ''}">${l}</button>`).join('')}</div></div>
+    <div class="agrid3">
+      ${panel('Where they are from', bars(L.countries, 'n', 'k', 8, k => `${flag(k)} ${esc(k === '?' ? 'Unknown' : COUNTRY(k))}`))}
+      ${panel('Pages they are on', bars(L.pages, 'n', 'k', 8, k => esc(PAGE_NAME(k))))}
+      ${panel('How they came', bars(L.sources, 'n', 'k', 8, k => esc(k === 'direct' ? 'Direct / typed' : k)))}
+    </div>
+    ${panel(`Visitors – online first (${ss.length})`, ss.length ? `<div class="alvs">${[...on, ...ss.filter(x => !x.online)].map(card).join('')}</div>`
+      : empty(`Nobody in the last ${win.find(w => w[0] === LIVE.win)[1]}. Your own devices are never shown.`), `<small class="amut">Updates every 15 s</small>`)}`;
+}
+SEC.live = () => { if (!LIVE.data) loadLive().then(() => { if (S.sec === 'live' && $('asec')) { $('asec').innerHTML = liveHtml(); BIND.live(C.app.querySelector('.adm')); } }); return `<div id="alive">${liveHtml()}</div>`; };
+BIND.live = root => {
+  root.querySelectorAll('[data-lwin]').forEach(b => b.onclick = async () => { LIVE.win = +b.dataset.lwin; await loadLive(); $('asec').innerHTML = liveHtml(); BIND.live(root); });
+  clearInterval(LIVE.timer);
+  LIVE.timer = setInterval(async () => {
+    if (S.sec !== 'live' || !$('asec')) return clearInterval(LIVE.timer);
+    if (document.visibilityState !== 'visible') return;
+    await loadLive(); const y = scrollY; $('asec').innerHTML = liveHtml(); BIND.live(root); scrollTo(0, y);
+  }, 15000);
 };

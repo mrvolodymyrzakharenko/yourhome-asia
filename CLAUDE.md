@@ -320,6 +320,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   a yh_ row; auth.users is shared with the Study portal), filters, email/Telegram buttons. VERIFICATION: requests
   (yh_admin_verify) + every agent profile with ✓ Verify / Remove (yh_admin_agent). PARTNERS: requests by type, projects
   show/hide/TOP (yh_admin_project), project questions. TELEGRAM: channel (TG_CHANNEL), alert subscribers (yh_alerts), setup steps.
+- LIVE NOW (owner, 2026-11-25: "mutasd a live-okat, honnan vannak, kell egy menü külön"): the FIRST section card "Live now" (red,
+  green badge = online count; PC 9 cards in one row, tablets 3 × 3, phones it spans the full row on top). Window 5 min · 30 min ·
+  1 hour · 24 hours; online now (page opened in the last 5 min), visitors, page views; where they are from · pages they are on ·
+  how they came; one card per visitor, online first: flag + city/country, online / last seen, new or returning, the page they
+  are on now, device · browser · system · language · source (+ utm), the pages they went through, the listings they opened
+  (yh_events joined by the same visitor id). RPC yh_admin_live(minutes); refreshes itself every 15 s while open. Own devices never show.
 - A NEW thing visitors can send or post gets its place here in the same task (inbox kind or section + count).
 
 ## Rules for listings

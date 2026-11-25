@@ -103,7 +103,7 @@ export async function open(id, push) {
   dlg.querySelector('.apm-scroll').innerHTML = `
     <div class="apm-tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}<span class="tag apm-kind">${esc(t(l.deal_type === 'sale' ? 'buy' : l.deal_type))} · ${esc(t('t_' + l.property_type))}</span></div>
     <h2 id="apm-title" class="apm-title">${esc(l.title)}</h2>
-    <p class="apm-loc">${I.pin}<span><b>${esc([l.district, !l.city || l.city === 'Phnom Penh' ? t('cityPP') : l.city].filter(Boolean).join(', '))}</b><small>${esc(t('exactAddr'))}</small></span></p>
+    <p class="apm-loc">${I.pin}<span><b>${esc([l.district, !l.city || l.city === 'Phnom Penh' ? t('cityPP') : l.city].filter(Boolean).join(', '))}</b><small>${esc(l.address || t('exactAddr'))}</small></span></p>
     <div class="apm-stats">
       <div><span>${I.bed}</span><small>${esc(t('bedrooms'))}</small><b>${l.bedrooms === 0 ? esc(t('studio')) : (l.bedrooms ?? '–')}</b></div>
       <div><span>${I.bath}</span><small>${esc(t('bathrooms'))}</small><b>${l.bathrooms ?? '–'}</b></div>
@@ -111,6 +111,7 @@ export async function open(id, push) {
     </div>
     <h3 class="apm-h">${esc(t('description'))}</h3><div class="apm-desc">${esc(l.description || t('noDesc'))}</div>
     <div class="apm-am">${C.facts(l)}</div>
+    ${C.addrRows ? C.addrRows(l) : ''}
     <div id="agLinks" class="apm-ag"></div>
     <div class="apm-safe"><b>${esc(t('staySafe'))}</b><span>${esc(t('staySafeTxt'))}</span></div>
     <div class="apm-con" id="apmContact">

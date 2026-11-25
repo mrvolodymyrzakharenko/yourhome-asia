@@ -269,6 +269,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
 
 ## Rules for listings
+- ADDRESS PARTS (owner, 2026-11-25: "sangkat, utca, házszám… kerület vagy falu… ha akarja kitölti… a leírásban mindenképpen"):
+  the post form has five OPTIONAL fields – House no. · Street · Village (Phum) · Sangkat / Commune · Khan / District – saved in the
+  one address column as "No. 24, Street 278, Phum 3, Sangkat …, Khan …" (composeAddr / parseAddr in app.js, no schema change).
+  The listing popup shows the address under the title (instead of "exact address after contact") and an "Address" block of
+  labelled tiles after the facts (addrRows, .apm-addr in popup.css). The "District" select stays the search area.
 - RENT KINDS IN THE POST FORM (owner, 2026-11-25: "daily rent, weekly rent, monthly rent, long term rent… other request"):
   the listing type list is Daily rent · Weekly rent · Monthly rent · Long-term rent · Other rental (on request) · Buy · Room. A rent
   kind sets the period itself (day / week / month / month + min. term 1 year (or 6 months) / other + the "Other period" text) and

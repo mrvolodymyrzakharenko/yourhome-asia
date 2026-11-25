@@ -56,6 +56,18 @@ const money = n => {
   return k === 'KHR' ? s + ' ៛' : c[2] + s;
 };
 window.yhMoney = money;
+// ADDRESS PARTS (owner, 2026-11-25: "sangkat, utca, házszám… kerület vagy falu… ha akarja kitölti"): all optional, kept in the one
+// address column as "No. 24, Street 278, Phum 3, Sangkat Boeung Keng Kang 1, Khan Chamkarmon" (the usual Cambodian order)
+const ADDR = [['house', 'No. '], ['street', 'Street '], ['village', 'Phum '], ['sangkat', 'Sangkat '], ['khan', 'Khan ']];
+const composeAddr = p => ADDR.map(([k, pre]) => p[k] ? pre + p[k] : '').filter(Boolean).join(', ');
+function parseAddr(a) {
+  const p = {}, rest = [];
+  String(a || '').split(/\s*,\s*/).filter(Boolean).forEach(x => { const m = ADDR.find(([k, pre]) => !p[k] && x.toLowerCase().startsWith(pre.toLowerCase())); if (m) p[m[0]] = x.slice(m[1].length).trim(); else rest.push(x); });
+  if (rest.length) p.street = [p.street, ...rest].filter(Boolean).join(', ');
+  return p;
+}
+const addrRows = l => { const p = parseAddr(l.address); const rows = ADDR.filter(([k]) => p[k]).map(([k]) => `<div class="apm-addr-r"><small>${esc(t('ad_' + k))}</small><b>${esc(p[k])}</b></div>`);
+  return rows.length ? `<h3 class="apm-h">${esc(t('address'))}</h3><div class="apm-addr">${rows.join('')}</div>` : ''; };
 // which rent kind a saved listing shows in the post form
 const postDeal = l => l.deal_type !== 'rent' ? l.deal_type : l.price_period === 'day' ? 'daily' : l.price_period === 'week' ? 'weekly'
   : l.price_period === 'other' ? 'rentother' : ['6m', '1y'].includes(l.min_lease) ? 'longterm' : 'rent';
@@ -673,7 +685,11 @@ async function viewPost(editId) {
     <label>${t('description')}<textarea name="description" maxlength="5000">${esc(l.description || '')}</textarea></label>
     <div class="row"><label>${t('city')} *<select name="city" id="pCity" required>${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (l.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></label>
       <label>${t('district')} *<select name="district" id="pDist" required><option value="">—</option>${(l.district && !distList(l.city || 'Phnom Penh').includes(l.district) ? [l.district, ...distList(l.city || 'Phnom Penh')] : distList(l.city || 'Phnom Penh')).map(d => `<option ${l.district === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select></label></div>
-    <label>${t('address')}<input name="address" maxlength="200" value="${esc(l.address || '')}"></label>
+    ${(() => { const ap = parseAddr(l.address), inp = (k, ph) => `<label>${t('ad_' + k)}<input name="a_${k}" maxlength="${k === 'street' ? 80 : 50}" placeholder="${esc(ph)}" value="${esc(ap[k] || '')}"></label>`;
+      return `<div><div class="mp-lab" style="margin-top:0">${t('address')} <span style="color:var(--muted);font-weight:400">(${t('optional')})</span></div>
+      <div class="row">${inp('house', '24')}${inp('street', '278')}</div>
+      <div class="row">${inp('village', '3')}${inp('sangkat', 'Boeung Keng Kang 1')}</div>
+      <div class="row">${inp('khan', 'Chamkarmon')}<span></span></div></div>`; })()}
     <label>${t('pickMap')}<div class="pick-map" id="pmap"></div></label>
     <label>${t('photos')}<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple></label>
     <p class="phint">${esc(t('photosHint'))} <b id="pcount"></b></p>
@@ -738,7 +754,7 @@ async function viewPost(editId) {
       amenities: fd.getAll('amen').filter(a => AMEN.includes(a)), posted_by: f.posted_by || null,
       min_lease: f.deal_type === 'sale' ? null : f.deal_type === 'longterm' && !['6m', '1y'].includes(f.min_lease) ? '1y' : (f.min_lease || null),
       title_type: f.deal_type === 'sale' ? (f.title_type || null) : null, foreigner_ok: f.deal_type === 'sale' ? !!f.foreigner_ok : null,
-      city: CITY_NAMES.includes(f.city) ? f.city : 'Phnom Penh', district: f.district, address: f.address.trim() || null, lat: pos ? pos[0] : null, lng: pos ? pos[1] : null, photos,
+      city: CITY_NAMES.includes(f.city) ? f.city : 'Phnom Penh', district: f.district, address: composeAddr(Object.fromEntries(ADDR.map(([k, pre]) => { let v = String(f['a_' + k] || '').trim().replace(/,/g, ' '); if (v.toLowerCase().startsWith(pre.toLowerCase())) v = v.slice(pre.length).trim(); return [k, v]; }))).slice(0, 200) || null, lat: pos ? pos[0] : null, lng: pos ? pos[1] : null, photos,
       contact_name: f.contact_name.trim() || null, contact_phone: f.contact_phone.trim() || null,
       contact_telegram: f.contact_telegram.trim() || null, contact_whatsapp: f.contact_whatsapp.trim() || null,
     };
@@ -1157,7 +1173,7 @@ async function route() {
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
-POP.init({ sb, t, esc, money, priceSuffix, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
+POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });
 
 applyStatic();

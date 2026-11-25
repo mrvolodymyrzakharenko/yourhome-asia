@@ -143,3 +143,9 @@ html.apm-on{overflow:hidden}
 }
 .apm-tools [data-apm=save][aria-pressed=true]{color:#E00025!important}
 .apm-tools [data-apm=save][aria-pressed=true] svg{fill:#E00025!important;stroke:#E00025!important}
+
+/* ADDRESS block in the listing popup (owner, 2026-11-25) */
+.apm-addr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 14px}
+.apm-addr-r{background:#F5F7FB;border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
+.apm-addr-r small{font-size:11px;color:#64748b}
+.apm-addr-r b{font-size:13px;font-weight:600;letter-spacing:-.025em;color:#0b1d51;overflow-wrap:anywhere}

@@ -292,3 +292,13 @@ fr: { d_weekly:'Location à la semaine', d_monthly:'Location au mois', d_longter
 th: { d_weekly:'เช่ารายสัปดาห์', d_monthly:'เช่ารายเดือน', d_longterm:'เช่าระยะยาว', d_other:'เช่าแบบอื่น (ตามคำขอ)' },
 };
 for (const k of Object.keys(DK)) Object.assign(T[k], DK[k]);
+
+/* ADDRESS PARTS in the post form + listing popup (owner, 2026-11-25) */
+const AD = {
+en: { ad_house:'House no.', ad_street:'Street', ad_village:'Village (Phum)', ad_sangkat:'Sangkat / Commune', ad_khan:'Khan / District', optional:'optional' },
+km: { ad_house:'ផ្ទះលេខ', ad_street:'ផ្លូវ', ad_village:'ភូមិ', ad_sangkat:'សង្កាត់ / ឃុំ', ad_khan:'ខណ្ឌ / ស្រុក', optional:'ស្រេចចិត្ត' },
+zh: { ad_house:'门牌号', ad_street:'街道', ad_village:'村（Phum）', ad_sangkat:'分区 / 乡（Sangkat）', ad_khan:'区 / 县（Khan）', optional:'选填' },
+fr: { ad_house:'N° de maison', ad_street:'Rue', ad_village:'Village (Phum)', ad_sangkat:'Sangkat / Commune', ad_khan:'Khan / District', optional:'facultatif' },
+th: { ad_house:'บ้านเลขที่', ad_street:'ถนน', ad_village:'หมู่บ้าน (ภูม)', ad_sangkat:'สังกัด / ตำบล', ad_khan:'ขัณฑ์ / อำเภอ', optional:'ไม่บังคับ' },
+};
+for (const k of Object.keys(AD)) Object.assign(T[k], AD[k]);

@@ -130,6 +130,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (button) in i18n.js, 5 languages. Homepage blocks and the results grid.
 - MENU LIST: "Become a partner" spans both columns as the last link row (pale blue), the rest two columns; long names wrap
   onto a second line on phones – never "…" (owner, 2026-11-25).
+- EVERY DROP-DOWN LIST = OUR SMALL LIST (owner, 2026-11-25 11:23, screenshot of the phone's full-screen list in the post form:
+  "sose nézzen ki így a választási menü… legyen olyan, mint a fő oldalon, picibe. Nehogy ilyet meglássak még"): picker.js opens
+  the small rounded .ypk list for EVERY <select> on the site, on every screen (post form, dashboard, partner form, agent
+  profile, header language/currency…) – never the phone's own full-screen picker. New selects need nothing extra; only
+  <select multiple>, size>1 or data-native keep the native one (don't use data-native without the owner's OK).
 - ROUND × BUTTONS (owner, 2026-11-25): every close / remove × is a DRAWN X (svg .xic or the popup/picker icons) in the exact
   centre of its circle – never the text character "×" (it sits off-centre).
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.

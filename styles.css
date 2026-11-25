@@ -1087,3 +1087,4 @@ body.rpop-open{overflow:hidden}
 .rpop-tiles button.on .rpi{background:#FDE4E7}
 /* Random call-to-action strips between listings (owner, 2026-11-25) – full row inside a grid */
 .grid>.cta-x,.row4>.cta-x,.row-scroll>.cta-x{grid-column:1/-1;margin:4px 0 8px!important}
+.ypk-l button[disabled]{opacity:.4;cursor:default}

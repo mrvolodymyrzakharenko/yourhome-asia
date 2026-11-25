@@ -8,6 +8,8 @@
 // Vercel env (project yourhome-asia, Production): TELEGRAM_CLIENT_ID, TELEGRAM_CLIENT_SECRET, SUPABASE_SERVICE_ROLE_KEY.
 // Telegram accounts get the SAME internal, never-mailed address as on the Study portal (tg<id>@telegram.studyandworkabroad.net),
 // so one Telegram person = one account across the Eleon portals – exactly like Google. It is never shown to anyone.
+// signup_site 'yourhome' (new accounts only): the Study portal's "New account" Telegram alert skips them (owner, 2026-11-25:
+// "a másik bot nem kellene működjön! csak a kambodzsai tg"; Supabase function alert_new_account).
 const crypto = require('crypto');
 
 const ISSUER = 'https://oauth.telegram.org';
@@ -92,7 +94,7 @@ async function identity(code, p) {
 async function sessionToken(who) {
   const H = { apikey: serviceKey(), Authorization: 'Bearer ' + serviceKey(), 'Content-Type': 'application/json' };
   const email = 'tg' + who.id + '@' + EMAIL_DOMAIN;
-  const meta = { full_name: who.name, telegram_id: who.id, telegram_username: who.username, telegram_photo: who.picture };
+  const meta = { signup_site: 'yourhome', full_name: who.name, telegram_id: who.id, telegram_username: who.username, telegram_photo: who.picture };
   const cr = await fetch(SB_URL + '/auth/v1/admin/users', { method: 'POST', headers: H, signal: AbortSignal.timeout(8000), body: JSON.stringify({ email, email_confirm: true, user_metadata: meta }) });
   if (!cr.ok) { const t = await cr.text(); if (!/already|exists|registered/i.test(t)) return null; }
   const gl = await fetch(SB_URL + '/auth/v1/admin/generate_link', { method: 'POST', headers: H, signal: AbortSignal.timeout(8000), body: JSON.stringify({ type: 'magiclink', email }) });

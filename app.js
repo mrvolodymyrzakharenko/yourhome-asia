@@ -675,7 +675,7 @@ function viewLogin(next) {
   document.getElementById('gbtn').onclick = async () => { const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } }); if (error) toast(t('error') + error.message); };
   document.getElementById('mform').onsubmit = async e => {
     e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true;
-    const { error } = await sb.auth.signInWithOtp({ email: new FormData(e.target).get('email').trim(), options: { emailRedirectTo: redirectTo } });
+    const { error } = await sb.auth.signInWithOtp({ email: new FormData(e.target).get('email').trim(), options: { emailRedirectTo: redirectTo, data: { signup_site: 'yourhome' } } });
     btn.disabled = false; if (error) return toast(t('error') + error.message);
     toast(t('linkSent'), 6000);
   };

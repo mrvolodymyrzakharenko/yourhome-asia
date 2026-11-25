@@ -342,7 +342,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Vercel env (yourhome-asia, Production, set by the owner): TELEGRAM_CLIENT_ID, TELEGRAM_CLIENT_SECRET, SUPABASE_SERVICE_ROLE_KEY.
   Without them the button only says "coming soon". LIVE since 2026-11-25 on the bot @yourhomeasiabot (name "www.yourhome.asia";
   BotFather mini app → Login Widget → OpenID Connect: Redirect URI https://yourhome.asia/auth/telegram/callback, Trusted Origin
-  https://yourhome.asia); all 4 env values set (also TELEGRAM_BOT_TOKEN for the channel/bot steps). First test login worked.
+  https://yourhome.asia). ONLY THE YOURHOME BOT for YourHome (owner, 2026-11-25: "a másik bot nem kellene működjön! csak a kambodzsai
+  tg"): new Telegram and email accounts get user_metadata.signup_site 'yourhome' and the Study portal's "New account" alert
+  (Supabase alert_new_account) skips them; Google sign-ups cannot carry it yet. All 4 env values set (also TELEGRAM_BOT_TOKEN for the channel/bot steps). First test login worked.
   NEXT STEP agreed: the yourhome.asia Telegram channel (then TG_CHANNEL in app.js).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")

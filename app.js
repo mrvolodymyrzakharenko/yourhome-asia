@@ -727,6 +727,43 @@ async function setRole(role, terms, kind) {
   const { data, error } = await sb.auth.updateUser({ data: d });
   if (error) toast(t('error') + error.message); else if (data?.user) user = data.user;
 }
+// ACCOUNT TYPE POPUP (owner, 2026-11-25: "legyen az az ablak, amit már beillesztettem" – the Study portal's Tenant / Landlord
+// window): signed in without a role or without accepted Terms → a modal over the page: Tenant | Landlord · Agent · Agency
+// (then Owner / Agent / Agency), REQUIRED Terms tick, Continue. Opens on sign-in on any page and on the dashboard.
+const needsRole = () => { const m = user?.user_metadata || {}; return !!user && (!['seeker', 'advertiser'].includes(m.role) || !m.terms_accepted_at); };
+function rolePopup(onDash) {
+  if (!needsRole() || document.querySelector('.rpop')) return;
+  const m = user.user_metadata || {};
+  let pick = m.role === 'seeker' ? 'seeker' : m.role === 'advertiser' ? 'advertiser' : '', kind = ['owner', 'agent', 'agency'].includes(m.adv_kind) ? m.adv_kind : 'owner';
+  const w = document.createElement('div'); w.className = 'rpop'; w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true');
+  const draw = () => {
+    w.innerHTML = `<div class="rpop-c"><button type="button" class="rpop-x" aria-label="${esc(t('cancel'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+      <b class="rpop-t">${t('r_title')}</b><p class="rpop-q">${t('r_who')}</p>
+      <div class="rpop-tiles">
+        <button type="button" data-r="seeker" class="${pick === 'seeker' ? 'on' : ''}"><span class="rpi"><svg viewBox="0 0 24 24" aria-hidden="true">${ROLE_I.seeker}</svg></span><b>${t('r_tenant')}</b><small>${t('r_tenantSub')}</small></button>
+        <button type="button" data-r="advertiser" class="${pick === 'advertiser' ? 'on' : ''}"><span class="rpi"><svg viewBox="0 0 24 24" aria-hidden="true">${ROLE_I.owner}</svg></span><b>${t('r_landlord')}</b><small>${t('r_landlordSub')}</small></button>
+      </div>
+      ${pick === 'advertiser' ? `<div class="rpop-kind"><span>${t('r_iam')}</span>${['owner', 'agent', 'agency'].map(k => `<button type="button" data-k="${k}" class="${k === kind ? 'on' : ''}">${t('k_' + k)}</button>`).join('')}</div>` : ''}
+      <label class="rpop-terms"><input type="checkbox" id="rpTerms"${w.dataset.ok ? ' checked' : ''}><span>${t('r_terms').replace('{terms}', `<a href="/terms" target="_blank" rel="noopener">${t('terms')}</a>`).replace('{privacy}', `<a href="/privacy" target="_blank" rel="noopener">${t('privacy')}</a>`)}</span></label>
+      <button type="button" class="btn red rpop-go"${pick ? '' : ' disabled'}>${t('r_continue')}</button>
+      <p class="rpop-note">${t('r_later')}</p></div>`;
+    w.querySelector('.rpop-x').onclick = () => { w.remove(); document.body.classList.remove('rpop-open'); if (onDash) go('#/'); };
+    w.querySelectorAll('[data-r]').forEach(b => b.onclick = () => { pick = b.dataset.r; draw(); });
+    w.querySelectorAll('[data-k]').forEach(b => b.onclick = () => { kind = b.dataset.k; draw(); });
+    const cb = w.querySelector('#rpTerms'); cb.onchange = () => { if (cb.checked) w.dataset.ok = '1'; else delete w.dataset.ok; };
+    w.querySelector('.rpop-go').onclick = async e => {
+      if (!pick) return;
+      if (!cb.checked) { toast(t('r_termsNeeded'), 4000); cb.closest('label').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 }); return; }
+      e.currentTarget.disabled = true;
+      await setRole(pick, true, pick === 'advertiser' ? kind : null);
+      if (needsRole()) { e.currentTarget.disabled = false; return; }
+      w.remove(); document.body.classList.remove('rpop-open');
+      if (pick === 'advertiser' && kind !== 'owner') return go('#/account?tab=agent');
+      if (onDash) route();
+    };
+  };
+  draw(); document.body.appendChild(w); document.body.classList.add('rpop-open');
+}
 async function viewAccount() {
   if (!user) return viewLogin('account');
   const asQ = qs().get('as');
@@ -734,22 +771,8 @@ async function viewAccount() {
   const md0 = user.user_metadata || {};
   let role = md0.role;
   if ((role !== 'seeker' && role !== 'advertiser') || !md0.terms_accepted_at) {
-    let pre = role;
-    if (pre !== 'seeker' && pre !== 'advertiser') { const { count } = await sb.from('yh_listings').select('id', { count: 'exact', head: true }).eq('owner_id', user.id); pre = count ? 'owner' : ''; }
-    if (pre === 'advertiser') pre = md0.adv_kind === 'agent' ? 'agent' : 'owner';
-    const tile = r => `<button type="button" data-pick="${r}" class="dtile${r === pre ? ' on' : ''}"><span class="dti"><svg viewBox="0 0 24 24" aria-hidden="true">${ROLE_I[r]}</svg></span><b>${t('r_' + r)}</b><small>${t('r_' + r + 'Sub')}</small></button>`;
-    app.innerHTML = `<div class="wrap" style="margin-top:26px"><div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('r_who')}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
-      <div class="dtiles role-pick">${tile('seeker')}${tile('owner')}${tile('agent')}</div>
-      <label class="role-terms" style="display:flex;gap:10px;align-items:flex-start;margin:18px 0 6px;cursor:pointer"><input type="checkbox" id="roleTerms" style="margin-top:2px;width:18px;height:18px;flex:none"><span>${t('r_terms').replace('{terms}', `<a href="/terms" target="_blank" rel="noopener">${t('terms')}</a>`).replace('{privacy}', `<a href="/privacy" target="_blank" rel="noopener">${t('privacy')}</a>`)}</span></label>
-      <p style="color:var(--muted);margin:6px 0 0">${t('r_later')}</p></div>`;
-    document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };
-    app.querySelectorAll('[data-pick]').forEach(b => b.onclick = async () => {
-      const cb = document.getElementById('roleTerms');
-      if (!cb.checked) { toast(t('r_termsNeeded'), 4000); cb.closest('label').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 }); return; }
-      b.disabled = true; const pk = b.dataset.pick; await setRole(pk === 'seeker' ? 'seeker' : 'advertiser', true, pk === 'seeker' ? null : pk);
-      if (pk === 'agent') return go('#/account?tab=agent'); route();
-    });
-    return;
+    app.innerHTML = `<div class="wrap" style="margin-top:26px">${skelRow(false)}</div>`;
+    return rolePopup(true);
   }
   if (role === 'seeker') return viewSeeker();
   const tab = qs().get('tab') || 'overview';
@@ -781,7 +804,7 @@ async function viewAccount() {
   const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: t('settings') };
   let body = '';
   if (tab === 'overview') {
-    const isAgent = (user.user_metadata || {}).adv_kind === 'agent', noProfile = !(myAgents || []).length;
+    const isAgent = ['agent', 'agency'].includes((user.user_metadata || {}).adv_kind), noProfile = !(myAgents || []).length;
     body = `<div class="dtiles">
       ${isAgent && noProfile ? bigCard('#/account?tab=agent', 'agent', t('r_agentStart'), t('r_agentStartSub'), true) : ''}
       ${bigCard('#/post', 'post', t('post'), t('postSub'), !(isAgent && noProfile))}
@@ -1082,11 +1105,13 @@ sb.auth.onAuthStateChange((ev, s) => {
     const next = store.get('yh_next', null); store.set('yh_next', null);
     if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
     if (next) go('#/' + next); else route();
+    setTimeout(() => rolePopup(false), 400);
   }
 });
 if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
 const next0 = user && store.get('yh_next', null);
 if (next0 && location.pathname === '/') { store.set('yh_next', null); go('#/' + next0); } else route();
+if (user) setTimeout(() => rolePopup(/^\/account|^\/my/.test(location.pathname)), 600);
 
 // PHONE CARD NAME + ADDRESS FILL THE ROW (owner, 2026-11-24 20:12: "elejétől a végéig legyen, és a cím vele azonos szélességű"):
 // on phones "Apartment for rent in BKK1" and "Phnom Penh, <address>" are sized so each runs from the left edge to the right

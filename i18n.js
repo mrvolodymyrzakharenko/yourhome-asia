@@ -259,3 +259,13 @@ fr: { r_who:'Comment souhaitez-vous utiliser YourHome ?', r_seeker:'Locataire ou
 th: { r_who:'คุณต้องการใช้ YourHome แบบไหน?', r_seeker:'ผู้เช่าหรือผู้ซื้อ', r_seekerSub:'ฉันกำลังหาที่เช่าหรือซื้อ', r_owner:'เจ้าของหรือผู้ให้เช่า', r_ownerSub:'ฉันให้เช่าหรือขายทรัพย์สินของตัวเอง', r_agent:'นายหน้าหรือเอเจนซี่', r_agentSub:'ฉันลงประกาศให้ลูกค้า – มีหน้าเอเจนต์ของตัวเอง', r_seekerShort:'🔍 กำลังหาบ้าน', r_advertiserShort:'🏠 ลงประกาศ', r_later:'คุณสลับระหว่างการหาบ้านและการลงประกาศได้ทุกเมื่อที่ด้านบนของแดชบอร์ด', r_terms:'ฉันได้อ่านและยอมรับ{terms}และ{privacy}แล้ว ฉันรับผิดชอบต่อสิ่งที่ฉันเผยแพร่', r_termsNeeded:'กรุณายอมรับข้อกำหนดการใช้งานก่อน', r_agentStart:'สร้างหน้าเอเจนต์หรือเอเจนซี่ของคุณ', r_agentStartSub:'ขั้นที่ 1 – โปรไฟล์สาธารณะ แล้วลงประกาศ', sk_alerts:'แจ้งเตือนประกาศใหม่', sk_alertsSub:'รับประกาศใหม่ที่ตรงกับการค้นหาของคุณทาง Telegram', sk_find:'หาบ้าน', sk_findSub:'เช่า ซื้อ หรือห้องในพนมเปญ', sk_mapSub:'ดูประกาศบนแผนที่', sk_setSub:'ชื่อและการเข้าสู่ระบบ', sk_becomeAdv:'ฉันต้องการลงประกาศ', sk_becomeAdvSub:'ลงประกาศฟรี', sk_noAlerts:'ยังไม่มีการแจ้งเตือน' },
 };
 for (const k of Object.keys(R)) Object.assign(T[k], R[k]);
+
+/* ACCOUNT TYPE POPUP (owner, 2026-11-25) */
+const RP = {
+en: { r_title:'Your account', r_tenant:'Tenant', r_tenantSub:'I’m looking for a place to rent or buy', r_landlord:'Landlord · Agent · Agency', r_landlordSub:'I rent out or sell a property', r_iam:'I am', k_owner:'Owner', k_agent:'Agent', k_agency:'Agency', r_continue:'Continue' },
+km: { r_title:'គណនីរបស់អ្នក', r_tenant:'អ្នកជួល', r_tenantSub:'ខ្ញុំកំពុងរកកន្លែងជួល ឬទិញ', r_landlord:'ម្ចាស់ផ្ទះ · ភ្នាក់ងារ · ក្រុមហ៊ុនភ្នាក់ងារ', r_landlordSub:'ខ្ញុំជួលចេញ ឬលក់អចលនទ្រព្យ', r_iam:'ខ្ញុំជា', k_owner:'ម្ចាស់', k_agent:'ភ្នាក់ងារ', k_agency:'ក្រុមហ៊ុនភ្នាក់ងារ', r_continue:'បន្ត' },
+zh: { r_title:'您的账户', r_tenant:'租客', r_tenantSub:'我在找房子租或买', r_landlord:'房东 · 中介 · 中介公司', r_landlordSub:'我出租或出售房产', r_iam:'我是', k_owner:'业主', k_agent:'中介', k_agency:'中介公司', r_continue:'继续' },
+fr: { r_title:'Votre compte', r_tenant:'Locataire', r_tenantSub:'Je cherche un logement à louer ou à acheter', r_landlord:'Propriétaire · Agent · Agence', r_landlordSub:'Je loue ou vends un bien', r_iam:'Je suis', k_owner:'Propriétaire', k_agent:'Agent', k_agency:'Agence', r_continue:'Continuer' },
+th: { r_title:'บัญชีของคุณ', r_tenant:'ผู้เช่า', r_tenantSub:'ฉันกำลังหาที่เช่าหรือซื้อ', r_landlord:'เจ้าของ · นายหน้า · เอเจนซี่', r_landlordSub:'ฉันให้เช่าหรือขายทรัพย์สิน', r_iam:'ฉันเป็น', k_owner:'เจ้าของ', k_agent:'นายหน้า', k_agency:'เอเจนซี่', r_continue:'ดำเนินการต่อ' },
+};
+for (const k of Object.keys(RP)) Object.assign(T[k], RP[k]);

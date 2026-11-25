@@ -234,6 +234,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Find a home · Saved · New listing alerts (yh_alerts new_listings – list, add, delete) · Map · Settings · I want to advertise.
   ADVERTISER dashboard = the full one; for an agent/agency without a profile the first (red) tile is "Create your agent or
   agency page" and choosing Agent opens the agent profile tab.
+  POPUP (owner, 2026-11-25 11:03: "legyen az az ablak, amit már beillesztettem… bérel vagy kiad… a landlord mellé agency vagy
+  agent"): the choice is a MODAL (rolePopup() in app.js, .rpop in styles.css) like the Study portal's Tenant / Landlord window:
+  "Your account · How would you like to use YourHome?" – two tiles Tenant | Landlord · Agent · Agency (then I am: Owner · Agent ·
+  Agency), required Terms tick, red Continue. It opens right after sign-in on any page, on page load for a signed-in user who
+  has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
 
 ## Rules for listings
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin

@@ -1050,3 +1050,32 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   .cta>div{display:flex!important;align-items:center!important;min-width:0;flex:1 1 auto}
   .cta .btn{flex:0 0 auto}
 }
+
+/* ACCOUNT TYPE POPUP (owner, 2026-11-25: the Study portal Tenant / Landlord window) */
+body.rpop-open{overflow:hidden}
+.rpop{position:fixed;inset:0;z-index:3000;background:rgba(15,23,42,.45);backdrop-filter:blur(3px);display:grid;place-items:center;padding:16px;animation:rpIn .25s ease}
+@keyframes rpIn{from{opacity:0}to{opacity:1}}
+.rpop-c{position:relative;width:100%;max-width:640px;max-height:calc(100vh - 32px);overflow:auto;background:#fff;border-radius:30px;padding:30px 30px 24px;text-align:center;box-shadow:0 30px 80px rgba(15,23,42,.25)}
+.rpop-x{position:absolute;top:14px;right:14px;width:40px;height:40px;border-radius:50%;border:0;background:#E00025;color:#fff;display:grid;place-items:center;cursor:pointer;box-shadow:0 6px 16px rgba(224,0,37,.3)}
+.rpop-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.rpop-t{display:block;font-size:13px;font-weight:600;letter-spacing:-.025em;color:#0b1d51}
+.rpop-q{margin:14px 0 20px;font-size:13px;color:#1e3a8a}
+.rpop-tiles{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.rpop-tiles button{display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px 14px;border:0;border-radius:22px;background:#F5F7FB;cursor:pointer;font:inherit;box-shadow:0 8px 22px rgba(15,23,42,.06);transition:transform .2s,box-shadow .2s}
+.rpop-tiles button:hover{transform:translateY(-2px)}
+.rpop-tiles button.on{background:#fff;box-shadow:0 0 0 2px #E00025,0 10px 26px rgba(224,0,37,.12)}
+.rpop-tiles b{font-size:13px;font-weight:600;letter-spacing:-.025em;color:#0b1d51}
+.rpop-tiles small{font-size:12px;color:#475569;line-height:1.4}
+.rpi{width:48px;height:48px;border-radius:50%;background:#FDE4E7;color:#E00025;display:grid;place-items:center;margin-bottom:6px}
+.rpi svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.rpop-kind{display:flex;justify-content:center;align-items:center;gap:6px;flex-wrap:wrap;margin:16px 0 0}
+.rpop-kind span{font-size:12px;color:#64748b;margin-right:4px}
+.rpop-kind button{border:0;background:#F5F7FB;border-radius:99px;padding:8px 16px;font:inherit;font-size:13px;font-weight:500;letter-spacing:-.025em;color:#334155;cursor:pointer}
+.rpop-kind button.on{background:#FDE4E7;color:#E00025;font-weight:600}
+.rpop-terms{display:flex;gap:10px;align-items:flex-start;text-align:left;margin:20px auto 0;max-width:480px;font-size:12px;color:#334155;cursor:pointer}
+.rpop-terms input{width:18px;height:18px;flex:none;margin-top:1px;accent-color:#E00025}
+.rpop-terms a{color:#E00025;font-weight:600}
+.rpop-go{margin-top:18px;min-width:200px}
+.rpop-go[disabled]{opacity:.45;cursor:default}
+.rpop-note{margin:12px 0 0;font-size:12px;color:#94a3b8}
+@media (max-width:560px){.rpop-c{padding:26px 16px 20px;border-radius:26px}.rpop-tiles{gap:10px}.rpop-tiles button{padding:18px 10px}}

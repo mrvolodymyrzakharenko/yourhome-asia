@@ -1102,7 +1102,22 @@ let fitRaf = 0;
 function markLineStarts() {
   document.querySelectorAll('.more-panel .chips, .dtabs').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
 }
+// PHOTO DOTS IN THE MIDDLE OF THE FREE SPACE (owner, 2026-11-25: "a csíkok legyenek a két kiírás között egyenlő távolságra,
+// most az ár felé hajlik"): the dots sit halfway between the text on the left of the photo (phones: date · PC: price pill)
+// and the text on the right (phones: price · PC: nothing → the same margin as on the left), not in the centre of the photo.
+function placeDots() {
+  document.querySelectorAll('.card .ph .ydots').forEach(d => {
+    const ph = d.parentElement, r = ph.getBoundingClientRect(); if (!r.width) return;
+    const vis = el => el && el.offsetParent !== null && getComputedStyle(el).display !== 'none' ? el.getBoundingClientRect() : null;
+    const L = vis(ph.querySelector('.ydate')) || vis(ph.querySelector('.pov'));
+    const R = vis(ph.querySelector('.yprice'));
+    const left = L ? L.right - r.left : 0;
+    const right = R ? R.left - r.left : (L ? r.width - (L.left - r.left) : r.width);
+    d.style.left = Math.round((left + right) / 2) + 'px';
+  });
+}
 function fitCards() {
+  placeDots();
   markLineStarts(); fitRows();
   if (innerWidth > 720) { document.querySelectorAll('.yname,.ymeta .yaddr').forEach(e => e.style.removeProperty('font-size')); return; }
   // ONE size on every card (owner, 2026-11-24 19:55: "egyfajta méretűek legyenek, minden kiírás mint a BKK1 nagyságú"): the size

@@ -296,6 +296,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   resizes and re-encodes it as WebP (JPEG fallback), EXIF/location dropped – a large copy "<id>-L.webp" (1600px, q .8, max 2 MB)
   and a small card copy "<id>-s.webp" (800px, q .72) in Supabase Storage yh-photos. Photos never go into the repo or through Vercel.
 - imgSrc(url, width) picks the needed size: Unsplash via ?w=, our uploads "-L.webp" → "-s.webp" for cards/thumbnails; the popup uses the large copy.
+- Photo dots sit HALFWAY between the date and the price (PC: price pill and the right edge) – placeDots() in app.js, run with fitCards (owner, 2026-11-25: "egyenlő távolságra… most az ár felé hajlik").
 - EVERY photo is on the card (phones swipe, PC/tablet round arrows on hover + real dots; >8 photos = smaller dots). Only the
   first two load at once – the rest load when the visitor gets near them (yLoad()).
 - Sample listings: long descriptions (apartment, building, price and terms, "This is a sample listing…") and 12 photos each.

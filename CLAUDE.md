@@ -269,8 +269,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (title ≤60, description ≤160, canonical, og/twitter, JSON-LD Organization + BreadcrumbList + RealEstateListing /
   RealEstateAgent / FAQPage …) and its first content inside <main id="app"> (div.ssr – invisible, the app redraws it).
   About/How/Safety/FAQ/Terms/Privacy text is read from app.js PAGES (same words). Unknown address = 404 + noindex
-  ("This page is currently unavailable"), removed listing = 410, wrong listing slug = 301. "/" is index.html itself –
-  its head sits between <!--seo--> and <!--/seo-->. /sitemap.xml = api/sitemap.js (generated), robots.txt static.
+  ("This page is currently unavailable"), removed listing = 410, wrong listing slug = 301. index.html is the shell –
+  its head sits between <!--seo--> and <!--/seo--> (replaced per page). /sitemap.xml = api/sitemap.js (generated), robots.txt static.
 - LANDING PAGES: /<rent|buy|rooms|daily>/<city-slug>[/<district-slug | type-slug>] (e.g. /rent/phnom-penh/bkk1,
   /buy/phnom-penh/condo, /rent/phnom-penh/studio). In the app = #/search?deal=…&city=…&q=<district> or &type= (router.js;
   viewSearch maps slugs back to the exact names). Indexable + in the sitemap only when live listings exist (api/_seo.js
@@ -280,6 +280,14 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   PC, 1 on phones; styles.css "LOADING = SKELETON CARDS").
 - The hidden server HTML (div.ssr) is never faded in by fade.js and is visibility:hidden (owner, 2026-11-25: "még mindig valami
   szöveg bevillan") – the visitor sees nothing until the app draws the page.
+- INSTANT FIRST PAGE (owner, 2026-11-25: "nem tudod egyből magát az oldalt betölteni?"): EVERY page incl. "/" is answered by
+  api/page.js (vercel.json "routes": "/" and "/index.html" go to the function before the filesystem). On /, /rent, /buy,
+  /rooms, /daily, /search, landing pages and /listing/… the server puts the live listings (app.js LISTING_COLS, read from
+  app.js; up to 300 + their agents) into the page as window.__YH_PRE; fetchListings() → fromPre() draws the first page from
+  them at once (deal / city / district / type / studio / budget / sort filtered locally; other filters ask the database).
+  Only the FIRST route of a visit uses them; later navigations read fresh. Edge cache of these pages: 30 s (+120 s stale).
+  Homepage: listing blocks are drawn at once, the New projects block joins under them when it arrives.
+  modulepreload links in index.html start supabase-js and our modules early.
 - The first load keeps the server's <title> (route() only sets document.title on later navigations).
 - Photo alt text never empty: photoAlt() in app.js ("Apartment for rent in BKK1, Phnom Penh – photo 2").
 

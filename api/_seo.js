@@ -112,6 +112,8 @@ function render(page) {
   let html = shell();
   html = html.replace(/<!--seo-->[\s\S]*?<!--\/seo-->/, `<!--seo-->\n${head}\n<!--/seo-->`);
   html = html.replace(/<main id="app">[\s\S]*?<\/main>/, `<main id="app">${page.body || ''}</main>`);
+  // the live listings for the first page – the app draws its cards at once (app.js fromPre)
+  if (page.pre) html = html.replace('<script src="/router.js', `<script>window.__YH_PRE=${JSON.stringify(page.pre).replace(/</g, '\\u003c').replace(/\u2028|\u2029/g, '')}</script>\n<script src="/router.js`);
   return html;
 }
 

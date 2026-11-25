@@ -39,6 +39,21 @@ function pageText(key) {
       .replace(/href="#\//g, 'href="/').replace(/href="\/how"/g, 'href="/how-it-works"');
   } catch (_) { return ''; }
 }
+// Listing columns = app.js LISTING_COLS (read from the file, so both always match)
+function listingCols() {
+  pageText('terms');   // loads APPJS
+  const m = APPJS && APPJS.match(/const LISTING_COLS = '([^']+)'/);
+  return m ? m[1] : null;
+}
+async function preData() {
+  const cols = listingCols(); if (!cols) return null;
+  const listings = await sb('yh_listings', `select=${cols}&status=eq.active&country=eq.KH&order=is_featured.desc,created_at.desc&limit=301`, 2500);
+  const ids = [...new Set(listings.map(l => l.agent_id).filter(Boolean))];
+  let agents = {};
+  if (ids.length) { try { (await sb('yh_agents', `select=id,name,photo,phone,whatsapp,telegram&id=in.(${ids.join(',')})`, 2000)).forEach(a => { agents[a.id] = a; }); } catch (_) {} }
+  return { complete: listings.length <= 300, listings: listings.slice(0, 300), agents };
+}
+const PRE_PAGES = new Set(['', 'rent', 'buy', 'rooms', 'daily', 'search', 'listing']);
 const strip = s => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
 async function build(p, q) {
@@ -172,12 +187,15 @@ module.exports = async (req, res) => {
   const q = url.searchParams.toString();
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   try {
-    let page = await build(p, q);
+    const p0 = p.split('/').filter(Boolean)[0] || '';
+    const [page0, pre] = await Promise.all([build(p, q), PRE_PAGES.has(p0) ? preData().catch(() => null) : null]);
+    let page = page0;
+    if (page && pre && !page.status) page.pre = pre;
     if (page && page.redirect) { res.statusCode = 301; res.setHeader('Location', page.redirect); return res.end(); }
     if (!page) page = { status: 404, noindex: true, path: p, title: 'This page is currently unavailable | YourHome Cambodia', desc: 'The page you are looking for is not available. Search homes for rent and sale in Cambodia or contact our team.', body: body('This page is currently unavailable', 'The address may have changed, or the page was removed.', '<p><a href="/support">Contact our team</a> · <a href="/">Back to home</a></p>') };
     res.statusCode = page.status || 200;
     if (page.noindex) res.setHeader('X-Robots-Tag', 'noindex, follow');
-    res.setHeader('Cache-Control', page.status ? 'public, s-maxage=60' : 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400');
+    res.setHeader('Cache-Control', page.status ? 'public, s-maxage=60' : page.pre ? 'public, max-age=0, s-maxage=30, stale-while-revalidate=120' : 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400');
     return res.end(render(page));
   } catch (err) {
     console.error('page', p, err && err.message);

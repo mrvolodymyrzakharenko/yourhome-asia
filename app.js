@@ -267,7 +267,32 @@ function listingsMap(el, list) {
   setTimeout(() => m.invalidateSize(), 50);
 }
 
+// INSTANT FIRST PAGE (owner, 2026-11-25: "nem tudod egyből magát az oldalt betölteni?"): the server puts the live listings
+// into the page (window.__YH_PRE, api/page.js), so the first page draws its cards at once – no database wait. Simple searches
+// (deal, city, district, type, studio, budget, sort) are filtered here on the same rows; anything else asks the database.
+// Used only for the first route after a page load (later navigations always read fresh data).
+let PRE = window.__YH_PRE && Array.isArray(window.__YH_PRE.listings) ? window.__YH_PRE : null;
+const PRE_KEYS = ['deal', 'city', 'type', 'q', 'beds', 'max', 'sort', 'limit', 'view'];
+function fromPre(f) {
+  if (!PRE) return null;
+  const keys = Object.keys(f).filter(k => f[k] !== '' && f[k] != null);
+  if (keys.some(k => !PRE_KEYS.includes(k))) return null;
+  if (!PRE.complete && keys.some(k => k !== 'limit')) return null;
+  let l = PRE.listings.slice();
+  if (f.deal === 'daily') l = l.filter(x => x.deal_type === 'rent' && x.price_period === 'day'); else if (f.deal) l = l.filter(x => x.deal_type === f.deal);
+  if (f.city && CITY_NAMES.includes(f.city)) l = l.filter(x => x.city === f.city);
+  if (f.type === 'studio') l = l.filter(x => x.bedrooms === 0); else if (f.type) l = l.filter(x => x.property_type === f.type);
+  if (f.max) l = l.filter(x => Number(x.price) <= Number(f.max));
+  if (f.beds) l = f.beds === '0' ? l.filter(x => x.bedrooms === 0) : l.filter(x => x.bedrooms >= Number(f.beds));
+  if (f.q) { const s = f.q.replace(/[,()%*\\]/g, ' ').trim().slice(0, 60).toLowerCase(); if (s) l = l.filter(x => [x.district, x.title, x.address].some(v => String(v || '').toLowerCase().includes(s))); }
+  const n = (v, d) => v == null ? d : Number(v), sort = f.sort || 'new';
+  if (sort === 'cheap') l.sort((a, b) => n(a.price) - n(b.price)); else if (sort === 'exp') l.sort((a, b) => n(b.price) - n(a.price));
+  else if (sort === 'big') l.sort((a, b) => n(b.area_m2, -1) - n(a.area_m2, -1)); else if (sort === 'small') l.sort((a, b) => n(a.area_m2, 1e12) - n(b.area_m2, 1e12));
+  const ag = PRE.agents || {};
+  return l.slice(0, f.limit || 300).map(x => Object.assign({}, x, { _agent: x.agent_id ? ag[x.agent_id] || null : null }));
+}
 async function fetchListings(f = {}) {
+  const pre = fromPre(f); if (pre) return pre;
   let q = sb.from('yh_listings').select(LISTING_COLS).eq('status', 'active').eq('country', 'KH');
   if (f.deal === 'daily') q = q.eq('deal_type', 'rent').eq('price_period', 'day');   // Daily rent tab (owner, 2026-11-24)
   else if (f.deal) q = q.eq('deal_type', f.deal);
@@ -407,12 +432,17 @@ async function viewHome() {
     + block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')
     + block(t('dailyBlock'), rent.filter(l => l.price_period === 'day'), '#/search?deal=daily')
     + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale');
-  const prj = await PT.homeBlock();   // New projects block (owner, 2026-11-24)
+  // the listing blocks are drawn AT ONCE; the New projects block (owner, 2026-11-24) joins under them when it arrives
+  // (owner, 2026-11-25: "nem tudod egyből magát az oldalt betölteni?")
   const b0 = document.getElementById('blocks'); if (!b0) return;
-  b0.innerHTML = ((html + prj) || `<div class="empty">${t('noResults')}</div>`);
+  b0.innerHTML = html;
   // "Want to rent out faster?" banner sits BETWEEN the first two category blocks, not under the search (owner, 2026-11-24 17:26)
   const cta = app.querySelector('.cta'), first = b0.querySelector('section.block');
   if (cta && first) first.after(cta);
+  const prj = await PT.homeBlock();
+  if (!b0.isConnected) return;
+  if (prj) b0.insertAdjacentHTML('beforeend', prj);
+  else if (!html) b0.innerHTML = `<div class="empty">${t('noResults')}</div>`;
 }
 
 // Subscribe (Telegram) + Newest in the filters' second row – on the homepage too (owner, 2026-11-24 22:21: "hova tűnt?")
@@ -947,7 +977,9 @@ const PAGES = {
 let skipNext = false, firstRoute = true;
 // Unknown address (seo-rules.md): friendly "currently unavailable" page + Contact our team (the server answers it with 404 + noindex)
 const viewMissing = () => { app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px"><b>This page is currently unavailable</b><br>The address may have changed, or the listing was removed.<br><br><a class="btn red" href="#/support">Contact our team</a> <a class="btn ghost" href="#/">Back to home</a></div></div>`; };
+let routes = 0;
 async function route() {
+  if (routes++) PRE = null;   // the server's listings serve only the first page of a visit
   const p0 = (YH.h().slice(1).split('?')[0] || '/').split('/').filter(Boolean);
   if (p0[0] === 'l' && p0[1]) {           // a listing = the popup over the page (owner, 2026-11-24)
     if (!app.querySelector('.wrap:not(.ssr)')) await viewHome();

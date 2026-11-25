@@ -1,14 +1,14 @@
 {
-  "trailingSlash": false,
-  "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/api/sitemap" },
-    { "source": "/((?!api/)[^.]*)", "destination": "/api/page?p=/$1" }
+  "routes": [
+    { "src": "/(.+)/", "status": 308, "headers": { "Location": "/$1" } },
+    { "src": "/sitemap.xml", "dest": "/api/sitemap" },
+    { "src": "/", "dest": "/api/page?p=/" },
+    { "src": "/index.html", "dest": "/api/page?p=/" },
+    { "handle": "filesystem" },
+    { "src": "/((?!api/).*)", "dest": "/api/page?p=/$1" }
   ],
   "functions": {
     "api/page.js": { "includeFiles": "{index.html,app.js}", "maxDuration": 10 },
     "api/sitemap.js": { "maxDuration": 10 }
-  },
-  "headers": [
-    { "source": "/robots.txt", "headers": [{ "key": "Cache-Control", "value": "public, max-age=3600" }] }
-  ]
+  }
 }

@@ -1,7 +1,7 @@
 // TELEGRAM CHANNEL AUTO-POST (owner, 2026-11-25: "élesítsd a channelt" – central channel where every listing also appears):
 // Vercel cron (vercel.json "crons", every 10 min) calls this. It takes live, non-demo listings of the last 2 days that the
 // channel has not had yet (table yh_channel_posts – the row is claimed first, so nothing is posted twice) and posts each one
-// with @yourhomeasiabot: photo + caption (name, place, price, beds/baths/m²) + buttons "View listing" / "Post your listing".
+// with @yourhomeasiabot (?welcome=1 = the one-time welcome post): photo + caption (name, place, price, beds/baths/m²) + buttons "View listing" / "Post your listing".
 // Env (yourhome-asia, Production): TELEGRAM_BOT_TOKEN, SUPABASE_SERVICE_ROLE_KEY. Channel = CHANNEL below (= TG_CHANNEL in app.js).
 const S = require('./_seo');
 
@@ -43,6 +43,23 @@ function caption(l) {
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (!token() || !key()) { res.statusCode = 503; return res.end('not configured'); }
+  // ?welcome=1 – the channel's first post (once only: yh_channel_meta 'welcome'); also tells whether the bot can post there
+  if (/[?&]welcome=1\b/.test(req.url || '')) {
+    try {
+      const got = await rest('yh_channel_meta?on_conflict=key', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=representation' }, body: JSON.stringify({ key: 'welcome', value: CHANNEL }) });
+      if (!got || !got.length) { res.setHeader('Content-Type', 'text/plain; charset=utf-8'); return res.end('Already posted – the welcome message is in the channel.'); }
+      const text = ['👋 <b>Welcome to www.yourhome.asia – Cambodia!</b>', '',
+        '🏠 Apartments, condos, houses, villas and rooms for rent and sale all over Cambodia – Phnom Penh, Siem Reap, Sihanoukville, Battambang and more.', '',
+        '🆕 Every new listing on www.yourhome.asia appears here automatically – with photos, price and a direct link to the owner or agent.', '',
+        '➕ Owners and agents: post your property for free.', '', '#Cambodia #PhnomPenh #ForRent #ForSale'].join('\n');
+      const reply_markup = { inline_keyboard: [[{ text: '🔎 Browse listings', url: S.ORIGIN + '/?utm_source=telegram&utm_medium=channel' }], [{ text: '➕ Post your listing – free', url: S.ORIGIN + '/post?utm_source=telegram&utm_medium=channel' }]] };
+      const r = await tg('sendMessage', { chat_id: CHANNEL, text, parse_mode: 'HTML', reply_markup, link_preview_options: { is_disabled: true } });
+      if (!r.ok) { await rest('yh_channel_meta?key=eq.welcome', { method: 'DELETE' }); res.statusCode = 502; res.setHeader('Content-Type', 'text/plain; charset=utf-8'); return res.end('Telegram said: ' + (r.description || 'error') + '\n(Is @yourhomeasiabot an admin of ' + CHANNEL + ' with "Post messages"?)'); }
+      const pin = await tg('pinChatMessage', { chat_id: CHANNEL, message_id: r.result.message_id, disable_notification: true });
+      res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+      return res.end('✅ Posted to ' + CHANNEL + (pin.ok ? ' and pinned.' : ' (not pinned – the bot has no "Pin messages" right, that is fine).'));
+    } catch (e) { res.statusCode = 500; return res.end(String(e.message || e)); }
+  }
   const out = [];
   try {
     const since = new Date(Date.now() - 2 * 864e5).toISOString();

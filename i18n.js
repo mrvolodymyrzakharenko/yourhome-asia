@@ -242,11 +242,11 @@ for (const k of Object.keys(CO)) Object.assign(T[k], CO[k]);
 
 // Telegram channel card (bottom menu + footer)
 const TC = {
-en: { tgchTitle:'Join our Telegram channel', tgchLine:'New listings and price drops in Phnom Penh – first on Telegram.', tgchJoin:'Join on Telegram', tgchSoon:'Our channel opens soon.' },
-km: { tgchTitle:'ចូលរួមឆានែល Telegram របស់យើង', tgchLine:'ប្រកាសថ្មី និងការបញ្ចុះតម្លៃនៅភ្នំពេញ – មុនគេនៅលើ Telegram។', tgchJoin:'ចូលរួមតាម Telegram', tgchSoon:'ឆានែលរបស់យើងនឹងបើកឆាប់ៗ។' },
-zh: { tgchTitle:'加入我们的 Telegram 频道', tgchLine:'金边新房源和降价信息，第一时间在 Telegram 发布。', tgchJoin:'在 Telegram 加入', tgchSoon:'我们的频道即将开通。' },
-fr: { tgchTitle:'Rejoignez notre chaîne Telegram', tgchLine:'Nouvelles annonces et baisses de prix à Phnom Penh – d’abord sur Telegram.', tgchJoin:'Rejoindre sur Telegram', tgchSoon:'Notre chaîne ouvre bientôt.' },
-th: { tgchTitle:'เข้าร่วมช่อง Telegram ของเรา', tgchLine:'ประกาศใหม่และราคาลดในพนมเปญ – ก่อนใครบน Telegram', tgchJoin:'เข้าร่วมทาง Telegram', tgchSoon:'ช่องของเราจะเปิดเร็วๆ นี้' },
+en: { tgchTitle:'Join our Telegram channel', tgchLine:'New listings and price drops all over Cambodia – first on Telegram.', tgchJoin:'Join on Telegram', tgchSoon:'Our channel opens soon.' },
+km: { tgchTitle:'ចូលរួមឆានែល Telegram របស់យើង', tgchLine:'ប្រកាសថ្មី និងការបញ្ចុះតម្លៃទូទាំងកម្ពុជា – មុនគេនៅលើ Telegram។', tgchJoin:'ចូលរួមតាម Telegram', tgchSoon:'ឆានែលរបស់យើងនឹងបើកឆាប់ៗ។' },
+zh: { tgchTitle:'加入我们的 Telegram 频道', tgchLine:'柬埔寨各地新房源和降价信息，第一时间在 Telegram 发布。', tgchJoin:'在 Telegram 加入', tgchSoon:'我们的频道即将开通。' },
+fr: { tgchTitle:'Rejoignez notre chaîne Telegram', tgchLine:'Nouvelles annonces et baisses de prix partout au Cambodge – d’abord sur Telegram.', tgchJoin:'Rejoindre sur Telegram', tgchSoon:'Notre chaîne ouvre bientôt.' },
+th: { tgchTitle:'เข้าร่วมช่อง Telegram ของเรา', tgchLine:'ประกาศใหม่และราคาลดทั่วกัมพูชา – ก่อนใครบน Telegram', tgchJoin:'เข้าร่วมทาง Telegram', tgchSoon:'ช่องของเราจะเปิดเร็วๆ นี้' },
 };
 for (const k of Object.keys(TC)) Object.assign(T[k], TC[k]);
 

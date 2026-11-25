@@ -345,7 +345,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   https://yourhome.asia). ONLY THE YOURHOME BOT for YourHome (owner, 2026-11-25: "a másik bot nem kellene működjön! csak a kambodzsai
   tg"): new Telegram and email accounts get user_metadata.signup_site 'yourhome' and the Study portal's "New account" alert
   (Supabase alert_new_account) skips them; Google sign-ups cannot carry it yet. All 4 env values set (also TELEGRAM_BOT_TOKEN for the channel/bot steps). First test login worked.
-  NEXT STEP agreed: the yourhome.asia Telegram channel (then TG_CHANNEL in app.js).
+- TELEGRAM CHANNEL t.me/yourhomeasia (owner, 2026-11-25: name "www.yourhome.asia – Cambodia", whole Cambodia not only Phnom Penh;
+  @yourhomeasiabot is its admin with Post messages): TG_CHANNEL in app.js (bottom-menu Telegram card, footer icon) and CHANNEL in
+  api/tg-sync.js. AUTO-POST: Vercel cron every 10 min → api/tg-sync.js posts every new live non-demo listing of the last 2 days
+  once (photo + name, place, price, beds/baths/m², title, link with utm_source=telegram, buttons View listing / Post your listing,
+  hashtags); table yh_channel_posts (claimed before sending, error kept). /api/tg-sync?welcome=1 = one-time welcome post (pinned
+  if allowed; yh_channel_meta). Profile pictures were made from the site logo (blue background version recommended).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

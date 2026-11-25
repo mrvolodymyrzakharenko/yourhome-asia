@@ -173,7 +173,7 @@ document.getElementById('lang').addEventListener('change', e => { lang = e.targe
 // the bottom menu's first button and the footer Telegram icon ([data-tgch]) open a small card "Join our Telegram channel"
 // + "Join on Telegram". TG_CHANNEL = the channel's public username without @ – until it is filled in, the card says
 // "coming soon" and its button is hidden. Once set, the card also opens by itself once per visitor (3 s after load, 7 s).
-const TG_CHANNEL = '';
+const TG_CHANNEL = 'yourhomeasia';   // t.me/yourhomeasia – "www.yourhome.asia – Cambodia" (owner, 2026-11-25)
 function tgCard() {
   let c = document.getElementById('tgch');
   if (c) return c;

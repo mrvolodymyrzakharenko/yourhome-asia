@@ -1125,3 +1125,7 @@ body.rpop-open{overflow:hidden}
 .dx .arow .atb{margin-left:auto}
 .role-sw button{display:inline-flex;align-items:center;justify-content:center;gap:7px}
 .role-sw .rsi{width:16px;height:16px;flex:none}
+
+/* A hidden form field stays hidden (label{display:grid} beat the hidden attribute: "Price per" and "Other period" showed on
+   the post form for Monthly rent – owner screenshot 2026-11-25) */
+label[hidden]{display:none!important}

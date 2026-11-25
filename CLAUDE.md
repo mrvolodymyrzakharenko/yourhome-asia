@@ -363,6 +363,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   once (photo + name, place, price, beds/baths/m², title, link with utm_source=telegram, buttons View listing / Post your listing,
   hashtags); table yh_channel_posts (claimed before sending, error kept). /api/tg-sync?welcome=1 = one-time welcome post (pinned
   if allowed; yh_channel_meta). Profile pictures were made from the site logo (blue background version recommended).
+  ONE CLICK TO JOIN (owner, 2026-11-25: "egyszerűbben egy klikkre"): the bottom-menu Telegram button and the footer Telegram icon
+  open t.me/yourhomeasia directly (new tab / the Telegram app) – no card in between; the card still opens by itself once per visitor.
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

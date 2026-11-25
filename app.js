@@ -198,6 +198,9 @@ function tgCardOpen(auto) {
 function tgCardClose() { const c = document.getElementById('tgch'); if (!c || c.hidden) return; c.classList.remove('on'); setTimeout(() => { c.hidden = true; }, 250); }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-tgch]');
+  // ONE CLICK (owner, 2026-11-25: "egyszerűbben egy klikkre"): with the channel set, the bottom-menu Telegram button and the
+  // footer icon open t.me/<channel> straight away (the Telegram app on phones); the card only appears by itself once per visitor
+  if (b && TG_CHANNEL) { e.preventDefault(); tgCardClose(); window.open('https://t.me/' + TG_CHANNEL, '_blank', 'noopener'); return; }
   if (b) { e.preventDefault(); const c = document.getElementById('tgch'); c && !c.hidden ? tgCardClose() : tgCardOpen(); return; }
   const c = document.getElementById('tgch');
   if (c && !c.hidden && (e.target.closest('.tgch-x') || !c.contains(e.target))) tgCardClose();

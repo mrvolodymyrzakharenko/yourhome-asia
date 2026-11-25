@@ -1079,3 +1079,9 @@ body.rpop-open{overflow:hidden}
 .rpop-go[disabled]{opacity:.45;cursor:default}
 .rpop-note{margin:12px 0 0;font-size:12px;color:#94a3b8}
 @media (max-width:560px){.rpop-c{padding:26px 16px 20px;border-radius:26px}.rpop-tiles{gap:10px}.rpop-tiles button{padding:18px 10px}}
+/* popup tiles stand out more (owner, 2026-11-25: "alig látszik… nagyobb árnyék") */
+.rpop-tiles button{background:#EEF2FA;box-shadow:0 16px 36px rgba(15,23,42,.16),0 4px 10px rgba(15,23,42,.08)}
+.rpop-tiles button:hover{box-shadow:0 20px 44px rgba(15,23,42,.2),0 5px 12px rgba(15,23,42,.1)}
+.rpop-tiles button.on{background:#fff;box-shadow:0 0 0 2px #E00025,0 18px 40px rgba(224,0,37,.22),0 4px 10px rgba(15,23,42,.08)}
+.rpop-tiles .rpi{background:#fff;box-shadow:0 4px 12px rgba(224,0,37,.15)}
+.rpop-tiles button.on .rpi{background:#FDE4E7}

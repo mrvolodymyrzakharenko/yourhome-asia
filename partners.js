@@ -218,11 +218,20 @@ export function viewPartners() {
 const STAGE = { presale: 'Pre-sale', construction: 'Under construction', ready: 'Ready to move in' };
 const STAGE_C = { presale: 'yb-price', construction: 'yb-beds', ready: 'yb-type' };
 const fmt = n => n ? (window.yhMoney ? window.yhMoney(n) : '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })) : '';
+// Unsplash photos come in the size we need (?w=); our own uploads have a small "-s.webp" copy for cards/thumbnails
+const pimg = (u, w) => /images\.unsplash\.com/.test(u) ? (/[?&]w=\d+/.test(u) ? u.replace(/([?&])w=\d+/, '$1w=' + w) : u + (u.includes('?') ? '&' : '?') + 'w=' + w) : (w <= 800 ? String(u).replace(/-L\.webp$/, '-s.webp') : u);
+const ARR = d => `<svg viewBox="0 0 24 24"><path d="${d < 0 ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'}"/></svg>`;
+// Project cards get the same photo slider as the listing cards (app.js handles .ygal / .ydots / .yarr)
+function pslider(p) {
+  const ph = (p.photos || []).slice(0, 15); if (ph.length < 2) return '';
+  const { esc } = C;
+  return `<div class="ygal">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 800))}" alt="${esc(p.name)} – photo ${i + 1}" decoding="async">`).join('')}</div><div class="ydots${ph.length > 8 ? ' many' : ''}">${ph.map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo">${ARR(1)}</button>`;
+}
 function pcard(p) {
   const { esc } = C; const img = p.photos && p.photos[0];
   const href = '#/project/' + encodeURIComponent(p.slug);
   return `<a class="card prj-card" href="${href}">
-    <div class="ph">${img ? `<img src="${esc(img)}" alt="" loading="lazy">` : '<span class="noimg">🏗</span>'}
+    <div class="ph">${img ? `<img src="${esc(pimg(img, 800))}" alt="${esc(p.name)}" loading="lazy">` : '<span class="noimg">🏗</span>'}${pslider(p)}
       <span class="prj-badges">${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}<span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</span>
       ${p.price_from ? `<span class="prj-price">from ${fmt(p.price_from)}</span>` : ''}
       ${p.photos && p.photos.length > 1 ? `<span class="prj-count">${I.camera}${p.photos.length}</span>` : ''}
@@ -270,16 +279,16 @@ export async function viewProject(slug) {
   document.title = p.name + ' — New project — YourHome';
   const ph = p.photos || [];
   const tg = p.telegram ? String(p.telegram).replace(/^@/, '').replace(/^https?:\/\/t\.me\//, '') : '';
-  const facts = [[I.cal, 'Completion', p.completion], [I.layers, 'Units', p.units], [I.build, 'Floors', p.floors], [I.home, 'Apartments', p.unit_count]].filter(x => x[2]);
   app.innerHTML = `<div class="wrap prj-one">
     <nav class="crumbs"><a href="#/">Home</a><span>/</span><a href="#/projects">New projects</a><span>/</span><span>${esc(p.name)}</span></nav>
-    <div class="prj-gal">${ph.length ? ph.slice(0, 3).map((u, i) => `<img src="${esc(u)}" alt="${esc(p.name)} photo ${i + 1}" ${i ? 'loading="lazy"' : ''}>`).join('') : '<div class="prj-noimg">🏗</div>'}</div>
+    ${gallery(p, ph)}
     <div class="prj-main">
       <div>
-        <div class="prj-tags"><span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</div>
+        <div class="prj-tags"><span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</div>
         <h1>${esc(p.name)}</h1>
         <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}${p.developer ? ' · by ' + esc(p.developer) : ''}</p>
-        ${facts.length ? `<div class="prj-facts4">${facts.map(([ic, k, v]) => `<div>${ic}<span>${k}</span><b>${esc(v)}</b></div>`).join('')}</div>` : ''}
+        <div class="prj-mbar"><div>${p.price_from ? `<span>Prices from</span><b>${fmt(p.price_from)}</b>` : '<b>Price on request</b>'}</div><a class="btn red" href="#prjForm" data-prj-ask>Ask about it</a></div>
+        ${sheet(p)}
         ${p.description ? `<h3>About the project</h3><p class="prj-desc">${esc(p.description)}</p>` : ''}
         ${(p.amenities || []).length ? `<h3>Amenities</h3><div class="chips static">${p.amenities.map(a => `<span class="chip">${esc(C.t('am_' + a) === 'am_' + a ? a : C.t('am_' + a))}</span>`).join('')}</div>` : ''}
       </div>
@@ -297,6 +306,8 @@ export async function viewProject(slug) {
       </aside>
     </div>
   </div>`;
+  galInit(ph, p.name);
+  app.querySelectorAll('[data-prj-ask]').forEach(a => a.addEventListener('click', e => { e.preventDefault(); const f = document.getElementById('prjForm'); f.scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => f.querySelector('input')?.focus({ preventScroll: true }), 450); }));
   document.getElementById('prjForm').addEventListener('submit', async e => {
     e.preventDefault(); const form = e.target;
     const f = Object.fromEntries(new FormData(form)); for (const k in f) f[k] = String(f[k]).trim() || null;
@@ -306,4 +317,99 @@ export async function viewProject(slug) {
     form.querySelectorAll('input,textarea,button').forEach(el => el.hidden = true);
     form.querySelector('.prj-sent').hidden = false;
   });
+}
+
+// ---------- Project page gallery + fact sheet (owner, 2026-11-25: "egy nagy kép mellette 8 pici kocka… vagy egy nagy kép és
+// listáz jobbra-balra… mobilon valami adatlap, hogy milyen projekt, mikor indul") ----------
+// PC/tablet: one big photo (swipe / arrows) + 8 small squares beside it, the 8th shows "+N"; phones: the big photo swipes
+// sideways with a "3 / 12" counter and 4 small squares under it. Any click on a photo opens the full-screen viewer (lightbox).
+function gallery(p, ph) {
+  const { esc } = C;
+  if (!ph.length) return '<div class="pg pg-empty"><div class="prj-noimg">🏗</div></div>';
+  const n = ph.length, th = ph.slice(1, 9);
+  return `<div class="pg${th.length ? '' : ' pg-one'}" id="pg">
+    <div class="pg-main">
+      <div class="pg-track" id="pgTrack">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 1400))}" alt="${esc(p.name)} – photo ${i + 1}" data-pg="${i}" decoding="async">`).join('')}</div>
+      ${n > 1 ? `<button type="button" class="pg-arr pg-prev" data-pgarr="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="pg-arr pg-next" data-pgarr="1" aria-label="Next photo">${ARR(1)}</button>` : ''}
+      <span class="pg-count" id="pgCount">1 / ${n}</span>
+      <button type="button" class="pg-all" data-pgopen="0">${I.camera}All ${n} photos</button>
+    </div>
+    ${th.length ? `<div class="pg-thumbs">${th.map((u, k) => {
+      const i = k + 1, morePc = k === 7 && n > 9 ? n - 9 : 0, morePh = k === 3 && n > 5 ? n - 5 : 0;
+      return `<button type="button" class="pg-th${k > 3 ? ' pg-th-pc' : ''}" data-pgth="${i}" aria-label="Photo ${i + 1}"><img src="${esc(pimg(u, 400))}" alt="" loading="lazy" decoding="async">${morePc ? `<span class="pg-plus pc">+${morePc}</span>` : ''}${morePh ? `<span class="pg-plus ph">+${morePh}</span>` : ''}</button>`;
+    }).join('')}</div>` : ''}
+  </div>`;
+}
+const SI = {
+  stage: S('<path d="M3 20h18M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/>'),
+  start: S('<circle cx="12" cy="12" r="9"/><path d="M10 8.5v7l5.5-3.5z"/>'),
+  done: S('<path d="M4 21V4h11l-1.5 3.5L15 11H4"/>'),
+  dev: S('<path d="M3 21h18M6 21V5h8v16M14 9h4v12M9 8h2M9 12h2M9 16h2"/>'),
+  types: S('<rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>'),
+  units: S('<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>'),
+  floors: S('<path d="m12 3 9 5-9 5-9-5z"/><path d="m3 13 9 5 9-5"/>'),
+  loc: S('<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>'),
+  price: S('<path d="M20.6 13.4 13.4 20.6a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.5"/>')
+};
+function sheet(p) {
+  const { esc } = C;
+  const steps = [['presale', 'Pre-sale'], ['construction', 'Under construction'], ['ready', 'Ready to move in']];
+  const cur = Math.max(0, steps.findIndex(x => x[0] === p.stage));
+  const rows = [
+    [SI.stage, 'Status', STAGE[p.stage] || p.stage],
+    [SI.start, 'Sales start', p.sales_start],
+    [SI.done, 'Completion', p.completion],
+    [SI.dev, 'Developer', p.developer],
+    [SI.types, 'Unit types', p.units],
+    [SI.units, 'Apartments', p.unit_count ? Number(p.unit_count).toLocaleString('en-US') + ' units' : ''],
+    [SI.floors, 'Floors', p.floors],
+    [SI.loc, 'Location', [p.district, p.city].filter(Boolean).join(', ')],
+    [SI.price, 'Prices from', p.price_from ? fmt(p.price_from) : 'On request']
+  ].filter(r => r[2] !== null && r[2] !== undefined && r[2] !== '');
+  return `<section class="prj-sheet"><h3>Project overview</h3>
+    <ol class="prj-steps">${steps.map(([k, n], i) => `<li class="${i < cur ? 'done' : i === cur ? 'on' : ''}"><i></i><span>${n}</span></li>`).join('')}</ol>
+    <dl class="prj-dl">${rows.map(([ic, k, v]) => `<div>${ic}<dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join('')}</dl>
+  </section>`;
+}
+function galInit(ph, name) {
+  const tr = document.getElementById('pgTrack'); if (!tr) return;
+  const n = ph.length, cnt = document.getElementById('pgCount');
+  const load = (box, i) => [i - 1, i, i + 1, i + 2].forEach(k => { const im = box.children[(k + n) % n]; if (im && im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } });
+  const idx = () => Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth));
+  const show = (i, smooth = true) => { i = (i + n) % n; load(tr, i); tr.scrollTo({ left: tr.clientWidth * i, behavior: smooth && Math.abs(i - idx()) < 2 ? 'smooth' : 'auto' }); };
+  const mark = () => { const i = idx(); load(tr, i); cnt.textContent = `${i + 1} / ${n}`; document.querySelectorAll('.pg-th').forEach(b => b.classList.toggle('on', Number(b.dataset.pgth) === i)); };
+  tr.addEventListener('scroll', () => requestAnimationFrame(mark), { passive: true });
+  document.getElementById('pg').addEventListener('click', e => {
+    const a = e.target.closest('[data-pgarr]'), th = e.target.closest('[data-pgth]'), op = e.target.closest('[data-pgopen]'), im = e.target.closest('.pg-track img');
+    if (a) return show(idx() + Number(a.dataset.pgarr));
+    if (th) { const i = Number(th.dataset.pgth); return th.querySelector('.pg-plus') && getComputedStyle(th.querySelector('.pg-plus')).display !== 'none' ? lightbox(ph, name, i) : innerWidth <= 720 ? lightbox(ph, name, i) : show(i); }
+    if (op) return lightbox(ph, name, idx());
+    if (im) return lightbox(ph, name, Number(im.dataset.pg));
+  });
+}
+// Full-screen photo viewer: swipe / arrows / arrow keys, counter, thumbnails, drawn X; Escape or the X closes it
+function lightbox(ph, name, start) {
+  const { esc } = C; const n = ph.length;
+  document.querySelector('.pgl')?.remove();
+  const box = document.createElement('div'); box.className = 'pgl'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', name + ' photos');
+  box.innerHTML = `<div class="pgl-top"><span class="pgl-name">${esc(name)}</span><span class="pgl-n" id="pglN"></span><button type="button" class="pgl-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="pgl-track" id="pglTrack">${ph.map((u, i) => `<div class="pgl-s"><img data-src="${esc(pimg(u, 1800))}" alt="${esc(name)} – photo ${i + 1}"></div>`).join('')}</div>
+    ${n > 1 ? `<button type="button" class="pgl-arr pgl-prev" data-l="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="pgl-arr pgl-next" data-l="1" aria-label="Next photo">${ARR(1)}</button>
+    <div class="pgl-th">${ph.map((u, i) => `<button type="button" data-lt="${i}"><img src="${esc(pimg(u, 240))}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}`;
+  document.body.appendChild(box); document.documentElement.classList.add('pgl-open');
+  const tr = box.querySelector('#pglTrack'), num = box.querySelector('#pglN');
+  const load = i => [i - 1, i, i + 1].forEach(k => { const im = tr.children[(k + n) % n]?.firstElementChild; if (im && im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } });
+  const idx = () => Math.round(tr.scrollLeft / Math.max(1, tr.clientWidth));
+  const go = (i, smooth = true) => { i = (i + n) % n; load(i); tr.scrollTo({ left: tr.clientWidth * i, behavior: smooth && Math.abs(i - idx()) < 2 ? 'smooth' : 'auto' }); };
+  const mark = () => { const i = idx(); load(i); num.textContent = `${i + 1} / ${n}`; box.querySelectorAll('[data-lt]').forEach(b => { const on = Number(b.dataset.lt) === i; b.classList.toggle('on', on); if (on) b.scrollIntoView({ block: 'nearest', inline: 'center' }); }); };
+  tr.addEventListener('scroll', () => requestAnimationFrame(mark), { passive: true });
+  const close = () => { box.remove(); document.documentElement.classList.remove('pgl-open'); removeEventListener('keydown', key); removeEventListener('popstate', close); };
+  const key = e => { if (e.key === 'Escape') close(); else if (e.key === 'ArrowLeft') go(idx() - 1); else if (e.key === 'ArrowRight') go(idx() + 1); };
+  addEventListener('keydown', key); addEventListener('popstate', close);
+  box.addEventListener('click', e => {
+    if (e.target.closest('.pgl-x')) return close();
+    const a = e.target.closest('[data-l]'); if (a) return go(idx() + Number(a.dataset.l));
+    const t = e.target.closest('[data-lt]'); if (t) return go(Number(t.dataset.lt));
+  });
+  requestAnimationFrame(() => { go(start, false); mark(); });
 }

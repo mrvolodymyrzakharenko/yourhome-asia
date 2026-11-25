@@ -193,6 +193,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   call / Telegram / WhatsApp, "Ask about this project" → yh_project_leads, insert only). Homepage block "New projects" after
   the category blocks. Table yh_projects (public read of active rows; only our team adds/edits with the service key;
   is_demo = sample, 4 demo projects – delete at launch). Developers apply via #/partners?type=developers.
+- PROJECT PAGE LOOK (owner, 2026-11-25: "egy nagy kép mellette 8 pici kocka… vagy egy nagy kép és listáz jobbra-balra… mobilon
+  adatlap, hogy milyen projekt, mikor indul"): gallery() in partners.js – PC/tablet one big photo (swipe + round arrows, "3 / 12"
+  counter, "All N photos") with 8 small SQUARES beside it (2 × 4, the 8th "+N", the shown one red-framed); phones: the big photo
+  swipes sideways, 4 small photos under it (4th "+N"). Every photo opens the full-screen viewer lightbox() (.pgl: swipe, arrows,
+  arrow keys, thumbnails, drawn X, Escape/Back close). Under the title: phones a price bar ("Prices from" red 20px + "Ask about it"
+  → the form), then "Project overview" fact sheet sheet() – stage timeline Pre-sale → Under construction → Ready to move in and
+  rows Status · Sales start (yh_projects.sales_start) · Completion · Developer · Unit types · Apartments · Floors · Location ·
+  Prices from (2 columns PC, 1 on phones). Project CARDS have the listing cards' photo slider (pslider(): .ygal/.ydots/.yarr;
+  placeDots() centres the dots between the price pill and the photo count). Demo projects: 12 photos each. Styles: end of partners.css.
 
 ## Dashboard (owner, 2026-11-24)
 - Very clear, big cards: Post listing · My listings · Messages · Statistics · Telegram alerts.

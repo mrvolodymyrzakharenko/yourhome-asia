@@ -1156,8 +1156,8 @@ function placeDots() {
   document.querySelectorAll('.card .ph .ydots').forEach(d => {
     const ph = d.parentElement, r = ph.getBoundingClientRect(); if (!r.width) return;
     const vis = el => el && el.offsetParent !== null && getComputedStyle(el).display !== 'none' ? el.getBoundingClientRect() : null;
-    const L = vis(ph.querySelector('.ydate')) || vis(ph.querySelector('.pov'));
-    const R = vis(ph.querySelector('.yprice'));
+    const L = vis(ph.querySelector('.ydate')) || vis(ph.querySelector('.pov')) || vis(ph.querySelector('.prj-price'));
+    const R = vis(ph.querySelector('.yprice')) || vis(ph.querySelector('.prj-count'));
     const left = L ? L.right - r.left : 0;
     const right = R ? R.left - r.left : (L ? r.width - (L.left - r.left) : r.width);
     d.style.left = Math.round((left + right) / 2) + 'px';

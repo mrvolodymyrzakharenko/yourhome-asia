@@ -1035,3 +1035,9 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 @media (min-width:721px){ .ydots.many{gap:3px} .ydots.many button{width:4px;height:4px} .ydots.many button.on{width:11px} }
 /* Post form photo hint (owner, 2026-11-25: 12–15 photos is ideal, max 15) */
 .phint{margin:6px 0 8px;font-size:12px;line-height:1.55;color:#6B7385}.phint b{color:var(--blue,#032EA1);font-weight:600;white-space:nowrap}
+/* Every round × is a drawn X in the exact centre of its circle (owner, 2026-11-25: "több helyen az X-ek el vannak csúszva") */
+.tgch-x,.ypk-x,.apm-close,.pi button[data-rm]{display:grid!important;place-items:center!important;padding:0!important;line-height:0!important;letter-spacing:0!important;text-align:center}
+.tgch-x{width:30px!important;height:30px!important}
+.xic{display:block;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round}
+.pi button[data-rm] .xic{width:12px;height:12px}
+.ypk-x svg,.apm-close svg{display:block;margin:0!important}

@@ -141,7 +141,7 @@ function tgCard() {
 }
 function tgCardFill(c) {
   const url = TG_CHANNEL ? 'https://t.me/' + TG_CHANNEL : '';
-  c.innerHTML = `<button type="button" class="tgch-x" aria-label="${esc(t('close'))}">×</button>
+  c.innerHTML = `<button type="button" class="tgch-x" aria-label="${esc(t('close'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
     <div class="tgch-h"><span class="tgch-ic"><svg viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.4 0 1.7l4.7 1.5 1.8 5.6c.2.6.9.8 1.4.4l2.6-2.1 5 3.7c.7.5 1.6.1 1.8-.7l3.1-14.9c.2-1-.8-1.8-1.8-1.4z"/></svg></span><b>${t('tgchTitle')}</b></div>
     <p>${t('tgchLine')}</p>
     ${url ? `<a class="tgch-go" href="${url}" target="_blank" rel="noopener">${t('tgchJoin')}</a><span class="tgch-n">@${esc(TG_CHANNEL)}</span>` : `<span class="tgch-n">${t('tgchSoon')}</span>`}`;
@@ -661,7 +661,7 @@ async function viewPost(editId) {
   let mk = pos ? L.marker(pos).addTo(m) : null;
   m.on('click', e => { pos = [e.latlng.lat, e.latlng.lng]; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); });
   setTimeout(() => m.invalidateSize(), 60);
-  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(imgSrc(p, 800))}" alt=""><button type="button" data-rm="${i}">×</button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
+  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(imgSrc(p, 800))}" alt=""><button type="button" data-rm="${i}" aria-label="Remove"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
   drawPrev();
   document.getElementById('prev').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) { photos.splice(+b.dataset.rm, 1); drawPrev(); } };
   // UPLOADED PHOTOS ARE OPTIMIZED IN THE BROWSER (owner, 2026-11-25 – the Study portal's SWImageOpt rule: "ne legyen nagy

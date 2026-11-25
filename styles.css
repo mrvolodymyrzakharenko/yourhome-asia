@@ -1041,3 +1041,12 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 .xic{display:block;width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.3;stroke-linecap:round}
 .pi button[data-rm] .xic{width:12px;height:12px}
 .ypk-x svg,.apm-close svg{display:block;margin:0!important}
+/* Phones: the post banner = ONE line of call to action + "Post now", no "+" circle, everything centred vertically (owner, 2026-11-25) */
+.cta .cta-s{display:none}
+@media (max-width:720px){
+  .cta{align-items:center!important}
+  .cta .ic,.cta .cta-l{display:none!important}
+  .cta .cta-s{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+  .cta>div{display:flex!important;align-items:center!important;min-width:0;flex:1 1 auto}
+  .cta .btn{flex:0 0 auto}
+}

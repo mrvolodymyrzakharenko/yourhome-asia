@@ -95,7 +95,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).
 - Homepage: big title + search box (City · District · Type · Budget · Search, with Rent/Buy/Rooms tabs) →
   category blocks, with the "Want to rent out faster?" banner BETWEEN the first and second block (owner 17:26; phones: ONE compact
-  row, text at most 2 lines, small "Post now" pill right – owner 21:12). Blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
+  row: NO "+" circle, ONE line of call to action (ctaShort: "Post your listing for free!") + "Post now" pill, vertically centred – owner 2026-11-25). Blocks: Recommended for you (TOP) · Newest · Cheapest rentals · Rooms · For sale.
 - FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js (loaded before
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.

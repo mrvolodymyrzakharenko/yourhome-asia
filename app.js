@@ -436,7 +436,7 @@ const skelRow = (head = true) => `<section class="block skel-block" aria-busy="t
 window.yhSkel = skelRow;
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
-    <div class="cta"><div><span class="ic">+</span>${t('ctaText')}</div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>
+    <div class="cta"><div><span class="ic">+</span><span class="cta-l">${t('ctaText')}</span><span class="cta-s">${t('ctaShort')}</span></div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>
     <div id="blocks">${skelRow()}${skelRow()}</div></div>`;
   let st = {};
   const box = document.getElementById('chipBox');

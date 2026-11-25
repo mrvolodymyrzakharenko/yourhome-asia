@@ -260,6 +260,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   About/How/Safety/FAQ/Terms/Privacy text is read from app.js PAGES (same words). Unknown address = 404 + noindex
   ("This page is currently unavailable"), removed listing = 410, wrong listing slug = 301. "/" is index.html itself –
   its head sits between <!--seo--> and <!--/seo-->. /sitemap.xml = api/sitemap.js (generated), robots.txt static.
+- LANDING PAGES: /<rent|buy|rooms|daily>/<city-slug>[/<district-slug | type-slug>] (e.g. /rent/phnom-penh/bkk1,
+  /buy/phnom-penh/condo, /rent/phnom-penh/studio). In the app = #/search?deal=…&city=…&q=<district> or &type= (router.js;
+  viewSearch maps slugs back to the exact names). Indexable + in the sitemap only when live listings exist (api/_seo.js
+  landings()); empty combination = noindex. The city page links its districts/types; /rent links the cities.
+- LOADING = SKELETON CARDS (owner, 2026-11-25: "betöltésnél ilyen megjelenés van, szerintem ez hiba"): never the big white
+  "Loading…" box for listing lists – skelRow() / window.yhSkel in app.js (pale shimmering cards in the real cards' place, 4 on
+  PC, 1 on phones; styles.css "LOADING = SKELETON CARDS").
 - The first load keeps the server's <title> (route() only sets document.title on later navigations).
 - Photo alt text never empty: photoAlt() in app.js ("Apartment for rent in BKK1, Phnom Penh – photo 2").
 

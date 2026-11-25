@@ -372,10 +372,15 @@ const hero = (p = {}, deal, cat) => `<section class="hero"><h1 style="white-spac
 // List / Map switch under the search card on the homepage and the results page (owner, 2026-11-24: "hiányzik a térképes
 // nézetgomb és a listing… legyen kiírva map… nagyon fontos")
 const viewSwitch = (p = {}) => { const m = p.view === 'map'; return `<div class="vsw" role="group" aria-label="View"><a href="#/search" data-v="grid" class="${m ? '' : 'on'}">${ICON.grid}<span>${t('listing1')}</span></a><a href="#/search?view=map" data-v="map" class="${m ? 'on' : ''}">${ICON.map}<span>${t('mapNav')}</span></a></div>`; };
+// LOADING = SKELETON CARDS (owner, 2026-11-25: "betöltésnél ilyen megjelenés van, szerintem ez hiba" – no big white "Loading…" box):
+// pale shimmering cards in the exact place and size of the real ones (4 in a row on PC, 1 on phones), so nothing jumps
+const SKC = '<div class="card sk-card" aria-hidden="true"><div class="ph sk"></div><div class="cb"><span class="sk sk-l"></span><span class="sk sk-s"></span><span class="sk sk-s2"></span></div></div>';
+const skelRow = (head = true) => `<section class="block skel-block" aria-busy="true">${head ? '<div class="bh"><span class="sk sk-h"></span></div>' : ''}<div class="row4">${SKC.repeat(4)}</div></section>`;
+window.yhSkel = skelRow;
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
     <div class="cta"><div><span class="ic">+</span>${t('ctaText')}</div><a href="#/post" class="btn">${t('ctaBtn')} →</a></div>
-    <div id="blocks"><div class="empty">${t('loading')}</div></div></div>`;
+    <div id="blocks">${skelRow()}${skelRow()}</div></div>`;
   let st = {};
   const box = document.getElementById('chipBox');
   const homeTools = () => {   // same tools as the results page: Subscribe opens the Telegram alert form, Newest opens the sorted results
@@ -416,11 +421,14 @@ const SORTS = ['cheap', 'exp', 'big', 'small'];
 const resultTools = p => `<button type="button" class="ftg" id="notifyBtn" aria-label="${esc(t('notify'))}" data-tip="${esc(t('notify'))}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5zM8.9 13.6l8.6-5.4c.4-.3.8-.1.5.2l-7.4 6.7-.3 3.1-1.4-4.6z"/></svg><span>${t('subscribe')}</span></button><label class="fsort"><select id="sortSel" aria-label="${esc(t('sort'))}"><option value="new">${t('sortNew')}</option>${SORTS.map(k => `<option value="${k}" ${p.sort === k ? 'selected' : ''}>${t('so_' + k)}</option>`).join('')}</select></label>`;
 async function viewSearch() {
   const p = Object.fromEntries(qs());
+  // a landing address (/rent/phnom-penh/bkk1) carries slugs – use the list's exact names ("BKK1", "Siem Reap")
+  if (p.city) { const c = CITY_NAMES.find(x => YH.slugify(x) === YH.slugify(p.city)); if (c) p.city = c; }
+  if (p.q) { const d = distList(p.city).find(x => YH.slugify(x) === YH.slugify(p.q)); if (d) p.q = d; }
   const view = p.view === 'map' ? 'map' : 'grid';
   const deal = p.deal || '';
   const cat = p.beds === '0' ? 'studio' : (CATS.some(([k]) => k === p.type) ? p.type : '');
   app.innerHTML = `<div class="wrap">${hero(p, deal, cat)}
-    <div id="res"></div></div>`;
+    <div id="res">${p.view === 'map' ? '' : skelRow(false)}</div></div>`;
   // Results tools in the filters' second row (owner, 2026-11-24: "a Telegram alerts oda nem kell kiírni, hanem egy Telegram
   // logó… ha rámegy, kiírja… ne legyen kiírva, hogy sort, csak newest… lenyílik… két sorba, nem háromba"):
   // More filters | Listings | Map | Telegram logo (bubble on hover) | Newest ▾

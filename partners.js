@@ -256,7 +256,7 @@ export async function viewProjects() {
       <p>Condos, apartments and homes from developers – pre-sale, under construction and ready to move in.</p>
       <div class="deal-tabs prj-tabs">${[['', 'All'], ['presale', 'Pre-sale'], ['construction', 'Under construction'], ['ready', 'Ready']].map(([k, n]) => `<a class="${k === st ? 'on' : ''}" href="#/projects${k ? '?stage=' + k : ''}">${n}</a>`).join('')}</div>
     </div>
-    <div id="prjList"><div class="empty">${C.t('loading')}</div></div>
+    <div id="prjList">${window.yhSkel ? window.yhSkel(false) : ''}</div>
     <div class="prj-cta">${I.crane}<div><b>Are you a developer?</b><span>Show your project to buyers and tenants on YourHome.</span></div><a class="btn red" href="#/partners?type=developers">List your project</a></div>
   </div>`;
   let list = await fetchProjects(200);

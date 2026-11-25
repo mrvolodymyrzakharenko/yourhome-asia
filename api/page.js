@@ -58,7 +58,36 @@ async function build(p, q) {
     const list = await sb('yh_listings', `select=${LCOLS}&status=eq.active&country=eq.KH&${dq}&order=is_featured.desc,created_at.desc&limit=24`).catch(() => []);
     return { path: '/' + p0, title: title(D.t), desc: desc(D.d), image: list[0] && list[0].photos && list[0].photos[0],
       ld: [crumbs([['Home', '/'], [D.crumb, '/' + p0]]), { '@type': 'CollectionPage', name: D.h1, url: ORIGIN + '/' + p0 }],
-      body: body(esc(D.h1), D.d, cards(list, 24) || '<p>No listings yet – <a href="/post">post the first one for free</a>.</p>') };
+      body: body(esc(D.h1), D.d, (() => { const ks = Object.keys(S.landings(list)).filter(k => k.startsWith('/' + p0 + '/') && k.split('/').length === 3); return ks.length ? `<p>${ks.map(k => `<a href="${k}">${esc(D.crumb)} in ${esc((S.landings(list)[k][0].city) || 'Phnom Penh')}</a>`).join(' · ')}</p>` : ''; })() + (cards(list, 24) || '<p>No listings yet – <a href="/post">post the first one for free</a>.</p>')) };
+  }
+
+  if (DEALS[p0] && parts.length >= 2 && parts.length <= 3) {   // /rent/phnom-penh · /rent/phnom-penh/bkk1 · /buy/phnom-penh/condo
+    const D = DEALS[p0];
+    const dq = D.deal === 'daily' ? 'deal_type=eq.rent&price_period=eq.day' : D.deal === 'rent' ? 'deal_type=eq.rent' : `deal_type=eq.${D.deal}`;
+    const all = await sb('yh_listings', `select=${LCOLS},address&status=eq.active&country=eq.KH&${dq}&order=is_featured.desc,created_at.desc&limit=1000`).catch(() => []);
+    const lp = '/' + parts.map(x => S.slugify(x)).join('/');
+    if (lp !== '/' + parts.join('/')) return { redirect: lp + (q ? '?' + q : '') };
+    const list = S.landings(all)[lp] || [];
+    const inCity = all.filter(l => S.slugify(l.city || 'Phnom Penh') === parts[1]);
+    const cityName = (inCity[0] && (inCity[0].city || 'Phnom Penh')) || parts[1].split('-').map(w => w[0].toUpperCase() + w.slice(1)).join(' ');
+    const seg = parts[2] || '', isType = !!S.TYPE_PLURAL[seg];
+    const distName = seg && !isType ? ((list[0] && list[0].district) || seg.replace(/-/g, ' ').toUpperCase()) : '';
+    const what = isType ? S.TYPE_PLURAL[seg] : D.deal === 'room' ? 'Rooms' : D.deal === 'sale' ? 'Property' : D.deal === 'daily' ? 'Daily rentals' : 'Homes';
+    const verb = D.deal === 'sale' ? 'for sale' : D.deal === 'daily' ? (isType ? 'for daily rent' : '') : 'for rent';
+    const where = distName ? `${distName}, ${cityName}` : cityName;
+    const h1 = `${what} ${verb} in ${where}`.replace(/\s+/g, ' ');
+    const prices = list.map(l => Number(l.price)).filter(Boolean);
+    const d0 = list.length
+      ? `${list.length} ${list.length === 1 ? 'listing' : 'listings'}: ${h1.charAt(0).toLowerCase() + h1.slice(1)}${prices.length ? `, from ${S.money(Math.min(...prices))}${D.deal === 'sale' ? '' : D.deal === 'daily' ? '/day' : '/month'}` : ''}. Real photos, prices in USD and direct contact with owners and agents on YourHome.asia.`
+      : `${h1} on YourHome.asia – new listings from owners and agents appear here as soon as they are posted.`;
+    const cr = [['Home', '/'], [D.crumb, '/' + p0], [cityName, `/${p0}/${parts[1]}`]];
+    if (seg) cr.push([isType ? S.TYPE_PLURAL[seg] : distName, lp]);
+    // the city page links its districts and types (crawlable way to the deeper pages)
+    const subs = !seg ? Object.keys(S.landings(all)).filter(k => k.startsWith(lp + '/')) : [];
+    const subLinks = subs.length ? `<p>${subs.map(k => { const s2 = k.split('/')[3]; const ll = S.landings(all)[k]; return `<a href="${k}">${esc(S.TYPE_PLURAL[s2] || ll[0].district || s2)}</a>`; }).join(' · ')}</p>` : '';
+    return { path: lp, noindex: !list.length, title: title(h1), desc: desc(d0), image: list[0] && list[0].photos && list[0].photos[0],
+      ld: [crumbs(cr), { '@type': 'CollectionPage', name: h1, url: ORIGIN + lp }],
+      body: body(esc(h1), d0, subLinks + (cards(list, 24) || `<p><a href="/${p0}">All ${esc(D.crumb.toLowerCase())} listings</a> · <a href="/post">Post a listing for free</a></p>`)) };
   }
 
   if (p0 === 'listing' && parts[1]) {

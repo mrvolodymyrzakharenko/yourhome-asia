@@ -190,7 +190,7 @@ export async function viewAgent(slug) {
 export async function viewExperts() {
   const app = C.app;
   app.innerHTML = `<div class="wrap"><div class="bh" style="margin-top:26px"><div><h2>⚡ ${tx('agentsTitle')}</h2><div style="color:var(--muted)">${tx('agentsSub')}</div></div>
-    <a class="btn red" href="#/account?tab=agent">+ ${tx('createAgent')}</a></div><div id="res"><div class="empty">${C.t('loading')}</div></div></div>`;
+    <a class="btn red" href="#/account?tab=agent">+ ${tx('createAgent')}</a></div><div id="res">${window.yhSkel ? window.yhSkel(false) : ''}</div></div>`;
   const [{ data: ags = [] }, { data: rows = [] }] = await Promise.all([
     C.sb.from('yh_agents').select('*').eq('country', 'KH').limit(1000),
     C.sb.from('yh_listings').select('owner_id,agent_id,contact_name,contact_telegram').eq('status', 'active').limit(3000),

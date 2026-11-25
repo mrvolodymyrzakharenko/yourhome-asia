@@ -122,4 +122,25 @@ function cards(list, n = 12) {
 }
 const body = (h1, lead, extra = '') => `<div class="ssr wrap"><h1>${h1}</h1>${lead ? `<p>${esc(lead)}</p>` : ''}${extra}</div>`;
 
-module.exports = { ORIGIN, SITE, PHONE, EMAIL, esc, sb, LCOLS, listingPath, listingSlug, listingName, typeName, place, money, per, photoAlt, title, desc, img, crumbs, render, cards, body, shell };
+// Landing pages /<deal>/<city>[/<district or type>] (seo-rules.md) – only combinations with live listings are indexable
+const DEAL_SEG = { rent: 'rent', buy: 'sale', rooms: 'room', daily: 'daily' };
+const TYPE_PLURAL = { apartment: 'Apartments', condo: 'Condos', house: 'Houses', villa: 'Villas', 'twin-villa': 'Twin villas', 'link-house': 'Link houses', 'flat-house': 'Flat houses', flat: 'Flats', penthouse: 'Penthouses', studio: 'Studios', shophouse: 'Shophouses', office: 'Offices', land: 'Land' };
+const dealOf = (l) => l.deal_type === 'rent' && l.price_period === 'day' ? 'daily' : l.deal_type;
+const typeSeg = l => l.bedrooms === 0 && l.property_type !== 'room' ? 'studio' : String(l.property_type || '').replace(/_/g, '-');
+// every landing path that has at least one live listing: { path: [listings] }
+function landings(list) {
+  const out = {};
+  const add = (k, l) => { (out[k] = out[k] || []).push(l); };
+  for (const l of list) {
+    const segs = Object.keys(DEAL_SEG).filter(k => DEAL_SEG[k] === dealOf(l) || (k === 'rent' && l.deal_type === 'rent'));
+    const c = slugify(l.city || 'Phnom Penh');
+    for (const d of segs) {
+      add(`/${d}/${c}`, l);
+      if (l.district && slugify(l.district)) add(`/${d}/${c}/${slugify(l.district)}`, l);
+      if (d !== 'rooms' && TYPE_PLURAL[typeSeg(l)]) add(`/${d}/${c}/${typeSeg(l)}`, l);
+    }
+  }
+  return out;
+}
+
+module.exports = { slugify, DEAL_SEG, TYPE_PLURAL, landings, typeSeg, ORIGIN, SITE, PHONE, EMAIL, esc, sb, LCOLS, listingPath, listingSlug, listingName, typeName, place, money, per, photoAlt, title, desc, img, crumbs, render, cards, body, shell };

@@ -8,7 +8,7 @@ const url = (p, lm) => `<url><loc>${S.esc(S.ORIGIN + p)}</loc>${lm ? `<lastmod>$
 
 module.exports = async (req, res) => {
   const [ls, ags, prs] = await Promise.all([
-    S.sb('yh_listings', 'select=id,city,district,deal_type,property_type,bedrooms,price_period,created_at,updated_at,agent_id&status=eq.active&country=eq.KH&order=updated_at.desc&limit=5000', 5000).catch(() => []),
+    S.sb('yh_listings', 'select=id,city,district,deal_type,property_type,bedrooms,price_period,created_at,updated_at&status=eq.active&country=eq.KH&order=updated_at.desc&limit=5000', 5000).catch(() => []),
     S.sb('yh_agents', 'select=id,slug,created_at,updated_at&country=eq.KH&limit=2000', 5000).catch(() => []),
     S.sb('yh_projects', 'select=slug,created_at&active=eq.true&limit=1000', 5000).catch(() => []),
   ]);
@@ -16,9 +16,10 @@ module.exports = async (req, res) => {
   const lmAll = newest(ls, 'updated_at');
   const lmDeal = k => newest(ls.filter(l => k === 'daily' ? l.deal_type === 'rent' && l.price_period === 'day' : l.deal_type === k), 'updated_at');
   const lmFor = { '/': lmAll, '/rent': lmDeal('rent'), '/buy': lmDeal('sale'), '/rooms': lmDeal('room'), '/daily': lmDeal('daily'), '/projects': newest(prs, 'created_at'), '/agents': newest(ags, 'updated_at') };
-  const withListings = new Set(ls.map(l => l.agent_id).filter(Boolean));
+  const land = S.landings(ls);
   const xml = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
     + STATIC.map(p => url(p, lmFor[p] || null)).join('\n') + '\n'
+    + Object.keys(land).sort().map(k => url(k, newest(land[k], 'updated_at'))).join('\n') + '\n'
     + ls.map(l => url(S.listingPath(l), day(l.updated_at || l.created_at))).join('\n') + '\n'
     + ags.filter(a => a.slug).map(a => url('/agent/' + encodeURIComponent(a.slug), day(a.updated_at || a.created_at))).join('\n') + '\n'
     + prs.filter(p => p.slug).map(p => url('/project/' + encodeURIComponent(p.slug), day(p.created_at))).join('\n')

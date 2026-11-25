@@ -12,6 +12,10 @@
   var PATH_DEAL = { rent: 'rent', buy: 'sale', rooms: 'room', daily: 'daily' };
   var ALIAS = { experts: 'agents', how: 'how-it-works' };
   var ALIAS_BACK = { agents: 'experts', 'how-it-works': 'how' };
+  // Landing pages (seo-rules.md): /rent/phnom-penh · /rent/phnom-penh/bkk1 · /buy/phnom-penh/condo – the district is the
+  // search's q (district select), the type the search's type (studio = 0 bedrooms)
+  var TYPE_SLUGS = ['apartment','condo','house','villa','twin-villa','link-house','flat-house','flat','penthouse','studio','shophouse','office','land'];
+  var titleCase = function (s) { return s.split('-').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' '); };
   var ID_RE = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\d+)/i;
 
   function slugify(s) {
@@ -37,7 +41,15 @@
     var parts = path.split('/').filter(Boolean);
     if (parts[0] === 'l' && parts[1]) path = '/listing/' + parts[1];
     else if (ALIAS[parts[0]]) path = '/' + ALIAS[parts[0]] + (parts.length > 1 ? '/' + parts.slice(1).join('/') : '');
-    else if (parts[0] === 'search' && DEAL_PATH[q.get('deal')]) { path = DEAL_PATH[q.get('deal')]; q.delete('deal'); }
+    else if (parts[0] === 'search' && DEAL_PATH[q.get('deal')]) {
+      path = DEAL_PATH[q.get('deal')]; q.delete('deal');
+      var city = q.get('city'), dq = q.get('q'), ty = q.get('beds') === '0' && !q.get('type') ? 'studio' : q.get('type');
+      if (city && slugify(city)) {
+        path += '/' + slugify(city); q.delete('city');
+        if (dq && slugify(dq) && !ty) { path += '/' + slugify(dq); q.delete('q'); }
+        else if (ty && !dq && TYPE_SLUGS.indexOf(ty.replace(/_/g, '-')) >= 0) { path += '/' + ty.replace(/_/g, '-'); if (ty === 'studio') q.delete('beds'); else q.delete('type'); }
+      }
+    }
     else path = '/' + parts.join('/');
     var qs = q.toString();
     return path + (qs ? '?' + qs : '');
@@ -47,7 +59,12 @@
     var q = new URLSearchParams(search || '');
     var path;
     if (parts[0] === 'listing' && parts[1]) { var m = parts[1].match(ID_RE); path = '/l/' + (m ? m[1] : parts[1]); }
-    else if (PATH_DEAL[parts[0]] && parts.length === 1) { var n = new URLSearchParams({ deal: PATH_DEAL[parts[0]] }); q.forEach(function (v, k) { if (k !== 'deal') n.set(k, v); }); q = n; path = '/search'; }
+    else if (PATH_DEAL[parts[0]] && parts.length <= 3) {
+      var n = new URLSearchParams({ deal: PATH_DEAL[parts[0]] });
+      if (parts[1]) n.set('city', titleCase(parts[1]));
+      if (parts[2]) { if (parts[2] === 'studio') n.set('beds', '0'); else if (TYPE_SLUGS.indexOf(parts[2]) >= 0) n.set('type', parts[2].replace(/-/g, '_')); else n.set('q', parts[2].replace(/-/g, ' ')); }
+      q.forEach(function (v, k) { if (k !== 'deal') n.set(k, v); }); q = n; path = '/search';
+    }
     else if (ALIAS_BACK[parts[0]]) path = '/' + ALIAS_BACK[parts[0]] + (parts.length > 1 ? '/' + parts.slice(1).join('/') : '');
     else path = '/' + parts.join('/');
     var qs = q.toString();

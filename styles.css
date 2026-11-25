@@ -990,3 +990,16 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
   #dealTabs .dt-deal::before,#dealTabs .dt-cat::before,#dealTabs .dt-deal::after,#dealTabs .dt-cat::after,
   html[lang] #dealTabs .dt-cat[data-cat]:not(.on)::before{display:none!important}
 }
+
+/* LOADING = SKELETON CARDS (owner, 2026-11-25: no big white "Loading…" box) – app.js skelRow() */
+.sk{display:block;border-radius:8px;background:linear-gradient(90deg,#eef1f6 25%,#f8f9fc 40%,#eef1f6 60%);background-size:300% 100%;animation:yhsk 1.25s ease-in-out infinite}
+.sk-card{pointer-events:none}
+.sk-card .ph.sk{aspect-ratio:4/3;border-radius:0;height:auto}
+.sk-card .cb{display:flex;flex-direction:column;align-items:center;gap:9px;padding:16px 14px 18px}
+.sk-l{height:13px;width:78%}.sk-s{height:11px;width:58%}.sk-s2{height:11px;width:40%}
+.skel-block .bh .sk-h{height:13px;width:170px}
+@keyframes yhsk{0%{background-position:100% 50%}100%{background-position:0 50%}}
+@media (max-width:720px){.skel-block .row4>.sk-card:nth-child(n+2){display:none}}
+@media (prefers-reduced-motion:reduce){.sk{animation:none}}
+.sk-card .ph::before,.sk-card .ph::after{display:none!important;content:none!important}
+.sk-card .ph.sk{background:linear-gradient(90deg,#eef1f6 25%,#f8f9fc 40%,#eef1f6 60%)!important;background-size:300% 100%!important}

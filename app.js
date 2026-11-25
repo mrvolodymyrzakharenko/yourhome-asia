@@ -94,6 +94,30 @@ function trafficSource() {
   return s;
 }
 trafficSource();
+// PAGE VIEWS for the admin Visitors section (api/track.js → yh_pageviews): one beacon per shown page, only after a real
+// touch / click / key / scroll or 8 s visible (preview bots never do that), never from the admin's own browser (yh_noct).
+const PV = { armed: false, queue: [], last: '' };
+function pvSend(path) {
+  try { if (localStorage.getItem('yh_noct') || /[?&]nocount=1/.test(location.search)) { localStorage.setItem('yh_noct', '1'); return; } } catch {}
+  if (/[?&]nocount=0/.test(location.search)) try { localStorage.removeItem('yh_noct'); } catch {}
+  if (path === PV.last) return; PV.last = path;
+  const src = trafficSource(), p = new URLSearchParams(location.search);
+  const utm = [p.get('utm_source'), p.get('utm_medium'), p.get('utm_campaign')].filter(Boolean).join(' / ') || null;
+  const body = JSON.stringify({ path, v: visitorId(), ref: src, utm, lang, device: device(), wd: !!navigator.webdriver });
+  try { if (!navigator.sendBeacon('/api/track', new Blob([body], { type: 'application/json' }))) throw 0; }
+  catch { fetch('/api/track', { method: 'POST', body, headers: { 'Content-Type': 'application/json' }, keepalive: true }).catch(() => {}); }
+}
+function pageView() {
+  if (!/(^|\.)yourhome\.asia$/.test(location.hostname)) return;
+  const path = location.pathname + (location.search.replace(/[?&](nocount|utm_[a-z]+|fbclid|gclid)=[^&]*/g, '').replace(/^&/, '?') || '');
+  if (path.startsWith('/admin')) return;
+  if (PV.armed) pvSend(path); else PV.queue = [path];
+}
+(() => {
+  const arm = () => { if (PV.armed) return; PV.armed = true; ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(e => removeEventListener(e, arm)); PV.queue.forEach(pvSend); PV.queue = []; };
+  ['pointerdown', 'keydown', 'scroll', 'touchstart'].forEach(e => addEventListener(e, arm, { passive: true }));
+  setTimeout(() => { if (document.visibilityState === 'visible') arm(); }, 8000);
+})();
 function track(l, kind) {
   if (!l || l.status !== 'active' || (user && l.owner_id === user.id)) return;
   if (kind === 'view') { const k = 'yh_v_' + l.id; try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch {} }
@@ -822,30 +846,12 @@ function rolePopup(onDash) {
   };
   draw(); document.body.appendChild(w); document.body.classList.add('rpop-open');
 }
-// ADMIN: verification requests (owner's own account – table yh_admins; yh_is_admin(), yh_admin_verify() in the database)
+// ADMIN: yh_admins / yh_is_admin(); the dashboard itself is admin.js (route /admin)
 let isAdmin = null;
 const adminCheck = async () => { if (isAdmin === null && user) { const { data } = await sb.rpc('yh_is_admin'); isAdmin = !!data; } return isAdmin; };
-async function viewAdmin() {
-  app.innerHTML = `<div class="wrap" style="margin-top:26px">${skelRow(false)}</div>`;
-  const { data: rows = [], error } = await sb.from('yh_verify_requests').select('*').order('created_at', { ascending: false }).limit(300);
-  const pend = (rows || []).filter(r => r.status === 'pending'), done = (rows || []).filter(r => r.status !== 'pending');
-  const row = r => `<div class="inq" style="display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap">
-    <div style="min-width:0"><b>${esc(r.email || '')}</b> · ${t('m_' + r.method)} · <a href="${contactHref(r.contact)}" target="_blank" rel="noopener">${esc(r.contact)}</a>
-      <div style="color:var(--muted);font-size:12px">${dateTime(r.created_at)}${r.preferred_time ? ' · ' + esc(r.preferred_time) : ''}</div>${r.note ? `<div style="white-space:pre-wrap;margin-top:4px">${esc(r.note)}</div>` : ''}</div>
-    ${r.status === 'pending' ? `<div style="display:flex;gap:8px"><button class="btn red sm" data-vok="${r.id}">✓ ${t('ad_verify')}</button><button class="btn ghost sm" data-vno="${r.id}">${t('ad_reject')}</button></div>`
-      : `<span style="font-weight:600;color:${r.status === 'verified' ? 'var(--red)' : 'var(--muted)'}">${r.status === 'verified' ? '✓ ' + t('ad_verified') : t('ad_rejected')}</span>`}</div>`;
-  app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">Admin</div><h2>${t('ad_title')}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account">${t('dash')}</a></div></div>
-    ${error ? `<div class="empty">${esc(t('error') + error.message)}</div>` : `
-    <div class="panel"><h3>${t('ad_pending')} (${pend.length})</h3>${pend.length ? pend.map(row).join('') : `<div class="empty" style="padding:16px 0">${t('ad_none')}</div>`}</div>
-    ${done.length ? `<div class="panel"><h3>${t('ad_done')}</h3>${done.map(row).join('')}</div>` : ''}`}</div>`;
-  const act = ok => async e => { const b = e.currentTarget; b.disabled = true; const { error: er } = await sb.rpc('yh_admin_verify', { p_id: b.dataset.vok || b.dataset.vno, p_ok: ok }); if (er) { b.disabled = false; return toast(t('error') + er.message); } toast(t('savedOk')); viewAdmin(); };
-  app.querySelectorAll('[data-vok]').forEach(b => b.onclick = act(true));
-  app.querySelectorAll('[data-vno]').forEach(b => b.onclick = act(false));
-}
 async function viewAccount() {
   if (!user) return viewLogin('account');
-  if (qs().get('tab') === 'admin' && await adminCheck()) return viewAdmin();
+  if (qs().get('tab') === 'admin') return go('#/admin');
   const asQ = qs().get('as');
   if (asQ === 'seeker' || asQ === 'advertiser') { await setRole(asQ); return go('#/account'); }
   const md0 = user.user_metadata || {};
@@ -956,7 +962,7 @@ async function viewAccount() {
     return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
   }
   app.innerHTML = `<div class="wrap dash" style="margin-top:26px">
-    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a>${await adminCheck() ? `<a class="btn ghost sm" href="#/account?tab=admin">🛡 Admin</a>` : ''}<button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a>${await adminCheck() ? `<a class="btn ghost sm" href="#/admin">🛡 Admin</a>` : ''}<button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     ${roleSwitch('advertiser')}
     <div class="dtabs">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
@@ -1153,7 +1159,9 @@ async function route() {
     mb.setAttribute('aria-label', onMap ? t('listing1') : t('mapNav'));
   }
   window.scrollTo(0, 0);
+  pageView();
   try {
+    if (parts[0] === 'admin') { const ADM = await adminMod(); return ADM.view(); }
     if (!parts.length) await viewHome();
     else if (parts[0] === 'search') await viewSearch();
 
@@ -1172,6 +1180,9 @@ async function route() {
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
+// ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
+let ADMP = null;
+const adminMod = () => ADMP || (ADMP = import('./admin.js?v=1').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL }); return m; }));
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });

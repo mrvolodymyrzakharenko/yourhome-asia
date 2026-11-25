@@ -230,7 +230,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   form) and "Get verified" – method (phone / video / Telegram / WhatsApp), contact, best time, note → table yh_verify_requests
   (user inserts only; status pending → verified/rejected set by admin). Verified = an own yh_agents row with verified_at or a
   'verified' request. No ID upload.
-  APPROVAL: #/account?tab=admin (button "🛡 Admin" in the dashboard header, only for emails in table yh_admins – seeded with
+  APPROVAL: now in the admin dashboard /admin → Verification (see "Admin dashboard"; button "🛡 Admin" in the dashboard header, only for emails in table yh_admins – seeded with
   mr.volodymyrzakharenko@gmail.com; add more with the service key). Lists waiting / decided requests (email, method, contact,
   time, note) with "Mark as verified" / "Reject" → RPC yh_admin_verify(): sets the request status and verified_at on all the
   user's yh_agents rows; a profile created later inherits it (trigger yh_agents_inherit_verify).
@@ -267,6 +267,35 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   "Your account · How would you like to use YourHome?" – two tiles Tenant | Landlord · Agent · Agency (then I am: Owner · Agent ·
   Agency), required Terms tick, red Continue. It opens right after sign-in on any page, on page load for a signed-in user who
   has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
+
+## Admin dashboard (owner, 2026-11-25: "szuper dashboard… kártyákon tudok mozogni, olvasó menü, statisztika, visitors… még
+   átláthatóbb, több funkció" – the Study portal admin as the model)
+- /admin (#/admin; old #/account?tab=admin redirects) – only for emails in yh_admins; the dashboard header "🛡 Admin" leads there.
+  admin.js + admin.css, loaded ON DEMAND by app.js (adminMod(), dynamic import) – visitors never download them. English only.
+- Moving around = 8 big SECTION CARDS on top (PC one row of 8, tablet 4, phones 2 per row; picked card royal blue; red badge =
+  waiting): Overview · Inbox · Visitors · Listings · Accounts · Verification · Partners · Telegram. Top bar: period Today / 7 / 30
+  / 90 days, refresh, back to site, "N online now". Auto refresh every 60 s (not while typing).
+- Overview: "What needs you now" (unread messages, verification requests, new partner requests, demo listings still live) →
+  8 KPI tiles (clickable) → visits per day chart → most viewed listings · traffic sources → newest messages · newest accounts.
+- INBOX = READER: every listing message (yh_inquiries), project question (yh_project_leads), partner request
+  (yh_partner_requests) and verification request (yh_verify_requests) in ONE list; filters All · Unread · Starred · per type +
+  search; PC list left + message right, phones one at a time with "← All messages". Opening does NOT mark read (Study rule):
+  "Mark as read / unread", "Star", one-tap Call · WhatsApp · Telegram · Email from what the visitor typed, the listing/project
+  card, partner status (new · contacted · approved · rejected · closed), verify / reject, private note. Columns
+  admin_read_at / admin_star / admin_note on those four tables, RPC yh_admin_mark().
+- VISITORS: own page-view counting – app.js pageView() (in route()) sends one beacon per page to api/track.js only after a
+  real touch/click/key/scroll or 8 s visible, only on yourhome.asia, never on /admin, never from the admin's browser
+  (localStorage yh_noct, set when /admin opens; ?nocount=1 / ?nocount=0 on any page). api/track.js adds Vercel country/city
+  and browser/OS, marks bots and inserts into yh_pageviews (insert-only RLS, publishable key). NO cookie, NO IP stored.
+  Admin numbers from RPC yh_admin_visitors(days, tz): online now (5 min), today, visitors, page views, new visitors, per day,
+  time of day, sources, utm, countries, cities, languages, devices, browsers & apps, systems, pages, latest visits.
+- LISTINGS: every listing (admin read policy) with views / contact clicks / messages / saves of the period, status select
+  (Live, Hidden, Rented, Sold, Rejected), TOP on/off (is_featured – only the admin), delete (confirm), "Delete all demo
+  listings" – RPC yh_admin_listing(). ACCOUNTS: RPC yh_admin_users() – YourHome accounts only (chose a YourHome role or own
+  a yh_ row; auth.users is shared with the Study portal), filters, email/Telegram buttons. VERIFICATION: requests
+  (yh_admin_verify) + every agent profile with ✓ Verify / Remove (yh_admin_agent). PARTNERS: requests by type, projects
+  show/hide/TOP (yh_admin_project), project questions. TELEGRAM: channel (TG_CHANNEL), alert subscribers (yh_alerts), setup steps.
+- A NEW thing visitors can send or post gets its place here in the same task (inbox kind or section + count).
 
 ## Rules for listings
 - ADDRESS PARTS (owner, 2026-11-25: "sangkat, utca, házszám… kerület vagy falu… ha akarja kitölti… a leírásban mindenképpen"):

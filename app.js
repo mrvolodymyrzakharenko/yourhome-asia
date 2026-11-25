@@ -847,6 +847,20 @@ async function route() {
   const parts = path.split('/').filter(Boolean);
   const nav = parts[0] === 'search' ? (qs().get('view') === 'map' ? 'map' : 'search') : ({ '': 'home', post: 'post', saved: 'saved', experts: 'experts', agent: 'experts', account: 'account' }[parts[0] || ''] || '');
   document.querySelectorAll('.bnav a').forEach(a => a.classList.toggle('on', a.dataset.nav === nav));
+  // Map button swaps to "Listing" while the map is open (owner, 2026-11-25: "ha mapre kattint, váltson át listing ikonra"):
+  // same place in the bottom menu, grid icon + "Listing", leads back to the same search as a list.
+  const mb = document.querySelector('.bnav a[data-nav="map"]');
+  if (mb) {
+    const onMap = nav === 'map';
+    if (onMap) { const p = qs(); p.delete('view'); const s = p.toString(); mb.href = '#/search' + (s ? '?' + s : ''); }
+    else mb.href = '#/search?view=map';
+    if (mb.dataset.mode !== (onMap ? 'list' : 'map')) {
+      mb.dataset.mode = onMap ? 'list' : 'map';
+      mb.innerHTML = onMap ? `${ICON.grid}<span>${t('listing1')}</span>` : `${ICON.map}<span>${t('mapNav')}</span>`;
+    } else if (mb.lastElementChild) mb.lastElementChild.textContent = onMap ? t('listing1') : t('mapNav');
+    mb.classList.remove('on');
+    mb.setAttribute('aria-label', onMap ? t('listing1') : t('mapNav'));
+  }
   window.scrollTo(0, 0);
   try {
     if (!parts.length) await viewHome();

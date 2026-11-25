@@ -344,7 +344,7 @@ function chipRow(st, deal) {
       ${deal === 'sale' ? sel('title', ['hard', 'soft', 'strata'].map(x => [x, t('tt_' + x)]), t('titleType')) : sel('lease', LEASE.map(x => [x, t('l_' + x)]), t('lease'))}
       ${sel('days', [1, 7, 30].map(n => [n, t('d_' + n)]), t('listedWithin'))}
     </div>
-    <div class="chips mp-am">${quick.slice(2).map(a => chip('amen', a, sl('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', sl('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, sl('am_' + a))).join('')}${chip('photos', '1', sl('withPhotos'))}${deal === 'sale' ? '' : chip('by', 'agent', t('by_agent'))}</div>
+    <div class="chips mp-am">${quick.slice(2).map(a => chip('amen', a, sl('am_' + a)).replace('class="chip', 'class="chip mp-q')).join('')}${chip('by', 'owner', sl('f_owner')).replace('class="chip', 'class="chip mp-q')}${AMEN.filter(a => !quick.includes(a) && (deal === 'room' || !['private_bath', 'female_only'].includes(a))).map(a => chip('amen', a, sl('am_' + a))).join('')}${chip('photos', '1', sl('withPhotos'))}</div>
 
   </div>`;
 }

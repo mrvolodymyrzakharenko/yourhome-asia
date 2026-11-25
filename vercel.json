@@ -4,6 +4,7 @@
     { "src": "/sitemap.xml", "dest": "/api/sitemap" },
     { "src": "/", "dest": "/api/page?p=/" },
     { "src": "/index.html", "dest": "/api/page?p=/" },
+    { "src": "/auth/telegram/callback", "dest": "/api/tg-callback" },
     { "handle": "filesystem" },
     { "src": "/((?!api/).*)", "dest": "/api/page?p=/$1" }
   ],

@@ -123,6 +123,8 @@ function track(l, kind) {
   if (kind === 'view') { const k = 'yh_v_' + l.id; try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch {} }
   sb.from('yh_events').insert({ listing_id: l.id, kind, visitor: visitorId(), source: trafficSource(), device: device(), lang }).then(() => {});
 }
+// Telegram accounts carry an internal, never-mailed address (api/_tg.js) – show "Telegram @name" instead of it.
+const shownEmail = u => /@telegram\./.test(u?.email || '') ? 'Telegram' + (u.user_metadata?.telegram_username ? ' @' + u.user_metadata.telegram_username : '') : (u?.email || '');
 const tgHandle = s => { const m = String(s || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, ''); return /^[A-Za-z0-9_]{3,32}$/.test(m) ? m : null; };
 const digits = s => String(s || '').replace(/[^\d+]/g, '');
 // Wide heart (owner, 2026-11-24: "ne ilyen magas, hanem szélesebb… legyen piros, ha megnyomják")
@@ -663,10 +665,12 @@ function detailFacts(l) {
 function viewLogin(next) {
   app.innerHTML = `<div class="wrap"><div class="auth panel form"><h2 style="margin:0">${t('login')}</h2><p style="margin:0;color:var(--muted)">${t('loginNeeded')}</p>
     <button class="btn ghost wide" id="gbtn"><svg width="18" height="18" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="m6.3 14.7 6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-7.9l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> ${t('google')}</button>
+    <button class="btn ghost wide" id="tgbtn"><svg width="18" height="18" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#29A9EB"/><path fill="#fff" d="M5.4 11.8 16.9 7.4c.5-.2 1 .1.8.9l-2 9.3c-.1.6-.5.8-1 .5l-3-2.2-1.5 1.4c-.2.2-.3.3-.6.3l.2-3.1 5.6-5.1c.2-.2 0-.3-.4-.1L8.2 13.7l-3-.9c-.6-.2-.6-.6.2-1z"/></svg> ${t('tgLogin')}</button>
     <div class="sep">${t('or')}</div>
     <form id="mform" class="form"><input type="email" name="email" placeholder="${esc(t('email'))}" required><button class="btn blue wide">${t('sendLink')}</button></form></div></div>`;
   store.set('yh_next', next || 'account');
   const redirectTo = location.origin + '/';
+  document.getElementById('tgbtn').onclick = () => { location.href = '/api/tg-start'; };
   document.getElementById('gbtn').onclick = async () => { const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options: { redirectTo } }); if (error) toast(t('error') + error.message); };
   document.getElementById('mform').onsubmit = async e => {
     e.preventDefault(); const btn = e.target.querySelector('button'); btn.disabled = true;
@@ -994,7 +998,7 @@ async function viewAccount() {
     body = `<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;align-items:start">
       <form class="panel form" id="setform" style="margin:0"><h3>👤 ${t('s_account')}</h3>
         <label>${t('s_name')}<input name="name" maxlength="80" value="${esc(md.full_name || '')}"></label>
-        <label>${t('s_email')}<input value="${esc(user.email || '')}" disabled></label>
+        <label>${t('s_email')}<input value="${esc(shownEmail(user))}" disabled></label>
         <h3 style="margin-top:10px">📇 ${t('s_contacts')}</h3><p style="margin:0;color:var(--muted)">${t('s_contactsSub')}</p>
         <label>${t('s_phone')}<input name="contact_phone" maxlength="40" value="${esc(c.contact_phone || '')}"></label>
         <label>Telegram<input name="contact_telegram" maxlength="64" placeholder="@username" value="${esc(c.contact_telegram || '')}"></label>
@@ -1010,7 +1014,7 @@ async function viewAccount() {
       <button class="btn blue">${t('tgSave')}</button></form>`;
   }
   app.innerHTML = `<div class="wrap adm dx">
-    <div class="atop"><div class="atl"><span class="alogo">${DI.listings}</span><div><b>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</b><small>${t('dash')} · ${isAgent ? t('k_' + ((user.user_metadata || {}).adv_kind || 'agent')) : t('k_owner')}${vState === 'done' ? ' · ✓ ' + t('ad_verified') : ''}</small></div></div>
+    <div class="atop"><div class="atl"><span class="alogo">${DI.listings}</span><div><b>${t('hello')}, ${esc(user.user_metadata?.full_name || shownEmail(user))}</b><small>${t('dash')} · ${isAgent ? t('k_' + ((user.user_metadata || {}).adv_kind || 'agent')) : t('k_owner')}${vState === 'done' ? ' · ✓ ' + t('ad_verified') : ''}</small></div></div>
       <div class="atr dx-btns">${await adminCheck() ? `<a class="dxb" href="#/admin">${DI.shield}<span>Admin</span></a>` : ''}<a class="dxb" href="#/">${DI.back}<span>${esc(t('backSite').replace(/^←\s*/, ''))}</span></a><button class="dxb dxb-out" id="logout">${DI.out}<span>${esc(t('logout'))}</span></button></div></div>
     ${roleSwitch('advertiser')}
     <nav class="acards" aria-label="${esc(t('dash'))}">${SECS.map(k => `<a href="${k === 'post' ? '#/post' : '#/account' + (k === 'overview' ? '' : '?tab=' + k)}" class="acard${tab === k ? ' on' : ''}${k === 'post' ? ' dx-post' : ''}"><span class="aci">${DI[k]}</span><b>${secName[k]}</b><small>${esc(secSub[k])}</small>${k === 'messages' && unread.length ? `<em class="abadge">${unread.length}</em>` : ''}</a>`).join('')}</nav>
@@ -1098,12 +1102,12 @@ async function viewSeeker() {
   } else if (tab === 'settings') {
     body = `<form class="panel form" id="sksetform" style="max-width:560px"><h3>${t('s_account')}</h3>
       <label>${t('s_name')}<input name="name" maxlength="80" value="${esc(md.full_name || '')}"></label>
-      <label>${t('s_email')}<input value="${esc(user.email || '')}" disabled></label>
+      <label>${t('s_email')}<input value="${esc(shownEmail(user))}" disabled></label>
       <button class="btn blue">${t('s_save')}</button>
       <button type="button" class="btn ghost sm" id="logout2" style="justify-self:start">${t('s_signout')}</button></form>`;
   }
   app.innerHTML = `<div class="wrap" style="margin-top:26px">
-    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(md.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(md.full_name || shownEmail(user))}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     ${roleSwitch('seeker')}
     <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${label[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
@@ -1240,6 +1244,16 @@ POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, to
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });
 
 applyStatic();
+// LOG IN WITH TELEGRAM (owner, 2026-11-25; api/_tg.js): /auth/telegram/callback sends the visitor to /#tgauth=<one-time
+// token> – turned into a normal session here, then the usual yh_next / account-type popup flow below runs.
+{
+  const hm = /^#tg(auth|err)=([\w.~%-]{1,600})$/.exec(location.hash);
+  if (hm) {
+    history.replaceState(null, '', location.pathname + location.search);
+    if (hm[1] === 'auth') { const { error } = await sb.auth.verifyOtp({ type: 'magiclink', token_hash: decodeURIComponent(hm[2]) }); if (error) toast(t('tgErr'), 6000); }
+    else setTimeout(() => toast(hm[2] === 'cancel' ? t('tgCancel') : hm[2] === 'off' ? t('tgOff') : t('tgErr'), 6000), 300);
+  }
+}
 const { data: { session } } = await sb.auth.getSession();
 user = session?.user || null;
 sb.auth.onAuthStateChange((ev, s) => {

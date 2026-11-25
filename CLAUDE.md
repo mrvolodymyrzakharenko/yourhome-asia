@@ -328,6 +328,14 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.
+- LOG IN WITH TELEGRAM (owner, 2026-11-25: "lépésről lépésre megoldjuk a telegramos bejelentkezés lehetőségét"): third button
+  "Continue with Telegram" in viewLogin. Same method as the Study portal (Telegram OpenID Connect, code + PKCE) but the OWN
+  YourHome bot: api/_tg.js, /api/tg-start → Telegram → /auth/telegram/callback (vercel.json → api/tg-callback.js) → verified ID
+  token → Supabase account tg<id>@telegram.studyandworkabroad.net (same internal address as the Study portal = one account per
+  Telegram person, never shown – shownEmail() in app.js) → /#tgauth=<one-time token> → sb.auth.verifyOtp in app.js.
+  Vercel env (yourhome-asia, Production, set by the owner): TELEGRAM_CLIENT_ID, TELEGRAM_CLIENT_SECRET, SUPABASE_SERVICE_ROLE_KEY.
+  Without them the button only says "coming soon". BotFather Allowed URL: https://yourhome.asia/auth/telegram/callback.
+  NEXT STEP agreed: the yourhome.asia Telegram channel (then TG_CHANNEL in app.js).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

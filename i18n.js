@@ -10,7 +10,7 @@ en: {
   topbar: '24/7 support. Questions or feedback?', contactUs: 'Contact us →',
   experts: 'Experts', post: 'Post listing', postShort: 'Post',
   heroTitle: 'Find your home in <em>Cambodia</em><i>.</i>',
-  heroSub: 'Homes from owners and agents across Cambodia.',
+  heroSub: 'Rent, buy and sell property in Cambodia.',
   city: 'City', cityPP: 'Phnom Penh', addrPh: 'Address or district (e.g. BKK1)', type: 'Property type', budget: 'Budget', any: 'Any', search: 'Search',
   ctaText: 'Want to rent out faster? Post a listing for free!', ctaShort: 'Post your listing for free!', ctaBtn: 'Post now',
   recommended: 'Recommended for you', newest: 'Newest listings', cheapest: 'Cheapest rentals', rooms: 'Rooms', forSale: 'For sale', seeAll: 'See all →',

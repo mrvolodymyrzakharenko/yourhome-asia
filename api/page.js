@@ -64,7 +64,7 @@ async function build(p, q) {
     const list = await sb('yh_listings', `select=${LCOLS}&status=eq.active&country=eq.KH&order=is_featured.desc,created_at.desc&limit=12`).catch(() => []);
     return { path: '/', title: 'YourHome.asia — All homes in Cambodia in one search', desc: 'Apartments, houses, condos and rooms for rent and sale in Phnom Penh, Cambodia. Free listings for owners and agents.',
       ld: [{ '@type': 'WebSite', '@id': ORIGIN + '/#web', name: 'YourHome.asia', url: ORIGIN + '/', publisher: { '@id': ORIGIN + '/#org' }, potentialAction: { '@type': 'SearchAction', target: ORIGIN + '/search?q={search_term_string}', 'query-input': 'required name=search_term_string' } }],
-      body: body('Find your home in Cambodia', 'Homes from owners and agents across Cambodia.', S.cards(list)) };
+      body: body('Find your home in Cambodia', 'Rent, buy and sell property in Cambodia.', S.cards(list)) };
   }
 
   if (DEALS[p0] && parts.length === 1) {

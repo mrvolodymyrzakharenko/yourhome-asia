@@ -1088,3 +1088,19 @@ body.rpop-open{overflow:hidden}
 /* Random call-to-action strips between listings (owner, 2026-11-25) – full row inside a grid */
 .grid>.cta-x,.row4>.cta-x,.row-scroll>.cta-x{grid-column:1/-1;margin:4px 0 8px!important}
 .ypk-l button[disabled]{opacity:.4;cursor:default}
+
+/* ADVERTISER DASHBOARD IN THE ADMIN LOOK (owner, 2026-11-25) – admin.css + these few extras; the site header stays */
+.dx{padding-top:22px}
+.dx .role-sw{margin:0 0 14px}
+.dx .acard{text-decoration:none;color:inherit}
+.dx .acard.dx-post .aci{background:#E00025;color:#fff}
+.dx a.akpi{text-decoration:none;color:inherit}
+.dx a.aneedi{text-decoration:none;color:inherit}
+.dx .aico{text-decoration:none}
+.dx-lrow{display:grid;grid-template-columns:56px minmax(0,1fr) auto;gap:12px;align-items:center}
+.dx-lrow small{display:block}
+.dx-lact{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.dx-lact select{border:0;background:#F5F7FB;border-radius:999px;padding:7px 12px;font:inherit;font-size:13px}
+.dx .panel.form{box-shadow:var(--shadow)}
+@media (max-width:720px){.dx-lrow{grid-template-columns:48px minmax(0,1fr)}.dx-lact{grid-column:1/-1;justify-content:flex-start}}
+.dx .akpis.k6{grid-template-columns:repeat(3,1fr)}@media (max-width:720px){.dx .akpis.k6{grid-template-columns:repeat(2,1fr)}}

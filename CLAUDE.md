@@ -221,6 +221,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   columns, 12px side margins on phones (owner 19:51); tabs as grey words with thin dividers (picked =
   pink patch, red text), no pill box; tiles .dtile = line icon in a soft round badge (blue / red alternating), title, one line;
   Post listing tile red; 2 per row on phones, 4 on PC (styles.css "DASHBOARD"). No emoji icons.
+- ADVERTISER DASHBOARD = THE ADMIN PANEL'S LOOK (owner, 2026-11-25: "hasonló legyen az agentek, advertiserek dashboardja mint az
+  enyém"): viewAccount (advertiser role) loads admin.css and draws .wrap.adm.dx with the site header kept: top bar (hello + role /
+  ✓ verified, round icons Admin (admins only) · Back to site · Sign out), the Looking / Advertising switch, 8 SECTION CARDS (.acards:
+  Overview · Messages (unread badge) · Statistics · My listings · Post listing (red, → #/post) · Agent profile · Telegram alerts ·
+  Settings & verification) and the section: Overview = "What needs you now" (unread messages, agent page missing, first listing,
+  get verified, hidden listings) + 6 number tiles + views-per-day chart + most viewed listings + newest messages; Messages = the
+  admin's reader (list + open message with Call / WhatsApp / Telegram / Email buttons, the listing card; read state in localStorage
+  yh_inq_read, ?m=<id> opens one); Statistics = 8 tiles, chart, sources / devices / languages bars, per listing, activity; My
+  listings = rows with status select, Edit, Delete. Only the advertiser's own data. Texts dx_* in i18n.js (5 languages).
 - Statistics: views per day, unique visitors, who viewed (anonymous: device, language, traffic source), when, which
   listing, contact clicks (phone / Telegram / WhatsApp), messages. Recent activity table.
 - Telegram alerts are stored as requests (yh_alerts); sending needs the Telegram bot to be connected (not done yet).

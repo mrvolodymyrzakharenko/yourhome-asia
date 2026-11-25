@@ -882,51 +882,103 @@ async function viewAccount() {
   const views = ev.filter(e => e.kind === 'view');
   const contacts = ev.filter(e => ['phone', 'telegram', 'whatsapp'].includes(e.kind));
   const uniq = new Set(views.map(e => e.visitor)).size;
-  // Dashboard tiles (owner, 2026-11-24 19:48: "mi ez a kinézet? javítsd"): clean white tiles, a line icon in a soft round badge,
-  // title + one short line; 2 per row on phones, 4 on PC (styles.css "DASHBOARD")
-  const DI = { post: '<path d="M12 5v14M5 12h14"/>', verify: '<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>', agent: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>', listings: '<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>', messages: '<path d="M4 5h16v11H8l-4 4z"/>', stats: '<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>', telegram: '<path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/>', settings: '<circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-2.8 1.2V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-2.8-1.2l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0-1.2-2.8H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.2-2.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 2.8-1.2V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 2.8 1.2l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0 1.2 2.8H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/>' };
-  const bigCard = (href, icon, title, sub, red) => `<a href="${href}" class="dtile${red ? ' dt-red' : ''}"><span class="dti"><svg viewBox="0 0 24 24" aria-hidden="true">${DI[icon] || DI.post}</svg></span><b>${title}</b><small>${sub}</small></a>`;
-  const tabs = ['overview', 'agent', 'listings', 'messages', 'stats', 'telegram', 'settings'];
-  const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: t('settings') };
+  // ADVERTISER DASHBOARD = THE ADMIN PANEL'S LOOK (owner, 2026-11-25: "hasonló legyen az agentek, advertiserek dashboardja mint
+  // az enyém"): admin.css (loaded here too), top bar, big SECTION CARDS to move between parts, "What needs you now", number tiles,
+  // views-per-day chart, a message READER (list + open message with one-tap answer buttons), statistics and a listings manager –
+  // with the advertiser's OWN data only. Read / unread of messages is kept in this browser (localStorage yh_inq_read).
+  if (!document.getElementById('admcss')) { const lk = document.createElement('link'); lk.id = 'admcss'; lk.rel = 'stylesheet'; lk.href = '/admin.css?v=2'; document.head.appendChild(lk); }
+  const SV = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const DI = { overview: SV('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
+    messages: SV('<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v6H3v-6z"/>'), stats: SV('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),
+    listings: SV('<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>'), post: SV('<path d="M12 5v14M5 12h14"/>'), agent: SV('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>'),
+    telegram: SV('<path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/><path d="m9 13 8-6"/>'), settings: SV('<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>'),
+    back: SV('<path d="M19 12H5M11 6l-6 6 6 6"/>'), out: SV('<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/>'), check: SV('<path d="m5 12 5 5 9-10"/>'), open: SV('<path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>'),
+    phone: SV('<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2"/>'), wa: SV('<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/>'), mail: SV('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'), shield: SV('<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/>') };
+  const readSet = new Set(store.get('yh_inq_read', []));
+  const unread = inq.filter(i => !readSet.has(i.id));
+  const live = mine.filter(l => l.status === 'active');
+  const isAgent = ['agent', 'agency'].includes((user.user_metadata || {}).adv_kind), noProfile = !(myAgents || []).length;
+  const SECS = ['overview', 'messages', 'stats', 'listings', 'post', 'agent', 'telegram', 'settings'];
+  const secName = { overview: t('overview'), messages: t('inquiries'), stats: t('stats'), listings: t('my'), post: t('post'), agent: AG.label('myAgent'), telegram: t('tgAlerts'), settings: t('settings') };
+  const secSub = { overview: `${views.length} ${t('views').toLowerCase()}`, messages: unread.length ? `${unread.length} ${t('dx_unread')}` : `${inq.length}`, stats: `${uniq} ${t('dx_people')}`,
+    listings: `${live.length} ${t('dx_live')}`, post: t('dx_free'), agent: noProfile ? t('dx_create') : `${myAgents.length}`, telegram: alerts.length ? t('dx_on') : t('dx_off'),
+    settings: vState === 'done' ? '✓ ' + t('ad_verified') : vState === 'pending' ? '⏳' : t('v_title') };
+  const panel = (title, inner, extra = '') => `<section class="apanel"><div class="aph"><h3>${title}</h3>${extra}</div>${inner}</section>`;
+  const emptyB = x => `<div class="aempty">${x}</div>`;
+  const kpi = (n, label, sub, col, go) => `<${go ? `a href="${go}"` : 'div'} class="akpi k-${col}"><b>${n}</b><span>${label}</span>${sub ? `<small>${sub}</small>` : ''}</${go ? 'a' : 'div'}>`;
+  const thumb = l => l?.photos?.[0] ? `<img src="${esc(imgSrc(l.photos[0], 400))}" alt="" loading="lazy">` : `<span class="anoimg">${DI.listings}</span>`;
+  const daysArr = []; for (let i = 29; i >= 0; i--) daysArr.push(new Date(Date.now() - i * 864e5).toISOString().slice(0, 10));
+  const perDay = daysArr.map(d => { const v = views.filter(e => e.created_at.slice(0, 10) === d); return { d, views: v.length, people: new Set(v.map(e => e.visitor)).size }; });
+  const chart = () => { if (!views.length) return emptyB(t('noStats'));
+    const W = 720, H = 160, n = perDay.length, bw = W / n, m = Math.max(...perDay.map(d => d.views), 1), y = v => H - (v / m) * (H - 8);
+    const lab = d => new Date(d + 'T00:00').toLocaleDateString(lang === 'km' ? 'km-KH' : lang, { day: 'numeric', month: 'short' }); const idx = [0, 7, 14, 21, 29];
+    return `<div class="achart"><div class="aleg"><span class="lg-a">${t('visitors')}</span><span class="lg-b">${t('views')}</span><em>max ${m}</em></div><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(t('views'))}">
+      ${[.25, .5, .75, 1].map(f => `<line x1="0" x2="${W}" y1="${y(m * f)}" y2="${y(m * f)}" class="gl" vector-effect="non-scaling-stroke"/>`).join('')}
+      ${perDay.map((d, i) => `<g><title>${lab(d.d)}: ${d.people} · ${d.views}</title><rect class="bb" x="${i * bw + bw * .12}" y="${y(d.views)}" width="${bw * .76}" height="${H - y(d.views)}"/><rect class="ba" x="${i * bw + bw * .27}" y="${y(d.people)}" width="${bw * .46}" height="${H - y(d.people)}"/></g>`).join('')}</svg>
+      <div class="axl">${idx.map(i => `<span style="left:${(i + .5) * 100 / n}%">${lab(perDay[i].d)}</span>`).join('')}</div></div>`; };
+  const bars = (list, keyFn) => { const mm = {}; list.forEach(e => { const k = keyFn(e); mm[k] = (mm[k] || 0) + 1; }); const rows = Object.entries(mm).sort((a, b) => b[1] - a[1]).slice(0, 8);
+    if (!rows.length) return emptyB(t('noStats')); const top = rows[0][1], tot = list.length || 1;
+    return `<div class="abars">${rows.map(([k, v]) => `<div class="abar"><div class="abl"><span>${esc(k)}</span><em>${v}<i>${Math.round(v * 100 / tot)}%</i></em></div><div class="abt"><span style="width:${Math.max(2, v * 100 / top)}%"></span></div></div>`).join('')}</div>`; };
+  const ago = d => { const x = (Date.now() - new Date(d)) / 1000; return x < 3600 ? Math.max(1, Math.floor(x / 60)) + ' min' : x < 86400 ? Math.floor(x / 3600) + ' h' : shortDate(d); };
+  const msgRow = (i, on) => `<button class="amsg${readSet.has(i.id) ? '' : ' unread'}${on ? ' on' : ''}" data-msg="${i.id}"><span class="adot"></span><div><div class="amh"><b>${esc(i.name || '—')}</b><time>${ago(i.created_at)}</time></div>
+    <div class="ams"><span class="atag t-blue">${esc(t('dx_msg'))}</span>${esc(byId[i.listing_id]?.title || '')}</div><div class="amp">${esc((i.message || i.contact || '').slice(0, 110))}</div></div></button>`;
+  const answerBtns = c => { const raw = String(c || ''), out = [], em = (raw.match(/[^\s@,;]+@[^\s@,;]+\.[a-z]{2,}/i) || [])[0], tg = tgHandle(raw.trim().startsWith('@') || /t\.me\//i.test(raw) ? raw : ''), ph = digits(raw.includes('@') ? '' : raw);
+    if (ph && ph.length >= 7) { const intl = ph.startsWith('0') ? '855' + ph.slice(1) : ph; out.push(`<a class="adb ad-call" href="tel:+${intl}">${DI.phone}${esc(t('call'))}</a>`, `<a class="adb ad-wa" href="https://wa.me/${intl}" target="_blank" rel="noopener">${DI.wa}WhatsApp</a>`, `<a class="adb ad-tg" href="https://t.me/+${intl}" target="_blank" rel="noopener">${DI.telegram}Telegram</a>`); }
+    if (tg) out.push(`<a class="adb ad-tg" href="https://t.me/${esc(tg)}" target="_blank" rel="noopener">${DI.telegram}@${esc(tg)}</a>`);
+    if (em) out.push(`<a class="adb ad-mail" href="mailto:${esc(em)}?subject=${encodeURIComponent('YourHome.asia')}">${DI.mail}Email</a>`);
+    return out.join(''); };
   let body = '';
   if (tab === 'overview') {
-    const isAgent = ['agent', 'agency'].includes((user.user_metadata || {}).adv_kind), noProfile = !(myAgents || []).length;
-    body = `<div class="dtiles">
-      ${isAgent && noProfile ? bigCard('#/account?tab=agent', 'agent', t('r_agentStart'), t('r_agentStartSub'), true) : ''}
-      ${bigCard('#/post', 'post', t('post'), t('postSub'), !(isAgent && noProfile))}
-      ${bigCard('#/account?tab=settings&v=1', 'verify', vState === 'done' ? t('v_done') : t('v_cardTitle'), vState === 'pending' ? '⏳ ' + t('v_pending') : vState === 'done' ? t('v_cardDone') : t('v_cardSub'))}
-      ${isAgent && noProfile ? '' : bigCard('#/account?tab=agent', 'agent', AG.label('myAgent'), AG.label('agentSub'))}
-      ${bigCard('#/account?tab=listings', 'listings', t('my'), String(mine.length))}
-      ${bigCard('#/account?tab=messages', 'messages', t('inquiries'), String(inq.length))}
-      ${bigCard('#/account?tab=stats', 'stats', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
-      ${bigCard('#/account?tab=telegram', 'telegram', t('tgAlerts'), alerts.length ? `${t('tgActive')} ${esc(alerts[0].telegram)}` : t('tgAlertsSub'))}
-      ${bigCard('#/account?tab=settings', 'settings', t('settings'), vState === 'done' ? t('v_done') : vState === 'pending' ? t('v_pending') : t('settingsSub'))}
-    </div>${statTiles()}`;
-  } else if (tab === 'listings') {
-    body = mine.length ? mine.map(l => `<div class="mine"><a href="#/l/${l.id}" class="ph">${l.photos?.[0] ? `<img src="${esc(imgSrc(l.photos[0], 800))}" alt="">` : '<span class="noimg">🏠</span>'}</a>
-      <div style="min-width:0"><div class="ct">${esc(l.title)}</div><div style="color:var(--red);font-weight:600">${money(l.price)}${priceSuffix(l)}</div>
-      <div class="loc" style="margin:2px 0 0">👁 ${views.filter(e => e.listing_id === l.id).length} · 📞 ${contacts.filter(e => e.listing_id === l.id).length} · ✉️ ${inq.filter(i => i.listing_id === l.id).length} · ${shortDate(l.created_at)}</div></div>
-      <div class="mine-act"><select data-status="${l.id}" ${l.status === 'rejected' ? 'disabled' : ''}>${['active', 'hidden', l.deal_type === 'sale' ? 'sold' : 'rented', ...(l.status === 'rejected' ? ['rejected'] : [])].map(s => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${t('s_' + s)}</option>`).join('')}</select>
-      <a class="btn ghost sm" href="#/edit/${l.id}">${t('edit')}</a><button class="btn ghost sm" data-del="${l.id}">${t('del')}</button></div></div>`).join('')
-      : `<div class="empty">${t('noMine')}<br><br><a class="btn red" href="#/post">+ ${t('post')}</a></div>`;
-  } else if (tab === 'messages') {
-    body = inq.length ? `<div class="panel">${inq.map(i => `<div class="inq"><b>${esc(i.name)}</b> · <a href="${contactHref(i.contact)}" target="_blank" rel="noopener">${esc(i.contact)}</a> <span style="color:var(--muted);font-size:12px">· ${dateTime(i.created_at)} · <a href="#/l/${i.listing_id}">${esc(byId[i.listing_id]?.title || '')}</a></span>${i.message ? `<div style="white-space:pre-wrap;margin-top:4px">${esc(i.message)}</div>` : ''}</div>`).join('')}</div>`
-      : `<div class="empty">${t('noInquiries')}</div>`;
-  } else if (tab === 'stats') {
-    body = statTiles() + (ev.length ? `<div class="panel"><h3>${t('views')} · ${t('last30')}</h3>${dayChart(views)}</div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px">
-        ${breakdown(t('sources'), views, e => e.source === 'direct' ? t('direct') : e.source)}
-        ${breakdown(t('devices'), views, e => t(e.device || 'desktop'))}
-        ${breakdown(t('languages'), views, e => (e.lang || '?').toUpperCase())}
+    const need = [
+      unread.length && [`${unread.length} ${t('dx_unreadMsgs')}`, t('dx_openReader'), '#/account?tab=messages', 'red', DI.messages],
+      isAgent && noProfile && [t('r_agentStart'), t('r_agentStartSub'), '#/account?tab=agent', 'red', DI.agent],
+      !mine.length && [t('dx_noListing'), t('postSub'), '#/post', 'red', DI.post],
+      vState !== 'done' && vState !== 'pending' && [t('v_cardTitle'), t('v_cardSub'), '#/account?tab=settings&v=1', 'blue', DI.shield],
+      mine.some(l => l.status === 'hidden') && [`${mine.filter(l => l.status === 'hidden').length} ${t('dx_hidden')}`, t('dx_hiddenSub'), '#/account?tab=listings', 'blue', DI.listings],
+    ].filter(Boolean);
+    const topL = Object.entries(views.reduce((mm, e) => (mm[e.listing_id] = (mm[e.listing_id] || 0) + 1, mm), {})).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    body = `${panel(t('dx_need'), need.length ? `<div class="aneed">${need.map(([tt, ss, go, col, ic]) => `<a class="aneedi n-${col}" href="${go}"><span>${ic}</span><div><b>${esc(tt)}</b><small>${esc(ss)}</small></div><em>›</em></a>`).join('')}</div>` : `<div class="aok">${DI.check}<b>${t('dx_allGood')}</b></div>`)}
+      <div class="akpis k6">
+        ${kpi(views.length, t('views'), t('last30'), 'blue', '#/account?tab=stats')}
+        ${kpi(uniq, t('visitors'), t('dx_peopleSub'), 'blue', '#/account?tab=stats')}
+        ${kpi(contacts.length, t('contacts'), t('dx_contactsSub'), 'red', '#/account?tab=stats')}
+        ${kpi(inq.length, t('inquiries'), unread.length ? `${unread.length} ${t('dx_unread')}` : t('dx_allRead'), 'red', '#/account?tab=messages')}
+        ${kpi(live.length, t('dx_liveListings'), `${mine.length} ${t('dx_total')}`, 'blue', '#/account?tab=listings')}
+        ${kpi(vState === 'done' ? '✓' : vState === 'pending' ? '⏳' : '–', t('v_title'), vState === 'done' ? t('ad_verified') : vState === 'pending' ? t('v_pending') : t('dx_notYet'), 'red', '#/account?tab=settings&v=1')}
       </div>
-      <div class="panel"><h3>${t('perListing')}</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-        <tr style="text-align:left;color:var(--muted)"><th style="padding:6px">${t('what')}</th><th>👁 ${t('views')}</th><th>${t('visitors')}</th><th>📞 ${t('contacts')}</th><th>✉️</th></tr>
-        ${mine.map(l => { const v = views.filter(e => e.listing_id === l.id); return `<tr style="border-top:1px solid var(--line)"><td style="padding:8px 6px"><a href="#/l/${l.id}">${esc(l.title)}</a></td><td>${v.length}</td><td>${new Set(v.map(e => e.visitor)).size}</td><td>${contacts.filter(e => e.listing_id === l.id).length}</td><td>${inq.filter(i => i.listing_id === l.id).length}</td></tr>`; }).join('')}
-      </table></div></div>
-      <div class="panel"><h3>${t('activity')}</h3><div style="overflow-x:auto"><table style="width:100%;border-collapse:collapse;font-size:13px">
-        <tr style="text-align:left;color:var(--muted)"><th style="padding:6px">${t('when')}</th><th>${t('what')}</th><th>${t('action')}</th><th>${t('from')}</th><th>${t('device')}</th><th>🌐</th></tr>
-        ${ev.slice(0, 100).map(e => `<tr style="border-top:1px solid var(--line)"><td style="padding:7px 6px;white-space:nowrap">${dateTime(e.created_at)}</td><td>${esc(byId[e.listing_id]?.title || '')}</td><td>${t('a_' + e.kind)}</td><td>${esc(e.source === 'direct' ? t('direct') : e.source || '')}</td><td>${t(e.device || 'desktop')}</td><td>${esc((e.lang || '').toUpperCase())}</td></tr>`).join('')}
-      </table></div></div>` : `<div class="empty">${t('noStats')}</div>`);
+      ${panel(`${t('views')} · ${t('last30')}`, chart(), `<a class="alink" href="#/account?tab=stats">${t('stats')} ›</a>`)}
+      <div class="agrid2">
+        ${panel(t('dx_mostViewed'), topL.length ? `<div class="alist">${topL.map(([id, n]) => { const l = byId[id]; return `<a class="arow" href="#/l/${id}"><span class="ath">${thumb(l)}</span><div><b>${esc(l?.title || '')}</b><small>${l ? money(l.price) + priceSuffix(l) : ''}</small></div><em>${n}</em></a>`; }).join('')}</div>` : emptyB(t('noStats')))}
+        ${panel(t('dx_newMsgs'), inq.length ? `<div class="alist">${inq.slice(0, 6).map(i => msgRow(i)).join('')}</div>` : emptyB(t('noInquiries')), `<a class="alink" href="#/account?tab=messages">${t('dx_openReader')} ›</a>`)}
+      </div>`;
+  } else if (tab === 'messages') {
+    const open = inq.find(i => i.id === qs().get('m'));
+    if (open && !readSet.has(open.id)) { readSet.add(open.id); store.set('yh_inq_read', [...readSet].slice(-2000)); }
+    const L1 = open && byId[open.listing_id];
+    body = `<div class="ainbox${open ? ' has-open' : ''}"><div class="ailist"><div class="aimsgs">${inq.length ? inq.map(i => msgRow(i, open && open.id === i.id)).join('') : emptyB(t('noInquiries'))}</div></div>
+      <div class="airead">${open ? `<div class="ard"><a class="aiback" href="#/account?tab=messages">${DI.back} ${t('dx_allMsgs')}</a>
+        <div class="arbar"><span>${t('dx_read')}</span><button type="button" id="dxUnread">${t('dx_markUnread')}</button></div>
+        <div class="arh"><span class="atag t-blue">${esc(t('dx_msg'))}</span><h3>${esc(open.name || '—')}</h3><small>${dateTime(open.created_at)}</small></div>
+        <div class="arc">${answerBtns(open.contact)}</div>
+        ${open.message ? `<div class="artext">${esc(open.message)}</div>` : ''}
+        <div class="arfacts"><div><span>${t('dx_contact')}</span><b>${esc(open.contact || '')}</b></div></div>
+        ${L1 ? `<a class="arow aref" href="#/l/${L1.id}"><span class="ath">${thumb(L1)}</span><div><b>${esc(L1.title)}</b><small>${money(L1.price)}${priceSuffix(L1)} · ${esc(L1.district || '')}</small></div><em>${DI.open}</em></a>` : ''}</div>`
+        : `<div class="aipick">${DI.messages}<b>${t('dx_pick')}</b><small>${t('dx_pickSub')}</small></div>`}</div></div>`;
+  } else if (tab === 'stats') {
+    body = `<div class="akpis">${kpi(views.length, t('views'), t('last30'), 'blue')}${kpi(uniq, t('visitors'), t('dx_peopleSub'), 'blue')}${kpi(contacts.length, t('contacts'), t('dx_contactsSub'), 'red')}${kpi(inq.length, t('inquiries'), t('last30'), 'red')}
+        ${kpi(contacts.filter(e => e.kind === 'phone').length, t('call'), '', 'blue')}${kpi(contacts.filter(e => e.kind === 'whatsapp').length, 'WhatsApp', '', 'blue')}${kpi(contacts.filter(e => e.kind === 'telegram').length, 'Telegram', '', 'red')}${kpi(views.length && uniq ? (views.length / uniq).toFixed(1) : '–', t('dx_perPerson'), '', 'red')}</div>
+      ${panel(`${t('views')} · ${t('last30')}`, chart())}
+      <div class="agrid2">${panel(t('sources'), bars(views, e => e.source === 'direct' ? t('direct') : e.source || '?'))}${panel(t('devices'), bars(views, e => t(e.device || 'desktop')))}</div>
+      <div class="agrid2">${panel(t('languages'), bars(views, e => (e.lang || '?').toUpperCase()))}
+        ${panel(t('perListing'), mine.length ? `<div class="alist">${mine.map(l => { const v = views.filter(e => e.listing_id === l.id); return `<a class="arow" href="#/l/${l.id}"><span class="ath">${thumb(l)}</span><div><b>${esc(l.title)}</b><small>${new Set(v.map(e => e.visitor)).size} ${t('dx_people')} · ${contacts.filter(e => e.listing_id === l.id).length} ${t('contacts').toLowerCase()} · ${inq.filter(i => i.listing_id === l.id).length} ✉</small></div><em>${v.length}</em></a>`; }).join('')}</div>` : emptyB(t('noMine')))}</div>
+      ${panel(t('activity'), ev.length ? `<div class="alist">${ev.slice(0, 60).map(e => `<div class="arow"><div><b>${t('a_' + e.kind)} · ${esc(byId[e.listing_id]?.title || '')}</b><small>${dateTime(e.created_at)} · ${esc(e.source === 'direct' ? t('direct') : e.source || '')} · ${esc(t(e.device || 'desktop'))} · ${esc((e.lang || '').toUpperCase())}</small></div></div>`).join('')}</div>` : emptyB(t('noStats')))}`;
+  } else if (tab === 'listings') {
+    body = panel(`${t('my')} · ${mine.length}`, mine.length ? `<div class="alist">${mine.map(l => `<div class="arow dx-lrow"><a class="ath" href="#/l/${l.id}">${thumb(l)}</a><div style="min-width:0"><b>${esc(l.title)}</b>
+        <small>${money(l.price)}${priceSuffix(l)} · ${esc(l.district || '')} · ${shortDate(l.created_at)}</small>
+        <small>${views.filter(e => e.listing_id === l.id).length} ${t('views').toLowerCase()} · ${contacts.filter(e => e.listing_id === l.id).length} ${t('contacts').toLowerCase()} · ${inq.filter(i => i.listing_id === l.id).length} ✉</small></div>
+        <div class="dx-lact"><select data-status="${l.id}" ${l.status === 'rejected' ? 'disabled' : ''}>${['active', 'hidden', l.deal_type === 'sale' ? 'sold' : 'rented', ...(l.status === 'rejected' ? ['rejected'] : [])].map(x => `<option value="${x}" ${l.status === x ? 'selected' : ''}>${t('s_' + x)}</option>`).join('')}</select>
+        <a class="btn ghost sm" href="#/edit/${l.id}">${t('edit')}</a><button class="btn ghost sm" data-del="${l.id}">${t('del')}</button></div></div>`).join('')}</div>`
+      : `${emptyB(t('noMine'))}<div style="text-align:center;margin-top:10px"><a class="btn red" href="#/post">+ ${t('post')}</a></div>`, `<a class="alink" href="#/post">+ ${t('post')}</a>`);
   } else if (tab === 'agent') {
     body = '<div id="agTab"></div>';
   } else if (tab === 'settings') {
@@ -957,15 +1009,14 @@ async function viewAccount() {
       <label>${t('tgUser')}<input name="tg" placeholder="@username" value="${esc(alerts[0]?.telegram || '')}" required></label>
       <button class="btn blue">${t('tgSave')}</button></form>`;
   }
-  function statTiles() {
-    const tile = (n, lab) => `<div class="panel" style="margin:0;text-align:center"><div style="font-size:13px;font-weight:600;letter-spacing:-.025em;color:var(--blue)">${n}</div><div style="color:var(--muted);font-size:13px;font-weight:600">${lab}</div></div>`;
-    return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
-  }
-  app.innerHTML = `<div class="wrap dash" style="margin-top:26px">
-    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a>${await adminCheck() ? `<a class="btn ghost sm" href="#/admin">🛡 Admin</a>` : ''}<button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+  app.innerHTML = `<div class="wrap adm dx">
+    <div class="atop"><div class="atl"><span class="alogo">${DI.listings}</span><div><b>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</b><small>${t('dash')} · ${isAgent ? t('k_' + ((user.user_metadata || {}).adv_kind || 'agent')) : t('k_owner')}${vState === 'done' ? ' · ✓ ' + t('ad_verified') : ''}</small></div></div>
+      <div class="atr">${await adminCheck() ? `<a class="aico" href="#/admin" title="Admin" aria-label="Admin">${DI.shield}</a>` : ''}<a class="aico" href="#/" title="${esc(t('backSite'))}" aria-label="${esc(t('backSite'))}">${DI.back}</a><button class="aico" id="logout" title="${esc(t('logout'))}" aria-label="${esc(t('logout'))}">${DI.out}</button></div></div>
     ${roleSwitch('advertiser')}
-    <div class="dtabs">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
-    <div>${body}</div></div>`;
+    <nav class="acards" aria-label="${esc(t('dash'))}">${SECS.map(k => `<a href="${k === 'post' ? '#/post' : '#/account' + (k === 'overview' ? '' : '?tab=' + k)}" class="acard${tab === k ? ' on' : ''}${k === 'post' ? ' dx-post' : ''}"><span class="aci">${DI[k]}</span><b>${secName[k]}</b><small>${esc(secSub[k])}</small>${k === 'messages' && unread.length ? `<em class="abadge">${unread.length}</em>` : ''}</a>`).join('')}</nav>
+    <div id="asec" class="asec">${body}</div></div>`;
+  { const un = document.getElementById('dxUnread'); if (un) un.onclick = () => { readSet.delete(qs().get('m')); store.set('yh_inq_read', [...readSet]); go('#/account?tab=messages'); }; }
+  app.querySelectorAll('[data-msg]').forEach(b => b.onclick = () => go('#/account?tab=messages&m=' + b.dataset.msg));
   if (tab === 'agent') AG.accountTab(document.getElementById('agTab'));
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
   document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };

@@ -18,6 +18,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (accents: TOP badge, prices, Post buttons), white background.
 - Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + TWO lines centred vertically next to it: "www.yourhome.asia" (menu-name type 13px / 500, phones 12px / 600) and under it red "CAMBODIA" in spaced capitals 11px / 700 (phones 10px), CENTRED under line 1 (owner 20:37 / 20:39; .brand .b1 + em, end of fonts.css), header AND footer (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language select
   (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown (the word "Menu" shows on phones too – owner 21:29).
+  PHONES (owner, 2026-11-25 11:09: "told az ikonokat balra, legyen a menügomb nagyobb… a csíkok helyére írd ki, hogy menü"): the header
+  buttons start right after the logo and the Menu button fills the rest of the row, showing ONLY the word "Menu" (no three-line
+  icon, never hidden by hfit2); the header Account icon is hidden on phones (end of header.css).
   Language pill: own small chevron close to the code with room after it (owner, 2026-11-24). "Become a partner" (white pill,
   → #/partners) sits right before Menu on screens over 980px; narrower screens have it in the Menu list (owner, 2026-11-24).
   "New projects" (white pill → #/projects) sits before it on screens over 1180px, and is the 2nd Menu item + a footer link.

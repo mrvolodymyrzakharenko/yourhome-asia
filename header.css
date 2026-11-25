@@ -63,3 +63,14 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .drawer>.dr-close,.drawer>.dr-cur{grid-column:1/-1}
 .drawer a{padding:10px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
 @media (max-width:900px){.drawer{min-width:0}.drawer a{padding:10px 10px}}
+
+/* PHONE MENU BUTTON (owner, 2026-11-25 11:09: "a menü ikon nagyon pici… told az ikonokat balra, legyen a menügomb nagyobb…
+   a csíkok helyére írd ki, hogy menü"): on phones the header buttons start right after the logo, the Menu button takes the
+   rest of the row (no empty gap), and it shows only the word "Menu" – no three-line icon. The word never hides (hfit2). */
+@media (max-width:720px){
+  .hdr .hdr-r{flex:1 1 auto!important;min-width:0;margin-left:4px!important}
+  .hdr .hdr-r .menu-btn{flex:1 1 auto!important;min-width:58px;justify-content:center;padding:8px 12px!important;gap:0!important;border-color:#d9dee8}
+  .hdr .hdr-r .menu-btn svg{display:none!important}
+  .hdr-r a.rb[aria-label="Account"]{display:none!important}   /* account = bottom menu on phones (the old #/account selector missed the clean /account link) */
+  body .hdr .hdr-r .menu-btn span{display:inline!important;font-size:13px!important;font-weight:600!important;letter-spacing:-.01em}
+}

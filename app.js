@@ -1267,6 +1267,16 @@ sb.auth.onAuthStateChange((ev, s) => {
   }
 });
 // The owner's own accounts (yh_admin_hidden) never count in any statistics: signing in with one marks this device (yh_noct)
+// STALE SESSION GUARD (2026-11-25): a browser can still hold the sign-in of an account that no longer exists (deleted test
+// account → every save answers "User from sub claim in JWT does not exist", the person cannot get in). Checked once per load
+// in the background; such a session is dropped on this device only and the page is drawn signed out, so a fresh sign-in works.
+if (user) sb.auth.getUser().then(async ({ error }) => {
+  if (!error || !(error.status === 401 || error.status === 403 || /not exist|user_not_found|missing sub/i.test(error.message || ''))) return;
+  await sb.auth.signOut({ scope: 'local' }).catch(() => {});
+  try { Object.keys(localStorage).filter(k => /^sb-.*-auth-token/.test(k)).forEach(k => localStorage.removeItem(k)); } catch {}
+  user = null; isAdmin = null; document.querySelector('.rpop')?.remove(); document.body.classList.remove('rpop-open');
+  toast(t('error') + 'your sign-in expired – please sign in again.', 5000); route();
+});
 const markOwnDevice = () => user && sb.rpc('yh_me_hidden').then(({ data }) => { if (data) try { localStorage.setItem('yh_noct', '1'); } catch {} });
 markOwnDevice();
 sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN') setTimeout(markOwnDevice, 0); });

@@ -1011,7 +1011,7 @@ async function viewAccount() {
   }
   app.innerHTML = `<div class="wrap adm dx">
     <div class="atop"><div class="atl"><span class="alogo">${DI.listings}</span><div><b>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</b><small>${t('dash')} · ${isAgent ? t('k_' + ((user.user_metadata || {}).adv_kind || 'agent')) : t('k_owner')}${vState === 'done' ? ' · ✓ ' + t('ad_verified') : ''}</small></div></div>
-      <div class="atr">${await adminCheck() ? `<a class="aico" href="#/admin" title="Admin" aria-label="Admin">${DI.shield}</a>` : ''}<a class="aico" href="#/" title="${esc(t('backSite'))}" aria-label="${esc(t('backSite'))}">${DI.back}</a><button class="aico" id="logout" title="${esc(t('logout'))}" aria-label="${esc(t('logout'))}">${DI.out}</button></div></div>
+      <div class="atr dx-btns">${await adminCheck() ? `<a class="dxb" href="#/admin">${DI.shield}<span>Admin</span></a>` : ''}<a class="dxb" href="#/">${DI.back}<span>${esc(t('backSite').replace(/^←\s*/, ''))}</span></a><button class="dxb dxb-out" id="logout">${DI.out}<span>${esc(t('logout'))}</span></button></div></div>
     ${roleSwitch('advertiser')}
     <nav class="acards" aria-label="${esc(t('dash'))}">${SECS.map(k => `<a href="${k === 'post' ? '#/post' : '#/account' + (k === 'overview' ? '' : '?tab=' + k)}" class="acard${tab === k ? ' on' : ''}${k === 'post' ? ' dx-post' : ''}"><span class="aci">${DI[k]}</span><b>${secName[k]}</b><small>${esc(secSub[k])}</small>${k === 'messages' && unread.length ? `<em class="abadge">${unread.length}</em>` : ''}</a>`).join('')}</nav>
     <div id="asec" class="asec">${body}</div></div>`;

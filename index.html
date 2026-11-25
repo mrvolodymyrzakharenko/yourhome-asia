@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Organization","@id":"https://yourhome.asia/#org","name":"YourHome Cambodia","url":"https://yourhome.asia/","logo":"https://yourhome.asia/favicon.svg","telephone":"+855 96 306 8590","email":"info@yourhome.asia","address":{"@type":"PostalAddress","addressLocality":"Phnom Penh","addressCountry":"KH"}},{"@type":"WebSite","@id":"https://yourhome.asia/#web","name":"YourHome.asia","url":"https://yourhome.asia/","publisher":{"@id":"https://yourhome.asia/#org"},"potentialAction":{"@type":"SearchAction","target":"https://yourhome.asia/search?q={search_term_string}","query-input":"required name=search_term_string"}}]}</script>
 <!--/seo-->
-<style>#app>.ssr{opacity:0;min-height:60vh}</style>
+<style>#app>.ssr{opacity:0!important;visibility:hidden!important;animation:none!important;min-height:60vh}</style>
 <script src="/router.js?v=1"></script>
 <meta name="theme-color" content="#032EA1">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
@@ -118,7 +118,7 @@ window.addEventListener('hashchange',function(){d.hidden=true;});
 document.getElementById('drClose').addEventListener('click',function(e){e.stopPropagation();d.hidden=true;});})();
 </script>
 <script src="/picker.js?v=4" defer></script>
-<script src="/fade.js?v=2" defer></script>
+<script src="/fade.js?v=3" defer></script>
 <script type="module" src="/app.js"></script>
 </body>
 </html>

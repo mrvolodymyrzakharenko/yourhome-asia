@@ -22,6 +22,7 @@
     let i = 0;
     for (const el of list) {
       if (el.nodeType !== 1 || SKIP.test(el.tagName) || isMap(el)) continue;
+      if (el.classList && el.classList.contains('ssr')) continue;   // the server's hidden first HTML (for Google) never fades in – the app replaces it
       // the search area (title, category rows, search card, the two filter rows, filters panel) never fades – only the
       // listings do (owner, 2026-11-24 20:49); a whole page that holds it fades piece by piece around it
       if (el.closest && el.closest(STILL)) continue;

@@ -286,7 +286,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (gate() in admin.js: "Sign in with Google" → back to /admin, Google account chooser) and its own "not the admin account" card with
   "Switch to the admin Google account". Admin = mr.volodymyrzakharenko@gmail.com (yh_admins), signed in with Google.
 - OWNER'S OWN ACCOUNTS NEVER COUNT (owner, 2026-11-25: "az én accountjaimat ne mutasd… ne legyen statisztika sem, semmi"):
-  euroworkcenter@gmail.com + euroworktrade@gmail.com + mr.volodymyrzakharenko@gmail.com are in table yh_admin_hidden – left out of Accounts
+  euroworkcenter@gmail.com + euroworktrade@gmail.com + mr.volodymyrzakharenko@gmail.com + his Telegram account tg8502897153@… are in table yh_admin_hidden – left out of Accounts
   (yh_admin_users) and every account number; signing in with one marks that device (app.js markOwnDevice → RPC yh_me_hidden →
   localStorage yh_noct), so its page views AND listing views/clicks (track()) are never recorded. A new own account → yh_admin_hidden.
 - EVERY ADMIN BUTTON HAS ITS WORD (owner, 2026-11-25: "írd ki a gombokra hogy mi mi… refresh is kiírva"): Refresh · Back to site ·

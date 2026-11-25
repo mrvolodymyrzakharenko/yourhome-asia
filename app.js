@@ -656,7 +656,7 @@ async function viewPost(editId) {
       <label>${t('propType')} *${sel('property_type', TYPES.map(x => [x, t('t_' + x)]), l.property_type)}</label></div>
     <label>${t('title')} *<input name="title" required minlength="5" maxlength="140" placeholder="${esc(t('titlePh'))}" value="${esc(l.title || '')}"></label>
     <div class="row"><label>${t('price')} *<input name="price" type="number" min="0" step="1" required value="${l.price ?? ''}"></label>
-      <label>${t('period')}${sel('price_period', [['hour', t('p_hour')], ['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>
+      <label>${t('period')}${sel('price_period', [['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>
     <label id="pNoteL"${l.price_period === 'other' ? '' : ' hidden'}>${t('p_otherNote')} *<input name="period_note" maxlength="40" placeholder="${esc(t('p_otherPh'))}" value="${esc(l.period_note || '')}"></label>
     <div class="row3"><label>${t('bedrooms')}${sel('bedrooms', [['', t('notSet')], ['0', t('studio')], ['1', '1 ' + t('bedroomOne')], ['2', '2 ' + t('bedrooms').toLowerCase()], ['3', '3 ' + t('bedrooms').toLowerCase()], ['4', '4 ' + t('bedrooms').toLowerCase()], ['5', '5+ ' + t('bedrooms').toLowerCase()], ...(l.bedrooms > 5 ? [[String(l.bedrooms), l.bedrooms + ' ' + t('bedrooms').toLowerCase()]] : [])], l.bedrooms ?? '')}</label>
       <label>${t('bathrooms')}${sel('bathrooms', [['', t('notSet')], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5+'], ...(l.bathrooms > 5 || l.bathrooms === 0 ? [[String(l.bathrooms), String(l.bathrooms)]] : [])], l.bathrooms ?? '')}</label>
@@ -682,7 +682,7 @@ async function viewPost(editId) {
     ${agBlock}
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
   { const pf = document.getElementById('pform'), per = pf.price_period, dl = pf.deal_type, noteL = document.getElementById('pNoteL');
-    const sync = () => { if (dl.value === 'daily' && !['hour', 'day'].includes(per.value)) per.value = 'day'; if (dl.value === 'sale') per.value = 'total'; else if (per.value === 'total') per.value = 'month';
+    const sync = () => { if (dl.value === 'daily') per.value = 'day'; if (dl.value === 'sale') per.value = 'total'; else if (per.value === 'total') per.value = 'month';
       noteL.hidden = per.value !== 'other'; noteL.querySelector('input').required = per.value === 'other'; };
     per.addEventListener('change', sync); dl.addEventListener('change', sync); sync(); }
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
@@ -724,7 +724,7 @@ async function viewPost(editId) {
     const num = v => v === '' || v == null ? null : Number(v);
     const row = {
       deal_type: f.deal_type === 'daily' ? 'rent' : f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
-      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.deal_type === 'daily' && !['hour', 'day'].includes(f.price_period) ? 'day' : f.price_period,
+      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.deal_type === 'daily' ? 'day' : f.price_period,
       period_note: f.price_period === 'other' && f.deal_type !== 'sale' ? (String(f.period_note || '').trim().slice(0, 40) || null) : null,
       bedrooms: num(f.bedrooms), bathrooms: num(f.bathrooms), area_m2: num(f.area_m2), furnished: !!f.furnished,
       amenities: fd.getAll('amen').filter(a => AMEN.includes(a)), posted_by: f.posted_by || null,

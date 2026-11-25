@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /post
+Disallow: /edit
+Disallow: /saved
+Disallow: /admin
+Disallow: /api
+
+Sitemap: https://yourhome.asia/sitemap.xml

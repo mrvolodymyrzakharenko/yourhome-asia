@@ -1,0 +1,158 @@
+// Every address (except files and "/") answers with its OWN HTML (claude/seo-rules.md "What Google receives"):
+// title, description, canonical, og/twitter, structured data, H1, lead and the first cards – then the app takes over.
+// vercel.json rewrites /<anything without a dot> here as /api/page?p=/<path>. Any error → the plain app shell (never a blank page).
+const fs = require('fs');
+const path = require('path');
+const S = require('./_seo');
+const { esc, sb, LCOLS, title, desc, render, cards, body, crumbs, ORIGIN } = S;
+
+const DEALS = {
+  rent: { deal: 'rent', h1: 'Homes for rent in Cambodia', t: 'Apartments & houses for rent in Phnom Penh', d: 'Apartments, condos, houses and villas for rent in Phnom Penh and across Cambodia – real photos, monthly prices in USD and direct contact with owners and agents.', crumb: 'Rent' },
+  buy: { deal: 'sale', h1: 'Property for sale in Cambodia', t: 'Property for sale in Phnom Penh – condos, houses', d: 'Condos, apartments, houses, villas and land for sale in Phnom Penh and Cambodia. Prices in USD, foreigner-friendly condos marked, contact the seller directly.', crumb: 'Buy' },
+  rooms: { deal: 'room', h1: 'Rooms for rent in Phnom Penh', t: 'Rooms for rent in Phnom Penh – shared & private', d: 'Private and shared rooms for rent in Phnom Penh – cheap monthly rooms with photos, amenities and the owner’s phone, Telegram or WhatsApp.', crumb: 'Rooms' },
+  daily: { deal: 'daily', h1: 'Daily rentals & short stays in Cambodia', t: 'Daily rentals & short stays in Phnom Penh', d: 'Apartments and rooms for daily and short-term rent in Phnom Penh – price per night, photos and direct booking contact with the owner or agent.', crumb: 'Daily rent' },
+};
+const STATIC = {
+  about: ['About us – who builds YourHome.asia', 'YourHome.asia is built by experienced portal designers and real-estate professionals to bring every home in Cambodia into one clean, safe search.', 'About us'],
+  'how-it-works': ['How it works – search, contact, move in', 'How to find a home on YourHome.asia in three steps, and how owners and agents post for free, get verified and follow their statistics.', 'How it works', 'how'],
+  safety: ['Safety tips for renting & buying in Cambodia', 'Never pay before a viewing, meet in person and check the documents – our safety tips for renting and buying property in Cambodia.', 'Safety tips'],
+  faq: ['FAQ – questions and answers', 'Answers to common questions: free posting, contacting owners, the Verified badge, Telegram alerts, covered cities and reporting a listing.', 'FAQ'],
+  support: ['Contact us – support for renters & advertisers', 'Questions, feedback or a problem with a listing? Write to the YourHome.asia team on Telegram, WhatsApp, Viber or email – we reply quickly.', 'Contact us'],
+  terms: ['Terms and Conditions', 'The rules for using YourHome.asia: who publishes listings, free posting, TOP placements, removed listings and what advertisers must follow.', 'Terms and Conditions'],
+  privacy: ['Privacy Policy', 'What YourHome.asia stores – account email, listings, messages and anonymous visit statistics – where it is kept and how to delete it.', 'Privacy Policy'],
+  partners: ['Become a partner – agents, developers, services', 'Partner with YourHome.asia: agents and agencies, owners, developers, short-stay hosts and home-service companies across Cambodia. Apply online.', 'Become a partner'],
+  search: ['Search homes for rent and sale in Cambodia', 'Search every apartment, condo, house, villa and room for rent or sale in Phnom Penh by district, type, budget and amenities – list or map view.', 'Search'],
+};
+const PRIVATE = new Set(['account', 'my', 'post', 'edit', 'saved', 'admin', 'api', 'auth', 'callback', 'l']);
+
+// The visible page texts (About, How, Safety, FAQ, Terms, Privacy) come straight from app.js PAGES – the same words
+let APPJS = null;
+function pageText(key) {
+  try {
+    if (!APPJS) for (const f of [path.join(process.cwd(), 'app.js'), path.join(__dirname, '..', 'app.js')]) { try { APPJS = fs.readFileSync(f, 'utf8'); break; } catch (_) {} }
+    if (!APPJS) return '';
+    const m = APPJS.match(new RegExp('\\n  ' + key + ': \\(\\) => `([\\s\\S]*?)`,?\\n(?:  [a-z]+: \\(\\)|};)'));
+    if (!m) return '';
+    return m[1]
+      .replace(/\$\{t\('terms'\)\}/g, 'Terms and Conditions').replace(/\$\{t\('privacy'\)\}/g, 'Privacy Policy')
+      .replace(/\$\{SUPPORT_EMAIL\}/g, S.EMAIL).replace(/\$\{[^}]*\}/g, '')
+      .replace(/href="#\//g, 'href="/').replace(/href="\/how"/g, 'href="/how-it-works"');
+  } catch (_) { return ''; }
+}
+const strip = s => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
+
+async function build(p, q) {
+  const parts = p.split('/').filter(Boolean).map(x => { try { return decodeURIComponent(x); } catch (_) { return x; } });
+  const p0 = parts[0] || '';
+
+  if (!p0) {   // homepage (normally served straight from index.html)
+    const list = await sb('yh_listings', `select=${LCOLS}&status=eq.active&country=eq.KH&order=is_featured.desc,created_at.desc&limit=12`).catch(() => []);
+    return { path: '/', title: 'YourHome.asia — All homes in Cambodia in one search', desc: 'Apartments, houses, condos and rooms for rent and sale in Phnom Penh, Cambodia. Free listings for owners and agents.',
+      ld: [{ '@type': 'WebSite', '@id': ORIGIN + '/#web', name: 'YourHome.asia', url: ORIGIN + '/', publisher: { '@id': ORIGIN + '/#org' }, potentialAction: { '@type': 'SearchAction', target: ORIGIN + '/search?q={search_term_string}', 'query-input': 'required name=search_term_string' } }],
+      body: body('Find your home in Cambodia', 'Homes from owners and agents across Cambodia.', S.cards(list)) };
+  }
+
+  if (DEALS[p0] && parts.length === 1) {
+    const D = DEALS[p0];
+    const dq = D.deal === 'daily' ? 'deal_type=eq.rent&price_period=eq.day' : `deal_type=eq.${D.deal}`;
+    const list = await sb('yh_listings', `select=${LCOLS}&status=eq.active&country=eq.KH&${dq}&order=is_featured.desc,created_at.desc&limit=24`).catch(() => []);
+    return { path: '/' + p0, title: title(D.t), desc: desc(D.d), image: list[0] && list[0].photos && list[0].photos[0],
+      ld: [crumbs([['Home', '/'], [D.crumb, '/' + p0]]), { '@type': 'CollectionPage', name: D.h1, url: ORIGIN + '/' + p0 }],
+      body: body(esc(D.h1), D.d, cards(list, 24) || '<p>No listings yet – <a href="/post">post the first one for free</a>.</p>') };
+  }
+
+  if (p0 === 'listing' && parts[1]) {
+    const m = parts[1].match(/^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})/i);
+    const rows = m ? await sb('yh_listings', `select=${LCOLS},description&id=eq.${m[1]}&limit=1`) : [];
+    const l = rows[0];
+    if (!l || l.status !== 'active') return { status: 410, noindex: true, path: p, title: title('This listing is no longer available'), desc: 'This listing was removed or has expired. See similar homes for rent and sale in Phnom Penh on YourHome.asia.', body: body('This listing is no longer available', 'It was removed or has expired.', '<p><a href="/rent">Homes for rent</a> · <a href="/buy">Homes for sale</a> · <a href="/rooms">Rooms</a></p>') };
+    const canonPath = S.listingPath(l);
+    if (decodeURIComponent(p) !== canonPath) return { redirect: canonPath + (q ? '?' + q : '') };
+    const name = S.listingName(l), plc = S.place(l), price = S.money(l.price) + S.per(l);
+    let tl = `${name} in ${plc} – ${price}`;
+    if (tl.length > 60) tl = `${name} in ${l.district || l.city || 'Phnom Penh'} – ${price}`;
+    if (tl.length > 60) tl = `${name} in ${l.district || l.city || 'Phnom Penh'}`;
+    const d0 = `${name.charAt(0).toUpperCase() + name.slice(1)} in ${plc} for ${price}.` + (l.description ? ' ' + l.description : '');
+    const dealCrumb = l.deal_type === 'sale' ? ['Buy', '/buy'] : l.deal_type === 'room' ? ['Rooms', '/rooms'] : l.price_period === 'day' ? ['Daily rent', '/daily'] : ['Rent', '/rent'];
+    const photos = (l.photos || []).slice(0, 12);
+    return { path: canonPath, title: title(tl), desc: desc(d0), image: photos[0], ogType: 'article',
+      ld: [crumbs([['Home', '/'], dealCrumb, [l.title || name, canonPath]]), {
+        '@type': 'RealEstateListing', name: l.title || name, url: ORIGIN + canonPath, datePosted: l.created_at, ...(l.description ? { description: desc(l.description) } : {}),
+        ...(photos.length ? { image: photos } : {}),
+        offers: { '@type': 'Offer', price: Number(l.price), priceCurrency: 'USD', ...(l.price_period === 'month' || l.price_period === 'day' ? { priceSpecification: { '@type': 'UnitPriceSpecification', price: Number(l.price), priceCurrency: 'USD', unitCode: l.price_period === 'month' ? 'MON' : 'DAY' } } : {}), availability: 'https://schema.org/InStock' },
+        contentLocation: { '@type': 'Place', address: { '@type': 'PostalAddress', ...(l.district ? { addressRegion: l.district } : {}), addressLocality: l.city || 'Phnom Penh', addressCountry: 'KH' } },
+      }],
+      body: body(esc(l.title || name), `${name} in ${plc} – ${price}`,
+        `${photos.map((u, i) => `<img src="${esc(S.img(u, 960))}" alt="${esc(S.photoAlt(l, i))}"${i ? ' loading="lazy"' : ''}>`).join('')}<ul><li>Type: ${esc(S.typeName(l))}</li>${l.bedrooms != null ? `<li>Bedrooms: ${l.bedrooms === 0 ? 'Studio' : l.bedrooms}</li>` : ''}${l.bathrooms != null ? `<li>Bathrooms: ${l.bathrooms}</li>` : ''}${l.area_m2 ? `<li>Area: ${Math.round(l.area_m2)} m²</li>` : ''}<li>Location: ${esc(plc)}</li></ul>${l.description ? `<p>${esc(l.description)}</p>` : ''}<p><a href="${dealCrumb[1]}">More homes: ${esc(dealCrumb[0])}</a></p>`) };
+  }
+
+  if (p0 === 'agents' && parts.length === 1) {
+    const ag = await sb('yh_agents', 'select=slug,name,kind,company&country=eq.KH&order=verified_at.desc.nullslast,created_at.desc&limit=60').catch(() => []);
+    return { path: '/agents', title: title('Real estate agents & agencies in Phnom Penh'), desc: 'Find real estate agents, agencies and owners in Phnom Penh and Cambodia – profiles, languages, areas they cover and all their listings on YourHome.asia.',
+      ld: [crumbs([['Home', '/'], ['Agents & agencies', '/agents']])],
+      body: body('Agents & agencies', 'Real estate agents, agencies and owners in Cambodia.', ag.length ? `<ul>${ag.map(a => `<li><a href="/agent/${esc(a.slug)}">${esc(a.name)}</a>${a.company ? ' – ' + esc(a.company) : ''}</li>`).join('')}</ul>` : '') };
+  }
+  if (p0 === 'agent' && parts[1]) {
+    const a = (await sb('yh_agents', `select=id,slug,name,kind,company,photo,bio,languages,areas,updated_at&slug=eq.${encodeURIComponent(parts[1].toLowerCase())}&limit=1`))[0];
+    if (!a) return null;
+    const list = await sb('yh_listings', `select=${LCOLS}&status=eq.active&agent_id=eq.${a.id}&order=created_at.desc&limit=24`).catch(() => []);
+    const kind = a.kind === 'agency' ? 'Real estate agency' : a.kind === 'owner' ? 'Property owner' : 'Real estate agent';
+    const pth = '/agent/' + a.slug;
+    return { path: pth, title: title(`${a.name} – ${kind} in Phnom Penh`), desc: desc(a.bio ? `${a.name}, ${kind.toLowerCase()} in Phnom Penh. ${a.bio}` : `${a.name} – ${kind.toLowerCase()} in Phnom Penh, Cambodia. See the profile, areas covered and all listings on YourHome.asia.`), image: a.photo,
+      ld: [crumbs([['Home', '/'], ['Agents & agencies', '/agents'], [a.name, pth]]), { '@type': 'RealEstateAgent', name: a.name, url: ORIGIN + pth, ...(a.photo ? { image: a.photo } : {}), ...(a.bio ? { description: desc(a.bio) } : {}), address: { '@type': 'PostalAddress', addressLocality: 'Phnom Penh', addressCountry: 'KH' } }],
+      body: body(esc(a.name), `${kind}${a.company ? ' – ' + a.company : ''}, Phnom Penh`, `${a.photo ? `<img src="${esc(a.photo)}" alt="${esc(a.name + ' – ' + kind.toLowerCase() + ', Phnom Penh')}">` : ''}${a.bio ? `<p>${esc(a.bio)}</p>` : ''}${cards(list, 24)}`) };
+  }
+
+  if (p0 === 'projects' && parts.length === 1) {
+    const pr = await sb('yh_projects', 'select=slug,name,district,city,stage,price_from,photos&active=eq.true&order=is_featured.desc,created_at.desc&limit=40').catch(() => []);
+    return { path: '/projects', title: title('New projects in Phnom Penh – condos & developments'), desc: 'New condo and housing projects in Phnom Penh: pre-sale, under construction and ready developments with prices from, photos and direct developer contact.', image: pr[0] && pr[0].photos && pr[0].photos[0],
+      ld: [crumbs([['Home', '/'], ['New projects', '/projects']])],
+      body: body('New projects', 'New developments in Cambodia – pre-sale, under construction and ready.', pr.length ? `<ul>${pr.map(x => `<li><a href="/project/${esc(x.slug)}">${x.photos && x.photos[0] ? `<img src="${esc(S.img(x.photos[0], 480))}" alt="${esc(`${x.name} – ${[x.district, x.city || 'Phnom Penh'].filter(Boolean).join(', ')}`)}" loading="lazy">` : ''}${esc(x.name)}</a>${x.price_from ? ' – from ' + S.money(x.price_from) : ''}</li>`).join('')}</ul>` : '') };
+  }
+  if (p0 === 'project' && parts[1]) {
+    const x = (await sb('yh_projects', `select=*&slug=eq.${encodeURIComponent(parts[1])}&active=eq.true&limit=1`))[0];
+    if (!x) return null;
+    const pth = '/project/' + x.slug, plc = [x.district, x.city || 'Phnom Penh'].filter(Boolean).join(', ');
+    const photos = (x.photos || []).slice(0, 12);
+    return { path: pth, title: title(`${x.name} – new project in ${x.district || x.city || 'Phnom Penh'}`), desc: desc(`${x.name}${x.developer ? ' by ' + x.developer : ''} in ${plc}${x.price_from ? ', prices from ' + S.money(x.price_from) : ''}.` + (x.description ? ' ' + x.description : '')), image: photos[0],
+      ld: [crumbs([['Home', '/'], ['New projects', '/projects'], [x.name, pth]]), { '@type': 'Residence', name: x.name, url: ORIGIN + pth, ...(photos.length ? { image: photos } : {}), ...(x.description ? { description: desc(x.description) } : {}), address: { '@type': 'PostalAddress', ...(x.district ? { addressRegion: x.district } : {}), addressLocality: x.city || 'Phnom Penh', addressCountry: 'KH' } }],
+      body: body(esc(x.name), `New project in ${plc}${x.price_from ? ' – from ' + S.money(x.price_from) : ''}`, `${photos.map((u, i) => `<img src="${esc(S.img(u, 960))}" alt="${esc(`${x.name} – ${plc}`)}"${i ? ' loading="lazy"' : ''}>`).join('')}${x.description ? `<p>${esc(x.description)}</p>` : ''}`) };
+  }
+
+  if (STATIC[p0] && parts.length === 1) {
+    const [t0, d0, crumb, key] = STATIC[p0];
+    const txt = pageText(key || p0);
+    const ld = [crumbs([['Home', '/'], [crumb, '/' + p0]])];
+    if (p0 === 'faq' && txt) {
+      const qa = [...txt.matchAll(/<summary>([\s\S]*?)<\/summary><p>([\s\S]*?)<\/p>/g)].map(m => ({ '@type': 'Question', name: strip(m[1]), acceptedAnswer: { '@type': 'Answer', text: strip(m[2]) } }));
+      if (qa.length) ld.push({ '@type': 'FAQPage', mainEntity: qa });
+    }
+    return { path: '/' + p0, title: title(t0), desc: desc(d0), ld,
+      body: txt ? `<div class="ssr wrap"><div class="page">${txt}</div></div>` : body(esc(crumb), d0) };
+  }
+
+  if (PRIVATE.has(p0)) return { noindex: true, path: p, title: 'YourHome.asia', desc: 'YourHome.asia – homes for rent and sale in Cambodia.', body: '' };
+  return null;
+}
+
+module.exports = async (req, res) => {
+  const url = new URL(req.url, 'https://yourhome.asia');
+  let p = url.searchParams.get('p') || '/';
+  p = ('/' + p.replace(/^\/+/, '')).replace(/\/+$/, '') || '/';
+  url.searchParams.delete('p');
+  const q = url.searchParams.toString();
+  res.setHeader('Content-Type', 'text/html; charset=utf-8');
+  try {
+    let page = await build(p, q);
+    if (page && page.redirect) { res.statusCode = 301; res.setHeader('Location', page.redirect); return res.end(); }
+    if (!page) page = { status: 404, noindex: true, path: p, title: 'This page is currently unavailable | YourHome Cambodia', desc: 'The page you are looking for is not available. Search homes for rent and sale in Cambodia or contact our team.', body: body('This page is currently unavailable', 'The address may have changed, or the page was removed.', '<p><a href="/support">Contact our team</a> · <a href="/">Back to home</a></p>') };
+    res.statusCode = page.status || 200;
+    if (page.noindex) res.setHeader('X-Robots-Tag', 'noindex, follow');
+    res.setHeader('Cache-Control', page.status ? 'public, s-maxage=60' : 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400');
+    return res.end(render(page));
+  } catch (err) {
+    console.error('page', p, err && err.message);
+    res.statusCode = 200; res.setHeader('Cache-Control', 'no-store');
+    try { return res.end(S.shell()); } catch (_) { res.statusCode = 500; return res.end('Temporary error'); }
+  }
+};

@@ -246,6 +246,23 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Code: agents.js (all agent UI + its own 5-language texts TX), agents.css; app.js only calls AG.* (listing page #agBox /
   #agLinks, post form block, dashboard tab, #/agent route, experts page).
 
+## Clean URLs + server HTML (owner, 2026-11-25: "mehet" – SEO rules in the project doc claude/seo-rules.md)
+- Real addresses, no "#": / · /rent · /buy · /rooms · /daily · /search · /listing/<id>-<slug> · /agents · /agent/<slug> ·
+  /projects · /project/<slug> · /partners · /about · /how-it-works · /safety · /faq · /support · /terms · /privacy ·
+  /account · /post · /edit/<id> · /saved. Old "#/…" links are turned into these on load (never break).
+- router.js (loaded first, in <head>) translates: the app code still writes "#/…" routes – YH.h() = current route as "#/…",
+  YH.go(h) = navigate (pushState + synthetic hashchange), every drawn <a href="#/…"> is rewritten to its clean path,
+  internal clicks stay in the same tab without reload. Never read location.hash in new code – use YH.h(); links may be
+  written as "#/…" or as clean paths. Listing links: YH.listingPath(l) (slug = api/_seo.js listingSlug – keep both equal).
+- vercel.json sends every path without a dot to api/page.js, which answers with index.html + the page's OWN head
+  (title ≤60, description ≤160, canonical, og/twitter, JSON-LD Organization + BreadcrumbList + RealEstateListing /
+  RealEstateAgent / FAQPage …) and its first content inside <main id="app"> (div.ssr – invisible, the app redraws it).
+  About/How/Safety/FAQ/Terms/Privacy text is read from app.js PAGES (same words). Unknown address = 404 + noindex
+  ("This page is currently unavailable"), removed listing = 410, wrong listing slug = 301. "/" is index.html itself –
+  its head sits between <!--seo--> and <!--/seo-->. /sitemap.xml = api/sitemap.js (generated), robots.txt static.
+- The first load keeps the server's <title> (route() only sets document.title on later navigations).
+- Photo alt text never empty: photoAlt() in app.js ("Apartment for rent in BKK1, Phnom Penh – photo 2").
+
 ## Files
 - index.html – page shell, header, footer, bottom menu · styles.css + header.css – design · app.js – the whole app
   (hash routes: #/ · #/search · #/l/<id> · #/post · #/edit/<id> · #/account · #/saved · #/experts · #/agent/<slug> · #/terms · #/privacy · #/support)

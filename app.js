@@ -60,8 +60,8 @@ const priceSuffix = l => l.price_period === 'month' ? t('perMonth') : l.price_pe
 const shortDate = d => { const x = new Date(d); return `${x.getFullYear()}. ${x.getMonth()+1}. ${x.getDate()}.`; };
 const dateTime = d => new Date(d).toLocaleString(lang === 'km' ? 'km-KH' : lang, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
 const toast = (msg, ms = 3200) => { const el = document.getElementById('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, ms); };
-const qs = () => new URLSearchParams((location.hash.split('?')[1]) || '');
-const go = h => { location.hash = h; };
+const qs = () => new URLSearchParams((YH.h().split('?')[1]) || '');
+const go = h => YH.go(h);   // clean URLs – router.js
 const saved = () => store.get('yh_saved', []);
 const isSaved = id => saved().includes(id);
 const visitorId = () => { let v = store.get('yh_vid', null); if (!v) { v = Math.random().toString(36).slice(2, 12); store.set('yh_vid', v); } return v; };
@@ -201,18 +201,20 @@ document.addEventListener('click', e => {
   try { track({ id: b.dataset.id, status: 'active' }, b.dataset.ev); } catch (_) {}
   const h = b.dataset.href; if (h.startsWith('tel:')) location.href = h; else window.open(h, '_blank', 'noopener');
 }, true);
+// Photo alt text is never empty (seo-rules.md): "<type> for <rent/sale> in <district>, <city>" (+ photo number)
+const photoAlt = (l, i) => `${t('t_' + (l.deal_type === 'room' ? 'room' : l.property_type))} ${l.deal_type === 'sale' ? 'for sale' : 'for rent'} in ${[l.district, l.city || 'Phnom Penh'].filter(Boolean).join(', ')}${i ? ' – photo ' + (i + 1) : ''}`;
 function card(l) {
-  const ph = l.photos && l.photos[0] ? `<img src="${esc(l.photos[0])}" alt="" loading="lazy">` : `<span class="noimg">🏠</span>`;
+  const ph = l.photos && l.photos[0] ? `<img src="${esc(l.photos[0])}" alt="${esc(photoAlt(l, 0))}" loading="lazy">` : `<span class="noimg">🏠</span>`;
   const dots = l.photos && l.photos.length > 1 ? `<div class="dots">${l.photos.slice(0, 5).map(() => '<i></i>').join('')}</div>` : '';
   const beds = l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–');
-  return `<a class="card" href="#/l/${l.id}">
+  return `<a class="card" href="${YH.listingPath(l)}">
     <div class="ph">${ph}
       <span class="date">${shortDate(l.created_at)}</span>
       <span class="tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}${l.status !== 'active' ? `<span class="tag st">${esc(t('s_' + l.status))}</span>` : ''}</span>
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${HEART}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
-      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, 12).map((u, i) => `<img src="${esc(u)}" alt="" loading="${i ? 'lazy' : 'eager'}" decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots">${l.photos.slice(0, 12).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}` : ''}
+      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, 12).map((u, i) => `<img src="${esc(u)}" alt="${esc(photoAlt(l, i))}" loading="${i ? 'lazy' : 'eager'}" decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots">${l.photos.slice(0, 12).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div>` : ''}` : ''}
       <span class="ydate">${shortDate(l.created_at)}</span>
       <div class="yprice">${money(l.price)}${priceSuffix(l) ? `<small>${esc(priceSuffix(l))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
@@ -229,7 +231,7 @@ function card(l) {
     </div></a>`;
 }
 // 10 categories, 5 + 5 (owner, 2026-11-24): the 5th top item "Projects" opens New projects
-document.addEventListener('click', e => { const b = e.target.closest('#dealTabs [data-go]'); if (!b) return; e.preventDefault(); e.stopPropagation(); location.hash = b.dataset.go; }, true);
+document.addEventListener('click', e => { const b = e.target.closest('#dealTabs [data-go]'); if (!b) return; e.preventDefault(); e.stopPropagation(); go(b.dataset.go); }, true);
 // Phone card photo slider like vietrent (owner, 2026-11-24: "pöttyök… ha rákattint a pöttyre, a képek mozognak a kártyán belül"):
 // swipe the photos sideways or tap a dot; the dots follow. A tap on the photo itself still opens the listing.
 document.addEventListener('click', e => {
@@ -258,7 +260,7 @@ function listingsMap(el, list) {
   const pts = [];
   list.filter(l => l.lat && l.lng).forEach(l => {
     const icon = L.divIcon({ className: '', html: `<span class="pin ${l.is_featured ? 'top' : ''}">${money(l.price)}</span>`, iconSize: [0, 0] });
-    L.marker([l.lat, l.lng], { icon }).addTo(m).bindPopup(`<div class="pop">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="">` : ''}<b>${money(l.price)}${priceSuffix(l)}</b><br><a href="#/l/${l.id}">${esc(l.title)}</a></div>`);
+    L.marker([l.lat, l.lng], { icon }).addTo(m).bindPopup(`<div class="pop">${l.photos?.[0] ? `<img src="${esc(l.photos[0])}" alt="${esc(photoAlt(l, 0))}">` : ''}<b>${money(l.price)}${priceSuffix(l)}</b><br><a href="${YH.listingPath(l)}">${esc(l.title)}</a></div>`);
     pts.push([l.lat, l.lng]);
   });
   if (pts.length > 1) m.fitBounds(pts, { padding: [40, 40], maxZoom: 15 });
@@ -833,17 +835,20 @@ const PAGES = {
     <div class="ab-cta"><div><b>Still have a question?</b><span>We usually reply within an hour.</span></div><div class="ab-btns"><a class="btn red" href="#/support">Contact us</a></div></div></div>`
 };
 
-let skipNext = false;
+let skipNext = false, firstRoute = true;
+// Unknown address (seo-rules.md): friendly "currently unavailable" page + Contact our team (the server answers it with 404 + noindex)
+const viewMissing = () => { app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px"><b>This page is currently unavailable</b><br>The address may have changed, or the listing was removed.<br><br><a class="btn red" href="#/support">Contact our team</a> <a class="btn ghost" href="#/">Back to home</a></div></div>`; };
 async function route() {
-  const p0 = (location.hash.slice(1).split('?')[0] || '/').split('/').filter(Boolean);
+  const p0 = (YH.h().slice(1).split('?')[0] || '/').split('/').filter(Boolean);
   if (p0[0] === 'l' && p0[1]) {           // a listing = the popup over the page (owner, 2026-11-24)
-    if (!app.querySelector('.wrap')) await viewHome();
+    if (!app.querySelector('.wrap:not(.ssr)')) await viewHome();
     return POP.open(decodeURIComponent(p0[1]), false);
   }
   if (POP.isOpen()) POP.hide();
   clearMaps();
-  document.title = 'YourHome.asia — ' + t('heroTitle').replace(/<[^>]+>/g, '');
-  const path = (location.hash.slice(1).split('?')[0] || '/').replace(/\/+$/, '') || '/';
+  if (!firstRoute) document.title = 'YourHome.asia — ' + t('heroTitle').replace(/<[^>]+>/g, '');   // first load keeps the server's SEO title
+  firstRoute = false;
+  const path = (YH.h().slice(1).split('?')[0] || '/').replace(/\/+$/, '') || '/';
   const parts = path.split('/').filter(Boolean);
   const nav = parts[0] === 'search' ? (qs().get('view') === 'map' ? 'map' : 'search') : ({ '': 'home', post: 'post', saved: 'saved', experts: 'experts', agent: 'experts', account: 'account' }[parts[0] || ''] || '');
   document.querySelectorAll('.bnav a').forEach(a => a.classList.toggle('on', a.dataset.nav === nav));
@@ -876,7 +881,7 @@ async function route() {
     else if (parts[0] === 'projects') await PT.viewProjects();
     else if (parts[0] === 'project' && parts[1]) await PT.viewProject(decodeURIComponent(parts[1]));
     else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${PAGES[parts[0]]()}</div></div>`;
-    else await viewHome();
+    else viewMissing();
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
@@ -892,13 +897,13 @@ sb.auth.onAuthStateChange((ev, s) => {
   const was = user?.id; user = s?.user || null;
   if (ev === 'SIGNED_IN' && !was) {
     const next = store.get('yh_next', null); store.set('yh_next', null);
-    if (location.search.includes('code=')) history.replaceState(null, '', '/' + location.hash);
+    if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
     if (next) go('#/' + next); else route();
   }
 });
-if (location.search.includes('code=')) history.replaceState(null, '', '/' + location.hash);
+if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
 const next0 = user && store.get('yh_next', null);
-if (next0 && !location.hash) { store.set('yh_next', null); go('#/' + next0); } else route();
+if (next0 && location.pathname === '/') { store.set('yh_next', null); go('#/' + next0); } else route();
 
 // PHONE CARD NAME + ADDRESS FILL THE ROW (owner, 2026-11-24 20:12: "elejétől a végéig legyen, és a cím vele azonos szélességű"):
 // on phones "Apartment for rent in BKK1" and "Phnom Penh, <address>" are sized so each runs from the left edge to the right

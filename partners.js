@@ -111,7 +111,7 @@ const LAP = `<svg class="pp-lap" viewBox="0 0 520 330" role="img" aria-label="Pa
 export function viewPartners() {
   const { app, esc } = C;
   document.title = 'Become a partner — YourHome Cambodia';
-  const pre = new URLSearchParams(location.hash.split('?')[1] || '').get('type') || '';
+  const pre = new URLSearchParams(YH.h().split('?')[1] || '').get('type') || '';
   const opt = (list) => list.map(x => `<option value="${x[0]}"${x[0] === pre ? ' selected' : ''}>${esc(x[1])}</option>`).join('');
   app.innerHTML = `
 <section class="pp-hero">
@@ -249,7 +249,7 @@ export async function homeBlock() {
 export async function viewProjects() {
   const { app } = C;
   document.title = 'New projects in Cambodia — YourHome';
-  const st = new URLSearchParams(location.hash.split('?')[1] || '').get('stage') || '';
+  const st = new URLSearchParams(YH.h().split('?')[1] || '').get('stage') || '';
   app.innerHTML = `<div class="wrap prj-page">
     <div class="prj-head"><nav class="crumbs"><a href="#/">Home</a><span>/</span><span>New projects</span></nav>
       <h1>New <em>projects</em> in Cambodia</h1>

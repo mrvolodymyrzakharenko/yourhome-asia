@@ -18,7 +18,7 @@ const I = {
   area: '<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg>',
 };
 const day = d => { const x = new Date(d); return isNaN(x) ? '' : x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
-const link = l => location.origin + '/#/l/' + encodeURIComponent(l.id);
+const link = l => location.origin + YH.listingPath(l);   // clean URL (router.js)
 
 export function init(ctx) {
   C = ctx;
@@ -26,10 +26,10 @@ export function init(ctx) {
   document.addEventListener('click', e => {
     if (e.defaultPrevented || e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey) return;
     if (e.target.closest('[data-save]')) return;
-    const a = e.target.closest('a[href^="#/l/"]'); if (!a || (dlg && dlg.contains(a))) return;
-    e.preventDefault(); open(a.getAttribute('href').slice(4), true);
+    const a = e.target.closest('a[href^="#/l/"],a[href^="/listing/"]'); if (!a || (dlg && dlg.contains(a))) return;
+    e.preventDefault(); open(YH.toHash(a.getAttribute('href').replace(/^#/, '').split('?')[0]).slice(4), true);
   });
-  window.addEventListener('popstate', () => { if (dlg && !dlg.hidden && !/^#\/l\//.test(location.hash)) { C.skipRoute(); shut(); pushed = false; } });
+  window.addEventListener('popstate', () => { if (dlg && !dlg.hidden && !/^#\/l\//.test(YH.h())) { C.skipRoute(); shut(); pushed = false; } });
 }
 export const isOpen = () => !!(dlg && !dlg.hidden);
 export const hide = () => shut();
@@ -146,8 +146,8 @@ export async function open(id, push) {
   C.listingExtras(l);
   dlg.querySelector('.apm-scroll').scrollTop = 0;
   showPhoto();
-  document.title = `${l.title} — YourHome.asia`;
-  if (push) { history.pushState({ yhPop: 1 }, '', '#/l/' + encodeURIComponent(l.id)); pushed = true; } else pushed = false;
+  if (push) document.title = `${l.title} — YourHome.asia`;   // a direct visit keeps the server's SEO title
+  if (push) { history.pushState({ yhPop: 1 }, '', YH.listingPath(l)); pushed = true; } else pushed = false;
   dlg.hidden = false; document.documentElement.classList.add('apm-on');
   requestAnimationFrame(() => { dlg.classList.add('open'); dlg.querySelector('.apm-close').focus({ preventScroll: true }); });
 }
@@ -160,7 +160,7 @@ function shut() {
 export function close() {
   if (!dlg || dlg.hidden) return;
   if (pushed) { history.back(); return; }            // popstate closes it
-  shut(); C.skipRoute(); history.replaceState(null, '', '#/'); if (!document.querySelector('.hero')) C.route();
+  shut(); C.skipRoute(); history.replaceState(null, '', '/'); if (!document.querySelector('.hero')) C.route();
 }
 function toast(s) { const el = dlg.querySelector('.apm-toast'); el.textContent = s; el.classList.add('on'); clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('on'), 2200); }
 function copy(u) {

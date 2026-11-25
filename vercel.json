@@ -1,15 +1,52 @@
 {
   "routes": [
-    { "src": "/(.+)/", "status": 308, "headers": { "Location": "/$1" } },
-    { "src": "/sitemap.xml", "dest": "/api/sitemap" },
-    { "src": "/", "dest": "/api/page?p=/" },
-    { "src": "/index.html", "dest": "/api/page?p=/" },
-    { "src": "/auth/telegram/callback", "dest": "/api/tg-callback" },
-    { "handle": "filesystem" },
-    { "src": "/((?!api/).*)", "dest": "/api/page?p=/$1" }
+    {
+      "src": "/(.+)/",
+      "status": 308,
+      "headers": {
+        "Location": "/$1"
+      }
+    },
+    {
+      "src": "/sitemap.xml",
+      "dest": "/api/sitemap"
+    },
+    {
+      "src": "/",
+      "dest": "/api/page?p=/"
+    },
+    {
+      "src": "/index.html",
+      "dest": "/api/page?p=/"
+    },
+    {
+      "src": "/auth/telegram/callback",
+      "dest": "/api/tg-callback"
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/((?!api/).*)",
+      "dest": "/api/page?p=/$1"
+    }
   ],
   "functions": {
-    "api/page.js": { "includeFiles": "{index.html,app.js}", "maxDuration": 10 },
-    "api/sitemap.js": { "maxDuration": 10 }
-  }
+    "api/page.js": {
+      "includeFiles": "{index.html,app.js}",
+      "maxDuration": 10
+    },
+    "api/sitemap.js": {
+      "maxDuration": 10
+    },
+    "api/tg-sync.js": {
+      "maxDuration": 30
+    }
+  },
+  "crons": [
+    {
+      "path": "/api/tg-sync",
+      "schedule": "*/10 * * * *"
+    }
+  ]
 }

@@ -223,6 +223,17 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   facts as soft cards, white price bar with a RED 20px price (owner's exception) and a red "Contact owner" pill (no black
   button); phones: 46% photo, rounded white sheet over it, full-width text (popup.css last block). The old full listing page (viewListing) is no longer routed.
 
+- WHO ARE YOU? + TERMS (owner, 2026-11-25: "legyen ugyanúgy, mint a study portálon… hirdető vagy kereső"; "el kell fogadni a
+  terms and conditions is"; "legyen fullos a dashboardjuk az agenteknek, agencyknek"): the first time a signed-in user opens the
+  dashboard (and whenever user_metadata.terms_accepted_at is missing) it asks "How would you like to use YourHome?" – three
+  Study-style tiles: Tenant or buyer · Owner or landlord · Agent or agency – with a REQUIRED tick accepting the Terms of service +
+  Privacy policy (user_metadata.terms_version / terms_accepted_at; TERMS_V in app.js – raise it after a material change).
+  Stored as user_metadata.role (seeker | advertiser) + adv_kind (owner | agent). The "🔍 Looking for a home · 🏠 Advertising"
+  switch on top of every dashboard changes the role any time (#/account?as=seeker|advertiser). SEEKER dashboard (viewSeeker):
+  Find a home · Saved · New listing alerts (yh_alerts new_listings – list, add, delete) · Map · Settings · I want to advertise.
+  ADVERTISER dashboard = the full one; for an agent/agency without a profile the first (red) tile is "Create your agent or
+  agency page" and choosing Agent opens the agent profile tab.
+
 ## Rules for listings
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.

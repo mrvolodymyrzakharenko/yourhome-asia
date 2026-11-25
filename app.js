@@ -639,8 +639,47 @@ async function viewPost(editId) {
   };
 }
 
+// WHO ARE YOU? (owner, 2026-11-25: "legyen ugyanúgy, mint a study portálon, választási lehetősége, hogy ő hirdető, vagy ő
+// kereső"): the account asks once – "I'm looking for a home" (seeker) or "I want to advertise" (advertiser) – kept in
+// user_metadata.role; the Looking · Advertising switch on top of the dashboard changes it any time.
+const ROLE_I = { seeker: '<circle cx="11" cy="11" r="6.5"/><path d="M20 20l-4-4"/>', advertiser: '<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/><path d="M12 11v5M9.5 13.5h5"/>', agent: '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M3 13h18"/>' };
+ROLE_I.owner = ROLE_I.advertiser;
+const roleSwitch = role => `<div class="deal-tabs role-sw">${['seeker', 'advertiser'].map(r => `<button type="button" data-as="${r}" class="${r === role ? 'on' : ''}">${t('r_' + r + 'Short')}</button>`).join('')}</div>`;
+function bindRoleSwitch() { app.querySelectorAll('[data-as]').forEach(b => b.onclick = () => go('#/account?as=' + b.dataset.as)); }
+// Terms must be accepted once (owner, 2026-11-25: "el kell fogadni a terms and conditions is") – stored with its version
+const TERMS_V = '2026-11-25';
+async function setRole(role, terms, kind) {
+  const md = user.user_metadata || {};
+  if (md.role === role && !terms && !kind) return;
+  const d = { role }; if (kind) d.adv_kind = kind; if (terms) { d.terms_version = TERMS_V; d.terms_accepted_at = new Date().toISOString(); }
+  const { data, error } = await sb.auth.updateUser({ data: d });
+  if (error) toast(t('error') + error.message); else if (data?.user) user = data.user;
+}
 async function viewAccount() {
   if (!user) return viewLogin('account');
+  const asQ = qs().get('as');
+  if (asQ === 'seeker' || asQ === 'advertiser') { await setRole(asQ); return go('#/account'); }
+  const md0 = user.user_metadata || {};
+  let role = md0.role;
+  if ((role !== 'seeker' && role !== 'advertiser') || !md0.terms_accepted_at) {
+    let pre = role;
+    if (pre !== 'seeker' && pre !== 'advertiser') { const { count } = await sb.from('yh_listings').select('id', { count: 'exact', head: true }).eq('owner_id', user.id); pre = count ? 'owner' : ''; }
+    if (pre === 'advertiser') pre = md0.adv_kind === 'agent' ? 'agent' : 'owner';
+    const tile = r => `<button type="button" data-pick="${r}" class="dtile${r === pre ? ' on' : ''}"><span class="dti"><svg viewBox="0 0 24 24" aria-hidden="true">${ROLE_I[r]}</svg></span><b>${t('r_' + r)}</b><small>${t('r_' + r + 'Sub')}</small></button>`;
+    app.innerHTML = `<div class="wrap" style="margin-top:26px"><div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('r_who')}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+      <div class="dtiles role-pick">${tile('seeker')}${tile('owner')}${tile('agent')}</div>
+      <label class="role-terms" style="display:flex;gap:10px;align-items:flex-start;margin:18px 0 6px;cursor:pointer"><input type="checkbox" id="roleTerms" style="margin-top:2px;width:18px;height:18px;flex:none"><span>${t('r_terms').replace('{terms}', `<a href="/terms" target="_blank" rel="noopener">${t('terms')}</a>`).replace('{privacy}', `<a href="/privacy" target="_blank" rel="noopener">${t('privacy')}</a>`)}</span></label>
+      <p style="color:var(--muted);margin:6px 0 0">${t('r_later')}</p></div>`;
+    document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };
+    app.querySelectorAll('[data-pick]').forEach(b => b.onclick = async () => {
+      const cb = document.getElementById('roleTerms');
+      if (!cb.checked) { toast(t('r_termsNeeded'), 4000); cb.closest('label').animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-6px)' }, { transform: 'translateX(6px)' }, { transform: 'translateX(0)' }], { duration: 300 }); return; }
+      b.disabled = true; const pk = b.dataset.pick; await setRole(pk === 'seeker' ? 'seeker' : 'advertiser', true, pk === 'seeker' ? null : pk);
+      if (pk === 'agent') return go('#/account?tab=agent'); route();
+    });
+    return;
+  }
+  if (role === 'seeker') return viewSeeker();
   const tab = qs().get('tab') || 'overview';
   app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px">${t('loading')}</div></div>`;
   const since = new Date(Date.now() - 30 * 864e5).toISOString();
@@ -670,10 +709,12 @@ async function viewAccount() {
   const tabLabel = { overview: t('overview'), agent: AG.label('myAgent'), listings: t('my'), messages: t('inquiries'), stats: t('stats'), telegram: t('tgAlerts'), settings: t('settings') };
   let body = '';
   if (tab === 'overview') {
+    const isAgent = (user.user_metadata || {}).adv_kind === 'agent', noProfile = !(myAgents || []).length;
     body = `<div class="dtiles">
-      ${bigCard('#/post', 'post', t('post'), t('postSub'), true)}
+      ${isAgent && noProfile ? bigCard('#/account?tab=agent', 'agent', t('r_agentStart'), t('r_agentStartSub'), true) : ''}
+      ${bigCard('#/post', 'post', t('post'), t('postSub'), !(isAgent && noProfile))}
       ${bigCard('#/account?tab=settings&v=1', 'verify', vState === 'done' ? t('v_done') : t('v_cardTitle'), vState === 'pending' ? '⏳ ' + t('v_pending') : vState === 'done' ? t('v_cardDone') : t('v_cardSub'))}
-      ${bigCard('#/account?tab=agent', 'agent', AG.label('myAgent'), AG.label('agentSub'))}
+      ${isAgent && noProfile ? '' : bigCard('#/account?tab=agent', 'agent', AG.label('myAgent'), AG.label('agentSub'))}
       ${bigCard('#/account?tab=listings', 'listings', t('my'), String(mine.length))}
       ${bigCard('#/account?tab=messages', 'messages', t('inquiries'), String(inq.length))}
       ${bigCard('#/account?tab=stats', 'stats', t('stats'), `${views.length} ${t('views').toLowerCase()} · ${t('last30').toLowerCase()}`)}
@@ -741,11 +782,13 @@ async function viewAccount() {
   }
   app.innerHTML = `<div class="wrap dash" style="margin-top:26px">
     <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    ${roleSwitch('advertiser')}
     <div class="dtabs">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
   if (tab === 'agent') AG.accountTab(document.getElementById('agTab'));
   app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
   document.getElementById('logout').onclick = async () => { await sb.auth.signOut(); go('#/'); };
+  bindRoleSwitch();
   const lo2 = document.getElementById('logout2'); if (lo2) lo2.onclick = async () => { await sb.auth.signOut(); go('#/'); };
   const sf = document.getElementById('setform');
   if (sf) sf.onsubmit = async e => {
@@ -790,6 +833,64 @@ function breakdown(title, list, keyFn) {
   const m = {}; list.forEach(e => { const k = keyFn(e); m[k] = (m[k] || 0) + 1; });
   const rows = Object.entries(m).sort((a, b) => b[1] - a[1]).slice(0, 8); const tot = list.length || 1;
   return `<div class="panel"><h3>${title}</h3>${rows.length ? rows.map(([k, v]) => `<div style="margin-bottom:8px"><div style="display:flex;justify-content:space-between;font-size:13px;font-weight:600"><span>${esc(k)}</span><span>${v}</span></div><div style="height:6px;background:var(--bg);border-radius:99px"><div style="height:6px;width:${(v / tot) * 100}%;background:var(--blue);border-radius:99px"></div></div></div>`).join('') : '–'}</div>`;
+}
+
+// SEEKER DASHBOARD: search, saved homes, new-listing alerts (yh_alerts kind new_listings), my details, become an advertiser
+async function viewSeeker() {
+  const tab = qs().get('tab') || 'overview', md = user.user_metadata || {};
+  app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px">${t('loading')}</div></div>`;
+  const { data: subs = [] } = await sb.from('yh_alerts').select('*').eq('user_id', user.id).eq('kind', 'new_listings').order('created_at', { ascending: false });
+  const sv = saved();
+  const I = { search: ROLE_I.seeker, saved: '<path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/>', bell: '<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>', map: '<path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/>', adv: ROLE_I.advertiser, settings: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>' };
+  const tileS = (href, icon, title, sub, red) => `<a href="${href}" class="dtile${red ? ' dt-red' : ''}"><span class="dti"><svg viewBox="0 0 24 24" aria-hidden="true">${I[icon]}</svg></span><b>${title}</b><small>${sub}</small></a>`;
+  const tabs = ['overview', 'saved', 'alerts', 'settings'];
+  const label = { overview: t('overview'), saved: t('saved'), alerts: t('sk_alerts'), settings: t('settings') };
+  let body = '';
+  if (tab === 'overview') {
+    body = `<div class="dtiles">
+      ${tileS('#/search', 'search', t('sk_find'), t('sk_findSub'), true)}
+      ${tileS('#/account?tab=saved', 'saved', t('saved'), String(sv.length))}
+      ${tileS('#/account?tab=alerts', 'bell', t('sk_alerts'), subs.length ? String(subs.length) : t('sk_alertsSub'))}
+      ${tileS('#/search?view=map', 'map', t('mapNav'), t('sk_mapSub'))}
+      ${tileS('#/account?tab=settings', 'settings', t('settings'), t('sk_setSub'))}
+      ${tileS('#/account?as=advertiser', 'adv', t('sk_becomeAdv'), t('sk_becomeAdvSub'))}
+    </div>`;
+  } else if (tab === 'saved') {
+    body = '<div id="skSaved"></div>';
+  } else if (tab === 'alerts') {
+    body = `<div class="panel"><h3>${t('sk_alerts')}</h3><p style="margin:0 0 10px;color:var(--muted)">${t('sk_alertsSub')}</p>
+      ${subs.length ? subs.map(a => { const f = a.filters || {}; const what = [f.deal ? t(f.deal === 'sale' ? 'buy' : f.deal) : '', f.type ? t('t_' + f.type) : '', f.q || '', f.max ? '≤ ' + money(f.max) : ''].filter(Boolean).join(' · ') || t('all');
+        return `<div class="inq" style="display:flex;justify-content:space-between;gap:10px;align-items:center"><div><b>${esc(what)}</b><div style="color:var(--muted);font-size:12px">${esc(a.telegram)} · ${shortDate(a.created_at)}</div></div><button class="btn ghost sm" data-delalert="${a.id}">${t('del')}</button></div>`; }).join('')
+        : `<div class="empty" style="padding:18px 0">${t('sk_noAlerts')}</div>`}
+      <button class="btn blue" id="skNewAlert" style="margin-top:10px">+ ${t('newListingsAlert')}</button></div>`;
+  } else if (tab === 'settings') {
+    body = `<form class="panel form" id="sksetform" style="max-width:560px"><h3>${t('s_account')}</h3>
+      <label>${t('s_name')}<input name="name" maxlength="80" value="${esc(md.full_name || '')}"></label>
+      <label>${t('s_email')}<input value="${esc(user.email || '')}" disabled></label>
+      <button class="btn blue">${t('s_save')}</button>
+      <button type="button" class="btn ghost sm" id="logout2" style="justify-self:start">${t('s_signout')}</button></form>`;
+  }
+  app.innerHTML = `<div class="wrap" style="margin-top:26px">
+    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(md.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    ${roleSwitch('seeker')}
+    <div class="deal-tabs" style="overflow-x:auto;max-width:100%">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${label[x]}</button>`).join('')}</div>
+    <div>${body}</div></div>`;
+  bindRoleSwitch();
+  app.querySelectorAll('[data-tab]').forEach(b => b.onclick = () => go('#/account' + (b.dataset.tab === 'overview' ? '' : '?tab=' + b.dataset.tab)));
+  const out = async () => { await sb.auth.signOut(); go('#/'); };
+  document.getElementById('logout').onclick = out;
+  const lo2 = document.getElementById('logout2'); if (lo2) lo2.onclick = out;
+  const box = document.getElementById('skSaved');
+  if (box) {
+    if (!sv.length) box.innerHTML = `<div class="empty">${t('savedEmpty')}</div>`;
+    else { const list = await fetchListings({ ids: sv.slice(0, 100) }); box.innerHTML = list.length ? `<div class="grid">${list.map(card).join('')}</div>` : `<div class="empty">${t('savedEmpty')}</div>`; }
+  }
+  const na = document.getElementById('skNewAlert'); if (na) na.onclick = () => alertModal({});
+  app.querySelectorAll('[data-delalert]').forEach(b => b.onclick = async () => { const { error } = await sb.from('yh_alerts').delete().eq('id', b.dataset.delalert); if (error) return toast(t('error') + error.message); route(); });
+  const sf = document.getElementById('sksetform');
+  if (sf) sf.onsubmit = async e => { e.preventDefault(); const name = String(new FormData(sf).get('name') || '').trim();
+    const { data, error } = await sb.auth.updateUser({ data: { full_name: name } }); if (error) return toast(t('error') + error.message);
+    if (data?.user) user = data.user; toast(t('savedOk')); route(); };
 }
 
 async function viewSaved() {

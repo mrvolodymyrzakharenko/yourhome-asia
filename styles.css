@@ -1003,3 +1003,13 @@ body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}
 @media (prefers-reduced-motion:reduce){.sk{animation:none}}
 .sk-card .ph::before,.sk-card .ph::after{display:none!important;content:none!important}
 .sk-card .ph.sk{background:linear-gradient(90deg,#eef1f6 25%,#f8f9fc 40%,#eef1f6 60%)!important;background-size:300% 100%!important}
+
+/* WHO ARE YOU? chooser (owner, 2026-11-25: like the Study portal's Tenant / Landlord window) – three centred tiles */
+.role-pick{grid-template-columns:repeat(3,minmax(0,1fr));max-width:900px}
+.role-pick .dtile{align-items:center;text-align:center;padding:26px 16px;background:#F5F7FB;border:0;cursor:pointer;font:inherit}
+.role-pick .dtile .dti{width:48px;height:48px;background:#FDE4E7;color:#E00025}
+.role-pick .dtile small{-webkit-line-clamp:3}
+.role-pick .dtile.on{box-shadow:0 0 0 2px #E00025,0 10px 28px rgba(15,23,42,.07)}
+.role-terms a{color:#E00025;font-weight:600}
+.role-sw{margin:4px 0 14px}
+@media (max-width:700px){.role-pick{grid-template-columns:1fr}}

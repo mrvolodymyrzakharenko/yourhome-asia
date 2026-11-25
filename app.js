@@ -764,8 +764,30 @@ function rolePopup(onDash) {
   };
   draw(); document.body.appendChild(w); document.body.classList.add('rpop-open');
 }
+// ADMIN: verification requests (owner's own account – table yh_admins; yh_is_admin(), yh_admin_verify() in the database)
+let isAdmin = null;
+const adminCheck = async () => { if (isAdmin === null && user) { const { data } = await sb.rpc('yh_is_admin'); isAdmin = !!data; } return isAdmin; };
+async function viewAdmin() {
+  app.innerHTML = `<div class="wrap" style="margin-top:26px">${skelRow(false)}</div>`;
+  const { data: rows = [], error } = await sb.from('yh_verify_requests').select('*').order('created_at', { ascending: false }).limit(300);
+  const pend = (rows || []).filter(r => r.status === 'pending'), done = (rows || []).filter(r => r.status !== 'pending');
+  const row = r => `<div class="inq" style="display:flex;gap:12px;justify-content:space-between;align-items:center;flex-wrap:wrap">
+    <div style="min-width:0"><b>${esc(r.email || '')}</b> · ${t('m_' + r.method)} · <a href="${contactHref(r.contact)}" target="_blank" rel="noopener">${esc(r.contact)}</a>
+      <div style="color:var(--muted);font-size:12px">${dateTime(r.created_at)}${r.preferred_time ? ' · ' + esc(r.preferred_time) : ''}</div>${r.note ? `<div style="white-space:pre-wrap;margin-top:4px">${esc(r.note)}</div>` : ''}</div>
+    ${r.status === 'pending' ? `<div style="display:flex;gap:8px"><button class="btn red sm" data-vok="${r.id}">✓ ${t('ad_verify')}</button><button class="btn ghost sm" data-vno="${r.id}">${t('ad_reject')}</button></div>`
+      : `<span style="font-weight:600;color:${r.status === 'verified' ? 'var(--red)' : 'var(--muted)'}">${r.status === 'verified' ? '✓ ' + t('ad_verified') : t('ad_rejected')}</span>`}</div>`;
+  app.innerHTML = `<div class="wrap" style="margin-top:26px">
+    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">Admin</div><h2>${t('ad_title')}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account">${t('dash')}</a></div></div>
+    ${error ? `<div class="empty">${esc(t('error') + error.message)}</div>` : `
+    <div class="panel"><h3>${t('ad_pending')} (${pend.length})</h3>${pend.length ? pend.map(row).join('') : `<div class="empty" style="padding:16px 0">${t('ad_none')}</div>`}</div>
+    ${done.length ? `<div class="panel"><h3>${t('ad_done')}</h3>${done.map(row).join('')}</div>` : ''}`}</div>`;
+  const act = ok => async e => { const b = e.currentTarget; b.disabled = true; const { error: er } = await sb.rpc('yh_admin_verify', { p_id: b.dataset.vok || b.dataset.vno, p_ok: ok }); if (er) { b.disabled = false; return toast(t('error') + er.message); } toast(t('savedOk')); viewAdmin(); };
+  app.querySelectorAll('[data-vok]').forEach(b => b.onclick = act(true));
+  app.querySelectorAll('[data-vno]').forEach(b => b.onclick = act(false));
+}
 async function viewAccount() {
   if (!user) return viewLogin('account');
+  if (qs().get('tab') === 'admin' && await adminCheck()) return viewAdmin();
   const asQ = qs().get('as');
   if (asQ === 'seeker' || asQ === 'advertiser') { await setRole(asQ); return go('#/account'); }
   const md0 = user.user_metadata || {};
@@ -876,7 +898,7 @@ async function viewAccount() {
     return `<h3 style="margin:28px 0 12px">${t('stats')} · ${t('last30')}</h3><div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;margin-bottom:18px">${tile(views.length, t('views'))}${tile(uniq, t('visitors'))}${tile(contacts.length, t('contacts'))}${tile(inq.filter(i => i.created_at >= since).length, t('messagesN'))}</div>`;
   }
   app.innerHTML = `<div class="wrap dash" style="margin-top:26px">
-    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a><button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
+    <div class="bh dhead"><div><div style="color:var(--muted);font-weight:600">${t('dash')}</div><h2>${t('hello')}, ${esc(user.user_metadata?.full_name || user.email)}</h2></div><div style="display:flex;gap:8px;flex-wrap:wrap"><a class="btn blue sm" href="#/">${t('backSite')}</a><a class="btn ghost sm" href="#/account?tab=settings">${t('settings')}</a>${await adminCheck() ? `<a class="btn ghost sm" href="#/account?tab=admin">🛡 Admin</a>` : ''}<button class="btn ghost sm" id="logout">${t('logout')}</button></div></div>
     ${roleSwitch('advertiser')}
     <div class="dtabs">${tabs.map(x => `<button data-tab="${x}" class="${x === tab ? 'on' : ''}">${tabLabel[x]}</button>`).join('')}</div>
     <div>${body}</div></div>`;
@@ -1100,7 +1122,7 @@ applyStatic();
 const { data: { session } } = await sb.auth.getSession();
 user = session?.user || null;
 sb.auth.onAuthStateChange((ev, s) => {
-  const was = user?.id; user = s?.user || null;
+  const was = user?.id; user = s?.user || null; if (user?.id !== was) isAdmin = null;
   if (ev === 'SIGNED_IN' && !was) {
     const next = store.get('yh_next', null); store.set('yh_next', null);
     if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);

@@ -206,6 +206,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   form) and "Get verified" – method (phone / video / Telegram / WhatsApp), contact, best time, note → table yh_verify_requests
   (user inserts only; status pending → verified/rejected set by admin). Verified = an own yh_agents row with verified_at or a
   'verified' request. No ID upload.
+  APPROVAL: #/account?tab=admin (button "🛡 Admin" in the dashboard header, only for emails in table yh_admins – seeded with
+  mr.volodymyrzakharenko@gmail.com; add more with the service key). Lists waiting / decided requests (email, method, contact,
+  time, note) with "Mark as verified" / "Reject" → RPC yh_admin_verify(): sets the request status and verified_at on all the
+  user's yh_agents rows; a profile created later inherits it (trigger yh_agents_inherit_verify).
 - "BECOME A VERIFIED ADVERTISER" CARD (owner, 2026-11-24): second big card on the dashboard overview (after Post listing) →
   #/account?tab=settings&v=1, which scrolls to the Get verified form; it shows "⏳ requested" while pending and "✓ You are a
   verified advertiser" once verified.

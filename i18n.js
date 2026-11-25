@@ -269,3 +269,6 @@ fr: { r_title:'Votre compte', r_tenant:'Locataire · Acheteur · Colocataire', r
 th: { r_title:'บัญชีของคุณ', r_tenant:'ผู้เช่า · ผู้ซื้อ · หาห้อง', r_tenantSub:'ฉันกำลังหาบ้านหรือห้องเพื่อเช่า ซื้อ หรือแชร์', r_landlord:'เจ้าของ · นายหน้า · เอเจนซี่', r_landlordSub:'ฉันให้เช่าหรือขายทรัพย์สิน', r_iam:'ฉันเป็น', k_owner:'เจ้าของ', k_agent:'นายหน้า', k_agency:'เอเจนซี่', r_continue:'ดำเนินการต่อ' },
 };
 for (const k of Object.keys(RP)) Object.assign(T[k], RP[k]);
+
+/* ADMIN – verification requests (owner only; English is enough, other languages fall back) */
+Object.assign(T.en, { ad_title:'Verification requests', ad_pending:'Waiting', ad_done:'Decided', ad_none:'No request is waiting.', ad_verify:'Mark as verified', ad_reject:'Reject', ad_verified:'Verified', ad_rejected:'Rejected' });

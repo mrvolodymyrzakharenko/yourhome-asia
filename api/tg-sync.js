@@ -191,7 +191,7 @@ module.exports = async (req, res) => {
         '➕ Owners and agents: post your property for free.', '', '#Cambodia #PhnomPenh #ForRent #ForSale'].join('\n');
       const reply_markup = { inline_keyboard: [[{ text: '🔎 Browse listings', url: S.ORIGIN + '/?utm_source=telegram&utm_medium=channel' }], [{ text: '➕ Post your listing – free', url: S.ORIGIN + '/post?utm_source=telegram&utm_medium=channel' }]] };
       const r = await tg('sendMessage', { chat_id: CHANNEL, text, parse_mode: 'HTML', reply_markup, link_preview_options: { is_disabled: true } });
-      if (!r.ok) { await rest('yh_channel_meta?key=eq.welcome', { method: 'DELETE' }); res.statusCode = 502; res.setHeader('Content-Type', 'text/plain; charset=utf-8'); return res.end('Telegram said: ' + (r.description || 'error') + '\n(Is @yourhomeasiabot an admin of ' + CHANNEL + ' with "Post messages"?)'); }
+      if (!r.ok) { await rest('yh_channel_meta?key=eq.welcome', { method: 'DELETE' }); res.statusCode = 502; res.setHeader('Content-Type', 'text/plain; charset=utf-8'); return res.end('Telegram said: ' + (r.description || 'error') + '\n' + (r.error_code === 404 || r.error_code === 401 ? 'The bot token is wrong or was revoked: copy the CURRENT token from @BotFather → /mybots → @yourhomeasiabot → API Token into Vercel TELEGRAM_BOT_TOKEN, then Redeploy.' : '(Is @yourhomeasiabot an admin of ' + CHANNEL + ' with "Post messages"?)')); }
       const pin = await tg('pinChatMessage', { chat_id: CHANNEL, message_id: r.result.message_id, disable_notification: true });
       res.setHeader('Content-Type', 'text/plain; charset=utf-8');
       return res.end('✅ Posted to ' + CHANNEL + (pin.ok ? ' and pinned.' : ' (not pinned – the bot has no "Pin messages" right, that is fine).'));

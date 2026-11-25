@@ -4,6 +4,7 @@
 
 const TX = {
   en: {
+    tgChan: 'Your Telegram channel (optional)', tgChanHelp: 'Your listings are posted there automatically too. Make your channel public, add @yourhomeasiabot as an admin with “Post messages”, then type its @name here.', tgChanBad: 'Telegram channel: type its public @name, e.g. @myhomes_pp',
     agentProfile: 'Agent profile', myAgent: 'My agent profile', agentSub: 'Your public page with all your listings',
     createAgent: 'Create your agent profile', addAgent: '+ Add another profile', editAgent: 'Edit profile', viewPage: 'View page',
     kind: 'I am', k_agent: 'Agent', k_agency: 'Agency', k_owner: 'Owner',
@@ -22,6 +23,7 @@ const TX = {
     call: 'Call', message: 'Message', notFound: 'Profile not found.', profilesN: '{n} profiles',
   },
   km: {
+    tgChan: 'ឆានែល Telegram របស់អ្នក (ស្រេចចិត្ត)', tgChanHelp: 'ការប្រកាសរបស់អ្នកនឹងត្រូវបានផ្សាយនៅទីនោះដោយស្វ័យប្រវត្តិ។ ធ្វើឱ្យឆានែលជាសាធារណៈ បន្ថែម @yourhomeasiabot ជាអ្នកគ្រប់គ្រង ដែលអាច “Post messages” រួចសរសេរ @ឈ្មោះ របស់វានៅទីនេះ។', tgChanBad: 'ឆានែល Telegram៖ សរសេរ @ឈ្មោះសាធារណៈ ឧ. @myhomes_pp',
     agentProfile: 'ប្រវត្តិរូបភ្នាក់ងារ', myAgent: 'ប្រវត្តិរូបភ្នាក់ងាររបស់ខ្ញុំ', agentSub: 'ទំព័រសាធារណៈរបស់អ្នកជាមួយការប្រកាសទាំងអស់',
     createAgent: 'បង្កើតប្រវត្តិរូបភ្នាក់ងារ', addAgent: '+ បន្ថែមប្រវត្តិរូបមួយទៀត', editAgent: 'កែប្រវត្តិរូប', viewPage: 'មើលទំព័រ',
     kind: 'ខ្ញុំជា', k_agent: 'ភ្នាក់ងារ', k_agency: 'ក្រុមហ៊ុនភ្នាក់ងារ', k_owner: 'ម្ចាស់',
@@ -34,6 +36,7 @@ const TX = {
     call: 'ហៅ', message: 'សារ',
   },
   zh: {
+    tgChan: '您的 Telegram 频道（可选）', tgChanHelp: '您的房源也会自动发布到该频道。请将频道设为公开，把 @yourhomeasiabot 添加为管理员并开启“发布消息”，然后在此填写频道的 @名称。', tgChanBad: 'Telegram 频道：请填写公开的 @名称，例如 @myhomes_pp',
     agentProfile: '经纪人主页', myAgent: '我的经纪人主页', agentSub: '展示您全部房源的公开主页',
     createAgent: '创建经纪人主页', addAgent: '+ 再添加一个主页', editAgent: '编辑主页', viewPage: '查看主页',
     kind: '我是', k_agent: '经纪人', k_agency: '中介公司', k_owner: '房东',
@@ -46,6 +49,7 @@ const TX = {
     call: '电话', message: '留言',
   },
   fr: {
+    tgChan: 'Votre chaîne Telegram (facultatif)', tgChanHelp: 'Vos annonces y sont aussi publiées automatiquement. Rendez la chaîne publique, ajoutez @yourhomeasiabot comme administrateur avec « Publier des messages », puis indiquez son @nom ici.', tgChanBad: 'Chaîne Telegram : indiquez son @nom public, ex. @myhomes_pp',
     agentProfile: 'Profil d’agent', myAgent: 'Mon profil d’agent', agentSub: 'Votre page publique avec toutes vos annonces',
     createAgent: 'Créer votre profil d’agent', addAgent: '+ Ajouter un profil', editAgent: 'Modifier le profil', viewPage: 'Voir la page',
     kind: 'Je suis', k_agent: 'Agent', k_agency: 'Agence', k_owner: 'Propriétaire',
@@ -58,6 +62,7 @@ const TX = {
     call: 'Appeler', message: 'Message',
   },
   th: {
+    tgChan: 'ช่อง Telegram ของคุณ (ไม่บังคับ)', tgChanHelp: 'ประกาศของคุณจะถูกโพสต์ที่นั่นโดยอัตโนมัติด้วย ตั้งช่องเป็นสาธารณะ เพิ่ม @yourhomeasiabot เป็นผู้ดูแลพร้อมสิทธิ์ “Post messages” แล้วใส่ @ชื่อช่องที่นี่', tgChanBad: 'ช่อง Telegram: ใส่ @ชื่อสาธารณะ เช่น @myhomes_pp',
     agentProfile: 'โปรไฟล์เอเจนต์', myAgent: 'โปรไฟล์เอเจนต์ของฉัน', agentSub: 'หน้าสาธารณะพร้อมประกาศทั้งหมดของคุณ',
     createAgent: 'สร้างโปรไฟล์เอเจนต์', addAgent: '+ เพิ่มโปรไฟล์', editAgent: 'แก้ไขโปรไฟล์', viewPage: 'ดูหน้า',
     kind: 'ฉันคือ', k_agent: 'เอเจนต์', k_agency: 'บริษัทนายหน้า', k_owner: 'เจ้าของ',
@@ -272,6 +277,8 @@ function form(el, a, hasOthers) {
       <label>${C.t('telegram')}<input name="telegram" maxlength="40" value="${C.esc(a.telegram || '')}" placeholder="@username"></label></div>
     <div class="row"><label>${C.t('whatsapp')}<input name="whatsapp" maxlength="30" value="${C.esc(a.whatsapp || '')}" placeholder="+855 …"></label>
       <label>${tx('email')}<input name="email" type="email" maxlength="120" value="${C.esc(a.email || '')}"></label></div>
+    <label>${tx('tgChan')}<input name="tg_channel" maxlength="40" value="${C.esc(a.tg_channel || '')}" placeholder="@mychannel"></label>
+    <p class="xl-note" style="margin-top:0">${tx('tgChanHelp')}</p>
     <div class="ag-sub">${tx('otherSites')}</div><p class="xl-note" style="margin-top:0">${tx('otherSitesSub')}</p>
     ${linkInputs(PROFILE_FIELDS, a.links, 'al_')}
     <div class="ag-btns"><button class="btn red" id="agSave">${tx('saveProfile')}</button>
@@ -303,7 +310,10 @@ function form(el, a, hasOthers) {
       bio: fd.get('bio').trim() || null, languages: fd.getAll('languages'), areas: fd.getAll('areas'),
       phone: fd.get('phone').trim() || null, telegram: fd.get('telegram').trim() || null, whatsapp: fd.get('whatsapp').trim() || null,
       email: fd.get('email').trim() || null, links,
+      // AGENT'S OWN TELEGRAM CHANNEL (owner, 2026-11-25): api/_tgx.js agentChannels() posts the profile's listings there too
+      tg_channel: (() => { const v = String(fd.get('tg_channel') || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, ''); return v ? '@' + v : null; })(),
     };
+    if (row.tg_channel && !/^@[A-Za-z0-9_]{5,32}$/.test(row.tg_channel)) return C.toast(tx('tgChanBad'));
     const btn = document.getElementById('agSave'); btn.disabled = true;
     let res = a.id ? await C.sb.from('yh_agents').update(row).eq('id', a.id).select('slug').single() : await C.sb.from('yh_agents').insert(row).select('slug').single();
     if (res.error && /duplicate|unique/i.test(res.error.message) && !f.slug.dataset.touched) {

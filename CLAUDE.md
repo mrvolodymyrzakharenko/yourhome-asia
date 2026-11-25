@@ -367,6 +367,28 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   once (photo + name, place, price, beds/baths/m², title, link with utm_source=telegram, buttons View listing / Post your listing,
   hashtags); table yh_channel_posts (claimed before sending, error kept). /api/tg-sync?welcome=1 = one-time welcome post (pinned
   if allowed; yh_channel_meta). Profile pictures were made from the site logo (blue background version recommended).
+- YOURHOME BOT – EVERYTHING ELSE (owner, 2026-11-25: "csináld meg mind sorrendben"; api/_tgx.js runAll() from every tg-sync run;
+  tg-sync also runs INSTANTLY: database triggers yh_tg_ping on yh_listings / yh_inquiries / yh_verify_requests / yh_partner_requests /
+  yh_project_leads call /api/tg-sync?quick=1 through pg_net; the 10-min cron stays as the safety net):
+  0) CHANNEL CLEAN-UP – a listing no longer active (hidden, rented, sold, rejected, deleted) → its posts in the channel AND in agents'
+     channels are deleted (older ones edited to "No longer available"); yh_channel_posts has no FK any more, deleted_at marks them.
+  1) ADMIN ALERTS – RPC yh_admin_feed(since) (new non-demo listing, new YourHome account, listing message, verification request, partner
+     request, project question; owner's own accounts left out) → every chat in yh_tg_admin_chats (seeded: the owner's Telegram 8502897153)
+     with an "Open" button; cursor yh_channel_meta 'admin_cursor' moved before sending (never twice).
+  2) AGENT'S OWN CHANNEL – yh_agents.tg_channel (@name, profile form "Your Telegram channel", 5 languages in agents.js TX); the agent
+     makes @yourhomeasiabot an admin; agentChannels() posts the profile's new listings there too (yh_channel_posts chat = the channel).
+  3) "STILL AVAILABLE?" – yh_listings.confirmed_at; 30 days after it the owner's Telegram (Telegram sign-in id, else the @handle of the
+     listing/contact if that person pressed Start) gets the question with ✅ Yes (confirmed_at = now) / 🔴 Rented-sold (status rented/sold)
+     buttons – yh_tg_reminders, answered in api/tg-bot.js (only the chat it was sent to). Unanswered listings stay live.
+  4) POST VIA THE BOT – /post, the button or simply sending photos: photos (max 15) + one description → parse() reads deal, type, price
+     (+ /day /week, 250k), beds, baths, m², district, city, furnished, amenities → summary + Publish/Cancel → the listing is created live for
+     the person's account (tg<id>@telegram…, made for them if new: signup_site yourhome, role advertiser), photos to yh-photos as .jpg,
+     contact = their @username; "By publishing you accept our Terms". State in yh_tg_chats.state (6 h).
+  5) SEARCH IN THE BOT – any text (e.g. "2 bedroom BKK1 600") or Rent / Daily / Buy / Rooms buttons → 5 newest matches (real ones first,
+     samples marked) + "See all on the website" with the same filters.
+  6) PRICE DROPS – trigger yh_price_drop logs a cheaper live listing in yh_price_drops → alert subscribers whose search matches get it once.
+  7) LANGUAGES – the bot answers in English, Khmer, Chinese, French or Thai by the person's Telegram language (T in api/_tgx.js).
+  8) DAILY DIGEST – from 19:00 Cambodia time, if 3+ new listings in 24 h: "Today's new homes" list post in the channel (once a day).
   ONE CLICK TO JOIN (owner, 2026-11-25: "egyszerűbben egy klikkre"): the bottom-menu Telegram button and the footer Telegram icon
   open t.me/yourhomeasia directly (new tab / the Telegram app) – no card in between; the card still opens by itself once per visitor.
 

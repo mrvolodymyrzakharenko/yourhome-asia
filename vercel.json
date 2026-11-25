@@ -40,7 +40,10 @@
       "maxDuration": 10
     },
     "api/tg-sync.js": {
-      "maxDuration": 30
+      "maxDuration": 60
+    },
+    "api/tg-bot.js": {
+      "maxDuration": 60
     }
   },
   "crons": [

@@ -56,7 +56,7 @@ const money = n => {
   return k === 'KHR' ? s + ' ៛' : c[2] + s;
 };
 window.yhMoney = money;
-const priceSuffix = l => l.price_period === 'month' ? t('perMonth') : l.price_period === 'day' ? t('perDay') : '';
+const priceSuffix = l => ({ month: t('perMonth'), day: t('perDay'), week: t('perWeek'), hour: t('perHour') })[l.price_period] || (l.price_period === 'other' && l.period_note ? ' / ' + l.period_note : '');
 const shortDate = d => { const x = new Date(d); return `${x.getFullYear()}. ${x.getMonth()+1}. ${x.getDate()}.`; };
 const dateTime = d => new Date(d).toLocaleString(lang === 'km' ? 'km-KH' : lang, { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
 const toast = (msg, ms = 3200) => { const el = document.getElementById('toast'); el.textContent = msg; el.hidden = false; clearTimeout(toast._t); toast._t = setTimeout(() => el.hidden = true, ms); };
@@ -96,7 +96,7 @@ const ICON = {
   map: '<svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg>',
   sliders: '<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
 };
-const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id,contact_photo';
+const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id,contact_photo,period_note';
 
 function applyStatic() {
   document.documentElement.lang = lang;
@@ -656,9 +656,10 @@ async function viewPost(editId) {
       <label>${t('propType')} *${sel('property_type', TYPES.map(x => [x, t('t_' + x)]), l.property_type)}</label></div>
     <label>${t('title')} *<input name="title" required minlength="5" maxlength="140" placeholder="${esc(t('titlePh'))}" value="${esc(l.title || '')}"></label>
     <div class="row"><label>${t('price')} *<input name="price" type="number" min="0" step="1" required value="${l.price ?? ''}"></label>
-      <label>${t('period')}${sel('price_period', [['month', t('p_month')], ['day', t('p_day')], ['total', t('p_total')]], l.price_period)}</label></div>
-    <div class="row3"><label>${t('bedrooms')}<input name="bedrooms" type="number" min="0" max="50" value="${l.bedrooms ?? ''}" placeholder="0 = ${esc(t('studio'))}"></label>
-      <label>${t('bathrooms')}<input name="bathrooms" type="number" min="0" max="50" value="${l.bathrooms ?? ''}"></label>
+      <label>${t('period')}${sel('price_period', [['hour', t('p_hour')], ['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>
+    <label id="pNoteL"${l.price_period === 'other' ? '' : ' hidden'}>${t('p_otherNote')} *<input name="period_note" maxlength="40" placeholder="${esc(t('p_otherPh'))}" value="${esc(l.period_note || '')}"></label>
+    <div class="row3"><label>${t('bedrooms')}${sel('bedrooms', [['', t('notSet')], ['0', t('studio')], ['1', '1 ' + t('bedroomOne')], ['2', '2 ' + t('bedrooms').toLowerCase()], ['3', '3 ' + t('bedrooms').toLowerCase()], ['4', '4 ' + t('bedrooms').toLowerCase()], ['5', '5+ ' + t('bedrooms').toLowerCase()], ...(l.bedrooms > 5 ? [[String(l.bedrooms), l.bedrooms + ' ' + t('bedrooms').toLowerCase()]] : [])], l.bedrooms ?? '')}</label>
+      <label>${t('bathrooms')}${sel('bathrooms', [['', t('notSet')], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5+'], ...(l.bathrooms > 5 || l.bathrooms === 0 ? [[String(l.bathrooms), String(l.bathrooms)]] : [])], l.bathrooms ?? '')}</label>
       <label>${t('area')}<input name="area_m2" type="number" min="0" step="0.1" value="${l.area_m2 ?? ''}"></label></div>
     <label class="chk"><input type="checkbox" name="furnished" ${l.furnished ? 'checked' : ''}> ${t('furnished')}</label>
     <div class="row"><label>${t('postedBy')}${sel('posted_by', [['', t('notSet')], ['owner', t('by_owner')], ['agent', t('by_agent')]], l.posted_by ?? '')}</label>
@@ -680,6 +681,10 @@ async function viewPost(editId) {
       <label>${t('whatsapp')}<input name="contact_whatsapp" maxlength="30" value="${esc(l.contact_whatsapp || '')}" placeholder="+855 …"></label></div>
     ${agBlock}
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
+  { const pf = document.getElementById('pform'), per = pf.price_period, dl = pf.deal_type, noteL = document.getElementById('pNoteL');
+    const sync = () => { if (dl.value === 'daily' && !['hour', 'day'].includes(per.value)) per.value = 'day'; if (dl.value === 'sale') per.value = 'total'; else if (per.value === 'total') per.value = 'month';
+      noteL.hidden = per.value !== 'other'; noteL.querySelector('input').required = per.value === 'other'; };
+    per.addEventListener('change', sync); dl.addEventListener('change', sync); sync(); }
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
   const m = L.map('pmap').setView(pos || cityCenter(l.city || 'Phnom Penh'), pos ? 16 : 13); tiles(m); maps.push(m);
   document.getElementById('pCity').addEventListener('change', e => {   // every city has its own district list (owner, 2026-11-24 20:28)
@@ -719,7 +724,8 @@ async function viewPost(editId) {
     const num = v => v === '' || v == null ? null : Number(v);
     const row = {
       deal_type: f.deal_type === 'daily' ? 'rent' : f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
-      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.deal_type === 'daily' ? 'day' : f.price_period,
+      price: Number(f.price), price_period: f.deal_type === 'sale' ? 'total' : f.deal_type === 'daily' && !['hour', 'day'].includes(f.price_period) ? 'day' : f.price_period,
+      period_note: f.price_period === 'other' && f.deal_type !== 'sale' ? (String(f.period_note || '').trim().slice(0, 40) || null) : null,
       bedrooms: num(f.bedrooms), bathrooms: num(f.bathrooms), area_m2: num(f.area_m2), furnished: !!f.furnished,
       amenities: fd.getAll('amen').filter(a => AMEN.includes(a)), posted_by: f.posted_by || null,
       min_lease: f.deal_type === 'sale' ? null : (f.min_lease || null),

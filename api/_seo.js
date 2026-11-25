@@ -39,7 +39,7 @@ const LCOLS = 'id,city,district,deal_type,property_type,title,price,price_period
 const TYPE_NAME = { apartment: 'Apartment', condo: 'Condo', house: 'House', villa: 'Villa', twin_villa: 'Twin villa', link_house: 'Link house', flat_house: 'Flat house', flat: 'Flat', penthouse: 'Penthouse', shophouse: 'Shophouse', room: 'Room', office: 'Office', land: 'Land', studio: 'Studio' };
 const typeName = l => l.deal_type === 'room' ? 'Room' : (TYPE_NAME[l.property_type] || 'Property');
 const money = n => '$' + Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 0 });
-const per = l => l.price_period === 'month' ? '/month' : l.price_period === 'day' ? '/day' : '';
+const per = l => ({ month: '/month', day: '/day', week: '/week', hour: '/hour' })[l.price_period] || '';
 function listingName(l) {
   const t = typeName(l);
   const beds = l.bedrooms === 0 && t !== 'Room' ? 'Studio ' + t.toLowerCase() : l.bedrooms > 0 && t !== 'Room' && t !== 'Land' && t !== 'Office' ? `${l.bedrooms}-bedroom ${t.toLowerCase()}` : t;

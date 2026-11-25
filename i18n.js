@@ -272,3 +272,13 @@ for (const k of Object.keys(RP)) Object.assign(T[k], RP[k]);
 
 /* ADMIN – verification requests (owner only; English is enough, other languages fall back) */
 Object.assign(T.en, { ad_title:'Verification requests', ad_pending:'Waiting', ad_done:'Decided', ad_none:'No request is waiting.', ad_verify:'Mark as verified', ad_reject:'Reject', ad_verified:'Verified', ad_rejected:'Rejected' });
+
+/* POST FORM: hourly / weekly / other price period (owner, 2026-11-25) */
+const PP = {
+en: { p_hour:'hour', p_week:'week', p_other:'other…', p_otherNote:'Other period', p_otherPh:'e.g. 3 months, weekend, night', perHour:'/hour', perWeek:'/week' },
+km: { p_hour:'ម៉ោង', p_week:'សប្តាហ៍', p_other:'ផ្សេងទៀត…', p_otherNote:'រយៈពេលផ្សេងទៀត', p_otherPh:'ឧ. 3 ខែ ចុងសប្តាហ៍ យប់', perHour:'/ម៉ោង', perWeek:'/សប្តាហ៍' },
+zh: { p_hour:'每小时', p_week:'每周', p_other:'其他…', p_otherNote:'其他期限', p_otherPh:'例如：3个月、周末、每晚', perHour:'/小时', perWeek:'/周' },
+fr: { p_hour:'heure', p_week:'semaine', p_other:'autre…', p_otherNote:'Autre période', p_otherPh:'ex. 3 mois, week-end, nuit', perHour:'/heure', perWeek:'/semaine' },
+th: { p_hour:'ชั่วโมง', p_week:'สัปดาห์', p_other:'อื่นๆ…', p_otherNote:'ระยะเวลาอื่น', p_otherPh:'เช่น 3 เดือน สุดสัปดาห์ คืน', perHour:'/ชั่วโมง', perWeek:'/สัปดาห์' },
+};
+for (const k of Object.keys(PP)) Object.assign(T[k], PP[k]);

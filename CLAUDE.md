@@ -264,6 +264,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
 
 ## Rules for listings
+- POST FORM CHOICES (owner, 2026-11-25: "kevés az opció… stúdió, one bedroom… daily, weekly, monthly, other… hourly"):
+  Bedrooms = list Studio · 1 · 2 · 3 · 4 · 5+ (stored 0–5), Bathrooms = 1 · 2 · 3 · 4 · 5+. "Price per" = hour · day · week · month ·
+  other… (an "Other period" text field appears, yh_listings.period_note, max 40) · total price (sale only). Suffixes /hour /week
+  (priceSuffix in app.js, per in api/_seo.js). Daily-rent deal allows hour or day.
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.

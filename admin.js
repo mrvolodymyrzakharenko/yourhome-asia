@@ -342,7 +342,7 @@ SEC.visitors = () => {
     <div class="agrid3">
       ${panel('Countries', bars(v.countries, 'u', 'k', 10, k => `${flag(k)} ${esc(k === '?' ? 'Unknown' : COUNTRY(k))}`))}
       ${panel('Cities', bars(v.cities, 'u', 'k', 10))}
-      ${panel('Languages', bars(v.langs, 'u', 'k', 6, k => esc(({ en: 'English', km: 'Khmer', zh: 'Chinese', fr: 'French', th: 'Thai' })[k] || k)))}
+      ${panel('Languages', bars(v.langs, 'u', 'k', 6, k => esc(({ en: 'English', km: 'Khmer', zh: 'Chinese', fr: 'French', th: 'Thai', ru: 'Russian', de: 'German', cs: 'Czech', pl: 'Polish', hu: 'Hungarian', ko: 'Korean', ja: 'Japanese' })[k] || k)))}
       ${panel('Devices', bars(v.devices, 'u', 'k', 3, k => esc(k[0].toUpperCase() + k.slice(1))))}
       ${panel('Browsers & apps', bars(v.browsers, 'u', 'k', 8))}
       ${panel('Systems', bars(v.os, 'u', 'k', 6))}

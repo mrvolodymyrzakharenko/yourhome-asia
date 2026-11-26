@@ -8,7 +8,7 @@ Data lives in the shared Supabase project "eleon" (same as the Study and Work po
 never touch the Study tables. When a new standing rule is agreed with the owner, add it here.
 
 ## Working style
-- The owner writes in Hungarian; answer in Hungarian. Site content is in English plus Khmer, Chinese, French and Thai (i18n.js); Russian, German, Czech, Polish, Hungarian, Korean and Japanese are selectable but still show English.
+- The owner writes in Hungarian; answer in Hungarian. Site content is in 12 languages: English, Khmer, Chinese, French, Thai, Russian, German, Czech, Polish, Hungarian, Korean, Japanese (i18n.js T + NL block; agents.js TX). A NEW text key needs all 12 – a missing one falls back to English.
 - The owner tests live: finished work goes straight to production on yourhome.asia – no temporary preview links.
 - Design is approved: never change layout, classes or styles unless asked. Copy changes keep the design.
 - Everything must work over HTTPS (SSL is automatic on Vercel).
@@ -229,7 +229,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   PL · HU · 한국어 · 日本語 – LANG_SHORT) + chevron, NO flag. It opens .lpk: white cards with a drawn flag (flagSvg(), never emoji) and
   the language in its own name; current = pink patch, red text. PC: centred, THREE per row (4 rows, flag · name · ›). Phones/tablets
   (≤900px): TWO per row, smaller cards (flag above the name), box 25% from the left, right and bottom. Never an inner scrollbar.
-  ru/de/cs/pl/hu/ko/ja have NO texts in i18n.js yet – they show English (t() falls back) until translated.
+  ru/de/cs/pl/hu/ko/ja texts: NL block at the end of i18n.js + TX in agents.js (owner, 2026-11-26 08:06: "mindent fordítsd le").
 - BOXES WITHOUT INNER SCROLLING – BASE RULE (owner, 2026-11-26: "sok helyet így kéne megcsinálni a boxokat"): every box / panel /
   popup is sized to its content so it needs no inner scrollbar; items get more compact on short screens instead. Only a genuinely
   long list (dozens of districts) gets a search field / groups rather than a tiny scrolling box.
@@ -519,7 +519,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   5) SEARCH IN THE BOT – any text (e.g. "2 bedroom BKK1 600") or Rent / Daily / Buy / Rooms buttons → 5 newest matches (real ones first,
      samples marked) + "See all on the website" with the same filters.
   6) PRICE DROPS – trigger yh_price_drop logs a cheaper live listing in yh_price_drops → alert subscribers whose search matches get it once.
-  7) LANGUAGES – the bot answers in English, Khmer, Chinese, French or Thai by the person's Telegram language (T in api/_tgx.js).
+  7) LANGUAGES – the bot answers in all 12 site languages (en, km, zh, fr, th, ru, de, cs, pl, hu, ko, ja) by the person's Telegram language (T in api/_tgx.js).
   8) DAILY DIGEST – from 19:00 Cambodia time, if 3+ new listings in 24 h: "Today's new homes" list post in the channel (once a day).
   ONE CLICK TO JOIN (owner, 2026-11-25: "egyszerűbben egy klikkre"): the bottom-menu Telegram button and the footer Telegram icon
   open t.me/yourhomeasia directly (new tab / the Telegram app) – no card in between; the card still opens by itself once per visitor.

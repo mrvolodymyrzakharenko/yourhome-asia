@@ -1248,3 +1248,11 @@ label[hidden]{display:none!important}
 @media (max-width:1180px){.yft-g{grid-template-columns:repeat(3,minmax(0,1fr))!important}.yft-a{grid-column:1/-1}.yft-pills{max-width:none}.yft-chat .yft-chs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){.yft-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}.yft-chat{grid-column:1/-1}}
 @media (max-width:360px){.yft-g{grid-template-columns:minmax(0,1fr)!important}}
+/* RENT · SELL · BUY FIELD (owner, 2026-11-26 07:08: "ide kell berakni egy plusz mezőt, rent - sell - buy és legyen alapból a
+   renten"): first field of the PC search card – five equal fields; phones/tablets keep City · District · Type · Budget (the deal
+   tabs above the card do the same job there). */
+.sbox .f-want{display:none}
+@media (min-width:901px){
+  .sbox .f-want{display:block}
+  .sbox{grid-template-columns:repeat(5,minmax(0,1fr)) auto!important}
+}

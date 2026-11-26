@@ -422,6 +422,7 @@ const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent',
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
+    <div class="f f-want"><label>${t('wantTo')}</label><select name="want" id="wantSel" aria-label="${esc(t('wantTo'))}">${[['rent', t('rent')], ['sell', t('sell')], ['buy', t('buy')]].map(([v, lab]) => `<option value="${v}"${v === (deal === 'sale' ? 'buy' : 'rent') ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
     <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
     <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${SEARCH_TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t(x === 'studio' ? 'studio' : 't_' + x)}</option>`).join('')}</select></div>
@@ -431,10 +432,17 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   <div class="chipbox home" id="chipBox">${chipRow(p, deal)}</div>`;
 }
 const budgetOpts = (deal, cur) => `<option value="">${t('any')}</option>` + BUDGET[deal].map(v => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('');
+// Sell in the search card → post form for a sale listing, with the picked type and city
+const goSell = form => { const f = new FormData(form), p = new URLSearchParams({ deal: 'sale' }); if (TYPES.includes(f.get('type'))) p.set('type', f.get('type')); go('#/post?' + p); };
 function wireSearchBox(onSubmit) {
   let deal = document.querySelector('#dealTabs .on').dataset.deal;
   document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: STAY_CATS.includes(b.dataset.cat) ? (deal === 'sale' ? 'sale' : 'daily') : deal === 'room' || (BIZ_CATS.includes(b.dataset.cat) && deal === 'daily') ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
-  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); onSubmit(deal); };
+  // Rent · Sell · Buy field in the search card (owner, 2026-11-26 07:08: "plusz mező, rent - sell - buy, alapból a renten"):
+  // Buy = sale search, Rent = the rent tab picked (Daily / Rooms stay), Sell = the post form preset to a sale listing
+  const want = document.getElementById('wantSel');
+  want.onchange = () => { const v = want.value; if (v === 'sell') return; const d = v === 'buy' ? 'sale' : (deal === 'sale' ? 'rent' : deal); if (d === deal) return; deal = d; document.querySelectorAll('#dealTabs [data-deal]').forEach(x => x.classList.toggle('on', x.dataset.deal === d)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
+  document.getElementById('dealTabs').addEventListener('click', e => { const b = e.target.closest('[data-deal]'); if (b) want.value = b.dataset.deal === 'sale' ? 'buy' : 'rent'; });
+  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); if (want.value === 'sell') return goSell(e.target); onSubmit(deal); };
   const cs = document.getElementById('citySel'), ds = document.getElementById('distSel');
   return () => deal;
 }
@@ -593,7 +601,8 @@ async function viewSearch() {
     if (k === 'studio') return upd({ beds: p.beds === '0' ? '' : '0' });
     upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds, ...(STAY_CATS.includes(k) && p.type !== k && deal !== 'sale' ? { deal: 'daily', max: '' } : {}), ...(BIZ_CATS.includes(k) && p.type !== k && (deal === 'daily' || deal === 'room') ? { deal: 'rent', max: '' } : {}) });
   };
-  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ city: f.get('city'), q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
+  document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target), w = f.get('want'); if (w === 'sell') return goSell(e.target);
+    const nd = w === 'buy' ? 'sale' : (deal === 'sale' || !deal ? 'rent' : deal); upd({ deal: nd, city: f.get('city'), q: f.get('q'), type: f.get('type'), max: nd === deal ? f.get('max') : '' }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
   document.getElementById('chipBox').addEventListener('click', e => { const b = e.target.closest('.vsw a'); if (!b) return; e.preventDefault(); e.stopPropagation(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); }, true);
   document.getElementById('notifyBtn').onclick = () => alertModal(p);
@@ -710,6 +719,9 @@ async function viewPost(editId) {
     l = data;
   } else {
     const last = store.get('yh_contact', null) || user?.user_metadata?.contact || {}; Object.assign(l, last);
+    const pq = Object.fromEntries(qs());   // "Sell" in the search card → #/post?deal=sale&type=<type>
+    if (pq.deal === 'sale') { l.deal_type = 'sale'; l.price_period = 'total'; }
+    if (TYPES.includes(pq.type)) l.property_type = pq.type;
   }
   let photos = [...(l.photos || [])];
   const agBlock = await AG.postBlock(l, !editId);

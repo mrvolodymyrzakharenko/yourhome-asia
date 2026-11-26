@@ -322,3 +322,6 @@ fr: { ftp_commercial:'Locaux commerciaux', t_commercial:'Commercial', ft_project
 th: { ftp_commercial:'อสังหาฯ เชิงพาณิชย์', t_commercial:'เชิงพาณิชย์', ft_project:'ลงโครงการของคุณ', ft_alerts:'แจ้งเตือน Telegram', ft_forRent:'ให้เช่า', ft_forSale:'ขาย', ft_areas:'ย่านยอดนิยม', ft_dailyR:'เช่ารายวัน', ft_allRent:'ที่พักให้เช่าทั้งหมด', ft_allSale:'อสังหาฯ ขายทั้งหมด', ftp_apartment:'อพาร์ตเมนต์', ftp_condo:'คอนโด', ftp_studio:'สตูดิโอ', ftp_house:'บ้าน', ftp_villa:'วิลล่า', ftp_penthouse:'เพนท์เฮาส์', 'ftp_twin-villa':'บ้านแฝด', 'ftp_link-house':'ทาวน์เฮาส์', 'ftp_flat-house':'อาคารพาณิชย์', ftp_flat:'แฟลต', ftp_shophouse:'ช็อปเฮาส์', ftp_office:'สำนักงาน', ftp_land:'ที่ดิน', ftp_hotel:'โรงแรม', ftp_hostel:'โฮสเทล' },
 };
 for (const k of Object.keys(FT2)) Object.assign(T[k], FT2[k]);
+/* Rent · Sell · Buy field in the search card (owner, 2026-11-26 07:08) */
+const WANT = { en:{wantTo:'I want to', sell:'Sell'}, km:{wantTo:'ខ្ញុំចង់', sell:'លក់'}, zh:{wantTo:'我想', sell:'出售'}, fr:{wantTo:'Je veux', sell:'Vendre'}, th:{wantTo:'ฉันต้องการ', sell:'ขาย'} };
+for (const k of Object.keys(WANT)) Object.assign(T[k], WANT[k]);

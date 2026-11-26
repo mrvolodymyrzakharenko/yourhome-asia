@@ -121,6 +121,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   filters under it are exactly as WIDE AS THE CARD, on PC the quick filters (owner 17:28: EQUAL GAPS between the words, space-between – not equal columns) and More filters |
   Listing | Map | Subscribe | Newest share ONE full-width line (styles.css "PC: the rows around the search card").
   The card is ~5% taller again (owner: "túl szűk"). The four fields are EQUAL, label + value centred, the small filled triangle right after the value (owner: "lélegezzen, de ne ennyire").
+- RENT · SELL · BUY FIELD (owner, 2026-11-26 07:08: "plusz mező, rent - sell - buy és legyen alapból a renten"; a two-row tab
+  version was tried and reverted – "túl sok"): the FIRST field of the PC search card (#wantSel, label "I want to", wantTo / sell in
+  i18n.js WANT), default Rent (Buy when the page's deal is sale). Buy = sale search, Rent = rent (Daily / Rooms tabs stay), Sell + Search
+  → #/post?deal=sale&type=<type> (goSell(); viewPost presets deal + type). Synced with the deal tabs. PC (≥901px) only: five equal
+  fields; phones/tablets keep their four fields (styles.css "RENT · SELL · BUY FIELD").
 - PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),
   then Post listing + Search in the row below.
 - Posting a listing must always be visible straight away (header button – on phones a compact red "+ Post" before Menu,

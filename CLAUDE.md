@@ -35,6 +35,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   brand icons (Facebook, Telegram channel, Instagram, TikTok, YouTube – "coming soon" bubble until a link is filled in) and a
   Company column: About us (#/about), How it works (#/how), Safety tips (#/safety), FAQ (#/faq), Contact us, Terms, Privacy.
   Those pages are PAGES in app.js (English, no invented numbers), styles .ab-* (kicker, H1 with a red word, cards, blue CTA band).
+  FOOTER LINKS LIKE MVP VIETNAM (owner, 2026-11-26: "mehet"): SIX columns on PC – brand (+ "Popular areas" district pills under the
+  contacts) · For rent · For sale · For advertisers · Company · Chat with us (chat pills one per row on PC). The For rent / For sale
+  type links (Apartments, Condos, Hotels…) and the district pills are filled by api/page.js footerLinks() from the LIVE listings
+  (markers <!--ft:rent/sale/areas--> in index.html, cached 2 min) – only landing pages that have listings, max 12 pills, most listings
+  first; a pill opens rent, else buy / rooms / daily. Labels ftp_<type> / ft_forRent… in i18n.js (FT2). "Saved listings" and
+  "Help & support" left the footer (bottom menu Saved, Company → Contact us). Styles: "FOOTER LINKS LIKE MVP" block in styles.css.
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
   icons 21px; six equal columns Telegram · Home · Saved · Post (red plus, red label – always visible) · Map · Account

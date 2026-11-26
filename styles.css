@@ -1189,3 +1189,15 @@ label[hidden]{display:none!important}
   .card:hover .ylink svg{transform:translateX(4px)}
 }
 @media (prefers-reduced-motion:reduce){.card,.card:hover,.card .ph>img,.card .ph .ygal{transition:none!important;transform:none!important}}
+/* FOOTER LINKS LIKE MVP VIETNAM (owner, 2026-11-26): six columns on PC – brand (+ Popular areas pills) · For rent · For sale ·
+   For advertisers · Company · Chat with us. Type links and district pills come from the server (live listings only). */
+.yft-g{grid-template-columns:1.35fr 1fr 1fr 1fr 1fr 1.15fr!important;gap:26px!important}
+.yft-chat .yft-chs{grid-template-columns:minmax(0,1fr)}
+.yft-soc-r{gap:8px}
+.yft-areas{margin-top:20px}
+.yft-pills{display:flex;flex-wrap:wrap;gap:8px;max-width:330px}
+.yft-pill{display:inline-flex;align-items:center;height:32px;padding:0 13px;border:1px solid #D5DBE7;border-radius:99px;background:#fff;color:#334155;text-decoration:none;font-size:13px;font-weight:500;letter-spacing:-.025em;white-space:nowrap;transition:border-color .2s,color .2s,background .2s}
+.yft-pill:hover,.yft-pill:focus-visible{border-color:var(--blue);color:var(--blue);background:#EEF2FD}
+@media (max-width:1180px){.yft-g{grid-template-columns:repeat(3,minmax(0,1fr))!important}.yft-a{grid-column:1/-1}.yft-pills{max-width:none}.yft-chat .yft-chs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:900px){.yft-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}.yft-chat{grid-column:1/-1}}
+@media (max-width:360px){.yft-g{grid-template-columns:minmax(0,1fr)!important}}

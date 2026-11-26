@@ -199,6 +199,45 @@ async function build(p, q) {
   return null;
 }
 
+// FOOTER LINKS LIKE MVP VIETNAM (owner, 2026-11-26: "mehet"): the "For rent" / "For sale" type links and the "Popular areas"
+// district pills are filled in on the server from the live listings – only landing pages that really have listings
+// (seo-rules.md), so the footer never links an empty page. Labels carry data-i18n (ftp_<type>) – the app translates them.
+const FT_RENT = ['apartment', 'condo', 'studio', 'house', 'villa', 'penthouse', 'twin-villa', 'link-house', 'flat-house', 'flat', 'shophouse', 'office', 'hotel', 'hostel'];
+const FT_SALE = ['condo', 'apartment', 'house', 'villa', 'penthouse', 'twin-villa', 'link-house', 'flat-house', 'flat', 'shophouse', 'office', 'land'];
+let FTC = null, FTT = 0;
+async function footerLinks() {
+  if (FTC && Date.now() - FTT < 120000) return FTC;
+  const list = await sb('yh_listings', 'select=city,district,deal_type,property_type,price_period,bedrooms&status=eq.active&country=eq.KH&limit=3000', 1500);
+  const L = S.landings(list), c = 'phnom-penh';
+  const li = (href, key, txt) => `<li><a href="${href}"${key ? ` data-i18n="${key}"` : ''}>${esc(txt)}</a></li>`;
+  const typeLinks = (deal, order) => order.map(ty => {
+    const pth = (deal === 'rent' && (ty === 'hotel' || ty === 'hostel') && L[`/daily/${c}/${ty}`]) ? `/daily/${c}/${ty}` : `/${deal}/${c}/${ty}`;
+    return L[pth] ? li(pth, 'ftp_' + ty, S.TYPE_PLURAL[ty]) : '';
+  }).join('');
+  const rent = typeLinks('rent', FT_RENT) + li('/daily', 'ft_dailyR', 'Daily rentals') + li('/rooms', 'ft_rooms', 'Rooms for rent') + li('/search?view=map', 'ft_map', 'Map search') + li('/rent', 'ft_allRent', 'All rentals');
+  const sale = typeLinks('buy', FT_SALE) + li('/projects', 'newProjects', 'New projects') + li('/buy', 'ft_allSale', 'All properties for sale');
+  // districts of Phnom Penh, most listings first; each pill opens the first deal that has listings there
+  const dist = {};
+  for (const k of Object.keys(L)) {
+    const m = k.match(/^\/(rent|buy|rooms|daily)\/phnom-penh\/([^/]+)$/);
+    if (!m || S.TYPE_PLURAL[m[2]]) continue;
+    const name = L[k][0].district; if (!name) continue;
+    const pri = ['rent', 'buy', 'rooms', 'daily'].indexOf(m[1]);
+    const d = dist[m[2]] || (dist[m[2]] = { name, n: 0, path: k, pri });
+    d.n += L[k].length; if (pri < d.pri) { d.pri = pri; d.path = k; }
+  }
+  const pills = Object.values(dist).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name)).slice(0, 12)
+    .map(d => `<a class="yft-pill" href="${d.path}">${esc(d.name)}</a>`).join('');
+  const areas = pills ? `<div class="yft-areas"><span class="yft-soc-t" data-i18n="ft_areas">Popular areas</span><div class="yft-pills">${pills}</div></div>` : '';
+  FTC = { rent, sale, areas }; FTT = Date.now();
+  return FTC;
+}
+function fillFooter(html, f) {
+  if (!f) return html;
+  for (const k of ['rent', 'sale', 'areas']) html = html.replace(new RegExp(`<!--ft:${k}-->[\\s\\S]*?<!--/ft:${k}-->`), `<!--ft:${k}-->${f[k]}<!--/ft:${k}-->`);
+  return html;
+}
+
 module.exports = async (req, res) => {
   const url = new URL(req.url, 'https://yourhome.asia');
   let p = url.searchParams.get('p') || '/';
@@ -211,7 +250,7 @@ module.exports = async (req, res) => {
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   try {
     const p0 = p.split('/').filter(Boolean)[0] || '';
-    const [page0, pre] = await Promise.all([build(p, q), PRE_PAGES.has(p0) ? preData().catch(() => null) : null]);
+    const [page0, pre, ft] = await Promise.all([build(p, q), PRE_PAGES.has(p0) ? preData().catch(() => null) : null, footerLinks().catch(() => null)]);
     let page = page0;
     if (page && pre && !page.status) page.pre = pre;
     if (page && page.redirect) { res.statusCode = 301; res.setHeader('Location', page.redirect); return res.end(); }
@@ -219,7 +258,7 @@ module.exports = async (req, res) => {
     res.statusCode = page.status || 200;
     if (page.noindex) res.setHeader('X-Robots-Tag', 'noindex, follow');
     res.setHeader('Cache-Control', page.status ? 'public, s-maxage=60' : page.pre ? 'public, max-age=0, s-maxage=30, stale-while-revalidate=120' : 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400');
-    return res.end(render(page));
+    return res.end(fillFooter(render(page), ft));
   } catch (err) {
     console.error('page', p, err && err.message);
     res.statusCode = 200; res.setHeader('Cache-Control', 'no-store');

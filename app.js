@@ -255,10 +255,11 @@ function agentBar(l) {
     wa ? b('https://wa.me/' + wa.replace('+', ''), 'whatsapp', 'yab-wa', '<svg viewBox="0 0 24 24"><path d="M20 12a8 8 0 0 1-11.8 7L4 20l1.1-4A8 8 0 1 1 20 12z"/><path d="M9 9.5c.3 2 2.5 4.2 4.5 4.5l1-1 1.5.7-.3 1.3c-3 .4-6.9-3.5-6.5-6.5l1.3-.3.7 1.5z"/></svg>', 'WhatsApp') : ''}${
     tg ? b('https://t.me/' + tg, 'telegram', 'yab-tg', '<svg viewBox="0 0 24 24"><path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/><path d="m9 13 7-5"/></svg>', 'Telegram') : ''}</span></div>`;
 }
+window.yhAgentBar = agentBar;
 document.addEventListener('click', e => {
   const b = e.target.closest('.yab'); if (!b) return;
   e.preventDefault(); e.stopPropagation();
-  try { track({ id: b.dataset.id, status: 'active' }, b.dataset.ev); } catch (_) {}
+  if (b.dataset.id) try { track({ id: b.dataset.id, status: 'active' }, b.dataset.ev); } catch (_) {}
   const h = b.dataset.href; if (h.startsWith('tel:')) location.href = h; else window.open(h, '_blank', 'noopener');
 }, true);
 // Photo alt text is never empty (seo-rules.md): "<type> for <rent/sale> in <district>, <city>" (+ photo number)

@@ -350,6 +350,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
 
 ## myhome.ge additions (owner, 2026-11-26: "újdonságok… mi kell ebből")
+- PROJECT CARD = LISTING CARD (owner, 2026-11-26 07:39: "nem jó ez a szöveg – hol vannak az elérhetőségek – legyen egységes – mint az
+  ingatlanos kártyák!!!!"): pcard() in partners.js uses the listing card's body – name (.ct) · "● developer · district" (.loc) · ONE
+  icon row floors · apartments · m² range (.specs-row) · the agent bar (window.yhAgentBar = app.js agentBar) with the developer
+  (logo or initial) and round Call · WhatsApp · Telegram from yh_projects phone / whatsapp / telegram; phones the .yname / .yfoot rows.
+  NO payment pills or unit-price table on the card any more – those stay on the project page.
 - PROJECT CARDS: developer logo (yh_projects.developer_logo, https only; else initial), payment option pills (yh_projects.payment
   ⊂ installment · full · bank · developer) and "Prices by unit type" rows (yh_projects.unit_prices [{type,size,price}], max 4) –
   on the card and on the project page (+ "Payment options"). partners.js PAY / payTags / uprices, partners.css last block.

@@ -231,25 +231,39 @@ function pslider(p) {
   const { esc } = C;
   return `<div class="ygal">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 800))}" alt="${esc(p.name)} – photo ${i + 1}" decoding="async">`).join('')}</div><div class="ydots${ph.length > 8 ? ' many' : ''}">${ph.map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo">${ARR(1)}</button>`;
 }
+// PROJECT CARD = LISTING CARD (owner, 2026-11-26: "legyen egységes – mint az ingatlanos kártyák… hol vannak az elérhetőségek"):
+// same body as app.js card(): name · "● developer · district" · one icon row (floors · units · m² range) · the agent bar with the
+// developer (logo or initial) and round Call · WhatsApp · Telegram buttons (yh_projects phone / whatsapp / telegram).
+// Phones get the listing card's name + pin/address rows (.yname / .yfoot) like every other card.
+const SP = {
+  fl: '<svg viewBox="0 0 24 24"><path d="M5 21V4h10v17M15 9h4v12M3 21h18M8 8h1M11 8h1M8 12h1M11 12h1M8 16h1M11 16h1"/></svg>',
+  un: '<svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>',
+  ar: '<svg viewBox="0 0 24 24"><path d="M4 20 20 4M4 14v6h6M20 10V4h-6"/></svg>',
+  pin: '<svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></svg>',
+};
 function pcard(p) {
   const { esc } = C; const img = p.photos && p.photos[0];
   const href = '#/project/' + encodeURIComponent(p.slug);
+  const sizes = uprices(p).map(u => Number(u.size)).filter(n => n > 0);
+  const area = sizes.length ? (Math.min(...sizes) === Math.max(...sizes) ? Math.min(...sizes) : Math.min(...sizes) + '–' + Math.max(...sizes)) + 'm²' : '–';
+  const place = [p.district, p.city].filter(Boolean).join(', ');
+  const bar = window.yhAgentBar ? window.yhAgentBar({ id: '', contact_name: p.developer || p.name, contact_phone: p.phone, contact_whatsapp: p.whatsapp || p.phone, contact_telegram: p.telegram, contact_photo: /^https:\/\//.test(p.developer_logo || '') ? p.developer_logo : '' }) : '';
   return `<a class="card prj-card" href="${href}">
     <div class="ph">${img ? `<img src="${esc(pimg(img, 800))}" alt="${esc(p.name)}" loading="lazy">` : '<span class="noimg">🏗</span>'}${pslider(p)}
       <span class="prj-badges">${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}<span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</span>
       ${p.price_from ? `<span class="prj-price">from ${fmt(p.price_from)}</span>` : ''}
       ${p.photos && p.photos.length > 1 ? `<span class="prj-count">${I.camera}${p.photos.length}</span>` : ''}
     </div>
-    <div class="cb prj-cb">
+    <div class="cb">
       <h3 class="ct">${esc(p.name)}</h3>
-      <p class="prj-dev">${p.developer ? devLogo(p) : ''}${esc(p.developer || '')}</p>
-      ${payTags(p) ? `<div class="prj-pays">${payTags(p)}</div>` : ''}
-      ${uprices(p).length ? `<dl class="prj-units">${uprices(p).map(u => `<div><dt>${esc(u.type)}</dt><dd>${u.size ? 'from ' + esc(String(u.size)) + ' m²' : ''}</dd><dd><b>${u.price ? 'from ' + fmt(u.price) : 'On request'}</b></dd></div>`).join('')}</dl>` : `<p class="prj-facts">${esc([p.units, p.completion].filter(Boolean).join(' · '))}</p>`}
-      <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}</p>
-      <span class="prj-link">View project ${I.arrow}</span>
+      <div class="loc"><b>●</b> ${esc(p.developer || 'New project')} · ${esc(p.district || p.city || '')}</div>
+      <div class="specs-row"><span title="Floors">${SP.fl}${p.floors ? esc(String(p.floors)) + ' fl.' : '–'}</span><span title="Apartments">${SP.un}${p.unit_count ? esc(String(p.unit_count)) : '–'}</span><span title="Unit sizes">${SP.ar}${esc(area)}</span></div>
+      <p class="yname"><span class="yn1">${esc(p.name)}</span></p>
+      <div class="yfoot"><p class="ymeta">${SP.pin}<span class="yaddr"><span class="ya1">${esc(p.city || 'Phnom Penh')},</span> <span class="ya2">${esc(p.district || 'Cambodia')}</span></span></p></div>
+      ${bar}
     </div></a>`;
 }
-const COLS = 'id,slug,name,developer,district,city,stage,completion,price_from,units,unit_count,floors,photos,payment,unit_prices,developer_logo,is_featured,is_demo,created_at';
+const COLS = 'id,slug,name,developer,phone,telegram,whatsapp,district,city,stage,completion,price_from,units,unit_count,floors,photos,payment,unit_prices,developer_logo,is_featured,is_demo,created_at';
 export async function fetchProjects(limit = 60) {
   const { data, error } = await C.sb.from('yh_projects').select(COLS).eq('active', true).order('is_featured', { ascending: false }).order('created_at', { ascending: false }).limit(limit);
   if (error) { console.error(error); return []; }

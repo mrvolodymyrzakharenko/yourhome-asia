@@ -3,7 +3,7 @@
 // Routes: #/blog (list) · #/blog/<slug> (article). Homepage block "Blog" after New projects (4 cards).
 let C = null, DATA = null;
 export function init(ctx) { C = ctx; }
-const load = () => DATA || (DATA = fetch('/blog.json?v=2').then(r => r.json()).then(l => l.sort((x, y) => y.date.localeCompare(x.date))).catch(() => []));
+const load = () => DATA || (DATA = fetch('/blog.json?v=3').then(r => r.json()).then(l => l.sort((x, y) => y.date.localeCompare(x.date))).catch(() => []));
 const S = d => `<svg viewBox="0 0 24 24" aria-hidden="true">${d}</svg>`;
 const ICONS = {
   key: S('<circle cx="8" cy="15" r="4"/><path d="m11 12 9-9M17 6l3 3M15 8l2 2"/>'),

@@ -418,7 +418,10 @@ async function fetchListings(f = {}) {
   return data;
 }
 
-const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','daily','sale','room'].map(d => `<button type="button" data-deal="${d}" class="dt-deal ${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d === 'daily' ? 'dailyTab' : d)}</button>`).join('')}<button type="button" class="dt-deal dt-prj" data-go="#/projects">${t('projectsShort')}</button><span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
+// TOP ROW = Rent · Sell · Buy · Rooms · Projects (owner, 2026-11-26 07:11: "Sell-t nem kéne a felülre rakni? és a daily-t kivenni…
+// daily… a rent termnél lesz"): Sell opens the post form for a sale listing; Daily is no tab any more – it is the "Daily" rental term
+// (lease=day) of Rent, and deal=daily (URLs, landing pages, Hotel / Hostel) shows Rent as the picked tab.
+const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','sell','sale','room'].map(d => d === 'sell' ? `<button type="button" class="dt-deal dt-sell" data-go="#/post?deal=sale">${t('sell')}</button>` : `<button type="button" data-deal="${d}" class="dt-deal ${d === deal || (d === 'rent' && deal === 'daily') ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d)}</button>`).join('')}<button type="button" class="dt-deal dt-prj" data-go="#/projects">${t('projectsShort')}</button><span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
@@ -545,9 +548,9 @@ async function viewHome() {
   wireChips(box, st, drawChips);
   const getDeal = wireSearchBox((deal, tabOnly) => {
     if (tabOnly) { FKEYS.forEach(k => delete st[k]); return drawChips(); }
-    const f = new FormData(document.getElementById('sbox')); const p = new URLSearchParams({ deal });
+    const f = new FormData(document.getElementById('sbox')); const p = new URLSearchParams({ deal: deal === 'rent' && st.lease === 'day' ? 'daily' : deal });
     for (const k of ['city', 'q', 'type', 'max']) if (f.get(k)) p.set(k, f.get(k));
-    for (const k of FKEYS) if (st[k]) p.set(k, st[k]);
+    for (const k of FKEYS) if (st[k] && !(k === 'lease' && st[k] === 'day')) p.set(k, st[k]);
     go('#/search?' + p);
   });
   homeTools();
@@ -593,7 +596,12 @@ async function viewSearch() {
 
   const upd = ch => { const n = new URLSearchParams(qs()); for (const k in ch) ch[k] ? n.set(k, ch[k]) : n.delete(k); go('#/search?' + n); };
   const st = {}; FKEYS.forEach(k => { if (p[k]) st[k] = p[k]; });
-  wireChips(document.getElementById('chipBox'), st, s => upd(Object.fromEntries(FKEYS.map(k => [k, s[k] || '']))));
+  if (deal === 'daily') st.lease = 'day';   // Daily = Rent with the rental term "Daily" (owner, 2026-11-26 07:11)
+  wireChips(document.getElementById('chipBox'), st, s => { const ch = Object.fromEntries(FKEYS.map(k => [k, s[k] || '']));
+    if (s.lease === 'day' && deal !== 'daily') Object.assign(ch, { deal: 'daily', lease: '', max: '' });
+    else if (deal === 'daily' && s.lease !== 'day') Object.assign(ch, { deal: 'rent', max: '' });
+    else if (deal === 'daily') ch.lease = '';
+    upd(ch); });
   document.getElementById('dealTabs').onclick = e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.deal) return upd({ deal: b.dataset.deal, max: '' });

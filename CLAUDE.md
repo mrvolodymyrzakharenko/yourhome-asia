@@ -121,6 +121,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   filters under it are exactly as WIDE AS THE CARD, on PC the quick filters (owner 17:28: EQUAL GAPS between the words, space-between – not equal columns) and More filters |
   Listing | Map | Subscribe | Newest share ONE full-width line (styles.css "PC: the rows around the search card").
   The card is ~5% taller again (owner: "túl szűk"). The four fields are EQUAL, label + value centred, the small filled triangle right after the value (owner: "lélegezzen, de ne ennyire").
+- TOP ROW = RENT · SELL · BUY · ROOMS · PROJECTS (owner, 2026-11-26 07:11: "Sell-t… felülre… a daily-t kivenni… a rent termnél lesz a
+  daily"): Daily is no tab any more – Sell (→ #/post?deal=sale) took its place, same 14 items / 2 × 7 on phones. Daily = the rental term
+  "Daily" (lease=day in More filters) of Rent: picking it switches the results to deal=daily, and deal=daily (URLs, /daily landings,
+  Hotel / Hostel, homepage Daily block) shows Rent as the picked tab with the term "Daily" selected (viewSearch / viewHome in app.js).
 - RENT · SELL · BUY FIELD (owner, 2026-11-26 07:08: "plusz mező, rent - sell - buy és legyen alapból a renten"; a two-row tab
   version was tried and reverted – "túl sok"): the FIRST field of the PC search card (#wantSel, label "I want to", wantTo / sell in
   i18n.js WANT), default Rent (Buy when the page's deal is sale). Buy = sale search, Rent = rent (Daily / Rooms tabs stay), Sell + Search

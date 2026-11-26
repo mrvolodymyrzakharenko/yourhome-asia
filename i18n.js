@@ -1,4 +1,4 @@
-export const LANGS = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', th: 'ไทย', ru: 'RU', vi: 'VI', ko: 'KO', ja: 'JA' };
+export const LANGS = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', th: 'ไทย', ru: 'RU', vi: 'VI', ko: 'KO' };
 
 export const T = {
 en: {

@@ -60,9 +60,9 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
-// Cambodia offers 9 languages (owner, 2026-11-26 13:30) – a stored de/cs/pl/hu choice falls back to English
-let lang = store.get('yh_lang', null) || (['km','zh','fr','th','ru','vi','ko','ja'].find(l => (navigator.language || '').startsWith(l)) || 'en');
-if (!['en','km','zh','fr','th','ru','vi','ko','ja'].includes(lang)) lang = 'en';
+// Cambodia offers 8 languages (owner, 2026-11-26 13:30 / 13:34 Japanese off) – a stored de/cs/pl/hu/ja choice falls back to English
+let lang = store.get('yh_lang', null) || (['km','zh','fr','th','ru','vi','ko'].find(l => (navigator.language || '').startsWith(l)) || 'en');
+if (!['en','km','zh','fr','th','ru','vi','ko'].includes(lang)) lang = 'en';
 // Short labels for the filters panel (owner, 2026-11-24 20:23: amenities in 3 rows) – s_<key>, else the full text
 const sl = k => (T[lang] && T[lang]['s_' + k]) ?? (lang === 'en' ? T.en['s_' + k] : null) ?? t(k);
 const t = (k, vars) => { let s = (T[lang] && T[lang][k]) ?? T.en[k] ?? k; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; };
@@ -202,7 +202,7 @@ document.getElementById('lang').addEventListener('change', e => { lang = e.targe
 // language in its own name · ›, the current one ✓), all 12 without scrolling – PC 3 per row; phones/tablets 2 per row, smaller,
 // 25% of the screen free left, right and below (owner 08:02 – base rule for boxes on phones; styles.css "LANGUAGE PICKER").
 // The header button shows ONLY the active language as text, no flag (owner 08:02). Flags are drawn SVG, never emoji. Languages without their own texts yet show English (t() falls back).
-const LANG_LIST = [['en', 'English'], ['km', 'ខ្មែរ'], ['zh', '中文'], ['fr', 'Français'], ['th', 'ไทย'], ['ru', 'Русский'], ['vi', 'Tiếng Việt'], ['ko', '한국어'], ['ja', '日本語']];
+const LANG_LIST = [['en', 'English'], ['km', 'ខ្មែរ'], ['zh', '中文'], ['fr', 'Français'], ['th', 'ไทย'], ['ru', 'Русский'], ['vi', 'Tiếng Việt'], ['ko', '한국어']];
 const LANG_SHORT = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', th: 'ไทย', ru: 'RU', vi: 'VI', ko: '한국어', ja: '日本語' };
 const LANG_TITLE = { vi: 'Ngôn ngữ', en: 'Language', km: 'ភាសា', zh: '语言', fr: 'Langue', th: 'ภาษา', ru: 'Язык', de: 'Sprache', cs: 'Jazyk', pl: 'Język', hu: 'Nyelv', ko: '언어', ja: '言語' };
 function flagSvg(c) {

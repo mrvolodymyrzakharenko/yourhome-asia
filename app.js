@@ -22,7 +22,16 @@ const districtOpts = (city, cur) => `<option value="">${distList(city).length ||
   (cur && !distList(city).includes(cur) ? [cur, ...distList(city)] : distList(city)).map(d => `<option value="${esc(d)}"${d === cur ? ' selected' : ''}>${esc(d)}</option>`).join('');
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 // property types like realestate.com.kh "All types" (owner, 2026-11-24 20:34); Studio is search-only (= 0 bedrooms)
-const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land','hotel','hostel'];
+const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land','hotel','hostel',
+  'borey','serviced','guesthouse','resort','farmland','plantation','comm_land','shop','warehouse','factory','showroom','restaurant','building'];
+// PROPERTY TYPES IN GROUPS (owner, 2026-11-26 07:43: "land, shop, territory, wood… elválasztva, alsó csíkkal, szépen, kategória név fent
+// középen, alatta az alkategóriák"): every Property type list (search card, post form) = <optgroup>s; picker.js draws the group name
+// centred with a thin line under it, its types below. 'studio' and 'commercial' (= every business type) are search-only.
+const TYPE_GROUPS = [['g_homes', ['apartment','condo','studio','house','borey','villa','twin_villa','link_house','flat_house','flat','penthouse','serviced']],
+  ['g_stays', ['room','hotel','hostel','guesthouse','resort']], ['g_land', ['land','farmland','plantation','comm_land']],
+  ['g_biz', ['commercial','shophouse','shop','office','warehouse','factory','showroom','restaurant','building']]];
+const typeLab = x => t(x === 'studio' ? 'studio' : x === 'commercial' ? 'g_allBiz' : 't_' + x);
+const typeOpts = (cur, search) => TYPE_GROUPS.map(([g, ks]) => `<optgroup label="${esc(t(g))}">${ks.filter(x => search || TYPES.includes(x)).map(x => `<option value="${x}"${cur === x ? ' selected' : ''}>${esc(typeLab(x))}</option>`).join('')}</optgroup>`).join('');
 // SEARCH TYPE LIST (owner, 2026-11-26: "a type-nál az összes ingatlan típus… commercial a végére, előre a lakossági"):
 // homes first, then rooms / short stays / land, business types LAST (after a thin divider in the list – data-sep)
 const SEARCH_TYPES = ['apartment','condo','studio','house','villa','twin_villa','link_house','flat_house','flat','penthouse','room','hotel','hostel','land','office','shophouse','commercial'];
@@ -35,7 +44,7 @@ const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wif
 // they open as short stays (deal daily) unless Buy is picked – STAY_CATS
 const STAY_CATS = ['hotel', 'hostel'];
 // "Commercial" (footer + /rent|buy/<city>/commercial landing, owner 2026-11-26) = offices + shophouses
-const COMMERCIAL = ['office', 'shophouse'];
+const COMMERCIAL = ['office', 'shophouse', 'shop', 'warehouse', 'factory', 'showroom', 'restaurant', 'building'];   // = every business type (TYPE_GROUPS g_biz)
 const CATS = [['hotel', 't_hotel'], ['hostel', 't_hostel'], ['office', 't_office_s'], ['shophouse', 't_shop_s'], ['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
@@ -433,7 +442,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
     <div class="f f-want"><label><span class="mf-l">${t('wantTo')}</span><span class="mf-s">${t('wantShort')}</span></label><select name="want" id="wantSel" aria-label="${esc(t('wantTo'))}">${[['rent', t('rent')], ['sell', t('sell')], ['buy', t('buy')]].map(([v, lab]) => `<option value="${v}"${v === (deal === 'sale' ? 'buy' : 'rent') ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
     <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
-    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type" data-all><option value="">${t('any')}</option>${SEARCH_TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}${x === 'office' ? ' data-sep' : ''}>${t(x === 'studio' ? 'studio' : 't_' + x)}</option>`).join('')}</select></div>
+    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type" data-all><option value="">${t('any')}</option>${typeOpts(p.type, true)}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <div class="sbtns"><a href="#/post" class="btn red sb-post">+ ${t('post')}</a><button class="btn blue">${t('search')} →</button></div>
   </form>
@@ -799,7 +808,7 @@ async function viewPost(editId) {
   app.innerHTML = `<div class="wrap"><form class="narrow panel form" id="pform">
     <h1 style="margin:0">${editId ? t('editTitle') : t('postTitle')}</h1>
     <div class="row"><label>${t('dealType')} *${sel('deal_type', [['daily', t('dailyRent')], ['weekly', t('d_weekly')], ['rent', t('d_monthly')], ['longterm', t('d_longterm')], ['rentother', t('d_other')], ['sale', t('buy')], ['room', t('room')]], postDeal(l))}</label>
-      <label>${t('propType')} *${sel('property_type', TYPES.map(x => [x, t('t_' + x)]), l.property_type)}</label></div>
+      <label>${t('propType')} *<select name="property_type">${typeOpts(l.property_type, false)}</select></label></div>
     <label>${t('title')} *<input name="title" required minlength="5" maxlength="140" placeholder="${esc(t('titlePh'))}" value="${esc(l.title || '')}"></label>
     <div class="row"><label>${t('price')} *<input name="price" type="number" min="0" step="1" required value="${l.price ?? ''}"></label>
       <label id="pPerL">${t('period')}${sel('price_period', [['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>

@@ -12,8 +12,13 @@
     var lab = sel.getAttribute('aria-label') || '';
     if (!lab) { var lw = sel.closest('.f') || sel.closest('label') || (sel.id && document.querySelector('label[for="' + sel.id + '"]')); var ln = lw ? (lw.querySelector('label') || lw) : null; var fc = ln && ln.firstChild; lab = ((fc && fc.textContent) || (ln && ln.textContent) || '').replace(/^\W+/, '').trim().slice(0, 40); }
     var h = '<div class="ypk-bg"></div><div class="ypk-w" role="listbox" aria-label="' + lab.replace(/"/g, '&quot;') + '"><div class="ypk-h"><span>' + lab.replace(/</g, '&lt;') + '</span><button type="button" class="ypk-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="ypk-l">';
+    var lastG = null;
     for (var i = 0; i < sel.options.length; i++) {
       var o = sel.options[i]; if (o.hidden) continue;
+      // option groups (Property type, owner 2026-11-26): the group name centred with a thin line under it, its items below
+      var g = o.parentNode && o.parentNode.tagName === 'OPTGROUP' ? o.parentNode : null;
+      if (g && g !== lastG) h += '<div class="ypk-g" role="presentation">' + (g.label || '').replace(/</g, '&lt;') + '</div>';
+      lastG = g;
       if (o.hasAttribute('data-sep')) h += '<i class="ypk-sep" aria-hidden="true"></i>';
       h += '<button type="button" data-i="' + i + '"' + (o.disabled ? ' disabled' : '') + ' class="' + (i === sel.selectedIndex ? 'on' : '') + '">' + o.textContent.replace(/</g, '&lt;') + '</button>';
     }

@@ -1382,3 +1382,11 @@ label[hidden]{display:none!important}
 .yft-psl a::before{content:"·";position:absolute;left:7px;color:#AEB9CF}   /* the dot of a line's first link sits in the clipped 19px – no line starts with a dot */
 .yft-pop .yft-areas{padding-bottom:18px}
 @media (max-width:900px){.yft-psr{flex-direction:column;align-items:flex-start}.yft-psl{align-self:stretch}.yft .yft-psl a{white-space:normal}}
+
+/* PROPERTY TYPE GROUPS (owner, 2026-11-26 07:43: "elválasztva, alsó csíkkal, szépen, kategória név fent középen, alatta az
+   alkategóriák"): Homes · Rooms & stays · Land · Business – the group name centred, small spaced capitals in royal blue, a thin
+   line under it, its types below (two columns on phones/tablets in the search card's list). */
+.ypk-g{display:block;margin:12px 6px 6px;padding:0 0 7px;border-bottom:1px solid #E5E9F2;text-align:center;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#032EA1}
+.ypk-l .ypk-g:first-child,.ypk-l button+.ypk-g{margin-top:12px}
+.ypk-l>button:first-child+.ypk-g{margin-top:8px}
+@media (max-width:900px){.ypk.ypk-all .ypk-g{grid-column:1/-1}}

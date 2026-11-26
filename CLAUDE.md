@@ -176,6 +176,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Flat · Penthouse · Room · Hotel · Hostel · Land | thin line | Office · Shophouse · Commercial (SEARCH_TYPES in app.js; data-sep on
   Office). On phones/tablets it opens in TWO COLUMNS, as tall as its content, so every type shows without scrolling
   (select[data-all] → .ypk-all, picker.js + last block of styles.css; only this list).
+- PROPERTY TYPES IN GROUPS (owner, 2026-11-26 07:43: "land, shop, territory, wood, mi lehet még?… elválasztva, alsó csíkkal, szépen,
+  kategória név fent középen, alatta az alkategóriák"): TYPE_GROUPS in app.js, drawn as <optgroup>s by typeOpts() in the search card and
+  the post form; picker.js shows each group name centred (royal-blue spaced capitals, .ypk-g) with a thin line under it, its types below.
+  Homes: Apartment · Condo · Studio (search) · House · Borey house · Villa · Twin villa · Link house · Flat house · Flat · Penthouse ·
+  Serviced apartment | Rooms & stays: Room · Hotel · Hostel · Guesthouse · Resort | Land: Land · Farmland · Plantation · Commercial land |
+  Business: All business property (= 'commercial', search) · Shophouse · Retail shop · Office · Warehouse · Factory · Showroom ·
+  Restaurant / café · Whole building. New keys borey, serviced, guesthouse, resort, farmland, plantation, comm_land, shop, warehouse,
+  factory, showroom, restaurant, building (yh_listings_property_type_check, t_* / g_* in i18n.js PTG, api/_seo.js TYPE_NAME/TYPE_PLURAL,
+  router TYPE_SLUGS). COMMERCIAL (app.js, _seo.js, tg-sync.js) = every business type.
 - SORTING (owner, 2026-11-24 20:51, tokki.house): Newest · Price: low to high · Price: high to low · Area: largest first ·
   Area: smallest first (#sortSel, SORTS in app.js, so_* in i18n.js; listings without an area come last).
 - CURRENCY (owner, 2026-11-24 20:55, realestate.com.kh menu): USD · KHR · THB · CNY · JPY · EUR – always in the Menu list

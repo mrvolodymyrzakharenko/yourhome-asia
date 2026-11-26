@@ -82,3 +82,10 @@ label{font-weight:500}
 .hdr .brand em,.yft .brand em{padding-left:.16em}
 /* CAMBODIA a little bolder (owner, 2026-11-24 20:41 Tbilisi) */
 .hdr .brand em,.yft .brand em{font-weight:700!important}
+/* SERVICES + ACCOUNTS STRIP (owner, 2026-11-26): card texts 13px, mini pictures 10–11px */
+.svc-b b{font-size:13px;font-weight:600;letter-spacing:-.025em}
+.svc-b span{font-size:13px;font-weight:400}
+.svc-b em{font-size:13px;font-weight:500;letter-spacing:-.025em}
+.svc-p,.svc-p b,.svc-msg,.svc-chat span,.svc-rows span,.svc-own span{font-size:11px;letter-spacing:-.01em}
+.svc-fn{font-size:12px}.svc-fn small,.svc-own small,.svc-wk>span,.svc-l3{font-size:10px}
+@media (max-width:720px){.svc-b span,.svc-b em{font-size:12px}}

@@ -535,6 +535,27 @@ function placeCtas(root) {
 let ctaW = innerWidth <= 720;
 addEventListener('resize', () => { const p = innerWidth <= 720; if (p !== ctaW) { ctaW = p; document.querySelectorAll('#blocks, #res').forEach(placeCtas); } });
 
+// SERVICES + ACCOUNTS STRIP (owner, 2026-11-26: tokki.house "Services · Cabinets & Support" screenshot – "ezt át kéne venni… csak
+// módosítani"): two groups of small white cards with a mini picture on top – YourHome services (Recommended · Verified advertisers ·
+// Telegram alerts · Help) and Accounts & dashboards (Agent or agency · Owner). Sits right after the first homepage block.
+function svcSection(all) {
+  const l = all.find(x => x.is_featured && x.photos && x.photos[0]) || all.find(x => x.photos && x.photos[0]);
+  const ok = '<svg class="svc-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  const arr = ' <span class="svc-ar">→</span>';
+  const card = (cls, pic, k, href, attr = '') => `<a class="svc-c ${cls}" href="${href}"${attr}><div class="svc-p">${pic}</div><div class="svc-b"><b>${t(k + 't')}</b><span>${t(k + 's')}</span><em>${t(k + 'l')}${arr}</em></div></a>`;
+  const feed = l ? `<img src="${esc(imgSrc(l.photos[0], 400))}" alt="" loading="lazy"><i class="svc-sh"></i><span class="svc-heart">${HEART}</span><span class="svc-fn">${esc(t('t_' + l.property_type) || '')}${l.district ? ' · ' + esc(l.district) : ''}<small>${money(l.price)}${esc(priceSuffix(l))}</small></span>` : '<i class="svc-sh"></i>';
+  const ver = `<div class="svc-rows"><span><i class="svc-dot b"></i>${t('svc2a')}${ok}</span><span><i class="svc-dot r"></i>${t('svc2b')}${ok}</span><span><i class="svc-dot b"></i>${t('svc2c')}${ok}</span></div><span class="svc-shield"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l7 3v5.5c0 4.3-3 7.7-7 9-4-1.3-7-4.7-7-9V6z" fill="none" stroke="#fff" stroke-width="2"/></svg></span>`;
+  const tg = `<div class="svc-tg"><span class="svc-tgi"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5z"/></svg></span><span class="svc-msg">${t('svc3m')}</span></div>`;
+  const help = `<div class="svc-chat"><span class="q">${t('svc4q')}</span><span class="a"><b>${t('svc4n')}</b> ${t('svc4a')}</span></div>`;
+  const bars = [30, 55, 35, 70, 45, 90, 60];
+  const stats = `<div class="svc-wk"><span>${t('svc5w')}</span><div class="svc-bars">${bars.map((h, i) => `<i style="height:${h}%"${i === 5 ? ' class="r"' : ''}></i>`).join('')}</div></div>`;
+  const own = `<div class="svc-own"><span class="svc-l1"><i class="svc-dot g"></i>${t('t_condo')} · BKK1</span><span class="svc-l2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 5h16v11H8l-4 4z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span><b>${t('svc6m')}</b><small>Sokha · 15:00</small></span></span><span class="svc-l3">${t('svc6f')}<b>${t('svc6g')}</b></span></div>`;
+  return `<section class="svc" aria-label="${esc(t('svcTitle'))}"><div class="svc-g svc-g1"><div class="bh"><h2>${t('svcTitle')}</h2></div><div class="svc-row">
+    ${card('c-feed', feed, 'svc1', '#/search?sort=new')}${card('c-ver', ver, 'svc2', '#/experts')}${card('c-tg', tg, 'svc3', '#/search', ' data-svc-alert="1"')}${card('c-help', help, 'svc4', '#/faq')}
+    </div></div><div class="svc-g svc-g2"><div class="bh"><h2>${t('svcAcc')}</h2></div><div class="svc-row">
+    ${card('c-stat', stats, 'svc5', '#/account?as=advertiser')}${card('c-own', own, 'svc6', '#/post')}
+    </div></div></section>`;
+}
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
     <div id="blocks">${skelRow()}${skelRow()}</div></div>`;
@@ -570,6 +591,9 @@ async function viewHome() {
   b0.innerHTML = html;
   // "Want to rent out faster?" banner sits BETWEEN the first two category blocks, not under the search (owner, 2026-11-24 17:26)
   placeCtas(b0);
+  const b1 = b0.querySelector('section.block');
+  if (b1) { b1.insertAdjacentHTML('afterend', svcSection(all));
+    const al = b0.querySelector('[data-svc-alert]'); if (al) al.onclick = e => { e.preventDefault(); alertModal({ deal: getDeal() }); }; }
   const [prj, blog] = await Promise.all([PT.homeBlock(), BL.homeBlock()]);
   if (!b0.isConnected) return;
   if (prj) b0.insertAdjacentHTML('beforeend', prj);

@@ -1269,3 +1269,74 @@ label[hidden]{display:none!important}
   .ypk.ypk-all .ypk-l button{padding:9px 6px}
   .ypk.ypk-all .ypk-sep{grid-column:1/-1}
 }
+
+/* SERVICES + ACCOUNTS STRIP (owner, 2026-11-26, tokki.house "Services · Cabinets & Support"): svcSection() in app.js.
+   PC: two groups side by side (4 cards | 2 cards); tablets: groups stacked, 4 columns; phones: 2 cards per row. */
+.svc{display:grid;grid-template-columns:4fr 2fr;gap:24px;margin:8px 0 36px}
+.svc .bh{margin-bottom:12px}
+.svc-g1 .svc-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.svc-g2 .svc-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.svc-c{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;text-decoration:none;color:var(--ink);box-shadow:0 1px 3px rgba(15,23,42,.04);transition:transform .2s,box-shadow .2s}
+.svc-c:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(3,46,161,.12)}
+.svc-p{position:relative;height:104px;background:linear-gradient(180deg,#eef2fc,#f7f9fe);overflow:hidden;border-bottom:1px solid var(--line)}
+.svc-b{display:flex;flex-direction:column;gap:3px;padding:12px 14px 14px}
+.svc-b b{color:var(--ink)}
+.svc-b span{color:var(--muted)}
+.svc-b em{font-style:normal;color:var(--blue);margin-top:6px}
+.svc-ar{display:inline-block;transition:transform .2s}
+.svc-c:hover .svc-ar{transform:translateX(4px)}
+.svc-c:hover .svc-b b{color:var(--blue)}
+/* 1 feed photo */
+.c-feed .svc-p{background:#1e293b}
+.c-feed img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.c-feed:hover img{transform:scale(1.05)}
+.svc-sh{position:absolute;inset:0;background:linear-gradient(180deg,rgba(15,23,42,0) 35%,rgba(15,23,42,.72))}
+.svc-heart{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.svc-heart svg{width:13px;height:11px;fill:var(--red)}
+.svc-fn{position:absolute;left:10px;bottom:8px;color:#fff;font-weight:600;display:flex;flex-direction:column;line-height:1.3}
+.svc-fn small{color:#ffd166;font-weight:600}
+/* 2 verification rows */
+.svc-rows{position:absolute;left:10px;right:40px;top:9px;display:flex;flex-direction:column;gap:5px}
+.svc-rows span{display:flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px 8px;font-weight:600;white-space:nowrap;overflow:hidden}
+.svc-ok{width:13px;height:13px;color:#16a34a;margin-left:auto;flex:none}
+.svc-dot{width:7px;height:7px;border-radius:50%;flex:none;display:inline-block}
+.svc-dot.b{background:var(--blue)}.svc-dot.r{background:var(--red)}.svc-dot.g{background:#16a34a}
+.svc-shield{position:absolute;right:8px;top:4px;width:24px;height:24px;border-radius:50%;background:var(--red);display:grid;place-items:center;box-shadow:0 3px 8px rgba(224,0,37,.35)}
+.svc-shield svg{width:14px;height:14px}
+/* 3 Telegram message */
+.svc-tg{position:absolute;left:10px;right:10px;top:16px;display:flex;align-items:flex-start;gap:7px}
+.svc-tgi{width:26px;height:26px;border-radius:50%;background:#229ED9;display:grid;place-items:center;flex:none}
+.svc-tgi svg{width:15px;height:15px}
+.svc-msg{background:#fff;border:1px solid var(--line);border-radius:4px 12px 12px 12px;padding:6px 9px;color:var(--ink);line-height:1.35}
+/* 4 help chat */
+.svc-chat{position:absolute;left:10px;right:10px;top:12px;display:flex;flex-direction:column;gap:7px}
+.svc-chat .q{align-self:flex-end;background:var(--blue);color:#fff;border-radius:12px 12px 4px 12px;padding:5px 10px;font-weight:600}
+.svc-chat .a{align-self:flex-start;background:#fff;border:1px solid var(--line);border-radius:12px 12px 12px 4px;padding:5px 10px}
+.svc-chat .a b{color:var(--blue)}
+/* 5 weekly bars */
+.svc-wk{position:absolute;inset:10px 12px 10px}
+.svc-wk>span{color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+.svc-bars{position:absolute;left:0;right:0;bottom:0;height:56px;display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
+.svc-bars i{flex:1;max-width:16px;background:var(--blue);border-radius:5px 5px 2px 2px}
+.svc-bars i.r{background:var(--red)}
+/* 6 owner */
+.svc-own{position:absolute;left:10px;right:10px;top:8px;display:flex;flex-direction:column;gap:5px}
+.svc-own>span{display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden}
+.svc-l1,.svc-l2{background:#fff;border:1px solid var(--line);border-radius:8px;padding:3px 8px;font-weight:600}
+.svc-l2{border-left:3px solid var(--blue)}
+.svc-l2 svg{width:13px;height:13px;color:var(--red);flex:none}
+.svc-l2>span{display:flex;flex-direction:column;line-height:1.2}
+.svc-l2 small{color:var(--muted);font-weight:400}
+.svc-l3{justify-content:space-between;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:0 2px}
+.svc-l3 b{color:var(--red);text-transform:none;letter-spacing:0}
+@media (max-width:1100px){
+  .svc{grid-template-columns:1fr;gap:18px}
+  .svc-g2 .svc-row{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:720px){
+  .svc{margin:4px 0 28px}
+  .svc-g1 .svc-row,.svc-g2 .svc-row{grid-template-columns:repeat(2,1fr);gap:10px}
+  .svc-c{border-radius:16px}
+  .svc-b{padding:10px 11px 12px}
+  .svc-rows{right:10px}.svc-shield{display:none}
+}

@@ -41,6 +41,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (markers <!--ft:rent/sale/areas--> in index.html, cached 2 min) – only landing pages that have listings, max 12 pills, most listings
   first; a pill opens rent, else buy / rooms / daily. Labels ftp_<type> / ft_forRent… in i18n.js (FT2). "Saved listings" and
   Styles: "FOOTER LINKS LIKE MVP" block in styles.css.
+  POPULAR AREAS = OWN ROW (owner, 2026-11-26 07:32: "legyen kicsit sötétebb… és egy sorban"): not in the brand column any more –
+  div.yft-pop under the link columns (above the © row): "Popular areas" + the pills on ONE line, darker pills (border #AEB9CF,
+  text #0F172A, 500); they wrap only when they no longer fit (phones: title above, pills wrap). styles.css "POPULAR AREAS" block.
   EVERY LINK COLUMN = 8 ROWS (owner, 2026-11-26: "egészítsd ki… legyen egységes – mehet a commercial is"): For rent = Apartments ·
   Condos · Houses · Villas · Commercial property · Rooms for rent · Daily rentals · All rentals; For sale = Condos · Apartments ·
   Houses · Villas · Land · Commercial property · New projects · All properties for sale; For advertisers = Post a listing – free ·

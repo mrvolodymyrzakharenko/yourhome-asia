@@ -1357,3 +1357,13 @@ label[hidden]{display:none!important}
 .ccard .cc-t small{font-size:12px;font-weight:400;opacity:.85}
 @media (hover:hover) and (prefers-reduced-motion:no-preference){.ccard:hover img{transform:scale(1.05)}}
 @media (max-width:720px){.cities .crow{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.ccard{border-radius:14px}}
+/* POPULAR AREAS = ONE ROW, DARKER (owner, 2026-11-26 07:32: "legyen kicsit sötétebb a popular areas és egy sorban"): its own
+   full-width row under the link columns – title + the pills on one line; only if they no longer fit (many districts, narrow
+   screens) do they wrap – never sticking out, never sideways scroll. */
+.yft-pop:empty{display:none}
+.yft-pop .yft-areas{display:flex;align-items:center;gap:10px 16px;margin:0;padding-bottom:26px}
+.yft-pop .yft-soc-t{margin:0;white-space:nowrap;color:#0b1d51}
+.yft-pop .yft-pills{max-width:none;flex-wrap:wrap;gap:8px;min-width:0}
+.yft .yft-pill{border-color:#AEB9CF;color:#0F172A;background:#fff;font-weight:500}
+.yft .yft-pill:hover,.yft .yft-pill:focus-visible{border-color:var(--blue);color:var(--blue);background:#EEF2FD}
+@media (max-width:900px){.yft-pop .yft-areas{flex-direction:column;align-items:flex-start}.yft-pop .yft-pills{flex-wrap:wrap}}

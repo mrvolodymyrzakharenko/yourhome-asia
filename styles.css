@@ -1248,26 +1248,3 @@ label[hidden]{display:none!important}
 @media (max-width:1180px){.yft-g{grid-template-columns:repeat(3,minmax(0,1fr))!important}.yft-a{grid-column:1/-1}.yft-pills{max-width:none}.yft-chat .yft-chs{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media (max-width:900px){.yft-g{grid-template-columns:repeat(2,minmax(0,1fr))!important}.yft-chat{grid-column:1/-1}}
 @media (max-width:360px){.yft-g{grid-template-columns:minmax(0,1fr)!important}}
-/* PC SEARCH TABS = TWO ROWS (owner, 2026-11-26 06:57: "Sell menü hiányzik… pc nézetben 2 sor Rent - Sell - Buy, és alá kategóriák…
-   commercialnál shop, beauty salon, barber shop"): ≥901px the one-line #dealTabs is replaced by .dtpc – row 1 Rent · Buy · Sell ·
-   Daily · Rooms · Projects (darker 600 words, hairline under it), row 2 the picked tab's categories (the same text-with-dividers
-   look, picked = pink patch + red), row 3 the business kinds on a pale strip when Commercial (or one of them) is picked.
-   Phones and tablets keep the 2 × 7 row – .dtpc is hidden there. */
-.dtpc{display:none}
-@media (min-width:901px){
-  html body #dealTabs.deal-tabs{display:none!important}
-  .dtpc{display:block;width:100%;max-width:972px;margin:0 auto 14px}
-  .pcr{display:flex;align-items:center}
-  .pcr button{flex:1 1 0;position:relative;display:flex;align-items:center;justify-content:center;border:0;background:none;cursor:pointer;font:inherit;font-size:13px;letter-spacing:-.025em;white-space:nowrap;color:#5B6478;font-weight:400;padding:9px 6px;border-radius:12px;transition:color .2s,background .2s}
-  .pcr button+button::before{content:"";position:absolute;left:0;top:28%;bottom:28%;width:1px;background:#D5DAE3}
-  .pcr button.on::before,.pcr button.on+button::before{display:none}
-  .pcr button:not(.on):hover{color:#E00025}
-  .pcr button.on{background:#FDE4E7;color:#E00025;font-weight:600;box-shadow:0 6px 18px rgba(15,23,42,.08),0 1px 4px rgba(15,23,42,.05)}
-  .pcr1{border-bottom:1px solid #E6EAF1;padding-bottom:6px;margin-bottom:6px}
-  .pcr1 button{color:#0b1d51;font-weight:600;padding:10px 6px}
-  .pcr1 .pc-sell:not(.on){color:#E00025}
-  .pcr2 button{color:#5B6478}
-  .pcr3{margin-top:8px;background:#F4F6FB;border-radius:14px;padding:3px}
-  .pcr3 button{font-size:12.5px;padding:7px 4px}
-  .pcr3 button.on{background:#fff}
-}

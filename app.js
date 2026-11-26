@@ -22,7 +22,7 @@ const districtOpts = (city, cur) => `<option value="">${distList(city).length ||
   (cur && !distList(city).includes(cur) ? [cur, ...distList(city)] : distList(city)).map(d => `<option value="${esc(d)}"${d === cur ? ' selected' : ''}>${esc(d)}</option>`).join('');
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 // property types like realestate.com.kh "All types" (owner, 2026-11-24 20:34); Studio is search-only (= 0 bedrooms)
-const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land','hotel','hostel','shop','salon','barber','restaurant','warehouse'];   // + business types (owner, 2026-11-26: "commercialnál shop, beauty salon, barber shop")
+const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land','hotel','hostel'];
 const SEARCH_TYPES = [...TYPES.slice(0, 9), 'studio', ...TYPES.slice(9), 'commercial'];
 // COMMERCIAL (owner, 2026-11-26: "külön portál a commercialra?" → no, a category here): 'commercial' is a search-only type =
 // every business property (COMMERCIAL below: office + shophouse); Office is its own category too. Both open as Rent (Buy stays Buy).
@@ -33,41 +33,7 @@ const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wif
 // they open as short stays (deal daily) unless Buy is picked – STAY_CATS
 const STAY_CATS = ['hotel', 'hostel'];
 // "Commercial" (footer + /rent|buy/<city>/commercial landing, owner 2026-11-26) = offices + shophouses
-const COMMERCIAL = ['office', 'shophouse', 'shop', 'salon', 'barber', 'restaurant', 'warehouse'];
-BIZ_CATS.push(...COMMERCIAL.filter(k => !BIZ_CATS.includes(k)));
-// PC SEARCH TABS = TWO ROWS (owner, 2026-11-26 06:57: "Sell menü hiányzik… pc nézetben 2 sor Rent - Sell - Buy, és alá kategóriák…
-// commercialnál shop, beauty salon, barber shop"): row 1 Rent · Buy · Sell · Daily · Rooms · Projects, row 2 the picked tab's own
-// categories, row 3 (Commercial or one of its kinds picked) the business kinds. Sell = post a sale listing: its categories open the
-// post form preset (deal sale + type). Phones/tablets keep the 2 × 7 row (#dealTabs) – this block is PC only (.dtpc, ≥901px).
-const PC_CATS = { rent: ['apartment','condo','studio','house','villa','office','commercial'], sale: ['condo','apartment','house','villa','land','shophouse','commercial'],
-  sell: ['condo','apartment','house','villa','land','shophouse','office','commercial'], daily: ['hotel','hostel','apartment','condo','studio','villa','house'] };
-const PC_ROOM = ['private_bath','female_only','aircon','wifi','pool','gym'];   // Rooms: what the room offers (amenity filters)
-const SUB_COMM = ['shophouse','shop','office','salon','barber','restaurant','warehouse'];
-const pcLab = k => t(k === 'studio' ? 'studio' : 't_' + k);
-function pcInner(deal, type, amen, sub) {
-  const d = deal || 'rent', isSell = d === 'sell', am = String(amen || '').split(',').filter(Boolean);
-  const b = (cls, attr, on, lab) => `<button type="button" class="${cls}${on ? ' on' : ''}" ${attr}>${esc(lab)}</button>`;
-  const r1 = [['rent','rent'],['sale','buy'],['sell','sell'],['daily','dailyTab'],['room','room']].map(([k, l]) => b('pc-d' + (k === 'sell' ? ' pc-sell' : ''), `data-deal="${k}"`, deal === k, t(l))).join('') + b('pc-d', 'data-go="#/projects"', false, t('projectsShort'));
-  const list = PC_CATS[d] || [];
-  const commOn = type === 'commercial' || (COMMERCIAL.includes(type) && !list.includes(type));
-  const r2 = d === 'room' ? PC_ROOM.map(k => b('pc-c', `data-amen="${k}"`, am.includes(k), sl(k))).join('')
-    : list.map(k => isSell ? (k === 'commercial' ? b('pc-c', 'data-csub="1"', sub, t('t_commercial')) : b('pc-c', `data-post="${k}"`, false, pcLab(k)))
-      : b('pc-c', `data-cat="${k}"`, k === 'commercial' ? commOn : type === k, k === 'commercial' ? t('t_commercial') : pcLab(k))).join('');
-  const show3 = isSell ? sub : (d === 'rent' || d === 'sale') && (type === 'commercial' || COMMERCIAL.includes(type));
-  const r3 = !show3 ? '' : (isSell ? '' : b('pc-s', 'data-cat="commercial"', type === 'commercial', t('pc_allComm'))) + SUB_COMM.map(k => b('pc-s', isSell ? `data-post="${k}"` : `data-cat="${k}"`, !isSell && type === k, pcLab(k))).join('');
-  return `<div class="pcr pcr1" role="tablist">${r1}</div><div class="pcr pcr2">${r2}</div>${r3 ? `<div class="pcr pcr3">${r3}</div>` : ''}`;
-}
-// one click handler for the PC rows; cat(k) = what a category click does on that page
-function wirePC(cur, onDeal, onCat, onAmen) {
-  const box = document.getElementById('dealPC'); if (!box) return;
-  box.onclick = e => { const b = e.target.closest('button'); if (!b || b.dataset.go) return;
-    if (b.dataset.post) return go('#/post?deal=sale&type=' + b.dataset.post);
-    if (b.dataset.csub) { cur.sub = !cur.sub; box.innerHTML = pcInner('sell', '', '', cur.sub); return; }
-    if (b.dataset.deal) { cur.deal = b.dataset.deal; cur.sub = false; if (b.dataset.deal === 'sell') { box.innerHTML = pcInner('sell', '', '', false); return onDeal('sale', true); } return onDeal(b.dataset.deal); }
-    if (b.dataset.amen) return onAmen(b.dataset.amen);
-    if (b.dataset.cat) return onCat(b.dataset.cat);
-  };
-}
+const COMMERCIAL = ['office', 'shophouse'];
 const CATS = [['hotel', 't_hotel'], ['hostel', 't_hostel'], ['office', 't_office_s'], ['commercial', 't_comm_s'], ['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
@@ -346,7 +312,7 @@ function card(l) {
     </div></a>`;
 }
 // 10 categories, 5 + 5 (owner, 2026-11-24): the 5th top item "Projects" opens New projects
-document.addEventListener('click', e => { const b = e.target.closest('#dealTabs [data-go], #dealPC [data-go]'); if (!b) return; e.preventDefault(); e.stopPropagation(); go(b.dataset.go); }, true);
+document.addEventListener('click', e => { const b = e.target.closest('#dealTabs [data-go]'); if (!b) return; e.preventDefault(); e.stopPropagation(); go(b.dataset.go); }, true);
 // Phone card photo slider like vietrent (owner, 2026-11-24: "pöttyök… ha rákattint a pöttyre, a képek mozognak a kártyán belül"):
 // swipe the photos sideways or tap a dot; the dots follow. A tap on the photo itself still opens the listing.
 document.addEventListener('click', e => {
@@ -452,9 +418,9 @@ async function fetchListings(f = {}) {
   return data;
 }
 
-const dealRow = (deal, cat, id, type = cat, amen = '') => `<div class="deal-tabs" id="${id}">${['rent','daily','sale','room'].map(d => `<button type="button" data-deal="${d}" class="dt-deal ${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d === 'daily' ? 'dailyTab' : d)}</button>`).join('')}<button type="button" class="dt-deal dt-prj" data-go="#/projects">${t('projectsShort')}</button><span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div><div class="dtpc" id="dealPC">${pcInner(deal, type, amen, false)}</div>`;
+const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent','daily','sale','room'].map(d => `<button type="button" data-deal="${d}" class="dt-deal ${d === deal ? 'on' : ''}">${t(d === 'sale' ? 'buy' : d === 'daily' ? 'dailyTab' : d)}</button>`).join('')}<button type="button" class="dt-deal dt-prj" data-go="#/projects">${t('projectsShort')}</button><span class="dt-sep" aria-hidden="true"></span>${CATS.map(([k, lab]) => `<button type="button" class="dt-cat ${k === cat ? 'on' : ''}" data-cat="${k}">${t(lab)}</button>`).join('')}</div>`;
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
-  return `${dealRow(deal, cat, 'dealTabs', p.beds === '0' ? 'studio' : (p.type || cat), p.amen)}
+  return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
     <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
     <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
@@ -467,10 +433,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
 const budgetOpts = (deal, cur) => `<option value="">${t('any')}</option>` + BUDGET[deal].map(v => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('');
 function wireSearchBox(onSubmit) {
   let deal = document.querySelector('#dealTabs .on').dataset.deal;
-  const catGo = k => { const p = new URLSearchParams({ deal: STAY_CATS.includes(k) ? (deal === 'sale' ? 'sale' : 'daily') : deal === 'room' || (BIZ_CATS.includes(k) && deal === 'daily') ? 'rent' : deal }); k === 'studio' ? p.set('beds', '0') : p.set('type', k); go('#/search?' + p); };
-  const setDeal = (d, quiet) => { deal = d; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x.dataset.deal === d)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); if (!quiet) document.getElementById('dealPC').innerHTML = pcInner(d, '', '', false); onSubmit && onSubmit(deal, true); };
-  wirePC({ deal }, setDeal, catGo, k => go('#/search?' + new URLSearchParams({ deal: 'room', amen: k })));
-  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) return catGo(b.dataset.cat); deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
+  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: STAY_CATS.includes(b.dataset.cat) ? (deal === 'sale' ? 'sale' : 'daily') : deal === 'room' || (BIZ_CATS.includes(b.dataset.cat) && deal === 'daily') ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); onSubmit(deal); };
   const cs = document.getElementById('citySel'), ds = document.getElementById('distSel');
   return () => deal;
@@ -623,12 +586,13 @@ async function viewSearch() {
   const upd = ch => { const n = new URLSearchParams(qs()); for (const k in ch) ch[k] ? n.set(k, ch[k]) : n.delete(k); go('#/search?' + n); };
   const st = {}; FKEYS.forEach(k => { if (p[k]) st[k] = p[k]; });
   wireChips(document.getElementById('chipBox'), st, s => upd(Object.fromEntries(FKEYS.map(k => [k, s[k] || '']))));
-  const catClick = k => {
+  document.getElementById('dealTabs').onclick = e => {
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.deal) return upd({ deal: b.dataset.deal, max: '' });
+    const k = b.dataset.cat;
     if (k === 'studio') return upd({ beds: p.beds === '0' ? '' : '0' });
     upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds, ...(STAY_CATS.includes(k) && p.type !== k && deal !== 'sale' ? { deal: 'daily', max: '' } : {}), ...(BIZ_CATS.includes(k) && p.type !== k && (deal === 'daily' || deal === 'room') ? { deal: 'rent', max: '' } : {}) });
   };
-  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.deal) return upd({ deal: b.dataset.deal, max: '' }); catClick(b.dataset.cat); };
-  wirePC({ deal }, (d, sell) => { if (!sell) upd({ deal: d, max: '' }); }, catClick, k => { const a = String(p.amen || '').split(',').filter(Boolean); upd({ deal: 'room', max: deal === 'room' ? p.max : '', amen: (a.includes(k) ? a.filter(x => x !== k) : [...a, k]).join(',') }); });
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ city: f.get('city'), q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });
   document.getElementById('chipBox').addEventListener('click', e => { const b = e.target.closest('.vsw a'); if (!b) return; e.preventDefault(); e.stopPropagation(); upd({ view: b.dataset.v === 'map' ? 'map' : '' }); }, true);
@@ -746,9 +710,6 @@ async function viewPost(editId) {
     l = data;
   } else {
     const last = store.get('yh_contact', null) || user?.user_metadata?.contact || {}; Object.assign(l, last);
-    const pq = Object.fromEntries(qs());   // Sell tab (PC) → #/post?deal=sale&type=<type>
-    if (pq.deal === 'sale') { l.deal_type = 'sale'; l.price_period = 'total'; }
-    if (TYPES.includes(pq.type)) l.property_type = pq.type;
   }
   let photos = [...(l.photos || [])];
   const agBlock = await AG.postBlock(l, !editId);

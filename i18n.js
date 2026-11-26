@@ -322,12 +322,3 @@ fr: { ftp_commercial:'Locaux commerciaux', t_commercial:'Commercial', ft_project
 th: { ftp_commercial:'อสังหาฯ เชิงพาณิชย์', t_commercial:'เชิงพาณิชย์', ft_project:'ลงโครงการของคุณ', ft_alerts:'แจ้งเตือน Telegram', ft_forRent:'ให้เช่า', ft_forSale:'ขาย', ft_areas:'ย่านยอดนิยม', ft_dailyR:'เช่ารายวัน', ft_allRent:'ที่พักให้เช่าทั้งหมด', ft_allSale:'อสังหาฯ ขายทั้งหมด', ftp_apartment:'อพาร์ตเมนต์', ftp_condo:'คอนโด', ftp_studio:'สตูดิโอ', ftp_house:'บ้าน', ftp_villa:'วิลล่า', ftp_penthouse:'เพนท์เฮาส์', 'ftp_twin-villa':'บ้านแฝด', 'ftp_link-house':'ทาวน์เฮาส์', 'ftp_flat-house':'อาคารพาณิชย์', ftp_flat:'แฟลต', ftp_shophouse:'ช็อปเฮาส์', ftp_office:'สำนักงาน', ftp_land:'ที่ดิน', ftp_hotel:'โรงแรม', ftp_hostel:'โฮสเทล' },
 };
 for (const k of Object.keys(FT2)) Object.assign(T[k], FT2[k]);
-/* PC SEARCH TABS + BUSINESS TYPES (owner, 2026-11-26: "Rent - Sell - Buy… commercialnál shop, beauty salon, barber shop") */
-const PC2 = {
-en: { sell:'Sell', t_shop:'Shop', t_salon:'Beauty salon', t_barber:'Barber shop', t_restaurant:'Restaurant / café', t_warehouse:'Warehouse', pc_allComm:'All commercial' },
-km: { sell:'លក់', t_shop:'ហាងលក់ទំនិញ', t_salon:'ហាងសម្អាងការ', t_barber:'ហាងកាត់សក់', t_restaurant:'ភោជនីយដ្ឋាន / កាហ្វេ', t_warehouse:'ឃ្លាំង', pc_allComm:'ពាណិជ្ជកម្មទាំងអស់' },
-zh: { sell:'出售', t_shop:'商铺', t_salon:'美容院', t_barber:'理发店', t_restaurant:'餐厅 / 咖啡馆', t_warehouse:'仓库', pc_allComm:'全部商业' },
-fr: { sell:'Vendre', t_shop:'Boutique', t_salon:'Salon de beauté', t_barber:'Barbier', t_restaurant:'Restaurant / café', t_warehouse:'Entrepôt', pc_allComm:'Tous les locaux' },
-th: { sell:'ขาย', t_shop:'ร้านค้า', t_salon:'ร้านเสริมสวย', t_barber:'ร้านตัดผม', t_restaurant:'ร้านอาหาร / คาเฟ่', t_warehouse:'โกดัง', pc_allComm:'พาณิชย์ทั้งหมด' },
-};
-for (const k of Object.keys(PC2)) Object.assign(T[k], PC2[k]);

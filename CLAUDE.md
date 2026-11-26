@@ -84,16 +84,6 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Row labels t_office_s / t_comm_s (short: FR "Local", KM "អូហ្វីស" / "ហាង"); full name t_commercial. Landing pages
   /rent/phnom-penh/commercial and /rent/phnom-penh/office ("Commercial spaces" / "Offices for rent" in the Menu after Listings;
   the footer has its own "Commercial property" link). fitRows() checks the category row against its OWN box, not only the screen.
-- PC SEARCH TABS = TWO ROWS + SELL (owner, 2026-11-26 06:57: "Sell menü hiányzik… pc nézetben 2 sor Rent - Sell - Buy, és alá
-  kategóriák… commercialnál shop, beauty salon, barber shop"; answers: row 1 = all tabs, Sell = post a sale listing, business kinds =
-  real types, phones unchanged): on screens ≥901px #dealTabs is hidden and .dtpc (#dealPC, pcInner() in app.js) shows ROW 1 Rent · Buy ·
-  Sell · Daily · Rooms · Projects, ROW 2 the tab's own categories (PC_CATS: Rent Apartment · Condo · Studio · House · Villa · Office ·
-  Commercial; Buy Condo · Apartment · House · Villa · Land · Shophouse · Commercial; Daily Hotel · Hostel · Apartment · Condo · Studio ·
-  Villa · House; Rooms = room amenity filters PC_ROOM; Sell = what you sell → #/post?deal=sale&type=<type>, viewPost presets it),
-  ROW 3 on a pale strip when Commercial or a business kind is picked: All commercial · Shophouse · Shop · Office · Beauty salon ·
-  Barber shop · Restaurant / café · Warehouse (SUB_COMM). New property types shop · salon · barber · restaurant · warehouse (TYPES,
-  t_* in i18n.js PC2, yh_listings_property_type_check, COMMERCIAL in app.js / api/_seo.js / api/tg-sync.js, router TYPE_SLUGS).
-  Phones/tablets keep the 2 × 7 row. Styles: "PC SEARCH TABS = TWO ROWS" at the end of styles.css.
 - SEARCH ROW (owner, 2026-11-24): Rent · Daily · Buy · Rooms · Projects | Apartment · Condo · Studio · Villa · House –
   10 items, phones 5 + 5 in equal centred columns (owner: "egymás alatt… egyenlő távolság"); Projects → #/projects;
   phones row 2 = House · Condo · Studio · Villa · Apartment (House under Rent, Apartment under Projects – CSS order)

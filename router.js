@@ -14,7 +14,7 @@
   var ALIAS_BACK = { agents: 'experts', 'how-it-works': 'how' };
   // Landing pages (seo-rules.md): /rent/phnom-penh · /rent/phnom-penh/bkk1 · /buy/phnom-penh/condo – the district is the
   // search's q (district select), the type the search's type (studio = 0 bedrooms)
-  var TYPE_SLUGS = ['apartment','condo','house','villa','twin-villa','link-house','flat-house','flat','penthouse','studio','shophouse','office','land','hotel','hostel','commercial','shop','salon','barber','restaurant','warehouse'];
+  var TYPE_SLUGS = ['apartment','condo','house','villa','twin-villa','link-house','flat-house','flat','penthouse','studio','shophouse','office','land','hotel','hostel','commercial'];
   var titleCase = function (s) { return s.split('-').map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' '); };
   var ID_RE = /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}|\d+)/i;
 

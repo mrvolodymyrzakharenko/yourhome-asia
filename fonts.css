@@ -102,3 +102,7 @@ label{font-weight:500}
 @media (max-width:720px){.hdr .brand-img{height:34px}.yft .brand-img{height:46px}}
 @media (max-width:379px){.hdr .brand-img{height:30px}}
 @media (max-width:339px){.hdr .brand-img{height:26px}}
+/* Phones: the logo keeps the old logo's width, so the Menu button is as wide as before (owner, 2026-11-26 10:36) */
+@media (max-width:720px){.hdr .logo{min-width:146px}}
+@media (max-width:379px){.hdr .logo{min-width:145px}}
+@media (max-width:339px){.hdr .logo{min-width:0}}

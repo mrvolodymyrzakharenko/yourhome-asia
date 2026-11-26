@@ -1418,30 +1418,42 @@ label[hidden]{display:none!important}
 .yagent{container-type:inline-size}
 @container (max-width:235px){.yan{display:none}.yabs{margin-left:auto}}
 
-/* LANGUAGE PICKER (owner, 2026-11-26: flags, ONE language per row like the country cards, NO scrolling – all 12 visible) */
-.hdr .lang-btn{display:inline-flex!important;align-items:center;gap:6px;width:auto!important;max-width:none!important;cursor:pointer;border:1px solid #e3e7ef;color:#0f172a}
-.lang-btn .lfl{display:inline-flex;width:20px;height:14px;border-radius:3px;overflow:hidden;box-shadow:0 0 0 1px rgba(15,23,42,.14)}
-.lang-btn .lfl img,.lpk-f svg{width:100%;height:100%;display:block;object-fit:cover}
-.hdr .lang-btn{padding-right:28px!important}
-@media (max-width:480px){.hdr .lang-btn .lcd{display:none}.hdr .lang-btn{padding-left:10px!important;padding-right:22px!important}}
-.lpk{position:fixed;inset:0;z-index:1200;display:flex;align-items:center;justify-content:center;padding:16px 12px}
+/* LANGUAGE PICKER (owner, 2026-11-26: flags on the cards, NO scrolling – all 12 visible; 08:02: PC 3 per row, header = text only,
+   phones two per row, smaller, 25% of the screen free on the left, right and below – base rule for phone boxes) */
+.hdr .lang-btn{cursor:pointer;color:var(--ink);font:inherit;border:1px solid var(--line);border-radius:99px;width:auto!important;max-width:none!important;padding-right:28px!important}
+.lpk{position:fixed;inset:0;z-index:1200}
 .lpk-bg{position:absolute;inset:0;background:rgba(15,23,42,.38);opacity:0;transition:opacity .18s}
-.lpk-w{--lg:8px;--lh:clamp(34px,calc((100vh - 120px - 11*var(--lg))/12),54px);position:relative;width:min(380px,100%);background:#f6f8fc;border-radius:22px;
-  box-shadow:0 24px 60px rgba(15,23,42,.28);padding:10px 12px 12px;transform:translateY(10px) scale(.98);opacity:0;transition:transform .18s,opacity .18s}
-@supports (height:100dvh){.lpk-w{--lh:clamp(34px,calc((100dvh - 120px - 11*var(--lg))/12),54px)}}
-@media (max-height:640px){.lpk-w{--lg:5px}}
-.lpk.in .lpk-bg{opacity:1}.lpk.in .lpk-w{transform:none;opacity:1}
+.lpk-w{--lg:10px;--lh:56px;position:absolute;top:50%;left:50%;width:min(660px,calc(100vw - 32px));background:#f6f8fc;border-radius:22px;
+  box-shadow:0 24px 60px rgba(15,23,42,.28);padding:10px 14px 14px;transform:translate(-50%,-48%) scale(.98);opacity:0;transition:transform .18s,opacity .18s}
+.lpk.in .lpk-bg{opacity:1}.lpk.in .lpk-w{transform:translate(-50%,-50%);opacity:1}
 .lpk-h{display:flex;align-items:center;justify-content:center;position:relative;height:36px;margin-bottom:8px;color:#032EA1}
 .lpk-x{position:absolute;right:0;top:2px;width:32px;height:32px;border-radius:50%;border:0;background:#fff;box-shadow:0 2px 8px rgba(15,23,42,.12);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
 .lpk-x svg{width:16px;height:16px;fill:none;stroke:#0f172a;stroke-width:2.4;stroke-linecap:round}
-.lpk-l{display:flex;flex-direction:column;gap:var(--lg)}
-.lpk-c{display:flex;align-items:center;gap:14px;height:var(--lh);padding:0 14px 0 calc(var(--lh)*.22);background:#fff;border:1px solid transparent;border-radius:14px;
+.lpk-l{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--lg)}
+.lpk-c{display:flex;align-items:center;gap:12px;height:var(--lh);padding:0 12px;background:#fff;border:1px solid transparent;border-radius:14px;min-width:0;
   box-shadow:0 4px 14px rgba(15,23,42,.07);cursor:pointer;text-align:left;color:#0f172a;width:100%;transition:box-shadow .15s,transform .15s,border-color .15s}
 .lpk-c:hover{box-shadow:0 8px 22px rgba(3,46,161,.14);transform:translateY(-1px)}
 .lpk-c:focus-visible{outline:2px solid #032EA1;outline-offset:2px}
 .lpk-c.on{background:#fff5f6;border-color:#f5c2ca}
-.lpk-f{flex:none;height:calc(var(--lh)*.58);aspect-ratio:3/2;border-radius:5px;overflow:hidden;box-shadow:0 0 0 1px rgba(15,23,42,.12)}
+.lpk-f{flex:none;height:26px;aspect-ratio:3/2;border-radius:4px;overflow:hidden;box-shadow:0 0 0 1px rgba(15,23,42,.12)}
+.lpk-f svg{width:100%;height:100%;display:block}
 .lpk-n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.lpk-i{flex:none;width:18px;height:18px;fill:none;stroke:#94a3b8;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.lpk-i{flex:none;width:16px;height:16px;fill:none;stroke:#94a3b8;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 .lpk-c.on .lpk-i{stroke:#E00025;stroke-width:2.6}
+/* phones + tablets: two per row, smaller cards (flag above the name), the box ends 25% above the bottom, 25% free at each side */
+@media (max-width:900px){
+  .lpk-w{--lg:6px;--lh:clamp(40px,calc((75vh - 24px - 66px - 5*var(--lg))/6),58px);top:auto;bottom:25vh;left:25vw;right:25vw;width:auto;max-height:calc(75vh - 12px);
+    padding:6px 8px 8px;border-radius:18px;transform:translateY(8px) scale(.98)}
+  .lpk.in .lpk-w{transform:none}
+  .lpk-h{height:30px;margin-bottom:6px}.lpk-x{width:28px;height:28px;top:1px}.lpk-x svg{width:14px;height:14px}
+  .lpk-l{grid-template-columns:1fr 1fr}
+  .lpk-c{flex-direction:column;justify-content:center;gap:4px;padding:0 4px;border-radius:12px;text-align:center}
+  .lpk-f{height:calc(var(--lh)*.34);border-radius:3px}
+  .lpk-n{flex:none;max-width:100%}
+  .lpk-i{display:none}
+}
+@supports (height:100dvh){@media (max-width:900px){.lpk-w{--lh:clamp(40px,calc((75dvh - 24px - 66px - 5*var(--lg))/6),58px);bottom:25dvh;max-height:calc(75dvh - 12px)}}}
+/* BASE RULE (owner 08:02): our small lists (picker.js .ypk) on phones/tablets also keep 25% free left, right and below.
+   The two-column Type list (.ypk-all) keeps its own wider size so every type fits without scrolling. */
+@media (max-width:900px){.ypk:not(.ypk-all) .ypk-w{left:25vw!important;right:25vw!important;bottom:25vh!important;min-width:0!important}}
 @media (prefers-reduced-motion:reduce){.lpk-bg,.lpk-w,.lpk-c{transition:none}}

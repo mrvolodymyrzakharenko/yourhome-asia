@@ -95,3 +95,4 @@ label{font-weight:500}
 .lpk-n{font-size:13px;font-weight:600;letter-spacing:-.025em}
 .lpk-c.on .lpk-n{color:#E00025}
 .lang-btn .lcd{font-size:13px;font-weight:600}
+@media (max-width:900px){.lpk-n{font-size:12px}.lpk-h span{font-size:12px}}

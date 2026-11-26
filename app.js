@@ -195,10 +195,12 @@ function setCur(k) {
 document.getElementById('lang').addEventListener('change', e => { lang = e.target.value; store.set('yh_lang', lang); applyStatic(); route(); });
 // LANGUAGE PICKER (owner, 2026-11-26: "orosz, német… cseh, lengyel, magyar… koreai, japán… legyen zászló… egymás alá, 1 egy sorban…
 // legyen akkora a box hogy ne kelljen görgetni"): header button = flag + code; it opens a panel with ONE card per row (flag ·
-// language in its own name · ›, the current one ✓), sized so all 12 show without scrolling (card height from the screen height,
-// styles.css "LANGUAGE PICKER"). Flags are drawn SVG, never emoji. Languages without their own texts yet show English (t() falls back).
+// language in its own name · ›, the current one ✓), all 12 without scrolling – PC 3 per row; phones/tablets 2 per row, smaller,
+// 25% of the screen free left, right and below (owner 08:02 – base rule for boxes on phones; styles.css "LANGUAGE PICKER").
+// The header button shows ONLY the active language as text, no flag (owner 08:02). Flags are drawn SVG, never emoji. Languages without their own texts yet show English (t() falls back).
 const LANG_LIST = [['en', 'English'], ['km', 'ខ្មែរ'], ['zh', '中文'], ['fr', 'Français'], ['th', 'ไทย'], ['ru', 'Русский'], ['de', 'Deutsch'],
   ['cs', 'Čeština'], ['pl', 'Polski'], ['hu', 'Magyar'], ['ko', '한국어'], ['ja', '日本語']];
+const LANG_SHORT = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', th: 'ไทย', ru: 'RU', de: 'DE', cs: 'CS', pl: 'PL', hu: 'HU', ko: '한국어', ja: '日本語' };
 const LANG_TITLE = { en: 'Language', km: 'ភាសា', zh: '语言', fr: 'Langue', th: 'ภาษา', ru: 'Язык', de: 'Sprache', cs: 'Jazyk', pl: 'Język', hu: 'Nyelv', ko: '언어', ja: '言語' };
 function flagSvg(c) {
   const star = (x, y, r, rot = -90) => { let p = ''; for (let i = 0; i < 10; i++) { const a = (rot + i * 36) * Math.PI / 180, q = i % 2 ? r * .382 : r; p += (i ? 'L' : 'M') + (x + q * Math.cos(a)).toFixed(2) + ' ' + (y + q * Math.sin(a)).toFixed(2); } return '<path fill="#FFDE00" d="' + p + 'Z"/>'; };
@@ -223,7 +225,7 @@ function flagSvg(c) {
 }
 function langBtnDraw() {
   const bt = document.getElementById('langBtn'); if (!bt) return;
-  bt.querySelector('.lfl').innerHTML = '<img alt="" src="data:image/svg+xml,' + encodeURIComponent(flagSvg(lang).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ')) + '">'; bt.querySelector('.lcd').textContent = lang.toUpperCase();
+  bt.querySelector('.lcd').textContent = LANG_SHORT[lang] || lang.toUpperCase();
   bt.setAttribute('aria-label', (LANG_TITLE[lang] || 'Language') + ': ' + ((LANG_LIST.find(x => x[0] === lang) || [])[1] || ''));
 }
 function closeLangs() { const p = document.querySelector('.lpk'); if (!p) return; p.classList.remove('in'); setTimeout(() => p.remove(), 180); document.removeEventListener('keydown', langKey); }

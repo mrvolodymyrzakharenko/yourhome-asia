@@ -222,16 +222,21 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   is FIRST and the default. Phnom Penh = district list (DISTRICTS); other cities = typed district in the post form and
   "Any" in the search. ?city= filters the results; the post-form map centres on the picked city. yh_listings.city.
 
-- LANGUAGE PICKER (owner, 2026-11-26: "orosz, német… cseh, lengyel, magyar… koreai, japán… legyen zászló… egymás alá, 1 egy sorban…
-  legyen akkora a box hogy ne kelljen görgetni – sok helyet így kéne megcsinálni a boxokat"): 12 languages – English · ខ្មែរ · 中文 ·
+- LANGUAGE PICKER (owner, 2026-11-26: "orosz, német… cseh, lengyel, magyar… koreai, japán… legyen zászló"; 08:02: "pc nézetben lehet
+  3 sor – felül ne legyen a fejlécben zászló, csak szöveg, ami aktív. Mobilon két sávos, kisebb"): 12 languages – English · ខ្មែរ · 中文 ·
   Français · ไทย · Русский · Deutsch · Čeština · Polski · Magyar · 한국어 · 日本語 (LANG_LIST in app.js, LANGS in i18n.js, hidden
-  <select id="lang"> keeps the value). Header #langBtn = drawn flag + code (phones: flag only). It opens .lpk: ONE white card per row
-  (flag 3:2 with thin border · language in its own name 13/600 · grey ›; current = pink patch, red text, ✓), all 12 visible WITHOUT
-  scrolling – card height from the screen height (--lh, styles.css "LANGUAGE PICKER"). Flags = flagSvg() SVG, never emoji.
+  <select id="lang"> keeps the value). Header #langBtn = ONLY the active language as text (EN · ខ្មែរ · 中文 · FR · ไทย · RU · DE · CS ·
+  PL · HU · 한국어 · 日本語 – LANG_SHORT) + chevron, NO flag. It opens .lpk: white cards with a drawn flag (flagSvg(), never emoji) and
+  the language in its own name; current = pink patch, red text. PC: centred, THREE per row (4 rows, flag · name · ›). Phones/tablets
+  (≤900px): TWO per row, smaller cards (flag above the name), box 25% from the left, right and bottom. Never an inner scrollbar.
   ru/de/cs/pl/hu/ko/ja have NO texts in i18n.js yet – they show English (t() falls back) until translated.
 - BOXES WITHOUT INNER SCROLLING – BASE RULE (owner, 2026-11-26: "sok helyet így kéne megcsinálni a boxokat"): every box / panel /
   popup is sized to its content so it needs no inner scrollbar; items get more compact on short screens instead. Only a genuinely
   long list (dozens of districts) gets a search field / groups rather than a tiny scrolling box.
+- PHONE BOXES = 25% FREE – BASE RULE (owner, 2026-11-26 08:02: "jobbról balról lentről 25% szabad hely kell, ez alap szabály"): on
+  phones/tablets a popup box / small list leaves 25% of the screen free on the left, the right and below (language picker; picker.js
+  .ypk lists – end of styles.css). Contents get smaller or go two per row to fit. Exception: the two-column Type list (.ypk-all)
+  keeps its wider size so every type fits without scrolling.
 
 - CARD HOVER = "B" (owner, 2026-11-26, picked from 4 demos): on mouse screens the card lifts 4px, a soft royal-blue shadow
   appears, the photo zooms ~5% inside its frame (.ph>img / .ygal), the title turns blue, the "View →" arrow slides 4px right

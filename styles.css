@@ -1174,3 +1174,10 @@ label[hidden]{display:none!important}
 .bbody a{color:#032EA1;text-decoration:underline;text-underline-offset:2px}
 @media (max-width:720px){.bart .bhero{height:130px;border-radius:20px}}
 @media (max-width:720px){.card.bcard:not([href="#/post"]) .ct{display:block!important}}
+/* CARD HOVER ZOOM (owner, 2026-11-26: "legyen enyhe zoom effekt ha valaki a kártyára megy"): on mouse screens the card photo
+   slowly zooms in ~6% inside its frame (the card itself only lifts as before); touch screens unchanged; off for "reduce motion". */
+@media (hover:hover) and (pointer:fine){
+  .card .ph>img,.card .ph .ygal{transition:transform .6s cubic-bezier(.2,.7,.2,1),opacity .45s ease;transform-origin:center;will-change:transform}
+  .card:hover .ph>img,.card:hover .ph .ygal{transform:scale(1.06)}
+}
+@media (prefers-reduced-motion:reduce){.card .ph>img,.card .ph .ygal{transition:none!important;transform:none!important}}

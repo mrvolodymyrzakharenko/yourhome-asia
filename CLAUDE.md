@@ -40,7 +40,14 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   type links (Apartments, Condos, Hotels…) and the district pills are filled by api/page.js footerLinks() from the LIVE listings
   (markers <!--ft:rent/sale/areas--> in index.html, cached 2 min) – only landing pages that have listings, max 12 pills, most listings
   first; a pill opens rent, else buy / rooms / daily. Labels ftp_<type> / ft_forRent… in i18n.js (FT2). "Saved listings" and
-  "Help & support" left the footer (bottom menu Saved, Company → Contact us). Styles: "FOOTER LINKS LIKE MVP" block in styles.css.
+  Styles: "FOOTER LINKS LIKE MVP" block in styles.css.
+  EVERY LINK COLUMN = 8 ROWS (owner, 2026-11-26: "egészítsd ki… legyen egységes – mehet a commercial is"): For rent = Apartments ·
+  Condos · Houses · Villas · Commercial property · Rooms for rent · Daily rentals · All rentals; For sale = Condos · Apartments ·
+  Houses · Villas · Land · Commercial property · New projects · All properties for sale; For advertisers = Post a listing – free ·
+  Post your project · Become a partner · Agents & agencies · Get verified · My dashboard · Telegram alerts · Help & support;
+  Company 8 as before. The type rows are FIXED: landing page when it has live listings, else /<deal>?type=<type> (canonical =
+  the deal page). COMMERCIAL = office + shophouse (COMMERCIAL in app.js and api/_seo.js; type=commercial filter, landing
+  /rent|buy/<city>/commercial "Commercial property", router TYPE_SLUGS).
 - Bottom menu = the Study portal's bottom bar (owner, 2026-11-24: "legyen olyan mint a study portálon + gomb a posztoláshoz
   akármikor"), EVERY screen (phone, tablet, PC), every page: centred, max 400px, rounded top, pale-blue bar, labels 11px / 600,
   icons 21px; six equal columns Telegram · Home · Saved · Post (red plus, red label – always visible) · Map · Account

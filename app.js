@@ -29,6 +29,8 @@ const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wif
 // Hotel · Hostel at the front of the category row (owner, 2026-11-26: "az elejére a kereső részbe… a hotelt és hostelt is");
 // they open as short stays (deal daily) unless Buy is picked – STAY_CATS
 const STAY_CATS = ['hotel', 'hostel'];
+// "Commercial" (footer + /rent|buy/<city>/commercial landing, owner 2026-11-26) = offices + shophouses
+const COMMERCIAL = ['office', 'shophouse'];
 const CATS = [['hotel', 't_hotel'], ['hostel', 't_hostel'], ['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
@@ -367,7 +369,7 @@ function fromPre(f) {
   let l = PRE.listings.slice();
   if (f.deal === 'daily') l = l.filter(x => x.deal_type === 'rent' && x.price_period === 'day'); else if (f.deal) l = l.filter(x => x.deal_type === f.deal);
   if (f.city && CITY_NAMES.includes(f.city)) l = l.filter(x => x.city === f.city);
-  if (f.type === 'studio') l = l.filter(x => x.bedrooms === 0); else if (f.type) l = l.filter(x => x.property_type === f.type);
+  if (f.type === 'studio') l = l.filter(x => x.bedrooms === 0); else if (f.type === 'commercial') l = l.filter(x => COMMERCIAL.includes(x.property_type)); else if (f.type) l = l.filter(x => x.property_type === f.type);
   if (f.max) l = l.filter(x => Number(x.price) <= Number(f.max));
   if (f.beds) l = f.beds === '0' ? l.filter(x => x.bedrooms === 0) : l.filter(x => x.bedrooms >= Number(f.beds));
   if (f.q) { const s = f.q.replace(/[,()%*\\]/g, ' ').trim().slice(0, 60).toLowerCase(); if (s) l = l.filter(x => [x.district, x.title, x.address].some(v => String(v || '').toLowerCase().includes(s))); }
@@ -383,7 +385,7 @@ async function fetchListings(f = {}) {
   if (f.deal === 'daily') q = q.eq('deal_type', 'rent').eq('price_period', 'day');   // Daily rent tab (owner, 2026-11-24)
   else if (f.deal) q = q.eq('deal_type', f.deal);
   if (f.city && CITY_NAMES.includes(f.city)) q = q.eq('city', f.city);
-  if (f.type === 'studio') q = q.eq('bedrooms', 0); else if (f.type) q = q.eq('property_type', f.type);
+  if (f.type === 'studio') q = q.eq('bedrooms', 0); else if (f.type === 'commercial') q = q.in('property_type', COMMERCIAL); else if (f.type) q = q.eq('property_type', f.type);
   if (f.max) q = q.lte('price', Number(f.max));
   if (f.beds) q = f.beds === '0' ? q.eq('bedrooms', 0) : q.gte('bedrooms', Number(f.beds));
   if (f.furn) q = q.eq('furnished', true);

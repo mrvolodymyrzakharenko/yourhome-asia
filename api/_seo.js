@@ -128,7 +128,8 @@ const body = (h1, lead, extra = '') => `<div class="ssr wrap"><h1>${h1}</h1>${le
 
 // Landing pages /<deal>/<city>[/<district or type>] (seo-rules.md) – only combinations with live listings are indexable
 const DEAL_SEG = { rent: 'rent', buy: 'sale', rooms: 'room', daily: 'daily' };
-const TYPE_PLURAL = { hotel: 'Hotels', hostel: 'Hostels', apartment: 'Apartments', condo: 'Condos', house: 'Houses', villa: 'Villas', 'twin-villa': 'Twin villas', 'link-house': 'Link houses', 'flat-house': 'Flat houses', flat: 'Flats', penthouse: 'Penthouses', studio: 'Studios', shophouse: 'Shophouses', office: 'Offices', land: 'Land' };
+const TYPE_PLURAL = { hotel: 'Hotels', hostel: 'Hostels', apartment: 'Apartments', condo: 'Condos', house: 'Houses', villa: 'Villas', 'twin-villa': 'Twin villas', 'link-house': 'Link houses', 'flat-house': 'Flat houses', flat: 'Flats', penthouse: 'Penthouses', studio: 'Studios', shophouse: 'Shophouses', office: 'Offices', land: 'Land', commercial: 'Commercial property' };
+const COMMERCIAL = ['office', 'shophouse'];
 const dealOf = (l) => l.deal_type === 'rent' && l.price_period === 'day' ? 'daily' : l.deal_type;
 const typeSeg = l => l.bedrooms === 0 && l.property_type !== 'room' ? 'studio' : String(l.property_type || '').replace(/_/g, '-');
 // every landing path that has at least one live listing: { path: [listings] }
@@ -142,6 +143,7 @@ function landings(list) {
       add(`/${d}/${c}`, l);
       if (l.district && slugify(l.district)) add(`/${d}/${c}/${slugify(l.district)}`, l);
       if (d !== 'rooms' && TYPE_PLURAL[typeSeg(l)]) add(`/${d}/${c}/${typeSeg(l)}`, l);
+      if (d !== 'rooms' && COMMERCIAL.includes(l.property_type)) add(`/${d}/${c}/commercial`, l);   // COMMERCIAL = office + shophouse (owner, 2026-11-26)
     }
   }
   return out;

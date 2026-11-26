@@ -202,19 +202,19 @@ async function build(p, q) {
 // FOOTER LINKS LIKE MVP VIETNAM (owner, 2026-11-26: "mehet"): the "For rent" / "For sale" type links and the "Popular areas"
 // district pills are filled in on the server from the live listings – only landing pages that really have listings
 // (seo-rules.md), so the footer never links an empty page. Labels carry data-i18n (ftp_<type>) – the app translates them.
-const FT_RENT = ['apartment', 'condo', 'studio', 'house', 'villa', 'penthouse', 'twin-villa', 'link-house', 'flat-house', 'flat', 'shophouse', 'office', 'hotel', 'hostel'];
-const FT_SALE = ['condo', 'apartment', 'house', 'villa', 'penthouse', 'twin-villa', 'link-house', 'flat-house', 'flat', 'shophouse', 'office', 'land'];
+// Every column is the same length (owner, 2026-11-26: "egészítsd ki… legyen egységes – mehet a commercial is"): a FIXED list of
+// types – each links its landing page when it has live listings, else the deal page filtered by type (?type= – canonical to
+// the deal page, never an empty indexable page).
+const FT_RENT = ['apartment', 'condo', 'house', 'villa', 'commercial'];
+const FT_SALE = ['condo', 'apartment', 'house', 'villa', 'land', 'commercial'];
 let FTC = null, FTT = 0;
 async function footerLinks() {
   if (FTC && Date.now() - FTT < 120000) return FTC;
   const list = await sb('yh_listings', 'select=city,district,deal_type,property_type,price_period,bedrooms&status=eq.active&country=eq.KH&limit=3000', 1500);
   const L = S.landings(list), c = 'phnom-penh';
   const li = (href, key, txt) => `<li><a href="${href}"${key ? ` data-i18n="${key}"` : ''}>${esc(txt)}</a></li>`;
-  const typeLinks = (deal, order) => order.map(ty => {
-    const pth = (deal === 'rent' && (ty === 'hotel' || ty === 'hostel') && L[`/daily/${c}/${ty}`]) ? `/daily/${c}/${ty}` : `/${deal}/${c}/${ty}`;
-    return L[pth] ? li(pth, 'ftp_' + ty, S.TYPE_PLURAL[ty]) : '';
-  }).join('');
-  const rent = typeLinks('rent', FT_RENT) + li('/daily', 'ft_dailyR', 'Daily rentals') + li('/rooms', 'ft_rooms', 'Rooms for rent') + li('/search?view=map', 'ft_map', 'Map search') + li('/rent', 'ft_allRent', 'All rentals');
+  const typeLinks = (deal, order) => order.map(ty => li(L[`/${deal}/${c}/${ty}`] ? `/${deal}/${c}/${ty}` : `/${deal}?type=${ty}`, 'ftp_' + ty, S.TYPE_PLURAL[ty])).join('');
+  const rent = typeLinks('rent', FT_RENT) + li('/rooms', 'ft_rooms', 'Rooms for rent') + li('/daily', 'ft_dailyR', 'Daily rentals') + li('/rent', 'ft_allRent', 'All rentals');
   const sale = typeLinks('buy', FT_SALE) + li('/projects', 'newProjects', 'New projects') + li('/buy', 'ft_allSale', 'All properties for sale');
   // districts of Phnom Penh, most listings first; each pill opens the first deal that has listings there
   const dist = {};

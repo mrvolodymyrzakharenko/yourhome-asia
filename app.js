@@ -60,7 +60,7 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
-let lang = store.get('yh_lang', null) || (['km','zh','fr','th'].find(l => (navigator.language || '').startsWith(l)) || 'en');
+let lang = store.get('yh_lang', null) || (['km','zh','fr','th','ru','de','cs','pl','hu','ko','ja'].find(l => (navigator.language || '').startsWith(l)) || 'en');
 // Short labels for the filters panel (owner, 2026-11-24 20:23: amenities in 3 rows) – s_<key>, else the full text
 const sl = k => (T[lang] && T[lang]['s_' + k]) ?? (lang === 'en' ? T.en['s_' + k] : null) ?? t(k);
 const t = (k, vars) => { let s = (T[lang] && T[lang][k]) ?? T.en[k] ?? k; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; };
@@ -167,6 +167,7 @@ function applyStatic() {
   // footer "Popular searches" (api/page.js footerLinks): template ps_* + plural type ftp_* + place name
   document.querySelectorAll('[data-ps]').forEach(el => { el.textContent = t(el.dataset.ps, { x: el.dataset.psx ? t('ftp_' + el.dataset.psx) : '', p: el.dataset.psp || '' }); });
   document.getElementById('lang').value = lang;
+  langBtnDraw();
   document.getElementById('year').textContent = new Date().getFullYear();
 }
 async function loadRates() {
@@ -192,6 +193,59 @@ function setCur(k) {
   loadRates();
 })();
 document.getElementById('lang').addEventListener('change', e => { lang = e.target.value; store.set('yh_lang', lang); applyStatic(); route(); });
+// LANGUAGE PICKER (owner, 2026-11-26: "orosz, német… cseh, lengyel, magyar… koreai, japán… legyen zászló… egymás alá, 1 egy sorban…
+// legyen akkora a box hogy ne kelljen görgetni"): header button = flag + code; it opens a panel with ONE card per row (flag ·
+// language in its own name · ›, the current one ✓), sized so all 12 show without scrolling (card height from the screen height,
+// styles.css "LANGUAGE PICKER"). Flags are drawn SVG, never emoji. Languages without their own texts yet show English (t() falls back).
+const LANG_LIST = [['en', 'English'], ['km', 'ខ្មែរ'], ['zh', '中文'], ['fr', 'Français'], ['th', 'ไทย'], ['ru', 'Русский'], ['de', 'Deutsch'],
+  ['cs', 'Čeština'], ['pl', 'Polski'], ['hu', 'Magyar'], ['ko', '한국어'], ['ja', '日本語']];
+const LANG_TITLE = { en: 'Language', km: 'ភាសា', zh: '语言', fr: 'Langue', th: 'ภาษา', ru: 'Язык', de: 'Sprache', cs: 'Jazyk', pl: 'Język', hu: 'Nyelv', ko: '언어', ja: '言語' };
+function flagSvg(c) {
+  const star = (x, y, r, rot = -90) => { let p = ''; for (let i = 0; i < 10; i++) { const a = (rot + i * 36) * Math.PI / 180, q = i % 2 ? r * .382 : r; p += (i ? 'L' : 'M') + (x + q * Math.cos(a)).toFixed(2) + ' ' + (y + q * Math.sin(a)).toFixed(2); } return '<path fill="#FFDE00" d="' + p + 'Z"/>'; };
+  const h3 = (a, b, d) => '<rect width="30" height="20" fill="' + a + '"/><rect y="6.67" width="30" height="6.67" fill="' + b + '"/><rect y="13.33" width="30" height="6.67" fill="' + d + '"/>';
+  const v3 = (a, b, d) => '<rect width="10" height="20" fill="' + a + '"/><rect x="10" width="10" height="20" fill="' + b + '"/><rect x="20" width="10" height="20" fill="' + d + '"/>';
+  const tri = (x, y, rot) => '<g transform="translate(' + x + ' ' + y + ') rotate(' + rot + ')" fill="#000"><rect x="-2" y="-1.6" width="4" height=".7"/><rect x="-2" y="-.35" width="4" height=".7"/><rect x="-2" y=".9" width="4" height=".7"/></g>';
+  const b = {
+    en: '<svg viewBox="0 0 60 30" preserveAspectRatio="xMidYMid slice"><clipPath id="fgbt"><path d="M30 15h30v15zv15H0zH0V0zV0h30z"/></clipPath><rect width="60" height="30" fill="#012169"/><path d="M0 0l60 30m0-30L0 30" stroke="#fff" stroke-width="6"/><path d="M0 0l60 30m0-30L0 30" clip-path="url(#fgbt)" stroke="#C8102E" stroke-width="4"/><path d="M30 0v30M0 15h60" stroke="#fff" stroke-width="10"/><path d="M30 0v30M0 15h60" stroke="#C8102E" stroke-width="6"/></svg>',
+    km: '<rect width="30" height="20" fill="#032EA1"/><rect y="5" width="30" height="10" fill="#E00025"/><path fill="#fff" d="M8.5 13.6h13v1h-13zM10 11.6h10v2H10zM11.2 11.6l1-3 1 3zM14 11.6l1-4.8 1 4.8zM16.8 11.6l1-3 1 3z"/>',
+    zh: '<rect width="30" height="20" fill="#EE1C25"/>' + star(5, 5, 3) + star(10, 2, 1, -50) + star(12, 4, 1, -25) + star(12, 7, 1, 0) + star(10, 9, 1, 20),
+    fr: v3('#0055A4', '#fff', '#EF4135'),
+    th: '<rect width="30" height="20" fill="#A51931"/><rect y="3.33" width="30" height="13.34" fill="#F4F5F8"/><rect y="6.67" width="30" height="6.66" fill="#2D2A4A"/>',
+    ru: h3('#fff', '#0039A6', '#D52B1E'),
+    de: h3('#000', '#DD0000', '#FFCE00'),
+    cs: '<rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#D7141A"/><path d="M0 0l15 10L0 20z" fill="#11457E"/>',
+    pl: '<rect width="30" height="10" fill="#fff"/><rect y="10" width="30" height="10" fill="#DC143C"/>',
+    hu: h3('#CD2A3E', '#fff', '#436F4D'),
+    ko: '<rect width="30" height="20" fill="#fff"/><g transform="rotate(33.7 15 10)"><path d="M10 10a5 5 0 0 1 10 0z" fill="#CD2E3A"/><path d="M10 10a5 5 0 0 0 10 0z" fill="#0047A0"/><circle cx="12.5" cy="10" r="2.5" fill="#CD2E3A"/><circle cx="17.5" cy="10" r="2.5" fill="#0047A0"/></g>' + tri(6.4, 4.3, -56.3) + tri(23.6, 15.7, -56.3) + tri(23.6, 4.3, 56.3) + tri(6.4, 15.7, 56.3),
+    ja: '<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/>',
+  }[c] || '';
+  return b.startsWith('<svg') ? b : '<svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice">' + b + '</svg>';
+}
+function langBtnDraw() {
+  const bt = document.getElementById('langBtn'); if (!bt) return;
+  bt.querySelector('.lfl').innerHTML = '<img alt="" src="data:image/svg+xml,' + encodeURIComponent(flagSvg(lang).replace('<svg ', '<svg xmlns="http://www.w3.org/2000/svg" ')) + '">'; bt.querySelector('.lcd').textContent = lang.toUpperCase();
+  bt.setAttribute('aria-label', (LANG_TITLE[lang] || 'Language') + ': ' + ((LANG_LIST.find(x => x[0] === lang) || [])[1] || ''));
+}
+function closeLangs() { const p = document.querySelector('.lpk'); if (!p) return; p.classList.remove('in'); setTimeout(() => p.remove(), 180); document.removeEventListener('keydown', langKey); }
+function langKey(e) { if (e.key === 'Escape') closeLangs(); }
+function openLangs() {
+  closeLangs();
+  const p = document.createElement('div'); p.className = 'lpk';
+  p.innerHTML = '<div class="lpk-bg"></div><div class="lpk-w" role="dialog" aria-modal="true" aria-label="' + esc(LANG_TITLE[lang] || 'Language') + '">'
+    + '<div class="lpk-h"><span>' + esc(LANG_TITLE[lang] || 'Language') + '</span><button type="button" class="lpk-x" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>'
+    + '<div class="lpk-l">' + LANG_LIST.map(([c, n]) => '<button type="button" class="lpk-c' + (c === lang ? ' on' : '') + '" data-l="' + c + '" lang="' + c + '"' + (c === lang ? ' aria-current="true"' : '') + '><span class="lpk-f" aria-hidden="true">' + flagSvg(c) + '</span><span class="lpk-n">' + esc(n) + '</span>'
+      + (c === lang ? '<svg class="lpk-i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>' : '<svg class="lpk-i" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>') + '</button>').join('') + '</div></div>';
+  document.body.appendChild(p);
+  requestAnimationFrame(() => p.classList.add('in'));
+  p.querySelector('.lpk-bg').onclick = closeLangs; p.querySelector('.lpk-x').onclick = closeLangs;
+  p.querySelectorAll('.lpk-c').forEach(b => b.onclick = () => {
+    const s = document.getElementById('lang'); closeLangs();
+    if (b.dataset.l !== lang) { s.value = b.dataset.l; s.dispatchEvent(new Event('change')); }
+  });
+  document.addEventListener('keydown', langKey);
+  const on = p.querySelector('.lpk-c.on'); if (on) on.focus({ preventScroll: true });
+}
+document.getElementById('langBtn')?.addEventListener('click', openLangs);
 // TELEGRAM CHANNEL (owner, 2026-11-24: "kellene egy telegram gomb – amivel fel tud iratkozni a yourhome.asia csatornára"):
 // the bottom menu's first button and the footer Telegram icon ([data-tgch]) open a small card "Join our Telegram channel"
 // + "Join on Telegram". TG_CHANNEL = the channel's public username without @ – until it is filled in, the card says

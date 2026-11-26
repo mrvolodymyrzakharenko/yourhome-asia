@@ -8,7 +8,7 @@ Data lives in the shared Supabase project "eleon" (same as the Study and Work po
 never touch the Study tables. When a new standing rule is agreed with the owner, add it here.
 
 ## Working style
-- The owner writes in Hungarian; answer in Hungarian. Site content is in English plus Khmer, Chinese, French and Thai (i18n.js).
+- The owner writes in Hungarian; answer in Hungarian. Site content is in English plus Khmer, Chinese, French and Thai (i18n.js); Russian, German, Czech, Polish, Hungarian, Korean and Japanese are selectable but still show English.
 - The owner tests live: finished work goes straight to production on yourhome.asia – no temporary preview links.
 - Design is approved: never change layout, classes or styles unless asked. Copy changes keep the design.
 - Everything must work over HTTPS (SSL is automatic on Vercel).
@@ -16,8 +16,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 ## Design (owner, 2026-11-24)
 - Structure copies vietrent.net (portal look), but in Cambodian flag colours: royal blue #032EA1 (main), red #E00025
   (accents: TOP badge, prices, Post buttons), white background.
-- Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + TWO lines centred vertically next to it: "www.yourhome.asia" (menu-name type 13px / 500, phones 12px / 600) and under it red "CAMBODIA" in spaced capitals 11px / 700 (phones 10px), CENTRED under line 1 (owner 20:37 / 20:39; .brand .b1 + em, end of fonts.css), header AND footer (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language select
-  (EN · ខ្មែរ · 中文 · FR · ไทย), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown (the word "Menu" shows on phones too – owner 21:29).
+- Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + TWO lines centred vertically next to it: "www.yourhome.asia" (menu-name type 13px / 500, phones 12px / 600) and under it red "CAMBODIA" in spaced capitals 11px / 700 (phones 10px), CENTRED under line 1 (owner 20:37 / 20:39; .brand .b1 + em, end of fonts.css), header AND footer (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language button
+  (flag + code; see LANGUAGE PICKER below), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown (the word "Menu" shows on phones too – owner 21:29).
   PHONES (owner, 2026-11-25 11:09: "told az ikonokat balra, legyen a menügomb nagyobb… a csíkok helyére írd ki, hogy menü"): the header
   buttons start right after the logo and the Menu button fills the rest of the row, showing ONLY the word "Menu" (no three-line
   icon, never hidden by hfit2); the header Account icon is hidden on phones (end of header.css).
@@ -221,6 +221,17 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh
   is FIRST and the default. Phnom Penh = district list (DISTRICTS); other cities = typed district in the post form and
   "Any" in the search. ?city= filters the results; the post-form map centres on the picked city. yh_listings.city.
+
+- LANGUAGE PICKER (owner, 2026-11-26: "orosz, német… cseh, lengyel, magyar… koreai, japán… legyen zászló… egymás alá, 1 egy sorban…
+  legyen akkora a box hogy ne kelljen görgetni – sok helyet így kéne megcsinálni a boxokat"): 12 languages – English · ខ្មែរ · 中文 ·
+  Français · ไทย · Русский · Deutsch · Čeština · Polski · Magyar · 한국어 · 日本語 (LANG_LIST in app.js, LANGS in i18n.js, hidden
+  <select id="lang"> keeps the value). Header #langBtn = drawn flag + code (phones: flag only). It opens .lpk: ONE white card per row
+  (flag 3:2 with thin border · language in its own name 13/600 · grey ›; current = pink patch, red text, ✓), all 12 visible WITHOUT
+  scrolling – card height from the screen height (--lh, styles.css "LANGUAGE PICKER"). Flags = flagSvg() SVG, never emoji.
+  ru/de/cs/pl/hu/ko/ja have NO texts in i18n.js yet – they show English (t() falls back) until translated.
+- BOXES WITHOUT INNER SCROLLING – BASE RULE (owner, 2026-11-26: "sok helyet így kéne megcsinálni a boxokat"): every box / panel /
+  popup is sized to its content so it needs no inner scrollbar; items get more compact on short screens instead. Only a genuinely
+  long list (dozens of districts) gets a search field / groups rather than a tiny scrolling box.
 
 - CARD HOVER = "B" (owner, 2026-11-26, picked from 4 demos): on mouse screens the card lifts 4px, a soft royal-blue shadow
   appears, the photo zooms ~5% inside its frame (.ph>img / .ygal), the title turns blue, the "View →" arrow slides 4px right

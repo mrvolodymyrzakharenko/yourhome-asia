@@ -90,3 +90,8 @@ label{font-weight:500}
 .svc-fn,.svc-fn small{letter-spacing:0}
 .svc-fn{font-size:12px}.svc-fn small,.svc-own small,.svc-wk>span,.svc-l3{font-size:10px}
 @media (max-width:720px){.svc-b span,.svc-b em{font-size:12px}}
+/* LANGUAGE PICKER texts (styles.css "LANGUAGE PICKER") */
+.lpk-h span{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.lpk-n{font-size:13px;font-weight:600;letter-spacing:-.025em}
+.lpk-c.on .lpk-n{color:#E00025}
+.lang-btn .lcd{font-size:13px;font-weight:600}

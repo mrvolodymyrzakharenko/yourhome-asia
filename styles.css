@@ -1134,24 +1134,34 @@ label[hidden]{display:none!important}
    2 sorban?"): 12 items. PC: one row of 12 equal columns. Tablets AND phones: TWO rows of six, Hotel over Hostel in the last column –
    Rent · Daily · Buy · Rooms · Projects · Hotel / House · Condo · Studio · Villa · Apartment · Hostel. Phones: each column as wide as
    its longest word (both rows share the columns, so the words stand under each other), spare room spread evenly; fitRows() makes
-   the letters smaller (down to 11px) if a language still does not fit. */
+   the letters smaller (down to 11px) if a language still does not fit.
+   + OFFICE · COMMERCIAL (owner, 2026-11-26: "commercial… külön portál?" → a category here, next to Hotel/Hostel): 14 items,
+   tablets AND phones TWO rows of SEVEN – Rent · Daily · Buy · Rooms · Projects · Hotel · Office / House · Condo · Studio ·
+   Villa · Apartment · Hostel · Commercial (Hotel over Hostel, Office over Commercial). */
 @media (max-width:900px){
-  #dealTabs.deal-tabs{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;row-gap:8px!important;width:100%}
+  #dealTabs.deal-tabs{display:grid!important;grid-template-columns:repeat(7,minmax(0,1fr))!important;row-gap:8px!important;width:100%}
   #dealTabs .dt-deal,#dealTabs .dt-cat{grid-column:auto!important;text-align:center;justify-content:center;padding:9px 4px!important;white-space:nowrap}
   #dealTabs button::before,#dealTabs button::after{display:none!important}
   #dealTabs .dt-deal{order:0}
   #dealTabs .dt-cat[data-cat=hotel]{order:1}
-  #dealTabs .dt-cat[data-cat=house]{order:2}
-  #dealTabs .dt-cat[data-cat=condo]{order:3}
-  #dealTabs .dt-cat[data-cat=studio]{order:4}
-  #dealTabs .dt-cat[data-cat=villa],html[lang=fr] #dealTabs .dt-cat[data-cat=villa]{order:5}
-  #dealTabs .dt-cat[data-cat=apartment]{order:6}
-  #dealTabs .dt-cat[data-cat=hostel]{order:7}
+  #dealTabs .dt-cat[data-cat=office]{order:2}
+  #dealTabs .dt-cat[data-cat=house]{order:3}
+  #dealTabs .dt-cat[data-cat=condo]{order:4}
+  #dealTabs .dt-cat[data-cat=studio]{order:5}
+  #dealTabs .dt-cat[data-cat=villa],html[lang=fr] #dealTabs .dt-cat[data-cat=villa]{order:6}
+  #dealTabs .dt-cat[data-cat=apartment]{order:7}
+  #dealTabs .dt-cat[data-cat=hostel]{order:8}
+  #dealTabs .dt-cat[data-cat=commercial]{order:9}
 }
 @media (max-width:720px){
-  #dealTabs.deal-tabs{grid-template-columns:repeat(6,auto)!important;justify-content:space-between!important;column-gap:0!important}
+  #dealTabs.deal-tabs{grid-template-columns:repeat(7,auto)!important;justify-content:space-between!important;column-gap:4px!important}
+  html[lang=fr] #dealTabs.deal-tabs,html[lang=km] #dealTabs.deal-tabs{column-gap:0!important}
   #dealTabs .dt-deal,#dealTabs .dt-cat{padding:9px 2px!important;font-size:12.5px!important}
 }
+@media (max-width:400px){#dealTabs .dt-deal,#dealTabs .dt-cat{padding:9px 1px!important}}
+@media (max-width:380px){#dealTabs .dt-deal,#dealTabs .dt-cat{padding:9px 0!important}}
+/* PC: 14 words in the card's 972px – less side room per word so the row stays inside the card */
+@media (min-width:901px){#dealTabs button{padding-left:6px!important;padding-right:6px!important}}
 /* BLOG (owner, 2026-11-26, myhome.ge "Blog"): cards with a coloured cover (Cambodian blue / red, line icon + kicker),
    article page = the About-page look (.ab-k, .ab-lead, .ab-cta) – no text over 13px except the H1 */
 .bcard .bcov{position:relative;aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:inherit;border-bottom-left-radius:0;border-bottom-right-radius:0;overflow:hidden;color:#fff}

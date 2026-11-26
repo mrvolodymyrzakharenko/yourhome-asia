@@ -72,6 +72,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   phones TWO rows of six (owner 09:11: "nem fér el 2 sorban?"): Rent · Daily · Buy · Rooms · Projects · Hotel / House · Condo ·
   Studio · Villa · Apartment · Hostel (Hotel over Hostel; phones: columns as wide as their longest word, spread evenly) – last block
   of styles.css. Hotel/Hostel = property_type 'hotel'/'hostel' (STAY_CATS in app.js) and open as Daily (Buy stays Buy).
+- OFFICE · COMMERCIAL (owner, 2026-11-26: "legyen külön portál a commercialra?" → no, a category on this site; "mehet"): the row is
+  14 items – Rent · Daily · Buy · Rooms · Projects | Hotel · Hostel · Office · Commercial · Apartment · Condo · Studio · Villa · House.
+  PC one row (6px side room per word); tablets AND phones TWO rows of SEVEN: Rent · Daily · Buy · Rooms · Projects · Hotel · Office /
+  House · Condo · Studio · Villa · Apartment · Hostel · Commercial (Office over Commercial; phones 4px gaps, FR/KM 0). Office =
+  property_type 'office'; Commercial = search-only type 'commercial' = shophouse + office (COMMERCIAL_TYPES in app.js, also in
+  api/tg-sync.js alerts and api/_seo.js landings). Both open as Rent (Buy stays Buy; from Daily/Rooms they switch to Rent – BIZ_CATS).
+  Row labels t_office_s / t_comm_s (short: FR "Local", KM "អូហ្វីស" / "ហាង"); full name t_commercial. Landing pages
+  /rent/phnom-penh/commercial and /rent/phnom-penh/office ("Commercial spaces" / "Offices for rent" in the Menu after Listings;
+  the footer has its own "Commercial property" link). fitRows() checks the category row against its OWN box, not only the screen.
 - SEARCH ROW (owner, 2026-11-24): Rent · Daily · Buy · Rooms · Projects | Apartment · Condo · Studio · Villa · House –
   10 items, phones 5 + 5 in equal centred columns (owner: "egymás alatt… egyenlő távolság"); Projects → #/projects;
   phones row 2 = House · Condo · Studio · Villa · Apartment (House under Rent, Apartment under Projects – CSS order)

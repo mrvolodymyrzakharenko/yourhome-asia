@@ -78,10 +78,3 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .drawer a.dr-partner{grid-column:1/-1;order:99;text-align:center;overflow:visible!important;text-overflow:clip!important;background:#F1F4FC;margin-top:4px}
 .drawer .dr-cur{order:100}
 @media (max-width:900px){.drawer a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.25}}
-
-/* PROJECTS BY STAGE IN THE MENU (owner, 2026-11-26, myhome.ge "Construction projects" with counts): full-width row of three
-   small links under "New projects", each with its live count (app.js fills b[data-pc] when the menu first opens) */
-.drawer .dr-prjs{grid-column:1/-1;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin:0 0 4px}
-.drawer .dr-prjs a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px;border-radius:10px;background:#F6F8FD;text-align:center;font-size:12px!important;font-weight:500;white-space:normal!important;line-height:1.2}
-.drawer .dr-prjs a b{font-size:11px;font-weight:600;color:#032EA1}
-.drawer .dr-prjs a b:empty{display:none}

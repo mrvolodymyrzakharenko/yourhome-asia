@@ -1332,6 +1332,8 @@ label[hidden]{display:none!important}
 .svc-l2 small{color:var(--muted);font-weight:400}
 .svc-l3{justify-content:space-between;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;padding:0 2px}
 .svc-l3 b{color:var(--red);text-transform:none;letter-spacing:0}
+/* "Accounts & dashboards" heading sits at the RIGHT edge of the page on PC (owner, 2026-11-26 07:37: "nem szélén van a szöveg – Accounts and Dashboard") */
+@media (min-width:1101px){.svc-g2 .bh{justify-content:flex-end}.svc-g2 .bh h2{text-align:right}}
 @media (max-width:1100px){
   .svc{grid-template-columns:1fr;gap:18px}
   .svc-g2 .svc-row{grid-template-columns:repeat(4,1fr)}

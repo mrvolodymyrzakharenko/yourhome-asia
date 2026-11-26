@@ -151,7 +151,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   homepage block, svcSection() in app.js – "YourHome services" (Recommended → newest · Verified advertisers → /agents · Telegram alerts →
   opens the alert form · Help → FAQ) | "Accounts & dashboards" (Agent or agency → dashboard · Owner → post). White cards with a mini
   picture on top (live listing photo, check rows, Telegram bubble, chat, weekly bars, new message). PC 4 | 2 side by side, tablets
-  stacked, phones 2 per row. Texts svc* in i18n.js (SVC, 5 languages), styles "SERVICES + ACCOUNTS STRIP" in styles.css + fonts.css.
+  stacked, phones 2 per row; on PC the "Accounts & dashboards" heading is right-aligned to the page edge (owner 07:37). Texts svc* in i18n.js (SVC, 5 languages), styles "SERVICES + ACCOUNTS STRIP" in styles.css + fonts.css.
 - FADE-IN (owner, 2026-11-24: "minden új tartalom fade in effekttel töltődjön – mobilon is, tabon is"): fade.js (loaded before
   app.js) fades every new element in #app and the popup details, staggers cards, fades photos in once loaded; header and
   bottom menu never fade. CSS block "FADE-IN" at the end of styles.css. Keep it when adding new pages.

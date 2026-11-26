@@ -1390,3 +1390,25 @@ label[hidden]{display:none!important}
 .ypk-l .ypk-g:first-child,.ypk-l button+.ypk-g{margin-top:12px}
 .ypk-l>button:first-child+.ypk-g{margin-top:8px}
 @media (max-width:900px){.ypk.ypk-all .ypk-g{grid-column:1/-1}}
+/* FOR SALE | FOR RENT GRID (owner, 2026-11-26, realestate.com.kh footer: "így jó? … mehet"): replaces the one-line Popular
+   searches. Pure-CSS tabs: radio inputs .sxr (deal sxd-s / sxd-r, type sxt-0…6) + labels; panel .sx-p-<deal><type> shows when
+   both match. Every link is in the HTML (api/page.js footerLinks). PC 4 columns, tablet 3, phones 1. */
+.yft-sx{position:relative;padding:4px 0 26px}
+.sxr{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.sx-tabs{display:flex;gap:4px;border-top:1px solid #E4E7EE;border-bottom:1px solid #E4E7EE}
+.sx-tabs label{padding:13px 16px 12px;color:#475569;cursor:pointer;font-size:13px;font-weight:600;letter-spacing:-.025em;border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .2s,border-color .2s}
+.sx-tabs label:hover{color:var(--blue)}
+#sxd-s:checked~.sx-tabs label[for=sxd-s],#sxd-r:checked~.sx-tabs label[for=sxd-r]{color:#0b1d51;border-bottom-color:var(--red)}
+.sx-types{display:none;flex-wrap:wrap;gap:6px;margin:12px 0 10px}
+#sxd-s:checked~.sx-types-s,#sxd-r:checked~.sx-types-r{display:flex}
+.sx-types label{padding:6px 12px;border-radius:99px;color:#334155;cursor:pointer;font-size:13px;font-weight:500;letter-spacing:-.025em;transition:background .2s,color .2s}
+.sx-types label:hover{color:var(--blue)}
+#sxt-0:checked~.sx-types label[for=sxt-0],#sxt-1:checked~.sx-types label[for=sxt-1],#sxt-2:checked~.sx-types label[for=sxt-2],#sxt-3:checked~.sx-types label[for=sxt-3],#sxt-4:checked~.sx-types label[for=sxt-4],#sxt-5:checked~.sx-types label[for=sxt-5],#sxt-6:checked~.sx-types label[for=sxt-6]{background:#FDE4E7;color:#E00025;font-weight:600}
+.sxr:focus-visible~.sx-tabs,.sxr:focus-visible~.sx-types{outline:2px solid #c7d2fe;outline-offset:2px;border-radius:8px}
+.sx-p{display:none;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 24px;padding:4px 12px 0}
+#sxd-s:checked~#sxt-0:checked~.sx-p-s0,#sxd-s:checked~#sxt-1:checked~.sx-p-s1,#sxd-s:checked~#sxt-2:checked~.sx-p-s2,#sxd-s:checked~#sxt-3:checked~.sx-p-s3,#sxd-s:checked~#sxt-4:checked~.sx-p-s4,#sxd-s:checked~#sxt-5:checked~.sx-p-s5,#sxd-s:checked~#sxt-6:checked~.sx-p-s6,
+#sxd-r:checked~#sxt-0:checked~.sx-p-r0,#sxd-r:checked~#sxt-1:checked~.sx-p-r1,#sxd-r:checked~#sxt-2:checked~.sx-p-r2,#sxd-r:checked~#sxt-3:checked~.sx-p-r3,#sxd-r:checked~#sxt-4:checked~.sx-p-r4,#sxd-r:checked~#sxt-5:checked~.sx-p-r5,#sxd-r:checked~#sxt-6:checked~.sx-p-r6{display:grid}
+.yft .sx-p a{color:#334155;text-decoration:none;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;transition:color .2s}
+.yft .sx-p a:hover,.yft .sx-p a:focus-visible{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+@media (max-width:1100px){.sx-p{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media (max-width:720px){.sx-p{grid-template-columns:minmax(0,1fr);padding:4px 4px 0}.sx-tabs label{padding:12px 10px 11px;flex:1;text-align:center}.yft .sx-p a{white-space:normal}}

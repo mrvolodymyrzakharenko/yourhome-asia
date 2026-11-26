@@ -50,6 +50,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   districts, then other cities; most listings first) – api/page.js footerLinks() fills <!--ft:ps-->. Translated in the browser:
   data-ps = template ps_* in i18n.js FT2 ({x} = ftp_<type>, {p} = place), applied next to data-i18n in app.js. A wrapped line never
   starts with a dot (clipped 19px). styles.css "POPULAR SEARCHES" block.
+  → REPLACED BY THE FOR SALE | FOR RENT GRID (owner, 2026-11-26 07:46, realestate.com.kh footer: "mehet"): the .yft-ps row now holds
+  tabs "Real estate for sale | for rent", type tabs (sale: All · Apartments · Condos · Houses · Villas · Commercial property · Land;
+  rent: … · Studios instead of Land) and a grid of keyword links ("Apartments for sale in BKK1"; PC 4 columns, tablet 3, phones 1,
+  max 24). PURE-CSS TABS (radio inputs .sxr + labels; every link is in the server HTML so Google sees them all). Cities Phnom Penh ·
+  Siem Reap · Sihanoukville · Kampot · Battambang always (+ any city with listings); districts only with live listings – UNTIL
+  FULL_AT = 100 REAL (non-demo) LISTINGS, then every Phnom Penh district (app.js DISTRICTS) shows (owner 07:47: "változzon meg amikor
+  lesz 100+ hirdetésünk"; a weekly scheduled task also checks it). A link = its landing page when it has listings, else the deal page
+  filtered (?city=&type= / &q=). NEW LANDING LEVEL /<deal>/<city>/<district>/<type> (e.g. /buy/phnom-penh/bkk1/apartment –
+  landings(), api/page.js, router.js toPath/toHash, sitemap). Texts sx_* + ps_* in i18n.js FT2. styles.css "FOR SALE | FOR RENT GRID".
   EVERY LINK COLUMN = 8 ROWS (owner, 2026-11-26: "egészítsd ki… legyen egységes – mehet a commercial is"): For rent = Apartments ·
   Condos · Houses · Villas · Commercial property · Rooms for rent · Daily rentals · All rentals; For sale = Condos · Apartments ·
   Houses · Villas · Land · Commercial property · New projects · All properties for sale; For advertisers = Post a listing – free ·

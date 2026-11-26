@@ -141,7 +141,11 @@ function landings(list) {
     const c = slugify(l.city || 'Phnom Penh');
     for (const d of segs) {
       add(`/${d}/${c}`, l);
-      if (l.district && slugify(l.district)) add(`/${d}/${c}/${slugify(l.district)}`, l);
+      const ds = l.district && slugify(l.district);
+      if (ds) add(`/${d}/${c}/${ds}`, l);
+      // district + type landing /<deal>/<city>/<district>/<type> (owner, 2026-11-26: footer "for sale | for rent" grid)
+      if (ds && d !== 'rooms' && TYPE_PLURAL[typeSeg(l)]) add(`/${d}/${c}/${ds}/${typeSeg(l)}`, l);
+      if (ds && d !== 'rooms' && COMMERCIAL.includes(l.property_type)) add(`/${d}/${c}/${ds}/commercial`, l);
       if (d !== 'rooms' && TYPE_PLURAL[typeSeg(l)]) add(`/${d}/${c}/${typeSeg(l)}`, l);
       if (d !== 'rooms' && COMMERCIAL.includes(l.property_type)) add(`/${d}/${c}/commercial`, l);   // COMMERCIAL = office + shophouse (owner, 2026-11-26)
     }

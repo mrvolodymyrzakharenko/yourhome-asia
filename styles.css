@@ -1468,3 +1468,16 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 
 /* phones: the narrow "I want" field keeps more room for its value (Аренда, Bérlés…) – owner screenshot 2026-11-26 13:23 */
 @media (max-width:720px){#sbox .f-want select{padding-right:10px!important;background-position:right 2px center!important}}
+/* Phones/tablets: SHOP stands under RENT (first column of row 2) in every language (owner, 2026-11-26 13:45) – it swaps
+   places with the word that stood there */
+@media (max-width:900px){
+  html[lang] #dealTabs .dt-cat[data-cat=shophouse]{order:3}
+  html[lang] #dealTabs .dt-cat[data-cat=house]{order:8}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=shophouse]{order:3}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=studio]{order:9}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=house]{order:5}
+  html[lang=km] #dealTabs .dt-cat[data-cat=shophouse]{order:3}
+  html[lang=km] #dealTabs .dt-cat[data-cat=condo]{order:1}
+  html[lang=km] #dealTabs .dt-cat[data-cat=house]{order:5}
+  #dealTabs .dt-sep{display:none!important}
+}

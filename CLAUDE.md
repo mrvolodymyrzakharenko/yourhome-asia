@@ -218,6 +218,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   <select multiple>, size>1 or data-native keep the native one (don't use data-native without the owner's OK).
 - ROUND × BUTTONS (owner, 2026-11-25): every close / remove × is a DRAWN X (svg .xic or the popup/picker icons) in the exact
   centre of its circle – never the text character "×" (it sits off-centre).
+- SHOP UNDER RENT (owner, 2026-11-26 13:45): on phones/tablets Shop is the first word of the category row's second line, under
+  Rent, in every language (last block of styles.css swaps it with the word that stood there).
 - Cambodia only for now; every listing has country/city so other countries (Vietnam, Indonesia…) can be added later.
 - CITIES (owner, 2026-11-24 20:17 Tbilisi: "legyen az összes nagy város a listában, de a kezdő Phnom Penh"): the search card's
   City select and the post form list every province capital + Poipet and Bavet (CITIES in app.js, 26 cities); Phnom Penh

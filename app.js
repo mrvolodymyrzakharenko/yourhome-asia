@@ -257,7 +257,7 @@ function agentBar(l) {
   const ph = digits(l.contact_phone || (ag && ag.phone)), wa = digits(l.contact_whatsapp || (ag && ag.whatsapp)), tgRaw = l.contact_telegram || (ag && ag.telegram), tg = tgHandle(tgRaw) || (/^\+?\d{8,15}$/.test(String(tgRaw || '').replace(/[\s-]/g, '')) ? '+' + digits(tgRaw).replace('+', '') : null);
   if (!name && !ph && !wa && !tg) return '';
   const ini = (name || '?').trim().split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
-  const pic = (ag && ag.photo) || l.contact_photo, av = pic ? `<img src="${esc(pic)}" alt="" loading="lazy">` : `<i>${esc(ini)}</i>`;
+  const pic = (ag && ag.photo) || l.contact_photo, av = pic ? `<img src="${esc(pic)}" alt="${esc((name || t('by_owner')) + ' – ' + ((ag && ag.kind) || 'agent') + ', ' + (l.city || 'Phnom Penh'))}" loading="lazy">` : `<i>${esc(ini)}</i>`;
   const b = (href, ev, cls, svg, lab) => `<span class="yab ${cls}" role="link" tabindex="0" data-href="${esc(href)}" data-ev="${ev}" data-id="${l.id}" aria-label="${esc(lab)}">${svg}</span>`;
   return `<div class="yagent"><span class="yav">${av}</span><span class="yan">${esc(name || t('by_owner'))}</span><span class="yabs">${
     ph ? b('tel:' + ph, 'phone', 'yab-ph', '<svg viewBox="0 0 24 24"><path d="M5 3h3.5l1.8 4.5-2.3 1.4a11 11 0 0 0 7.1 7.1l1.4-2.3L21 15.5V19a2 2 0 0 1-2 2A16 16 0 0 1 3 5a2 2 0 0 1 2-2z"/></svg>', t('call')) : ''}${
@@ -284,6 +284,13 @@ function imgSrc(u, w) {
   return u;
 }
 window.yhImg = imgSrc;
+// Card photos: browser picks 400 or 800px (Unsplash only – our uploads have one small copy). lazy = data-srcset, yLoad() sets it.
+const CARD_SIZES = '(max-width:719px) 100vw, (max-width:1100px) 34vw, 300px';
+function cardSrc(u, lazy) {
+  const a = imgSrc(u, 800), p = lazy ? 'data-' : '';
+  if (!/^https:\/\/images\.unsplash\.com\//.test(u)) return `${p}src="${esc(a)}"`;
+  return `${p}src="${esc(a)}" ${p}srcset="${esc(imgSrc(u, 400))} 400w, ${esc(a)} 800w" sizes="${CARD_SIZES}"`;
+}
 async function shrinkPhoto(file, edge, q) {
   try {
     const bmp = await createImageBitmap(file, { imageOrientation: 'from-image' });
@@ -299,7 +306,7 @@ async function shrinkPhoto(file, edge, q) {
 const perM2 = l => l.deal_type === 'sale' && l.price && l.area_m2 > 0 ? money(Math.round(l.price / l.area_m2)) + '/m²' : '';
 function card(l) {
   const pm = perM2(l);
-  const ph = l.photos && l.photos[0] ? `<img src="${esc(imgSrc(l.photos[0], 800))}" alt="${esc(photoAlt(l, 0))}" loading="lazy">` : `<span class="noimg">🏠</span>`;
+  const ph = l.photos && l.photos[0] ? `<img ${cardSrc(l.photos[0])} alt="${esc(photoAlt(l, 0))}" loading="lazy">` : `<span class="noimg">🏠</span>`;
   const dots = l.photos && l.photos.length > 1 ? `<div class="dots">${l.photos.slice(0, 5).map(() => '<i></i>').join('')}</div>` : '';
   const beds = l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–');
   return `<a class="card" href="${YH.listingPath(l)}">
@@ -309,7 +316,7 @@ function card(l) {
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${HEART}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}${pm ? ' · ' + esc(pm) : ''}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
-      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(imgSrc(u, 800))}" alt="${esc(photoAlt(l, i))}" ${i ? 'loading="lazy" ' : ''}decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots${l.photos.length > 8 ? ' many' : ''}">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}` : ''}
+      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<img ${cardSrc(u, i >= 2)} alt="${esc(photoAlt(l, i))}" ${i ? 'loading="lazy" ' : ''}decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots${l.photos.length > 8 ? ' many' : ''}">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}` : ''}
       <span class="ydate">${shortDate(l.created_at)}</span>
       <div class="yprice">${money(l.price)}${priceSuffix(l) || pm ? `<small>${esc(priceSuffix(l) + (pm ? ' · ' + pm : ''))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
@@ -335,7 +342,7 @@ document.addEventListener('click', e => {
   const g = d.closest('.ph').querySelector('.ygal'); yLoad(g, Number(d.dataset.yd)); g.scrollTo({ left: g.clientWidth * Number(d.dataset.yd), behavior: 'smooth' });
 }, true);
 // photos after the first two load only when the visitor gets near them (no traffic for photos nobody looks at)
-function yLoad(g, i) { [i - 1, i, i + 1, i + 2].forEach(k => { const im = g.children[k]; if (im && im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } }); }
+function yLoad(g, i) { [i - 1, i, i + 1, i + 2].forEach(k => { const im = g.children[k]; if (im && im.dataset.src) { if (im.dataset.srcset) { im.srcset = im.dataset.srcset; im.removeAttribute('data-srcset'); } im.src = im.dataset.src; im.removeAttribute('data-src'); } }); }
 // PC: round arrows on the photo (shown on hover) – same slider as the phone swipe
 document.addEventListener('click', e => {
   const a = e.target.closest('.yarr'); if (!a) return;
@@ -428,7 +435,7 @@ async function fetchListings(f = {}) {
   const { data, error } = await q.limit(f.limit || 300);
   if (error) { toast(t('error') + error.message); return []; }
   const aids = [...new Set(data.map(l => l.agent_id).filter(Boolean))];   // agent photo + name for the card's agent bar
-  if (aids.length) { const { data: ags } = await sb.from('yh_agents').select('id,name,photo,phone,whatsapp,telegram').in('id', aids); const m = Object.fromEntries((ags || []).map(a => [a.id, a])); data.forEach(l => { l._agent = m[l.agent_id] || null; }); }
+  if (aids.length) { const { data: ags } = await sb.from('yh_agents').select('id,name,kind,photo,phone,whatsapp,telegram').in('id', aids); const m = Object.fromEntries((ags || []).map(a => [a.id, a])); data.forEach(l => { l._agent = m[l.agent_id] || null; }); }
   return data;
 }
 
@@ -716,7 +723,7 @@ async function viewListing(id) {
   const { data: l, error } = await sb.from('yh_listings').select('*').eq('id', id).maybeSingle();
   if (error || !l) { app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px">404</div></div>`; return; }
   track(l, 'view');
-  document.title = `${l.title} — YourHome.asia`;
+  document.title = `${l.title} | YourHome Cambodia`;
   const photos = l.photos || [];
   const wa = digits(l.contact_whatsapp), ph = digits(l.contact_phone);
   const tgName = tgHandle(l.contact_telegram), tgNum = (wa || ph || '').replace('+', '');
@@ -1329,7 +1336,7 @@ async function route() {
   }
   if (POP.isOpen()) POP.hide();
   clearMaps();
-  if (!firstRoute) document.title = 'YourHome.asia — ' + t('heroTitle').replace(/<[^>]+>/g, '');   // first load keeps the server's SEO title
+  if (!firstRoute) document.title = t('heroTitle').replace(/<[^>]+>/g, '') + ' | YourHome Cambodia';   // first load keeps the server's SEO title
   firstRoute = false;
   const path = (YH.h().slice(1).split('?')[0] || '/').replace(/\/+$/, '') || '/';
   const parts = path.split('/').filter(Boolean);

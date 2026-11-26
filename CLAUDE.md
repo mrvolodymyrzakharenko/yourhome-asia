@@ -271,6 +271,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   -.025em; body max 13px / 400; buttons 13px / 500 (phones 600) with -.025em. Check: render the page and make sure nothing
   except hero H1s, the logo and glyphs is over 13px or over 600.
 
+## Review fixes (owner, 2026-11-26 07:51: "mehet" – no visible design change)
+- Agent photo on the card has alt "<name> – <agent/agency/owner>, <city>" (agentBar; yh_agents.kind is now fetched).
+- Card photos (Unsplash) carry srcset 400w/800w + sizes (cardSrc() in app.js; lazy ones data-srcset, set by yLoad()).
+- "Coming soon" social icons have NO href="#" (role="link" aria-disabled, tabindex) – they open nothing.
+- A card narrower than ~235px hides the agent name (it would show only "C…"): photo left, buttons right (container query, end of styles.css).
+- Homepage title keyword-first: "Homes for rent and sale in Cambodia | YourHome Cambodia"; in-app titles end " | YourHome Cambodia".
+
 ## Become a partner page (owner, 2026-11-24: "vedd ki teljesen a became a partner oldalt… minden olyan szolgáltatást, ami
    az ingatlanos oldalhoz lehet… kategóriákat, kártyákat")
 - #/partners = port of the Study For Partners page (partners.js viewPartners + partners.css): banner (photo fading in from

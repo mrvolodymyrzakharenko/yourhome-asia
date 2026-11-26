@@ -50,7 +50,7 @@ async function preData() {
   const listings = await sb('yh_listings', `select=${cols}&status=eq.active&country=eq.KH&order=is_featured.desc,created_at.desc&limit=301`, 2500);
   const ids = [...new Set(listings.map(l => l.agent_id).filter(Boolean))];
   let agents = {};
-  if (ids.length) { try { (await sb('yh_agents', `select=id,name,photo,phone,whatsapp,telegram&id=in.(${ids.join(',')})`, 2000)).forEach(a => { agents[a.id] = a; }); } catch (_) {} }
+  if (ids.length) { try { (await sb('yh_agents', `select=id,name,kind,photo,phone,whatsapp,telegram&id=in.(${ids.join(',')})`, 2000)).forEach(a => { agents[a.id] = a; }); } catch (_) {} }
   return { complete: listings.length <= 300, listings: listings.slice(0, 300), agents };
 }
 // Blog articles (blog.json – our own text, read once per instance)
@@ -69,7 +69,7 @@ async function build(p, q) {
 
   if (!p0) {   // homepage (normally served straight from index.html)
     const list = await sb('yh_listings', `select=${LCOLS}&status=eq.active&country=eq.KH&order=is_featured.desc,created_at.desc&limit=12`).catch(() => []);
-    return { path: '/', title: 'YourHome.asia — All homes in Cambodia in one search', desc: 'Apartments, houses, condos and rooms for rent and sale in Phnom Penh, Cambodia. Free listings for owners and agents.',
+    return { path: '/', title: 'Homes for rent and sale in Cambodia | YourHome Cambodia', desc: 'Apartments, houses, condos and rooms for rent and sale in Phnom Penh, Cambodia. Free listings for owners and agents.',
       ld: [{ '@type': 'WebSite', '@id': ORIGIN + '/#web', name: 'YourHome.asia', url: ORIGIN + '/', publisher: { '@id': ORIGIN + '/#org' }, potentialAction: { '@type': 'SearchAction', target: ORIGIN + '/search?q={search_term_string}', 'query-input': 'required name=search_term_string' } }],
       body: body('Find your home in Cambodia', 'Rent, buy and sell property in Cambodia.', S.cards(list)) };
   }

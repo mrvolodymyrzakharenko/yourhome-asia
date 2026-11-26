@@ -148,8 +148,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   is FIRST and the default. Phnom Penh = district list (DISTRICTS); other cities = typed district in the post form and
   "Any" in the search. ?city= filters the results; the post-form map centres on the picked city. yh_listings.city.
 
-- CARD HOVER ZOOM (owner, 2026-11-26: "enyhe zoom effekt"): on mouse screens the photo of every card zooms in ~6% inside its
-  frame on hover (.ph>img / .ygal, last block of styles.css); touch screens and "reduce motion" unchanged.
+- CARD HOVER = "B" (owner, 2026-11-26, picked from 4 demos): on mouse screens the card lifts 4px, a soft royal-blue shadow
+  appears, the photo zooms ~5% inside its frame (.ph>img / .ygal), the title turns blue, the "View →" arrow slides 4px right
+  (last block of styles.css). Touch screens and "reduce motion" unchanged.
 
 - PHONES = STUDY PORTAL MOBILE CARDS (owner, 2026-11-24: "vedd ki a mobilos nézetet a Study and Work portáról… nem lehet
   kettő egy sorba, tökre úgy nézzen ki"): under 720px every listing grid (.row4, .grid, .row-scroll) is ONE card per row, the

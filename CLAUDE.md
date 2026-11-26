@@ -302,6 +302,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - BLOG: blog.json = the articles (English, our own text, no invented figures); blog.js draws #/blog, #/blog/<slug> and the
   homepage "Blog" block (last, 4 cards); api/page.js gives /blog + /blog/<slug> their own head (BlogPosting) and text,
   api/sitemap.js lists them (both read blog.json – vercel.json includeFiles). New article = new entry in blog.json.
+- SHARE PICTURE (owner, 2026-11-26: "kambodzsai kép, valami igazi"): default og:image = real Phnom Penh houses (Unsplash photo-1593510649240,
+  Vanna Phon) – OG_DEFAULT in api/_seo.js + index.html; listings/projects keep their own first photo.
 - NOT TAKEN for Cambodia: auction, mortgage, ₾/$ switch (the Georgian portal will need mortgage + currency).
 
 ## Admin dashboard (owner, 2026-11-25: "szuper dashboard… kártyákon tudok mozogni, olvasó menü, statisztika, visitors… még

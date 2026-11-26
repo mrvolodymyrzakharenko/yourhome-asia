@@ -9,7 +9,8 @@ const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';   // publishable key (same as app.js) – RLS decides what it may read
 const PHONE = '+855 96 306 8590';
 const EMAIL = 'info@yourhome.asia';
-const OG_DEFAULT = 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1200&h=630&fit=crop&q=70&fm=jpg';
+// Share picture (owner, 2026-11-26: "kambodzsai kép… valami igazi"): real Phnom Penh houses, Unsplash photo by Vanna Phon
+const OG_DEFAULT = 'https://images.unsplash.com/photo-1593510649240-9e85e0eb75ee?w=1200&h=630&fit=crop&q=75&fm=jpg';
 
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 
@@ -102,6 +103,7 @@ function render(page) {
     `<meta property="og:description" content="${esc(page.desc)}">`,
     page.noindex ? '' : `<meta property="og:url" content="${esc(canon)}">`,
     `<meta property="og:image" content="${esc(page.image || OG_DEFAULT)}">`,
+    ...(page.image ? [] : ['<meta property="og:image:width" content="1200">', '<meta property="og:image:height" content="630">', '<meta property="og:image:alt" content="Houses in Phnom Penh, Cambodia">']),
     '<meta property="og:locale" content="en_US">',
     '<meta name="twitter:card" content="summary_large_image">',
     `<meta name="twitter:title" content="${esc(page.title)}">`,

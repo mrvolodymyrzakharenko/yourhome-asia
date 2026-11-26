@@ -16,7 +16,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 ## Design (owner, 2026-11-24)
 - Structure copies vietrent.net (portal look), but in Cambodian flag colours: royal blue #032EA1 (main), red #E00025
   (accents: TOP badge, prices, Post buttons), white background.
-- Header: small white header like the Study portal – NO coloured top strip. Logo = house in Cambodian blue/red/blue inside a white rounded square + TWO lines centred vertically next to it: "www.yourhome.asia" (menu-name type 13px / 500, phones 12px / 600) and under it red "CAMBODIA" in spaced capitals 11px / 700 (phones 10px), CENTRED under line 1 (owner 20:37 / 20:39; .brand .b1 + em, end of fonts.css), header AND footer (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language button
+- LOGO = IMAGE (owner, 2026-11-26: "Logo – rakd fel"): header AND footer show /logo.png (the owner's YourHome.asia CAMBODIA logo,
+  transparent background, 420×144) as img.brand-img – header 42px tall (phones 34px, ≤379px 30px, ≤339px 26px), footer 54px
+  (phones 46px); sizes at the end of fonts.css. Favicon / app icons = the roof from that logo: favicon.ico, icon-192.png,
+  icon-512.png, apple-touch-icon.png (manifest.json); schema Organization logo = /logo.png. This REPLACES the drawn SVG house +
+  "www.yourhome.asia / CAMBODIA" text logo described in the next line (kept only as history).
+- Header: small white header like the Study portal – NO coloured top strip. (Old) Logo = house in Cambodian blue/red/blue inside a white rounded square + TWO lines centred vertically next to it: "www.yourhome.asia" (menu-name type 13px / 500, phones 12px / 600) and under it red "CAMBODIA" in spaced capitals 11px / 700 (phones 10px), CENTRED under line 1 (owner 20:37 / 20:39; .brand .b1 + em, end of fonts.css), header AND footer (owner, 2026-11-24; header.css + fonts.css .brand; phones: 12px text, 26px house – owner 21:12), language button
   (flag + code; see LANGUAGE PICKER below), round icons (contact, account), red "+ Post listing" button, "Menu" button with a dropdown (the word "Menu" shows on phones too – owner 21:29).
   PHONES (owner, 2026-11-25 11:09: "told az ikonokat balra, legyen a menügomb nagyobb… a csíkok helyére írd ki, hogy menü"): the header
   buttons start right after the logo and the Menu button fills the rest of the row, showing ONLY the word "Menu" (no three-line

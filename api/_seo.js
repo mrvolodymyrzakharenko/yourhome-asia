@@ -73,7 +73,7 @@ function img(u, w) {
 }
 
 function org() {
-  return { '@type': 'Organization', '@id': ORIGIN + '/#org', name: SITE, url: ORIGIN + '/', logo: ORIGIN + '/favicon.svg',
+  return { '@type': 'Organization', '@id': ORIGIN + '/#org', name: SITE, url: ORIGIN + '/', logo: ORIGIN + '/logo.png',
     telephone: PHONE, email: EMAIL, address: { '@type': 'PostalAddress', addressLocality: 'Phnom Penh', addressCountry: 'KH' } };
 }
 function crumbs(list) {   // [[name, path], …] – Home first

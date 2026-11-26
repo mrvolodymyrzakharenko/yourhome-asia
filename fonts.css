@@ -96,3 +96,9 @@ label{font-weight:500}
 .lpk-c.on .lpk-n{color:#E00025}
 .lang-btn .lcd{font-size:13px;font-weight:600}
 @media (max-width:900px){.lpk-n{font-size:12px}.lpk-h span{font-size:12px}}
+/* LOGO IMAGE (owner, 2026-11-26: new YourHome.asia Cambodia logo in header + footer) */
+.brand-img{display:block;height:42px;width:auto;max-width:none;flex:none}
+.yft .brand-img{height:54px}
+@media (max-width:720px){.hdr .brand-img{height:34px}.yft .brand-img{height:46px}}
+@media (max-width:379px){.hdr .brand-img{height:30px}}
+@media (max-width:339px){.hdr .brand-img{height:26px}}

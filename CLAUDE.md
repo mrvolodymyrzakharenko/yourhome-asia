@@ -8,7 +8,7 @@ Data lives in the shared Supabase project "eleon" (same as the Study and Work po
 never touch the Study tables. When a new standing rule is agreed with the owner, add it here.
 
 ## Working style
-- The owner writes in Hungarian; answer in Hungarian. Site content is in 12 languages: English, Khmer, Chinese, French, Thai, Russian, German, Czech, Polish, Hungarian, Korean, Japanese (i18n.js T + NL block; agents.js TX). A NEW text key needs all 12 – a missing one falls back to English.
+- The owner writes in Hungarian; answer in Hungarian. Cambodia offers 9 languages (owner, 2026-11-26 13:30: German, Czech, Polish, Hungarian taken off, Vietnamese added): English, Khmer, Chinese, French, Thai, Russian, Vietnamese, Korean, Japanese (i18n.js T + NL + T.vi; agents.js TX; bot api/_tgx.js T). The de/cs/pl/hu texts stay in the files for the later European portals but are not offered here (a stored de/cs/pl/hu choice falls back to English). A NEW text key needs all 9 – a missing one falls back to English.
 - The owner tests live: finished work goes straight to production on yourhome.asia – no temporary preview links.
 - Design is approved: never change layout, classes or styles unless asked. Copy changes keep the design.
 - Everything must work over HTTPS (SSL is automatic on Vercel).
@@ -224,14 +224,15 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   is FIRST and the default. Phnom Penh = district list (DISTRICTS); other cities = typed district in the post form and
   "Any" in the search. ?city= filters the results; the post-form map centres on the picked city. yh_listings.city.
 
-- LANGUAGE PICKER (owner, 2026-11-26: "orosz, német… cseh, lengyel, magyar… koreai, japán… legyen zászló"; 08:02: "pc nézetben lehet
-  3 sor – felül ne legyen a fejlécben zászló, csak szöveg, ami aktív. Mobilon két sávos, kisebb"): 12 languages – English · ខ្មែរ · 中文 ·
-  Français · ไทย · Русский · Deutsch · Čeština · Polski · Magyar · 한국어 · 日本語 (LANG_LIST in app.js, LANGS in i18n.js, hidden
-  <select id="lang"> keeps the value). Header #langBtn = ONLY the active language as text (EN · ខ្មែរ · 中文 · FR · ไทย · RU · DE · CS ·
-  PL · HU · 한국어 · 日本語 – LANG_SHORT) + chevron, NO flag. It opens .lpk: white cards with a drawn flag (flagSvg(), never emoji) and
-  the language in its own name; current = pink patch, red text. PC: centred, THREE per row (4 rows, flag · name · ›). Phones/tablets
-  (≤900px): TWO per row, smaller cards (flag above the name), box 25% from the left, right and bottom. Never an inner scrollbar.
-  ru/de/cs/pl/hu/ko/ja texts: NL block at the end of i18n.js + TX in agents.js (owner, 2026-11-26 08:06: "mindent fordítsd le").
+- LANGUAGE PICKER (owner, 2026-11-26: flags; 08:02: "pc nézetben lehet 3 sor – felül ne legyen a fejlécben zászló, csak szöveg, ami
+  aktív. Mobilon két sávos, kisebb"; 13:30: 9 languages): English · ខ្មែរ · 中文 · Français · ไทย · Русский · Tiếng Việt · 한국어 · 日本語
+  (LANG_LIST / LANG_SHORT / LANG_TITLE / flagSvg in app.js, LANGS in i18n.js, hidden <select id="lang"> keeps the value). Header #langBtn
+  = ONLY the active language as text + chevron, NO flag (chevron never touches the code, also under hfit1). It opens .lpk: white cards
+  with a drawn flag (never emoji) and the language in its own name; current = pink patch, red text. PC: centred, THREE per row (3 × 3).
+  Phones/tablets (≤900px): TWO per row, smaller cards (flag above the name), box 25% from the left, right and bottom. No inner scrollbar.
+- LONG LANGUAGES MUST FIT (owner screenshots 2026-11-26 13:23–13:25): fitRows() shrinks the phone search-card labels (min 9px) and picked
+  values (min 9px; the "I want" field has extra room), the bottom-menu labels (min 8.5px) and the hero title; Menu word, project stages
+  (st_*) and currency names (Intl.DisplayNames) are translated; the popup date follows the page language and its price never wraps.
 - BOXES WITHOUT INNER SCROLLING – BASE RULE (owner, 2026-11-26: "sok helyet így kéne megcsinálni a boxokat"): every box / panel /
   popup is sized to its content so it needs no inner scrollbar; items get more compact on short screens instead. Only a genuinely
   long list (dozens of districts) gets a search field / groups rather than a tiny scrolling box.

@@ -60,7 +60,9 @@ const store = {
   get(k, d) { try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch { return d; } },
   set(k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch {} },
 };
-let lang = store.get('yh_lang', null) || (['km','zh','fr','th','ru','de','cs','pl','hu','ko','ja'].find(l => (navigator.language || '').startsWith(l)) || 'en');
+// Cambodia offers 9 languages (owner, 2026-11-26 13:30) – a stored de/cs/pl/hu choice falls back to English
+let lang = store.get('yh_lang', null) || (['km','zh','fr','th','ru','vi','ko','ja'].find(l => (navigator.language || '').startsWith(l)) || 'en');
+if (!['en','km','zh','fr','th','ru','vi','ko','ja'].includes(lang)) lang = 'en';
 // Short labels for the filters panel (owner, 2026-11-24 20:23: amenities in 3 rows) – s_<key>, else the full text
 const sl = k => (T[lang] && T[lang]['s_' + k]) ?? (lang === 'en' ? T.en['s_' + k] : null) ?? t(k);
 const t = (k, vars) => { let s = (T[lang] && T[lang][k]) ?? T.en[k] ?? k; if (vars) for (const v in vars) s = s.replace('{' + v + '}', vars[v]); return s; };
@@ -168,6 +170,8 @@ function applyStatic() {
   document.querySelectorAll('[data-ps]').forEach(el => { el.textContent = t(el.dataset.ps, { x: el.dataset.psx ? t('ftp_' + el.dataset.psx) : '', p: el.dataset.psp || '' }); });
   document.getElementById('lang').value = lang;
   langBtnDraw();
+  // currency names in the Menu in the visitor's language (owner screenshot 13:24 – they were English); the code stays
+  try { const dn = new Intl.DisplayNames([lang === 'km' ? 'km-KH' : lang], { type: 'currency' }); document.querySelectorAll('.dr-curs [data-cur]').forEach(b => { const n = dn.of(b.dataset.cur); if (n && b.lastChild && b.lastChild.nodeType === 3) b.lastChild.textContent = n.charAt(0).toLocaleUpperCase(lang) + n.slice(1); }); } catch {}
   document.getElementById('year').textContent = new Date().getFullYear();
 }
 async function loadRates() {
@@ -198,10 +202,9 @@ document.getElementById('lang').addEventListener('change', e => { lang = e.targe
 // language in its own name · ›, the current one ✓), all 12 without scrolling – PC 3 per row; phones/tablets 2 per row, smaller,
 // 25% of the screen free left, right and below (owner 08:02 – base rule for boxes on phones; styles.css "LANGUAGE PICKER").
 // The header button shows ONLY the active language as text, no flag (owner 08:02). Flags are drawn SVG, never emoji. Languages without their own texts yet show English (t() falls back).
-const LANG_LIST = [['en', 'English'], ['km', 'ខ្មែរ'], ['zh', '中文'], ['fr', 'Français'], ['th', 'ไทย'], ['ru', 'Русский'], ['de', 'Deutsch'],
-  ['cs', 'Čeština'], ['pl', 'Polski'], ['hu', 'Magyar'], ['ko', '한국어'], ['ja', '日本語']];
-const LANG_SHORT = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', th: 'ไทย', ru: 'RU', de: 'DE', cs: 'CS', pl: 'PL', hu: 'HU', ko: '한국어', ja: '日本語' };
-const LANG_TITLE = { en: 'Language', km: 'ភាសា', zh: '语言', fr: 'Langue', th: 'ภาษา', ru: 'Язык', de: 'Sprache', cs: 'Jazyk', pl: 'Język', hu: 'Nyelv', ko: '언어', ja: '言語' };
+const LANG_LIST = [['en', 'English'], ['km', 'ខ្មែរ'], ['zh', '中文'], ['fr', 'Français'], ['th', 'ไทย'], ['ru', 'Русский'], ['vi', 'Tiếng Việt'], ['ko', '한국어'], ['ja', '日本語']];
+const LANG_SHORT = { en: 'EN', km: 'ខ្មែរ', zh: '中文', fr: 'FR', th: 'ไทย', ru: 'RU', vi: 'VI', ko: '한국어', ja: '日本語' };
+const LANG_TITLE = { vi: 'Ngôn ngữ', en: 'Language', km: 'ភាសា', zh: '语言', fr: 'Langue', th: 'ภาษา', ru: 'Язык', de: 'Sprache', cs: 'Jazyk', pl: 'Język', hu: 'Nyelv', ko: '언어', ja: '言語' };
 function flagSvg(c) {
   const star = (x, y, r, rot = -90) => { let p = ''; for (let i = 0; i < 10; i++) { const a = (rot + i * 36) * Math.PI / 180, q = i % 2 ? r * .382 : r; p += (i ? 'L' : 'M') + (x + q * Math.cos(a)).toFixed(2) + ' ' + (y + q * Math.sin(a)).toFixed(2); } return '<path fill="#FFDE00" d="' + p + 'Z"/>'; };
   const h3 = (a, b, d) => '<rect width="30" height="20" fill="' + a + '"/><rect y="6.67" width="30" height="6.67" fill="' + b + '"/><rect y="13.33" width="30" height="6.67" fill="' + d + '"/>';
@@ -220,6 +223,7 @@ function flagSvg(c) {
     hu: h3('#CD2A3E', '#fff', '#436F4D'),
     ko: '<rect width="30" height="20" fill="#fff"/><g transform="rotate(33.7 15 10)"><path d="M10 10a5 5 0 0 1 10 0z" fill="#CD2E3A"/><path d="M10 10a5 5 0 0 0 10 0z" fill="#0047A0"/><circle cx="12.5" cy="10" r="2.5" fill="#CD2E3A"/><circle cx="17.5" cy="10" r="2.5" fill="#0047A0"/></g>' + tri(6.4, 4.3, -56.3) + tri(23.6, 15.7, -56.3) + tri(23.6, 4.3, 56.3) + tri(6.4, 15.7, 56.3),
     ja: '<rect width="30" height="20" fill="#fff"/><circle cx="15" cy="10" r="6" fill="#BC002D"/>',
+    vi: '<rect width="30" height="20" fill="#DA251D"/>' + star(15, 10.4, 5.4).replace('#FFDE00', '#FFFF00'),
   }[c] || '';
   return b.startsWith('<svg') ? b : '<svg viewBox="0 0 30 20" preserveAspectRatio="xMidYMid slice">' + b + '</svg>';
 }
@@ -1569,6 +1573,20 @@ function fitRows() {
     while (fs > 11 && out(row)) { fs -= 0.5; kids.forEach(k => k.style.setProperty('font-size', fs + 'px', 'important')); }
     if (out(row)) row.classList.add('fitwrap');
   });
+  // PHONE SEARCH CARD (owner screenshot 2026-11-26 13:23, Hungarian: "SZERET…", "Bérl…", "Bár…"): on phones every field label and the
+  // picked value shrink (down to 9px / 10px) until they fit their field instead of ending in "…" – needed for the long languages.
+  if (innerWidth <= 720) document.querySelectorAll('#sbox .f').forEach(f => {
+    const lab = f.querySelector('label'), parts = lab ? [lab, ...lab.querySelectorAll('span')] : [];
+    const over = () => parts.some(x => x.offsetParent && x.scrollWidth > x.clientWidth + 0.5);
+    if (lab) { parts.forEach(x => x.style.removeProperty('font-size')); let fs = parseFloat(getComputedStyle(lab).fontSize) || 11, i = 0; while (fs > 8.5 && i++ < 20 && over()) { fs -= 0.5; parts.forEach(x => x.style.setProperty('font-size', fs + 'px', 'important')); } }
+    const sel = f.querySelector('select'); if (!sel || !sel.options.length) return;
+    sel.style.removeProperty('font-size'); const cs = getComputedStyle(sel), avail = sel.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight) - 1;
+    const cv = fitRows.cv || (fitRows.cv = document.createElement('canvas').getContext('2d')), txt = (sel.options[sel.selectedIndex] || sel.options[0]).text;
+    let fs = parseFloat(cs.fontSize) || 13, i = 0; const w = s => { cv.font = `${cs.fontWeight} ${s}px ${cs.fontFamily}`; return cv.measureText(txt).width + (parseFloat(cs.letterSpacing) || 0) * txt.length; };
+    while (fs > 9 && i++ < 12 && w(fs) > avail) { fs -= 0.5; sel.style.setProperty('font-size', fs + 'px', 'important'); }
+  });
+  // BOTTOM MENU labels shrink (min 8.5px) instead of "Размести…" in the long languages (owner screenshot 13:24)
+  document.querySelectorAll('.bnav a > span:not(.bs)').forEach(sp => { sp.style.removeProperty('font-size'); let fs = parseFloat(getComputedStyle(sp).fontSize) || 11, i = 0; while (fs > 8.5 && i++ < 10 && sp.scrollWidth > sp.clientWidth + 0.5) { fs -= 0.5; sp.style.setProperty('font-size', fs + 'px', 'important'); } });
   // HERO TITLE fits ONE line in every language (owner, 2026-11-26 13:22: "kilóg… kicsinyítsd a betűt, hogyha kell"): from the CSS size,
   // the letters shrink until the text (measured without the underline) fits the title's own width; never below 16px.
   document.querySelectorAll('.hero > h1').forEach(h => { h.style.removeProperty('font-size'); h.style.setProperty('font-size', 'clamp(26px,3.7vw,46px)'); if (innerWidth < 380) h.style.setProperty('font-size', '6.4vw', 'important'); const r = document.createRange(); r.selectNodeContents(h); let fs = parseFloat(getComputedStyle(h).fontSize) || 26, i = 0; while (fs > 16 && i++ < 80 && r.getBoundingClientRect().width > h.clientWidth - 2) { fs -= 0.5; h.style.setProperty('font-size', fs + 'px', 'important'); } });
@@ -1579,6 +1597,7 @@ function fitRows() {
   document.querySelectorAll('.fitwrap').forEach(row => { let top = null; [...row.children].forEach(c => { const tp = c.offsetTop; c.classList.toggle('ln1', top === null || Math.abs(tp - top) > 4); top = tp; }); });
 }
 // City → its own districts, on EVERY page with the search card (home and results; owner, 2026-11-24 20:35)
+document.addEventListener('change', e => { if (e.target.closest && e.target.closest('#sbox')) queueFit(); });
 document.addEventListener('change', e => { if (e.target.id !== 'citySel') return; const ds = document.getElementById('distSel'); if (ds) ds.innerHTML = districtOpts(e.target.value); });
 const queueFit = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitCards); };
 new MutationObserver(queueFit).observe(document.getElementById('app'), { childList: true, subtree: true });

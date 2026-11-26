@@ -149,3 +149,7 @@ html.apm-on{overflow:hidden}
 .apm-addr-r{background:#F5F7FB;border-radius:12px;padding:9px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
 .apm-addr-r small{font-size:11px;color:#64748b}
 .apm-addr-r b{font-size:13px;font-weight:600;letter-spacing:-.025em;color:#0b1d51;overflow-wrap:anywhere}
+
+/* PRICE BAR: the price never breaks onto two lines ("$250/ мес." – owner screenshot 2026-11-26 13:25); a long Contact text wraps inside its pill instead */
+.apm-bar > div:first-child{flex:0 0 auto}.apm-bar .apm-price{white-space:nowrap}
+.apm-bar .apm-acts{min-width:0;flex:0 1 auto}.apm-bar .apm-tgo{flex:none}.apm-bar .apm-contact{flex:0 1 auto;min-width:0;white-space:normal;text-align:center;line-height:1.15}

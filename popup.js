@@ -17,7 +17,8 @@ const I = {
   bath: '<svg viewBox="0 0 24 24"><path d="M4 12h16v2a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5zM6 12V6a2 2 0 0 1 3.6-1.2M7 19l-1 2M17 19l1 2"/></svg>',
   area: '<svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-7 7M10 20H4v-6M4 20l7-7"/></svg>',
 };
-const day = d => { const x = new Date(d); return isNaN(x) ? '' : x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); };
+// date in the visitor's language (owner screenshot 2026-11-26 13:25: "24 Nov 2026" on the Russian page)
+const day = d => { const x = new Date(d), l = document.documentElement.lang || 'en'; if (isNaN(x)) return ''; try { return x.toLocaleDateString(l === 'en' ? 'en-GB' : l === 'km' ? 'km-KH' : l, { day: 'numeric', month: 'short', year: 'numeric' }); } catch { return x.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } };
 const link = l => location.origin + YH.listingPath(l);   // clean URL (router.js)
 
 export function init(ctx) {

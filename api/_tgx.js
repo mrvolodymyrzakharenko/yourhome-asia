@@ -243,6 +243,23 @@ const T = {
     yes: '✅ はい、まだ空いています', gone: '🔴 賃貸済み / 売却済み', thanksYes: '✅ ありがとうございます – 物件はさらに30日間公開されます。', thanksGone: '🔴 完了 – 物件を非表示にしました。おめでとうございます！',
     drop: '📉 通知条件に合う物件が<b>値下げ</b>されました：<s>{old}</s> → <b>{new}</b>',
   },
+  vi: {
+    welcome: '👋 <b>Chào mừng đến với www.yourhome.asia – Campuchia!</b>\n\nCăn hộ, condo, nhà và phòng cho thuê và bán khắp Campuchia.\n\n🔎 Tìm ở đây: chỉ cần viết điều bạn cần, VD: <i>2 bedroom BKK1 600</i>, hoặc bấm một nút.\n➕ Đăng bất động sản miễn phí – gửi cho tôi ảnh và mô tả.\n🔔 Thông báo bạn đã lưu trên trang web sẽ đến đây.',
+    rent: '🏠 Thuê', daily: '📅 Theo ngày', buy: '💰 Mua', rooms: '🛏 Phòng', post: '➕ Đăng tin', alerts: '🔔 Thông báo của tôi', channel: '📢 Kênh', site: '🌐 Trang web',
+    found: 'Tìm thấy {n} – mới nhất:', none: 'Chưa tìm thấy. Hãy thử ít từ hơn, VD: <i>rent BKK1</i> – hoặc lưu thông báo trên trang web, chúng tôi sẽ báo khi có tin.',
+    seeAll: '🔎 Xem tất cả trên trang web', view: '👀 Xem tin',
+    stop: '🔕 Đã tắt thông báo. Gửi /start để bật lại.',
+    noUser: '⚠️ Telegram của bạn chưa có @tên người dùng. Hãy đặt trong Telegram → Cài đặt, hoặc đăng nhập yourhome.asia bằng Telegram để nhận được thông báo.',
+    postIntro: '➕ <b>Đăng bất động sản – miễn phí</b>\n\n1️⃣ Gửi ảnh (tối đa 15).\n2️⃣ Sau đó gửi mô tả trong một tin nhắn: loại, thuê hay bán, giá, số phòng ngủ, khu vực và thành phố.\n\nVí dụ: <i>2 bedroom condo for rent in BKK1, Phnom Penh, $650/month, pool and gym</i>\n\nGửi /cancel để dừng.',
+    gotPhotos: '📷 Đã nhận {n} ảnh. Gửi thêm, hoặc gửi mô tả ngay.',
+    summary: '📝 <b>Tin của bạn</b>\n\n{s}\n\nĐăng ngay? Bạn có thể sửa mọi thứ sau trên trang web.',
+    publish: '✅ Đăng', edit: '✏️ Sửa trên trang web', cancel: '✖ Hủy', cancelled: 'Đã hủy – chưa đăng gì.',
+    published: '🎉 <b>Tin của bạn đã được đăng!</b>\nVài phút nữa tin cũng sẽ xuất hiện trên kênh ' + CHANNEL + ' của chúng tôi.',
+    needPrice: 'Tôi không tìm thấy giá. Vui lòng gửi lại mô tả kèm giá, VD: <i>$500/month</i>.',
+    still: '🏠 <b>Bất động sản của bạn còn trống không?</b>\n\n{s}\n\nVui lòng xác nhận để tin tiếp tục ở đầu kết quả tìm kiếm.',
+    yes: '✅ Còn trống', gone: '🔴 Đã cho thuê / đã bán', thanksYes: '✅ Cảm ơn – tin tiếp tục hiển thị thêm 30 ngày.', thanksGone: '🔴 Xong – tin đã được ẩn. Chúc mừng bạn!',
+    drop: '📉 <b>Giảm giá</b> ở tin phù hợp thông báo của bạn: <s>{old}</s> → <b>{new}</b>',
+  },
 };
 const langOf = code => { const c = String(code || '').slice(0, 2).toLowerCase(); return T[c] ? c : 'en'; };
 const tr = (lang, k, v) => String((T[lang] || T.en)[k] ?? T.en[k] ?? k).replace(/\{(\w+)\}/g, (_, x) => v && v[x] != null ? v[x] : '');

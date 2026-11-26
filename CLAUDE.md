@@ -180,6 +180,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   tightens (body.hfit1), and only if still too wide drops the "Menu" word (hfit2). Check EN/KM/ZH/FR/TH at 360/390/412 after a change.
 - HERO TITLE = ONE LINE IN EVERY LANGUAGE (owner, 2026-11-26 13:22: "kilóg… kicsinyítsd a betűt, hogyha kell"): fitRows() shrinks
   the .hero h1 letters (from the CSS size, min 16px) until the text fits its width – checked in all 12 languages at 360/390/768/1366.
+- HERO TITLE WEIGHT (owner, 2026-11-26 16:47, Russian: "ez túl vastag"): Plus Jakarta Sans has no Cyrillic/Khmer/CJK/Thai/Hangul, so
+  ru · km · zh · th · ko show a system font – there the hero H1 (and its red word) is 700, not 800 (end of fonts.css). EN/FR/VI keep 800.
 - HERO LINE under "Find your home in Cambodia" = ONE short line in every language (owner, 2026-11-24 20:29; heroSub in i18n.js,
   nowrap + shrink in fitRows). The filters panel has no "Amenities" heading (owner 20:27).
 - DISTRICTS FOR EVERY CITY (owner, 2026-11-24 20:28): the District list (search card and post form) shows the picked city's own

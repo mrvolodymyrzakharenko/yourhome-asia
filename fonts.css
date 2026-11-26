@@ -106,3 +106,8 @@ label{font-weight:500}
 @media (max-width:720px){.hdr .logo{min-width:146px}}
 @media (max-width:379px){.hdr .logo{min-width:145px}}
 @media (max-width:339px){.hdr .logo{min-width:0}}
+/* HERO TITLE NOT TOO HEAVY IN NON-LATIN LANGUAGES (owner, 2026-11-26 16:47, Russian screenshot: "ez túl vastag"): Plus Jakarta Sans
+   has no Cyrillic / Khmer / CJK / Thai / Hangul, so those fall back to a system font where 800 = its Black cut. Use 700 there. */
+html:lang(ru) .hero h1,html:lang(ru) .hero h1 em,html:lang(km) .hero h1,html:lang(km) .hero h1 em,
+html:lang(zh) .hero h1,html:lang(zh) .hero h1 em,html:lang(th) .hero h1,html:lang(th) .hero h1 em,
+html:lang(ko) .hero h1,html:lang(ko) .hero h1 em{font-weight:700;letter-spacing:-.02em}

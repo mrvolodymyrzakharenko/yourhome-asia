@@ -4,7 +4,7 @@
    photos fade in once they have loaded. Leaflet map internals are left alone. Off for "reduce motion". */
 (() => {
   if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  const STILL = '.hero, #chipBox, .chipbox, .deal-tabs, #sbox, .more-panel';
+  const STILL = '.hero, #chipBox, .chipbox, .deal-tabs, .dtpc, #sbox, .more-panel';
   const SKIP = /^(SCRIPT|STYLE|LINK|META|TEMPLATE|BR|OPTION)$/;
   const isMap = el => (el.className && typeof el.className === 'string' && el.className.indexOf('leaflet') > -1) ||
     (el.closest && el.closest('.leaflet-container'));

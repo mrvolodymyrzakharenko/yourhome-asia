@@ -37,7 +37,7 @@ async function sb(table, query, ms = 2500) {
 const LCOLS = 'id,city,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,photos,status,is_featured,is_demo,created_at,updated_at,country';
 
 // --- text helpers ---
-const TYPE_NAME = { apartment: 'Apartment', condo: 'Condo', house: 'House', villa: 'Villa', twin_villa: 'Twin villa', link_house: 'Link house', flat_house: 'Flat house', flat: 'Flat', penthouse: 'Penthouse', shophouse: 'Shophouse', room: 'Room', office: 'Office', land: 'Land', studio: 'Studio', hotel: 'Hotel', hostel: 'Hostel' };
+const TYPE_NAME = { apartment: 'Apartment', condo: 'Condo', house: 'House', villa: 'Villa', twin_villa: 'Twin villa', link_house: 'Link house', flat_house: 'Flat house', flat: 'Flat', penthouse: 'Penthouse', shophouse: 'Shophouse', room: 'Room', office: 'Office', land: 'Land', studio: 'Studio', hotel: 'Hotel', hostel: 'Hostel', shop: 'Shop', salon: 'Beauty salon', barber: 'Barber shop', restaurant: 'Restaurant / café', warehouse: 'Warehouse' };
 const typeName = l => l.deal_type === 'room' ? 'Room' : (TYPE_NAME[l.property_type] || 'Property');
 const money = n => '$' + Number(n || 0).toLocaleString('en-US', { maximumFractionDigits: 0 });
 const per = l => ({ month: '/month', day: '/day', week: '/week', hour: '/hour' })[l.price_period] || '';
@@ -128,8 +128,8 @@ const body = (h1, lead, extra = '') => `<div class="ssr wrap"><h1>${h1}</h1>${le
 
 // Landing pages /<deal>/<city>[/<district or type>] (seo-rules.md) – only combinations with live listings are indexable
 const DEAL_SEG = { rent: 'rent', buy: 'sale', rooms: 'room', daily: 'daily' };
-const TYPE_PLURAL = { hotel: 'Hotels', hostel: 'Hostels', apartment: 'Apartments', condo: 'Condos', house: 'Houses', villa: 'Villas', 'twin-villa': 'Twin villas', 'link-house': 'Link houses', 'flat-house': 'Flat houses', flat: 'Flats', penthouse: 'Penthouses', studio: 'Studios', shophouse: 'Shophouses', office: 'Offices', land: 'Land', commercial: 'Commercial property' };
-const COMMERCIAL = ['office', 'shophouse'];
+const TYPE_PLURAL = { hotel: 'Hotels', hostel: 'Hostels', apartment: 'Apartments', condo: 'Condos', house: 'Houses', villa: 'Villas', 'twin-villa': 'Twin villas', 'link-house': 'Link houses', 'flat-house': 'Flat houses', flat: 'Flats', penthouse: 'Penthouses', studio: 'Studios', shophouse: 'Shophouses', office: 'Offices', land: 'Land', commercial: 'Commercial property', shop: 'Shops', salon: 'Beauty salons', barber: 'Barber shops', restaurant: 'Restaurants & cafés', warehouse: 'Warehouses' };
+const COMMERCIAL = ['office', 'shophouse', 'shop', 'salon', 'barber', 'restaurant', 'warehouse'];   // = app.js COMMERCIAL
 const dealOf = (l) => l.deal_type === 'rent' && l.price_period === 'day' ? 'daily' : l.deal_type;
 const typeSeg = l => l.bedrooms === 0 && l.property_type !== 'room' ? 'studio' : String(l.property_type || '').replace(/_/g, '-');
 // every landing path that has at least one live listing: { path: [listings] }

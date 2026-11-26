@@ -55,7 +55,7 @@ function matches(l, f) {
   if (f.deal === 'daily') { if (!(l.deal_type === 'rent' && l.price_period === 'day')) return false; }
   else if (f.deal && l.deal_type !== f.deal) return false;
   if (f.city && l.city !== f.city) return false;
-  if (f.type === 'studio') { if (l.bedrooms !== 0) return false; } else if (f.type === 'commercial') { if (!['shophouse', 'office'].includes(l.property_type)) return false; } else if (f.type && l.property_type !== f.type) return false;
+  if (f.type === 'studio') { if (l.bedrooms !== 0) return false; } else if (f.type === 'commercial') { if (!['office', 'shophouse', 'shop', 'salon', 'barber', 'restaurant', 'warehouse'].includes(l.property_type)) return false; } else if (f.type && l.property_type !== f.type) return false;
   if (f.max && !(Number(l.price) <= Number(f.max))) return false;
   if (f.beds) { if (f.beds === '0' ? l.bedrooms !== 0 : !(l.bedrooms >= Number(f.beds))) return false; }
   if (f.furn && !l.furnished) return false;

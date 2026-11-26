@@ -556,6 +556,37 @@ function svcSection(all) {
     ${card('c-stat', stats, 'svc5', '#/account?as=advertiser')}${card('c-own', own, 'svc6', '#/post')}
     </div></div></section>`;
 }
+// MORE CITIES block (owner, 2026-11-26: "More cities blokk – ez is jó ötlet", vietrent screenshot): photo cards with a dark
+// fade, the city name and "N properties"; the four main cities always show (one row of 4), any other city with live
+// listings joins after them (most listings first). A city with no listings yet leads to the post form with that city.
+// Photos: Unsplash / Pexels (free licences); a city without its own photo uses its newest listing photo, else a blue fade.
+const PX = id => `https://images.pexels.com/photos/${id}/pexels-photo-${id}.jpeg?auto=compress&cs=tinysrgb&w=800`;
+const CITY_PH = {
+  'Phnom Penh': 'https://images.unsplash.com/photo-1593510649240-9e85e0eb75ee',
+  'Siem Reap': 'https://images.pexels.com/photos/18094112/pexels-photo-18094112/free-photo-of-siem-reap-angkor-wat.jpeg?auto=compress&cs=tinysrgb&w=800',
+  'Sihanoukville': PX(12001672),
+  'Kampot': 'https://images.unsplash.com/photo-1584004251221-306eb7bb62af'
+};
+const MAIN_CITIES = Object.keys(CITY_PH);
+async function cityCounts() {
+  try {
+    const { data } = await sb.from('yh_listings').select('city').eq('status', 'active').eq('country', 'KH').limit(10000);
+    const n = {}; (data || []).forEach(r => { const c = r.city || 'Phnom Penh'; n[c] = (n[c] || 0) + 1; }); return n;
+  } catch { return {}; }
+}
+function citiesBlock(counts, all) {
+  const extra = Object.keys(counts).filter(c => !MAIN_CITIES.includes(c) && CITY_NAMES.includes(c)).sort((a, b) => counts[b] - counts[a]);
+  const list = MAIN_CITIES.concat(extra).slice(0, 8);
+  const cardC = c => {
+    const n = counts[c] || 0;
+    const lp = all.find(l => l.city === c && l.photos && l.photos[0]);
+    const ph = CITY_PH[c] || (lp && lp.photos[0]);
+    const href = n ? '#/search?' + new URLSearchParams({ city: c }) : '#/post?' + new URLSearchParams({ city: c });
+    return `<a class="ccard" href="${href}">${ph ? `<img src="${esc(imgSrc(ph, 600))}" alt="${esc(c)}, Cambodia" loading="lazy" onerror="this.remove()">` : ''}<span class="cc-t"><b>${esc(cityLabel(c))}</b><small>${n ? t('cityProps').replace('{n}', n.toLocaleString('en-US')) : t('cityFirst')}</small></span></a>`;
+  };
+  return `<section class="block cities"><div class="bh"><h2>${t('moreCities')}</h2></div><div class="crow">${list.map(cardC).join('')}</div></section>`;
+}
+
 async function viewHome() {
   app.innerHTML = `<div class="wrap">${hero()}
     <div id="blocks">${skelRow()}${skelRow()}</div></div>`;
@@ -577,14 +608,15 @@ async function viewHome() {
     go('#/search?' + p);
   });
   homeTools();
-  const all = await fetchListings({ limit: 300 });
+  const [all, counts] = await Promise.all([fetchListings({ limit: 300 }), cityCounts()]);
   const rent = all.filter(l => l.deal_type === 'rent');
   const html = block(t('recommended'), all.filter(l => l.is_featured).concat(all.filter(l => !l.is_featured)), '#/search?sort=new')
     + block(t('newest'), [...all].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)), '#/search?sort=new')
     + block(t('cheapest'), rent.filter(l => l.price_period !== 'day').sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
     + block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')
     + block(t('dailyBlock'), rent.filter(l => l.price_period === 'day'), '#/search?deal=daily')
-    + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale');
+    + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale')
+    + (all.length ? citiesBlock(counts, all) : '');   // More cities – after the listing blocks (owner, 2026-11-26)
   // the listing blocks are drawn AT ONCE; the New projects block (owner, 2026-11-24) joins under them when it arrives
   // (owner, 2026-11-25: "nem tudod egyből magát az oldalt betölteni?")
   const b0 = document.getElementById('blocks'); if (!b0) return;
@@ -756,6 +788,7 @@ async function viewPost(editId) {
     const pq = Object.fromEntries(qs());   // "Sell" in the search card → #/post?deal=sale&type=<type>
     if (pq.deal === 'sale') { l.deal_type = 'sale'; l.price_period = 'total'; }
     if (TYPES.includes(pq.type)) l.property_type = pq.type;
+    if (CITY_NAMES.includes(pq.city)) l.city = pq.city;   // More cities card of a city with no listings yet → #/post?city=<city>
   }
   let photos = [...(l.photos || [])];
   const agBlock = await AG.postBlock(l, !editId);

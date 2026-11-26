@@ -1340,3 +1340,15 @@ label[hidden]{display:none!important}
   .svc-b{padding:10px 11px 12px}
   .svc-rows{right:10px}.svc-shield{display:none}
 }
+/* MORE CITIES (owner, 2026-11-26: "More cities blokk – ez is jó ötlet", vietrent screenshot): photo cards, rounded 16px, dark
+   fade at the bottom, white city name + "N properties"; PC/tablet 4 per row, phones 2 per row; hover = photo zoom ~5%. */
+.cities .crow{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:20px}
+.ccard{position:relative;display:block;aspect-ratio:4/3;border-radius:16px;overflow:hidden;text-decoration:none;
+  background:linear-gradient(160deg,#032EA1 0%,#0b1d51 100%);box-shadow:0 6px 18px rgba(11,29,81,.10)}
+.ccard img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.ccard::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(11,29,81,0) 40%,rgba(11,29,81,.78) 100%)}
+.ccard .cc-t{position:absolute;left:14px;right:14px;bottom:13px;z-index:1;display:flex;flex-direction:column;gap:2px;color:#fff}
+.ccard .cc-t b{font-size:13px;font-weight:600;letter-spacing:-.025em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ccard .cc-t small{font-size:12px;font-weight:400;opacity:.85}
+@media (hover:hover) and (prefers-reduced-motion:no-preference){.ccard:hover img{transform:scale(1.05)}}
+@media (max-width:720px){.cities .crow{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.ccard{border-radius:14px}}

@@ -53,6 +53,13 @@ async function preData() {
   if (ids.length) { try { (await sb('yh_agents', `select=id,name,photo,phone,whatsapp,telegram&id=in.(${ids.join(',')})`, 2000)).forEach(a => { agents[a.id] = a; }); } catch (_) {} }
   return { complete: listings.length <= 300, listings: listings.slice(0, 300), agents };
 }
+// Blog articles (blog.json – our own text, read once per instance)
+let BLOG = null;
+function blogPosts() {
+  if (BLOG) return BLOG;
+  for (const f of [path.join(process.cwd(), 'blog.json'), path.join(__dirname, '..', 'blog.json')]) { try { BLOG = JSON.parse(fs.readFileSync(f, 'utf8')); return BLOG; } catch (_) {} }
+  return [];
+}
 const PRE_PAGES = new Set(['', 'rent', 'buy', 'rooms', 'daily', 'search', 'listing']);
 const strip = s => s.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim();
 
@@ -161,6 +168,19 @@ async function build(p, q) {
     return { path: pth, title: title(`${x.name} – new project in ${x.district || x.city || 'Phnom Penh'}`), desc: desc(`${x.name}${x.developer ? ' by ' + x.developer : ''} in ${plc}${x.price_from ? ', prices from ' + S.money(x.price_from) : ''}.` + (x.description ? ' ' + x.description : '')), image: photos[0],
       ld: [crumbs([['Home', '/'], ['New projects', '/projects'], [x.name, pth]]), { '@type': 'Residence', name: x.name, url: ORIGIN + pth, ...(photos.length ? { image: photos } : {}), ...(x.description ? { description: desc(x.description) } : {}), address: { '@type': 'PostalAddress', ...(x.district ? { addressRegion: x.district } : {}), addressLocality: x.city || 'Phnom Penh', addressCountry: 'KH' } }],
       body: body(esc(x.name), `New project in ${plc}${x.price_from ? ' – from ' + S.money(x.price_from) : ''}`, `${photos.map((u, i) => `<img src="${esc(S.img(u, 960))}" alt="${esc(`${x.name} – ${plc}`)}"${i ? ' loading="lazy"' : ''}>`).join('')}${x.description ? `<p>${esc(x.description)}</p>` : ''}`) };
+  }
+
+  if (p0 === 'blog') {   // BLOG (owner, 2026-11-26) – words from blog.json, the same file the app shows
+    const posts = blogPosts();
+    if (parts.length === 1) return { path: '/blog', title: title('Blog – renting & buying property in Cambodia'), desc: 'Practical guides for tenants, buyers, owners and agents in Cambodia: Phnom Penh areas, contracts, deposits, safety and the rules for foreigners.',
+      ld: [crumbs([['Home', '/'], ['Blog', '/blog']]), { '@type': 'Blog', name: 'YourHome.asia Blog', url: ORIGIN + '/blog' }],
+      body: body('Guides for renting and buying in Cambodia', 'Practical guides for tenants, buyers, owners and agents.', `<ul>${posts.map(a => `<li><a href="/blog/${esc(a.slug)}">${esc(a.title)}</a> – ${esc(a.desc)}</li>`).join('')}</ul>`) };
+    const a = parts.length === 2 && posts.find(x => x.slug === parts[1]);
+    if (!a) return null;
+    const pth = '/blog/' + a.slug;
+    return { path: pth, title: title(a.title), desc: desc(a.desc), ogType: 'article',
+      ld: [crumbs([['Home', '/'], ['Blog', '/blog'], [a.title, pth]]), { '@type': 'BlogPosting', headline: a.title, description: a.desc, datePublished: a.date, dateModified: a.updated || a.date, url: ORIGIN + pth, mainEntityOfPage: ORIGIN + pth, author: { '@id': ORIGIN + '/#org' }, publisher: { '@id': ORIGIN + '/#org' } }],
+      body: `<div class="ssr wrap"><div class="page"><h1>${esc(a.title)}</h1><p>${esc(a.desc)}</p>${a.body}</div></div>` };
   }
 
   if (STATIC[p0] && parts.length === 1) {

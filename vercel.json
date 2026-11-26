@@ -33,10 +33,11 @@
   ],
   "functions": {
     "api/page.js": {
-      "includeFiles": "{index.html,app.js}",
+      "includeFiles": "{index.html,app.js,blog.json}",
       "maxDuration": 10
     },
     "api/sitemap.js": {
+      "includeFiles": "blog.json",
       "maxDuration": 10
     },
     "api/tg-sync.js": {

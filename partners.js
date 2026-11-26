@@ -217,6 +217,10 @@ export function viewPartners() {
 // ---------- New projects ----------
 const STAGE = { presale: 'Pre-sale', construction: 'Under construction', ready: 'Ready to move in' };
 const STAGE_C = { presale: 'yb-price', construction: 'yb-beds', ready: 'yb-type' };
+const PAY = { installment: 'Installments', full: 'Full payment', bank: 'Bank loan', developer: 'Developer financing' };
+const payTags = p => (p.payment || []).filter(k => PAY[k]).map(k => `<span class="prj-pay">${PAY[k]}</span>`).join('');
+const uprices = p => (Array.isArray(p.unit_prices) ? p.unit_prices : []).filter(u => u && u.type).slice(0, 4);
+const devLogo = p => p.developer_logo && /^https:\/\//.test(p.developer_logo) ? `<img class="prj-logo" src="${C.esc(p.developer_logo)}" alt="${C.esc(p.developer || '')}" loading="lazy">` : `<span class="prj-logo prj-ini">${C.esc(String(p.developer || '?').trim().charAt(0).toUpperCase())}</span>`;
 const fmt = n => n ? (window.yhMoney ? window.yhMoney(n) : '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })) : '';
 // Unsplash photos come in the size we need (?w=); our own uploads have a small "-s.webp" copy for cards/thumbnails
 const pimg = (u, w) => /images\.unsplash\.com/.test(u) ? (/[?&]w=\d+/.test(u) ? u.replace(/([?&])w=\d+/, '$1w=' + w) : u + (u.includes('?') ? '&' : '?') + 'w=' + w) : (w <= 800 ? String(u).replace(/-L\.webp$/, '-s.webp') : u);
@@ -238,13 +242,14 @@ function pcard(p) {
     </div>
     <div class="cb prj-cb">
       <h3 class="ct">${esc(p.name)}</h3>
-      <p class="prj-dev">${esc(p.developer || '')}</p>
-      <p class="prj-facts">${esc([p.units, p.completion].filter(Boolean).join(' · '))}</p>
+      <p class="prj-dev">${p.developer ? devLogo(p) : ''}${esc(p.developer || '')}</p>
+      ${payTags(p) ? `<div class="prj-pays">${payTags(p)}</div>` : ''}
+      ${uprices(p).length ? `<dl class="prj-units">${uprices(p).map(u => `<div><dt>${esc(u.type)}</dt><dd>${u.size ? 'from ' + esc(String(u.size)) + ' m²' : ''}</dd><dd><b>${u.price ? 'from ' + fmt(u.price) : 'On request'}</b></dd></div>`).join('')}</dl>` : `<p class="prj-facts">${esc([p.units, p.completion].filter(Boolean).join(' · '))}</p>`}
       <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}</p>
       <span class="prj-link">View project ${I.arrow}</span>
     </div></a>`;
 }
-const COLS = 'id,slug,name,developer,district,city,stage,completion,price_from,units,unit_count,floors,photos,is_featured,is_demo,created_at';
+const COLS = 'id,slug,name,developer,district,city,stage,completion,price_from,units,unit_count,floors,photos,payment,unit_prices,developer_logo,is_featured,is_demo,created_at';
 export async function fetchProjects(limit = 60) {
   const { data, error } = await C.sb.from('yh_projects').select(COLS).eq('active', true).order('is_featured', { ascending: false }).order('created_at', { ascending: false }).limit(limit);
   if (error) { console.error(error); return []; }
@@ -289,6 +294,8 @@ export async function viewProject(slug) {
         <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}${p.developer ? ' · by ' + esc(p.developer) : ''}</p>
         <div class="prj-mbar"><div>${p.price_from ? `<span>Prices from</span><b>${fmt(p.price_from)}</b>` : '<b>Price on request</b>'}</div><a class="btn red" href="#prjForm" data-prj-ask>Ask about it</a></div>
         ${sheet(p)}
+        ${uprices(p).length ? `<section class="prj-sheet"><h3>Prices by unit type</h3><dl class="prj-units big">${uprices(p).map(u => `<div><dt>${esc(u.type)}</dt><dd>${u.size ? 'from ' + esc(String(u.size)) + ' m²' : ''}</dd><dd><b>${u.price ? 'from ' + fmt(u.price) : 'On request'}</b></dd></div>`).join('')}</dl></section>` : ''}
+        ${payTags(p) ? `<section class="prj-sheet"><h3>Payment options</h3><div class="prj-pays">${payTags(p)}</div></section>` : ''}
         ${p.description ? `<h3>About the project</h3><p class="prj-desc">${esc(p.description)}</p>` : ''}
         ${(p.amenities || []).length ? `<h3>Amenities</h3><div class="chips static">${p.amenities.map(a => `<span class="chip">${esc(C.t('am_' + a) === 'am_' + a ? a : C.t('am_' + a))}</span>`).join('')}</div>` : ''}
       </div>

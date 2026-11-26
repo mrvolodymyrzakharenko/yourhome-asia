@@ -132,6 +132,7 @@ export async function open(id, push) {
     <small class="apm-id">${esc(t('listingNo'))} ${esc(String(l.id).slice(0, 8).toUpperCase())}</small>`;
   dlg.querySelector('.apm-pl').textContent = t('priceL');
   dlg.querySelector('.apm-price').textContent = C.money(l.price) + C.priceSuffix(l);
+  { const pm = window.yhPerM2 ? window.yhPerM2(l) : ''; dlg.querySelector('.apm-pl').textContent = t('priceL') + (pm ? ' · ' + pm : ''); }
   dlg.querySelector('.apm-contact').textContent = t('contactBtn');
   const tgo = dlg.querySelector('.apm-tgo'); tgo.hidden = !tg; if (tg) tgo.href = 'https://t.me/' + tg;
   dlg.querySelector('[data-apm=save]').setAttribute('aria-pressed', C.isSaved(l.id));

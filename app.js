@@ -3,6 +3,7 @@ import { T } from './i18n.js';
 import * as AG from './agents.js';
 import * as POP from './popup.js';
 import * as PT from './partners.js';
+import * as BL from './blog.js';
 
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';
@@ -59,6 +60,7 @@ const money = n => {
   return k === 'KHR' ? s + ' ៛' : c[2] + s;
 };
 window.yhMoney = money;
+window.yhPerM2 = l => perM2(l);
 // ADDRESS PARTS (owner, 2026-11-25: "sangkat, utca, házszám… kerület vagy falu… ha akarja kitölti"): all optional, kept in the one
 // address column as "No. 24, Street 278, Phum 3, Sangkat Boeung Keng Kang 1, Khan Chamkarmon" (the usual Cambodian order)
 const ADDR = [['house', 'No. '], ['street', 'Street '], ['village', 'Phum '], ['sangkat', 'Sangkat '], ['khan', 'Khan ']];
@@ -274,7 +276,10 @@ async function shrinkPhoto(file, edge, q) {
     return b;
   } catch { return file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/webp' ? (file.size <= 2 * 1024 * 1024 ? file : null) : null; }
 }
+// PRICE PER m² ON SALE LISTINGS (owner, 2026-11-26, myhome.ge "26 ₾/m²"): sale + area only, in the price's small text
+const perM2 = l => l.deal_type === 'sale' && l.price && l.area_m2 > 0 ? money(Math.round(l.price / l.area_m2)) + '/m²' : '';
 function card(l) {
+  const pm = perM2(l);
   const ph = l.photos && l.photos[0] ? `<img src="${esc(imgSrc(l.photos[0], 800))}" alt="${esc(photoAlt(l, 0))}" loading="lazy">` : `<span class="noimg">🏠</span>`;
   const dots = l.photos && l.photos.length > 1 ? `<div class="dots">${l.photos.slice(0, 5).map(() => '<i></i>').join('')}</div>` : '';
   const beds = l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–');
@@ -283,11 +288,11 @@ function card(l) {
       <span class="date">${shortDate(l.created_at)}</span>
       <span class="tags">${l.is_featured ? `<span class="tag top">${t('top')}</span>` : ''}${l.is_demo ? `<span class="tag demo">${t('demo')}</span>` : ''}${l.status !== 'active' ? `<span class="tag st">${esc(t('s_' + l.status))}</span>` : ''}</span>
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${HEART}</button>
-      <div class="pov">${money(l.price)}<small>${priceSuffix(l)}</small></div>${dots}
+      <div class="pov">${money(l.price)}<small>${priceSuffix(l)}${pm ? ' · ' + esc(pm) : ''}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
       ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(imgSrc(u, 800))}" alt="${esc(photoAlt(l, i))}" ${i ? 'loading="lazy" ' : ''}decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots${l.photos.length > 8 ? ' many' : ''}">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}` : ''}
       <span class="ydate">${shortDate(l.created_at)}</span>
-      <div class="yprice">${money(l.price)}${priceSuffix(l) ? `<small>${esc(priceSuffix(l))}</small>` : ''}</div>
+      <div class="yprice">${money(l.price)}${priceSuffix(l) || pm ? `<small>${esc(priceSuffix(l) + (pm ? ' · ' + pm : ''))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
     </div>
     <div class="cb">
@@ -547,9 +552,10 @@ async function viewHome() {
   b0.innerHTML = html;
   // "Want to rent out faster?" banner sits BETWEEN the first two category blocks, not under the search (owner, 2026-11-24 17:26)
   placeCtas(b0);
-  const prj = await PT.homeBlock();
+  const [prj, blog] = await Promise.all([PT.homeBlock(), BL.homeBlock()]);
   if (!b0.isConnected) return;
   if (prj) b0.insertAdjacentHTML('beforeend', prj);
+  if (blog && html) b0.insertAdjacentHTML('beforeend', blog);   // Blog block last (owner, 2026-11-26, myhome.ge)
   else if (!html) b0.innerHTML = `<div class="empty">${t('noResults')}</div>`;
 }
 
@@ -1264,12 +1270,15 @@ async function route() {
     else if (parts[0] === 'partners') PT.viewPartners();
     else if (parts[0] === 'projects') await PT.viewProjects();
     else if (parts[0] === 'project' && parts[1]) await PT.viewProject(decodeURIComponent(parts[1]));
+    else if (parts[0] === 'blog' && parts[1]) await BL.viewArticle(decodeURIComponent(parts[1]));
+    else if (parts[0] === 'blog') await BL.viewBlog();
     else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${PAGES[parts[0]]()}</div></div>`;
     else viewMissing();
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
+BL.init({ app, esc });
 // ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
 let ADMP = null;
 const adminMod = () => ADMP || (ADMP = import('./admin.js?v=5').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
@@ -1320,6 +1329,14 @@ const tagSignup = () => { const u = user; if (!u || (u.user_metadata || {}).sign
   sb.auth.updateUser({ data: { signup_site: 'yourhome' } }).catch(() => {}); };
 tagSignup();
 sb.auth.onAuthStateChange(ev => { if (ev === 'SIGNED_IN') setTimeout(tagSignup, 0); });
+// MENU: project counts by stage (owner, 2026-11-26, myhome.ge) – read once, the first time the menu opens
+document.getElementById('menuBtn')?.addEventListener('click', () => {
+  if (window.__yhPc) return; window.__yhPc = 1;
+  sb.from('yh_projects').select('stage').eq('active', true).then(({ data }) => {
+    const n = {}; (data || []).forEach(p => { n[p.stage] = (n[p.stage] || 0) + 1; });
+    document.querySelectorAll('[data-pc]').forEach(b => { const k = n[b.dataset.pc] || 0; b.textContent = k + (k === 1 ? ' project' : ' projects'); });
+  });
+});
 if (location.search.includes('code=')) history.replaceState(null, '', location.pathname);
 const next0 = user && store.get('yh_next', null);
 if (next0 && location.pathname === '/') { store.set('yh_next', null); go('#/' + next0); } else route();

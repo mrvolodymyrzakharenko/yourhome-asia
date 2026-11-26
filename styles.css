@@ -1143,3 +1143,25 @@ label[hidden]{display:none!important}
   #dealTabs.deal-tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
   #dealTabs .dt-cat[data-cat=hotel],#dealTabs .dt-cat[data-cat=hostel]{order:1}
 }
+/* BLOG (owner, 2026-11-26, myhome.ge "Blog"): cards with a coloured cover (Cambodian blue / red, line icon + kicker),
+   article page = the About-page look (.ab-k, .ab-lead, .ab-cta) – no text over 13px except the H1 */
+.bcard .bcov{position:relative;aspect-ratio:16/10;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border-radius:inherit;border-bottom-left-radius:0;border-bottom-right-radius:0;overflow:hidden;color:#fff}
+.bcov svg{width:46px;height:46px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
+.bcov span{padding:4px 12px;border-radius:999px;background:rgba(255,255,255,.18);font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.bcov.bc0{background:linear-gradient(135deg,#032EA1,#021f6e)}
+.bcov.bc1{background:linear-gradient(135deg,#E00025,#a3001b)}
+.bcov.bc2{background:linear-gradient(135deg,#1d4ed8,#032EA1)}
+.bcov.bc3{background:linear-gradient(135deg,#0b1d51,#E00025)}
+.bcard .cb{display:flex;flex-direction:column;gap:6px}
+.bcard .bdate{color:#94a3b8;font-size:12px}
+.bcard .ct{margin:0;white-space:normal}
+.bcard .bdesc{margin:0;color:#64748b;font-size:13px;line-height:1.5;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.blist{margin-top:18px}
+.bart{max-width:780px;margin:0 auto}
+.bart .bhero{aspect-ratio:auto;height:180px;border-radius:24px;margin-bottom:18px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#fff}
+.bbody{line-height:1.75;color:#334155}
+.bbody h2{margin:24px 0 8px;font-size:13px;font-weight:600;letter-spacing:-.025em;color:#0b1d51}
+.bbody ul{padding-left:20px}.bbody li{margin:5px 0}
+.bbody a{color:#032EA1;text-decoration:underline;text-underline-offset:2px}
+@media (max-width:720px){.bart .bhero{height:130px;border-radius:20px}}
+@media (max-width:720px){.card.bcard:not([href="#/post"]) .ct{display:block!important}}

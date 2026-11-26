@@ -291,6 +291,18 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Agency), required Terms tick, red Continue. It opens right after sign-in on any page, on page load for a signed-in user who
   has not chosen, and on the dashboard (closing it there goes home). No "Become a partner" in it (that has its own page).
 
+## myhome.ge additions (owner, 2026-11-26: "újdonságok… mi kell ebből")
+- PROJECT CARDS: developer logo (yh_projects.developer_logo, https only; else initial), payment option pills (yh_projects.payment
+  ⊂ installment · full · bank · developer) and "Prices by unit type" rows (yh_projects.unit_prices [{type,size,price}], max 4) –
+  on the card and on the project page (+ "Payment options"). partners.js PAY / payTags / uprices, partners.css last block.
+- MENU: under "New projects" a full-width row Pre-sale · Under construction · Ready with live counts (app.js fills b[data-pc]
+  when the menu first opens; header.css last block). Blog link in the Menu and the footer Company column.
+- PRICE PER m² on sale listings with an area: card price small text + popup price label (perM2 in app.js, window.yhPerM2).
+- BLOG: blog.json = the articles (English, our own text, no invented figures); blog.js draws #/blog, #/blog/<slug> and the
+  homepage "Blog" block (last, 4 cards); api/page.js gives /blog + /blog/<slug> their own head (BlogPosting) and text,
+  api/sitemap.js lists them (both read blog.json – vercel.json includeFiles). New article = new entry in blog.json.
+- NOT TAKEN for Cambodia: auction, mortgage, ₾/$ switch (the Georgian portal will need mortgage + currency).
+
 ## Admin dashboard (owner, 2026-11-25: "szuper dashboard… kártyákon tudok mozogni, olvasó menü, statisztika, visitors… még
    átláthatóbb, több funkció" – the Study portal admin as the model)
 - /admin (#/admin; old #/account?tab=admin redirects) – only for emails in yh_admins; the dashboard header "🛡 Admin" leads there.

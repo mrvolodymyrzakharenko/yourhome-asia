@@ -364,3 +364,17 @@ html.pgl-open,html.pgl-open body{overflow:hidden}
   .pgl-s img{border-radius:0}
   .pgl-arr{display:none}
 }
+
+/* PROJECT CARD EXTRAS (owner, 2026-11-26, myhome.ge): developer logo, payment options, prices by unit type */
+.prj-dev{display:flex;align-items:center;gap:7px}
+.prj-logo{width:22px;height:22px;border-radius:6px;object-fit:contain;background:#fff;border:1px solid #e5e9f2;flex:none}
+.prj-ini{display:inline-flex;align-items:center;justify-content:center;background:#eef2fb;color:var(--kb);font-size:11px;font-weight:600}
+.prj-pays{display:flex;flex-wrap:wrap;gap:5px;margin:6px 0 2px}
+.prj-pay{padding:3px 9px;border-radius:999px;background:#f1f4fa;color:#334155;font-size:11px;font-weight:500;letter-spacing:-.02em}
+.prj-units{margin:6px 0 2px;display:grid;gap:0}
+.prj-units>div{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:6px 0;border-top:1px solid #eef1f6}
+.prj-units>div:first-child{border-top:0}
+.prj-units dt{font-size:13px;font-weight:500;color:#0f172a}
+.prj-units dd{margin:0;font-size:12px;color:#64748b;text-align:right}
+.prj-units dd b{color:#E00025;font-weight:600;font-size:13px}
+.prj-units.big>div{padding:10px 0}

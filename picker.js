@@ -8,12 +8,13 @@
   function close() { if (box) { box.classList.remove('in'); var b = box; setTimeout(function () { b.remove(); }, 180); box = null; cur = null; } }
   function open(sel) {
     close(); cur = sel;
-    box = document.createElement('div'); box.className = 'ypk';
+    box = document.createElement('div'); box.className = 'ypk' + (sel.hasAttribute('data-all') ? ' ypk-all' : '');
     var lab = sel.getAttribute('aria-label') || '';
     if (!lab) { var lw = sel.closest('.f') || sel.closest('label') || (sel.id && document.querySelector('label[for="' + sel.id + '"]')); var ln = lw ? (lw.querySelector('label') || lw) : null; var fc = ln && ln.firstChild; lab = ((fc && fc.textContent) || (ln && ln.textContent) || '').replace(/^\W+/, '').trim().slice(0, 40); }
     var h = '<div class="ypk-bg"></div><div class="ypk-w" role="listbox" aria-label="' + lab.replace(/"/g, '&quot;') + '"><div class="ypk-h"><span>' + lab.replace(/</g, '&lt;') + '</span><button type="button" class="ypk-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="ypk-l">';
     for (var i = 0; i < sel.options.length; i++) {
       var o = sel.options[i]; if (o.hidden) continue;
+      if (o.hasAttribute('data-sep')) h += '<i class="ypk-sep" aria-hidden="true"></i>';
       h += '<button type="button" data-i="' + i + '"' + (o.disabled ? ' disabled' : '') + ' class="' + (i === sel.selectedIndex ? 'on' : '') + '">' + o.textContent.replace(/</g, '&lt;') + '</button>';
     }
     box.innerHTML = h + '</div></div>';

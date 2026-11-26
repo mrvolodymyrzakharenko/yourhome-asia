@@ -1257,3 +1257,15 @@ label[hidden]{display:none!important}
    one row (I want · City · District · Type · Budget), City a little wider. */
 @media (min-width:721px) and (max-width:900px){.sbox .f-want{grid-column:1/-1!important}}
 @media (max-width:720px){.sbox{grid-template-columns:.9fr 1.3fr 1fr 1fr 1fr!important;gap:4px!important}}
+
+/* LONG LISTS SHOW EVERYTHING (owner, 2026-11-26: "filter mobil nézetben… a type-nál az összes ingatlan típus, ne csak egypár"):
+   the search card's Property type list (select[data-all]) opens as TWO COLUMNS on phones/tablets, the card as tall as its content,
+   centred – every item visible without scrolling; a thin line before the business types (data-sep → .ypk-sep) */
+.ypk-sep{display:block;height:1px;background:#E5E9F2;margin:4px 6px}
+@media (max-width:900px){
+  .ypk.ypk-all .ypk-w{top:50%!important;bottom:auto!important;left:6vw!important;right:6vw!important;max-height:92vh;transform:translateY(-50%) scale(.96)}
+  .ypk.ypk-all.in .ypk-w{transform:translateY(-50%)}
+  .ypk.ypk-all .ypk-l{display:grid;grid-template-columns:1fr 1fr;gap:2px 4px;align-content:start}
+  .ypk.ypk-all .ypk-l button{padding:9px 6px}
+  .ypk.ypk-all .ypk-sep{grid-column:1/-1}
+}

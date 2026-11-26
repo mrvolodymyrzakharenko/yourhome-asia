@@ -154,6 +154,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - PROPERTY TYPES (owner, 2026-11-24 20:34, realestate.com.kh "All types"): Apartment · Condo · House · Villa · Twin Villa ·
   Link House · Flat House · Flat · Penthouse · (Studio – search only, = 0 bedrooms) · Shophouse · Room · Office · Land
   (TYPES / SEARCH_TYPES in app.js, t_* in i18n.js, yh_listings_property_type_check in the database).
+- SEARCH TYPE LIST (owner, 2026-11-26: "filter mobil nézetben… a type-nál az összes ingatlan típus… commercial a végére, előre a
+  lakossági"): the search card's Type list = Any · Apartment · Condo · Studio · House · Villa · Twin Villa · Link House · Flat House ·
+  Flat · Penthouse · Room · Hotel · Hostel · Land | thin line | Office · Shophouse · Commercial (SEARCH_TYPES in app.js; data-sep on
+  Office). On phones/tablets it opens in TWO COLUMNS, as tall as its content, so every type shows without scrolling
+  (select[data-all] → .ypk-all, picker.js + last block of styles.css; only this list).
 - SORTING (owner, 2026-11-24 20:51, tokki.house): Newest · Price: low to high · Price: high to low · Area: largest first ·
   Area: smallest first (#sortSel, SORTS in app.js, so_* in i18n.js; listings without an area come last).
 - CURRENCY (owner, 2026-11-24 20:55, realestate.com.kh menu): USD · KHR · THB · CNY · JPY · EUR – always in the Menu list

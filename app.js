@@ -23,7 +23,9 @@ const districtOpts = (city, cur) => `<option value="">${distList(city).length ||
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 // property types like realestate.com.kh "All types" (owner, 2026-11-24 20:34); Studio is search-only (= 0 bedrooms)
 const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land','hotel','hostel'];
-const SEARCH_TYPES = [...TYPES.slice(0, 9), 'studio', ...TYPES.slice(9), 'commercial'];
+// SEARCH TYPE LIST (owner, 2026-11-26: "a type-nál az összes ingatlan típus… commercial a végére, előre a lakossági"):
+// homes first, then rooms / short stays / land, business types LAST (after a thin divider in the list – data-sep)
+const SEARCH_TYPES = ['apartment','condo','studio','house','villa','twin_villa','link_house','flat_house','flat','penthouse','room','hotel','hostel','land','office','shophouse','commercial'];
 // COMMERCIAL (owner, 2026-11-26: "külön portál a commercialra?" → no, a category here): 'commercial' is a search-only type =
 // every business property (COMMERCIAL below: office + shophouse); Office is its own category too. Both open as Rent (Buy stays Buy).
 const BIZ_CATS = ['office', 'commercial'];
@@ -428,7 +430,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
     <div class="f f-want"><label><span class="mf-l">${t('wantTo')}</span><span class="mf-s">${t('wantShort')}</span></label><select name="want" id="wantSel" aria-label="${esc(t('wantTo'))}">${[['rent', t('rent')], ['sell', t('sell')], ['buy', t('buy')]].map(([v, lab]) => `<option value="${v}"${v === (deal === 'sale' ? 'buy' : 'rent') ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
     <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
-    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${SEARCH_TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t(x === 'studio' ? 'studio' : 't_' + x)}</option>`).join('')}</select></div>
+    <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type" data-all><option value="">${t('any')}</option>${SEARCH_TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}${x === 'office' ? ' data-sep' : ''}>${t(x === 'studio' ? 'studio' : 't_' + x)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('budget')}</label><select name="max" id="maxSel">${budgetOpts(deal || 'rent', p.max)}</select></div>
     <div class="sbtns"><a href="#/post" class="btn red sb-post">+ ${t('post')}</a><button class="btn blue">${t('search')} →</button></div>
   </form>

@@ -83,3 +83,10 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 @media (max-width:720px){.hdr .lang-btn{padding-left:9px!important;padding-right:22px!important;background-position:right 7px center!important}}
 @media (max-width:720px){body.hfit1 .hdr .lang-btn{padding-left:8px!important;padding-right:19px!important;background-position:right 6px center!important}
   body.hfit1 .hdr .hdr-r .menu-btn{min-width:48px!important;padding-left:8px!important;padding-right:8px!important}}
+/* PHONES: Menu button NOT stretched (owner, 2026-11-26 16:17: "miért ekkora böszme nagy most a menü gomb?" – after the flag left the
+   language button the Menu button took the freed room, 99px at 412px). Fixed width like "+ Post"; the button group sits on the right. */
+@media (max-width:720px){
+  .hdr .hdr-r{justify-content:flex-end!important}
+  .hdr .hdr-r .menu-btn{flex:0 0 auto!important;width:64px;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
+  body.hfit1 .hdr .hdr-r .menu-btn{width:56px;min-width:0!important}
+}

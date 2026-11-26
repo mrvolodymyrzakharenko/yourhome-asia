@@ -640,7 +640,9 @@ const CITY_PH = {
   'Phnom Penh': 'https://images.unsplash.com/photo-1593510649240-9e85e0eb75ee',
   'Siem Reap': 'https://images.pexels.com/photos/18094112/pexels-photo-18094112/free-photo-of-siem-reap-angkor-wat.jpeg?auto=compress&cs=tinysrgb&w=800',
   'Sihanoukville': PX(12001672),
-  'Kampot': 'https://images.unsplash.com/photo-1584004251221-306eb7bb62af'
+  'Kampot': 'https://images.unsplash.com/photo-1584004251221-306eb7bb62af',
+  'Battambang': 'https://images.unsplash.com/photo-1653714802676-6a50c7ead70e',
+  'Koh Kong': 'https://images.pexels.com/photos/31957027/pexels-photo-31957027/free-photo-of-frodig-gron-dal-i-koh-kong-provinsen-kambodja.jpeg?auto=compress&cs=tinysrgb&w=800'
 };
 const MAIN_CITIES = Object.keys(CITY_PH);
 async function cityCounts() {
@@ -651,7 +653,10 @@ async function cityCounts() {
 }
 function citiesBlock(counts, all) {
   const extra = Object.keys(counts).filter(c => !MAIN_CITIES.includes(c) && CITY_NAMES.includes(c)).sort((a, b) => counts[b] - counts[a]);
-  const list = MAIN_CITIES.concat(extra).slice(0, 8);
+  // SIX cards in one row on PC, like the services strip (owner, 2026-11-26 08:04: "lehet 6 kártya mint a servicenál"): main
+  // cities with listings first, then other cities with listings, then the remaining main cities – always 6
+  const has = MAIN_CITIES.filter(c => counts[c]), empty = MAIN_CITIES.filter(c => !counts[c]);
+  const list = has.concat(extra, empty).slice(0, 6);
   const cardC = c => {
     const n = counts[c] || 0;
     const lp = all.find(l => l.city === c && l.photos && l.photos[0]);

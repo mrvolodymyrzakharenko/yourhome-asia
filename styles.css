@@ -1457,3 +1457,9 @@ label[hidden]{display:none!important}
    The two-column Type list (.ypk-all) keeps its own wider size so every type fits without scrolling. */
 @media (max-width:900px){.ypk:not(.ypk-all) .ypk-w{left:25vw!important;right:25vw!important;bottom:25vh!important;min-width:0!important}}
 @media (prefers-reduced-motion:reduce){.lpk-bg,.lpk-w,.lpk-c{transition:none}}
+/* MORE CITIES = 6 CARDS (owner, 2026-11-26 08:04: "lehet 6 kártya mint a servicenál"): PC one row of six (services-strip gaps),
+   tablets 3 per row, phones 2 per row */
+.cities .crow{grid-template-columns:repeat(6,minmax(0,1fr));gap:14px}
+.ccard{aspect-ratio:1/1;border-radius:14px}
+@media (max-width:1100px){.cities .crow{grid-template-columns:repeat(3,minmax(0,1fr))}.ccard{aspect-ratio:4/3}}
+@media (max-width:720px){.cities .crow{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}

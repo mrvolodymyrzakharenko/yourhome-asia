@@ -130,6 +130,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   filters under it are exactly as WIDE AS THE CARD, on PC the quick filters (owner 17:28: EQUAL GAPS between the words, space-between – not equal columns) and More filters |
   Listing | Map | Subscribe | Newest share ONE full-width line (styles.css "PC: the rows around the search card").
   The card is ~5% taller again (owner: "túl szűk"). The four fields are EQUAL, label + value centred, the small filled triangle right after the value (owner: "lélegezzen, de ne ennyire").
+- SHOP INSTEAD OF COMMERCIAL (owner, 2026-11-26 07:41: "Commercial helyett legyen Shop"): the category row's Commercial item is now
+  "Shop" (t_shop_s; FR Boutique, KM ហាង) = property_type 'shophouse', same place in the 2 × 7 order (CSS data-cat=shophouse); opens as
+  Rent like Office (BIZ_CATS). The search-only type 'commercial' (office + shophouse) stays for the footer, landings and the Type list.
 - TOP ROW = RENT · SELL · BUY · ROOMS · PROJECTS (owner, 2026-11-26 07:11: "Sell-t… felülre… a daily-t kivenni… a rent termnél lesz a
   daily"): Daily is no tab any more – Sell (→ #/post?deal=sale) took its place, same 14 items / 2 × 7 on phones. Daily = the rental term
   "Daily" (lease=day in More filters) of Rent: picking it switches the results to deal=daily, and deal=daily (URLs, /daily landings,

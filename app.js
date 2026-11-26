@@ -28,7 +28,7 @@ const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','fl
 const SEARCH_TYPES = ['apartment','condo','studio','house','villa','twin_villa','link_house','flat_house','flat','penthouse','room','hotel','hostel','land','office','shophouse','commercial'];
 // COMMERCIAL (owner, 2026-11-26: "külön portál a commercialra?" → no, a category here): 'commercial' is a search-only type =
 // every business property (COMMERCIAL below: office + shophouse); Office is its own category too. Both open as Rent (Buy stays Buy).
-const BIZ_CATS = ['office', 'commercial'];
+const BIZ_CATS = ['office', 'commercial', 'shophouse'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
 const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wifi','aircon'], room: ['pool','gym','private_bath','wifi','aircon','female_only'], sale: ['pool','gym','parking','security'], '': ['pool','gym','pets','parking'] };  // row 1 always shows Pool + Gym; EDC only in Filters (owner, 2026-11-24)
 // Hotel · Hostel at the front of the category row (owner, 2026-11-26: "az elejére a kereső részbe… a hotelt és hostelt is");
@@ -36,7 +36,7 @@ const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wif
 const STAY_CATS = ['hotel', 'hostel'];
 // "Commercial" (footer + /rent|buy/<city>/commercial landing, owner 2026-11-26) = offices + shophouses
 const COMMERCIAL = ['office', 'shophouse'];
-const CATS = [['hotel', 't_hotel'], ['hostel', 't_hostel'], ['office', 't_office_s'], ['commercial', 't_comm_s'], ['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
+const CATS = [['hotel', 't_hotel'], ['hostel', 't_hostel'], ['office', 't_office_s'], ['shophouse', 't_shop_s'], ['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
 const LEASE = ['day','month','6m','1y'];

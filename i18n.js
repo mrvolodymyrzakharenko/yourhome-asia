@@ -335,3 +335,6 @@ fr:{svcTitle:'Services YourHome',svcAcc:'Comptes et tableaux de bord',svc1t:'Rec
 th:{svcTitle:'บริการ YourHome',svcAcc:'บัญชีและแดชบอร์ด',svc1t:'แนะนำ',svc1s:'ประกาศที่คัดสรร',svc1l:'ดู',svc2t:'ผู้ลงประกาศที่ยืนยันแล้ว',svc2s:'ตรวจสอบโดยทีมเรา',svc2l:'ดูตัวแทน',svc2a:'ตัวแทนที่ยืนยันแล้ว',svc2b:'รูปถ่ายจริง',svc2c:'ข้อมูลติดต่อ',svc3t:'แจ้งเตือน Telegram',svc3s:'ประกาศใหม่ทาง Telegram',svc3l:'ติดตาม',svc3m:'ใหม่: 2 ห้องนอน',svc4t:'ช่วยเหลือ',svc4s:'คำถามที่พบบ่อยและซัพพอร์ต',svc4l:'ถาม',svc4q:'เช่าอย่างปลอดภัยได้อย่างไร?',svc4n:'ซัพพอร์ต:',svc4a:'ยินดีช่วยเหลือ',svc5t:'ตัวแทนหรือเอเจนซี',svc5s:'ประกาศและสถิติ',svc5l:'เข้าสู่',svc5w:'สัปดาห์นี้',svc6t:'เจ้าของ',svc6s:'ปล่อยเช่าและจัดการ',svc6l:'ลงประกาศ',svc6m:'ข้อความใหม่',svc6f:'การลงประกาศ',svc6g:'ฟรี'}
 };
 for (const k of Object.keys(SVC)) Object.assign(T[k], SVC[k]);
+/* Category row: Shop instead of Commercial (owner, 2026-11-26 07:41) – Shop = shophouses */
+const SHOPCAT = { en:{t_shop_s:'Shop'}, km:{t_shop_s:'ហាង'}, zh:{t_shop_s:'商铺'}, fr:{t_shop_s:'Boutique'}, th:{t_shop_s:'ร้านค้า'} };
+for (const k of Object.keys(SHOPCAT)) Object.assign(T[k], SHOPCAT[k]);

@@ -1155,7 +1155,7 @@ label[hidden]{display:none!important}
   html[lang] #dealTabs .dt-cat[data-cat=villa]{order:5}
   html[lang] #dealTabs .dt-cat[data-cat=condo]{order:6}
   html[lang] #dealTabs .dt-cat[data-cat=studio]{order:7}
-  html[lang] #dealTabs .dt-cat[data-cat=commercial]{order:8}
+  html[lang] #dealTabs .dt-cat[data-cat=shophouse]{order:8}
   html[lang] #dealTabs .dt-cat[data-cat=hostel]{order:9}
   html[lang=fr] #dealTabs .dt-cat[data-cat=hotel]{order:1}
   html[lang=fr] #dealTabs .dt-cat[data-cat=office]{order:2}
@@ -1165,8 +1165,8 @@ label[hidden]{display:none!important}
   html[lang=fr] #dealTabs .dt-cat[data-cat=hostel]{order:6}
   html[lang=fr] #dealTabs .dt-cat[data-cat=apartment]{order:7}
   html[lang=fr] #dealTabs .dt-cat[data-cat=villa]{order:8}
-  html[lang=fr] #dealTabs .dt-cat[data-cat=commercial]{order:9}
-  html[lang=km] #dealTabs .dt-cat[data-cat=commercial]{order:1}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=shophouse]{order:9}
+  html[lang=km] #dealTabs .dt-cat[data-cat=shophouse]{order:1}
   html[lang=km] #dealTabs .dt-cat[data-cat=hotel]{order:2}
   html[lang=km] #dealTabs .dt-cat[data-cat=condo]{order:3}
   html[lang=km] #dealTabs .dt-cat[data-cat=apartment]{order:4}

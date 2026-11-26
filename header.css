@@ -78,3 +78,5 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .drawer a.dr-partner{grid-column:1/-1;order:99;text-align:center;overflow:visible!important;text-overflow:clip!important;background:#F1F4FC;margin-top:4px}
 .drawer .dr-cur{order:100}
 @media (max-width:900px){.drawer a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.25}}
+/* PHONES: the Menu button's right edge sat on / past the screen edge (owner screenshot 2026-11-26 14:08: "1 pixelt vagy 2-t balra") */
+@media (max-width:720px){.hdr .hdr-r .menu-btn{margin-right:2px!important}.hdr .hdr-r{min-width:0;max-width:100%}}

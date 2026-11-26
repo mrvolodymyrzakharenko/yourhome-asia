@@ -80,3 +80,6 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 @media (max-width:900px){.drawer a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important;line-height:1.25}}
 /* PHONES: the Menu button's right edge sat on / past the screen edge (owner screenshot 2026-11-26 14:08: "1 pixelt vagy 2-t balra") */
 @media (max-width:720px){.hdr .hdr-r .menu-btn{margin-right:2px!important}.hdr .hdr-r{min-width:0;max-width:100%}}
+@media (max-width:720px){.hdr .lang-btn{padding-left:9px!important;padding-right:22px!important;background-position:right 7px center!important}}
+@media (max-width:720px){body.hfit1 .hdr .lang-btn{padding-left:8px!important;padding-right:19px!important;background-position:right 6px center!important}
+  body.hfit1 .hdr .hdr-r .menu-btn{min-width:48px!important;padding-left:8px!important;padding-right:8px!important}}

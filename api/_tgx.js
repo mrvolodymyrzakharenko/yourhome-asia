@@ -2,7 +2,7 @@
 // (Vercel cron every 10 min + an instant ping from the database when something new happens – yh_tg_ping triggers):
 //   0 channelCleanup  – a listing hidden / rented / sold / deleted → its channel posts are deleted (or marked "no longer available")
 //   1 adminFeed       – everything new (listing, account, message, verification, partner, project question) → the owner's Telegram
-//   2 agentChannels   – a listing with an agent profile that has tg_channel → posted to the agent's own channel too
+//   2 agentChannels   – a listing of an agent profile with tg_channel (or of its owner) → posted to the agent's own channel too (30 days back)
 //   3 reminders       – 30 days after the advertiser last confirmed → "Still available?" with Yes / Rented buttons (api/tg-bot.js)
 //   6 priceDrops      – a live listing got cheaper → sent to alert subscribers whose search it matches
 //   8 digest          – once a day (from 19:00 Cambodia time) "Today's new listings" in the channel, if there are 3 or more
@@ -329,20 +329,31 @@ async function adminFeed() {
 }
 
 // ---------- 2) agents' own channels ----------
+// (owner, 2026-11-26 "Agent Telegram channel connect to website"): a listing goes to the channel of its agent profile; a listing
+// WITHOUT a profile goes to the channel of its owner's profile when the owner has exactly one profile with a channel. Window 30 days,
+// so an agent who connects a channel gets their recent listings posted there too (10 per run; yh_channel_posts = each only once).
 async function agentChannels() {
-  const list = await rest(`yh_listings?select=${LCOLS}&status=eq.active&is_demo=eq.false&agent_id=not.is.null&created_at=gte.${iso(Date.now() - 2 * 864e5)}&order=created_at.asc&limit=60`) || [];
-  if (!list.length) return { posted: 0 };
-  const aids = [...new Set(list.map(l => l.agent_id))];
-  const agents = await rest(`yh_agents?select=id,tg_channel&tg_channel=not.is.null&id=in.(${aids.join(',')})`) || [];
+  const agents = await rest('yh_agents?select=id,owner_id,tg_channel&tg_channel=not.is.null&limit=2000') || [];
+  if (!agents.length) return { posted: 0 };
   const chan = new Map(agents.map(a => [a.id, a.tg_channel]));
-  let n = 0; const errs = [];
+  const perOwner = new Map(); for (const a of agents) perOwner.set(a.owner_id, (perOwner.get(a.owner_id) || []).concat(a.tg_channel));
+  const list = await rest(`yh_listings?select=${LCOLS}&status=eq.active&is_demo=eq.false&created_at=gte.${iso(Date.now() - 30 * 864e5)}&owner_id=in.(${[...perOwner.keys()].join(',')})&order=created_at.asc&limit=300`) || [];
+  if (!list.length) return { posted: 0 };
+  const done = new Set((await rest(`yh_channel_posts?select=listing_id,chat&listing_id=in.(${list.map(l => l.id).join(',')})`) || []).map(r => r.listing_id + '|' + r.chat));
+  let n = 0; const errs = []; const bad = new Set();
   for (const l of list) {
-    const chat = chan.get(l.agent_id); if (!chat || n >= 10) continue;
+    if (n >= 10) break;
+    const own = perOwner.get(l.owner_id) || [];
+    const chat = l.agent_id ? chan.get(l.agent_id) : (new Set(own).size === 1 ? own[0] : null);
+    if (!chat || bad.has(chat) || done.has(l.id + '|' + chat)) continue;
     const claimed = await rest('yh_channel_posts?on_conflict=listing_id,chat', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=representation' }, body: JSON.stringify({ listing_id: l.id, chat }) });
     if (!claimed || !claimed.length) continue;
     const r = await sendListing(chat, l, [[{ text: '🏠 More homes on yourhome.asia', url: S.ORIGIN + '/?utm_source=telegram&utm_medium=agent_channel' }]], 'agent_channel');
-    await rest(`yh_channel_posts?listing_id=eq.${l.id}&chat=eq.${encodeURIComponent(chat)}`, { method: 'PATCH', body: JSON.stringify(r.ok ? { message_id: r.result.message_id, error: null } : { error: String(r.description || 'failed').slice(0, 300) }) });
-    if (r.ok) n++; else errs.push(chat + ': ' + r.description);
+    if (r.ok) { await rest(`yh_channel_posts?listing_id=eq.${l.id}&chat=eq.${encodeURIComponent(chat)}`, { method: 'PATCH', body: JSON.stringify({ message_id: r.result.message_id, error: null }) }); n++; continue; }
+    // not posted (bot not admin yet, channel renamed…): give the claim back so it is tried again once the agent fixes it; skip the
+    // rest of this channel in this run (one Telegram call per broken channel every 10 min)
+    await rest(`yh_channel_posts?listing_id=eq.${l.id}&chat=eq.${encodeURIComponent(chat)}`, { method: 'DELETE' });
+    bad.add(chat); errs.push(chat + ': ' + r.description);
   }
   return { posted: n, errors: errs.slice(0, 3) };
 }

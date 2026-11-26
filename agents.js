@@ -84,6 +84,20 @@ const TX = {
   vi: {"tgChan":"Kênh Telegram của bạn (không bắt buộc)","tgChanHelp":"Tin của bạn cũng sẽ tự động đăng ở đó. Hãy để kênh ở chế độ công khai, thêm @yourhomeasiabot làm quản trị viên với quyền “Đăng tin nhắn”, rồi nhập @tên kênh vào đây.","tgChanBad":"Kênh Telegram: nhập @tên công khai, VD: @myhomes_pp","agentProfile":"Hồ sơ môi giới","myAgent":"Hồ sơ môi giới của tôi","agentSub":"Trang công khai với tất cả tin của bạn","createAgent":"Tạo hồ sơ môi giới","addAgent":"+ Thêm hồ sơ khác","editAgent":"Sửa hồ sơ","viewPage":"Xem trang","kind":"Tôi là","k_agent":"Môi giới","k_agency":"Công ty môi giới","k_owner":"Chủ nhà","fullName":"Tên hiển thị trên trang","company":"Công ty / văn phòng","photo":"Ảnh hoặc logo","bio":"Giới thiệu","bioPh":"Kinh nghiệm, khu vực bạn rành nhất, bạn có thể giúp gì…","languages":"Ngôn ngữ bạn nói","areas":"Khu vực phụ trách","email":"Email","pageAddr":"Địa chỉ trang","contacts":"Liên hệ","otherSites":"Trang của bạn trên website khác (không bắt buộc)","otherSitesSub":"Dán đường dẫn đầy đủ https://. Chỉ hiển thị các trang bạn điền.","other":"Website khác","saveProfile":"Lưu hồ sơ","profileSaved":"Đã lưu hồ sơ.","delProfile":"Xóa hồ sơ","confirmDelProfile":"Xóa hồ sơ này? Tin của bạn vẫn hiển thị.","listedBy":"Người đăng","seeProfile":"Xem hồ sơ và tất cả tin →","verified":"Đã xác minh","alsoOn":"Cũng có trên","verifiedOn":"Đã xác minh trên","alsoListed":"Cũng được đăng trên","linksNote":"Các liên kết này do người đăng thêm.","linksNoteV":"Đội ngũ của chúng tôi đã kiểm tra người đăng này.","attachAgent":"Hiển thị hồ sơ môi giới của tôi trên tin này","none":"— không có —","listingLinks":"Bất động sản này trên trang khác (không bắt buộc)","listingLinksSub":"Booking.com, Agoda, Trip.com, Airbnb… dán đường dẫn của đúng bất động sản này.","activeListings":"{n} tin đang hiển thị","noListingsYet":"Chưa có tin đang hiển thị.","share":"Sao chép liên kết","copied":"Đã sao chép liên kết.","agentsTitle":"Môi giới & công ty","agentsSub":"Chuyên gia địa phương có hồ sơ công khai trên YourHome","otherAdvertisers":"Người đăng khác","needAgentFirst":"Tạo hồ sơ môi giới để hiển thị trên tin của bạn.","slugTaken":"Địa chỉ trang này đã được dùng – hãy thử địa chỉ khác.","call":"Gọi","message":"Nhắn tin","notFound":"Không tìm thấy hồ sơ.","profilesN":"{n} hồ sơ"}
 };
 
+// AGENT'S TELEGRAM CHANNEL – CONNECT (owner, 2026-11-26: "Agent Telegram channel connect to website"): one-tap "add the bot to my
+// channel" link + "Check connection" (api/tg-chan.js) in the profile form; 8 Cambodia languages, others fall back to English.
+const TXC = {
+  en: { tgAdd: 'Add @yourhomeasiabot to my channel', tgCheck: 'Check connection', tgChecking: 'Checking…', tgOk: '✓ Connected to {t} – your listings are posted there automatically.', tgNotFound: 'No public channel with this @name. Make the channel public and copy its @name.', tgNotChannel: 'This @name is a group or a person, not a channel.', tgNotAdmin: '@yourhomeasiabot is not an admin of this channel yet – tap “Add @yourhomeasiabot to my channel”.', tgNoPost: '@yourhomeasiabot is an admin but cannot post – switch on “Post messages” for it.', tgErr: 'Could not check right now – try again in a minute.', tgSteps: '1) Make your channel public. 2) Tap “Add @yourhomeasiabot to my channel” and pick your channel (it gets “Post messages”). 3) Type the channel’s @name here, Check connection, then Save. Your listings of the last 30 days and every new one appear there automatically.' },
+  km: { tgAdd: 'បន្ថែម @yourhomeasiabot ទៅឆានែលរបស់ខ្ញុំ', tgCheck: 'ពិនិត្យការភ្ជាប់', tgChecking: 'កំពុងពិនិត្យ…', tgOk: '✓ បានភ្ជាប់ជាមួយ {t} – ការប្រកាសរបស់អ្នកនឹងត្រូវផ្សាយនៅទីនោះដោយស្វ័យប្រវត្តិ។', tgNotFound: 'រកមិនឃើញឆានែលសាធារណៈដែលមាន @ឈ្មោះនេះទេ។ សូមធ្វើឱ្យឆានែលជាសាធារណៈ ហើយចម្លង @ឈ្មោះរបស់វា។', tgNotChannel: '@ឈ្មោះនេះជាក្រុម ឬជាមនុស្ស មិនមែនជាឆានែលទេ។', tgNotAdmin: '@yourhomeasiabot មិនទាន់ជាអ្នកគ្រប់គ្រងឆានែលនេះនៅឡើយទេ – ចុច “បន្ថែម @yourhomeasiabot ទៅឆានែលរបស់ខ្ញុំ”។', tgNoPost: '@yourhomeasiabot ជាអ្នកគ្រប់គ្រង ប៉ុន្តែមិនអាចផ្សាយបានទេ – សូមបើក “Post messages” ឱ្យវា។', tgErr: 'មិនអាចពិនិត្យបានឥឡូវនេះទេ – សូមព្យាយាមម្តងទៀតក្នុងមួយនាទី។', tgSteps: '1) ធ្វើឱ្យឆានែលរបស់អ្នកជាសាធារណៈ។ 2) ចុច “បន្ថែម @yourhomeasiabot ទៅឆានែលរបស់ខ្ញុំ” ហើយជ្រើសឆានែលរបស់អ្នក (វាទទួលបាន “Post messages”)។ 3) សរសេរ @ឈ្មោះឆានែលនៅទីនេះ ចុចពិនិត្យការភ្ជាប់ រួចរក្សាទុក។ ការប្រកាស 30 ថ្ងៃចុងក្រោយ និងការប្រកាសថ្មីៗនឹងបង្ហាញនៅទីនោះដោយស្វ័យប្រវត្តិ។' },
+  zh: { tgAdd: '将 @yourhomeasiabot 添加到我的频道', tgCheck: '检查连接', tgChecking: '正在检查…', tgOk: '✓ 已连接到 {t} – 您的房源会自动发布到该频道。', tgNotFound: '找不到使用此 @名称的公开频道。请将频道设为公开并复制其 @名称。', tgNotChannel: '此 @名称是群组或个人，不是频道。', tgNotAdmin: '@yourhomeasiabot 还不是该频道的管理员 – 请点击“将 @yourhomeasiabot 添加到我的频道”。', tgNoPost: '@yourhomeasiabot 是管理员但无法发布 – 请为其开启“发布消息”。', tgErr: '暂时无法检查 – 请一分钟后再试。', tgSteps: '1) 将频道设为公开。2) 点击“将 @yourhomeasiabot 添加到我的频道”并选择您的频道（它将获得“发布消息”权限）。3) 在此填写频道的 @名称，点击检查连接，然后保存。您最近 30 天的房源和每条新房源都会自动出现在那里。' },
+  fr: { tgAdd: 'Ajouter @yourhomeasiabot à ma chaîne', tgCheck: 'Vérifier la connexion', tgChecking: 'Vérification…', tgOk: '✓ Connecté à {t} – vos annonces y sont publiées automatiquement.', tgNotFound: 'Aucune chaîne publique avec ce @nom. Rendez la chaîne publique et copiez son @nom.', tgNotChannel: 'Ce @nom est un groupe ou une personne, pas une chaîne.', tgNotAdmin: '@yourhomeasiabot n’est pas encore administrateur de cette chaîne – appuyez sur « Ajouter @yourhomeasiabot à ma chaîne ».', tgNoPost: '@yourhomeasiabot est administrateur mais ne peut pas publier – activez « Publier des messages ».', tgErr: 'Vérification impossible pour le moment – réessayez dans une minute.', tgSteps: '1) Rendez votre chaîne publique. 2) Appuyez sur « Ajouter @yourhomeasiabot à ma chaîne » et choisissez votre chaîne (il reçoit « Publier des messages »). 3) Indiquez ici le @nom de la chaîne, Vérifiez la connexion, puis Enregistrez. Vos annonces des 30 derniers jours et chaque nouvelle y apparaissent automatiquement.' },
+  th: { tgAdd: 'เพิ่ม @yourhomeasiabot ในช่องของฉัน', tgCheck: 'ตรวจสอบการเชื่อมต่อ', tgChecking: 'กำลังตรวจสอบ…', tgOk: '✓ เชื่อมต่อกับ {t} แล้ว – ประกาศของคุณจะถูกโพสต์ที่นั่นโดยอัตโนมัติ', tgNotFound: 'ไม่พบช่องสาธารณะที่ใช้ @ชื่อนี้ ตั้งช่องเป็นสาธารณะแล้วคัดลอก @ชื่อของช่อง', tgNotChannel: '@ชื่อนี้เป็นกลุ่มหรือบุคคล ไม่ใช่ช่อง', tgNotAdmin: '@yourhomeasiabot ยังไม่ใช่ผู้ดูแลช่องนี้ – แตะ “เพิ่ม @yourhomeasiabot ในช่องของฉัน”', tgNoPost: '@yourhomeasiabot เป็นผู้ดูแลแต่โพสต์ไม่ได้ – เปิดสิทธิ์ “Post messages” ให้', tgErr: 'ตรวจสอบไม่ได้ในขณะนี้ – ลองใหม่ในอีกหนึ่งนาที', tgSteps: '1) ตั้งช่องของคุณเป็นสาธารณะ 2) แตะ “เพิ่ม @yourhomeasiabot ในช่องของฉัน” แล้วเลือกช่องของคุณ (บอทจะได้สิทธิ์ “Post messages”) 3) ใส่ @ชื่อช่องที่นี่ ตรวจสอบการเชื่อมต่อ แล้วบันทึก ประกาศ 30 วันล่าสุดและประกาศใหม่ทุกรายการจะแสดงที่นั่นโดยอัตโนมัติ' },
+  ru: { tgAdd: 'Добавить @yourhomeasiabot в мой канал', tgCheck: 'Проверить подключение', tgChecking: 'Проверяем…', tgOk: '✓ Подключено к {t} – ваши объявления публикуются там автоматически.', tgNotFound: 'Публичного канала с таким @именем нет. Сделайте канал публичным и скопируйте его @имя.', tgNotChannel: 'Это @имя группы или человека, а не канала.', tgNotAdmin: '@yourhomeasiabot ещё не администратор этого канала – нажмите «Добавить @yourhomeasiabot в мой канал».', tgNoPost: '@yourhomeasiabot – администратор, но не может публиковать – включите ему «Публикация сообщений».', tgErr: 'Сейчас не удалось проверить – попробуйте через минуту.', tgSteps: '1) Сделайте канал публичным. 2) Нажмите «Добавить @yourhomeasiabot в мой канал» и выберите свой канал (бот получит «Публикация сообщений»). 3) Впишите здесь @имя канала, проверьте подключение и сохраните. Ваши объявления за последние 30 дней и все новые появятся там автоматически.' },
+  vi: { tgAdd: 'Thêm @yourhomeasiabot vào kênh của tôi', tgCheck: 'Kiểm tra kết nối', tgChecking: 'Đang kiểm tra…', tgOk: '✓ Đã kết nối với {t} – tin của bạn được tự động đăng ở đó.', tgNotFound: 'Không có kênh công khai với @tên này. Hãy để kênh công khai và sao chép @tên của kênh.', tgNotChannel: '@tên này là nhóm hoặc người dùng, không phải kênh.', tgNotAdmin: '@yourhomeasiabot chưa là quản trị viên của kênh này – nhấn “Thêm @yourhomeasiabot vào kênh của tôi”.', tgNoPost: '@yourhomeasiabot là quản trị viên nhưng không thể đăng – hãy bật quyền “Đăng tin nhắn”.', tgErr: 'Hiện không kiểm tra được – vui lòng thử lại sau một phút.', tgSteps: '1) Để kênh ở chế độ công khai. 2) Nhấn “Thêm @yourhomeasiabot vào kênh của tôi” và chọn kênh (bot nhận quyền “Đăng tin nhắn”). 3) Nhập @tên kênh vào đây, Kiểm tra kết nối rồi Lưu. Tin 30 ngày gần nhất và mọi tin mới sẽ tự động xuất hiện ở đó.' },
+  ko: { tgAdd: '내 채널에 @yourhomeasiabot 추가', tgCheck: '연결 확인', tgChecking: '확인 중…', tgOk: '✓ {t}에 연결됨 – 매물이 그곳에 자동으로 게시됩니다.', tgNotFound: '이 @이름의 공개 채널이 없습니다. 채널을 공개로 설정하고 @이름을 복사하세요.', tgNotChannel: '이 @이름은 채널이 아니라 그룹 또는 개인입니다.', tgNotAdmin: '@yourhomeasiabot이 아직 이 채널의 관리자가 아닙니다 – "내 채널에 @yourhomeasiabot 추가"를 누르세요.', tgNoPost: '@yourhomeasiabot이 관리자이지만 게시할 수 없습니다 – "메시지 게시" 권한을 켜 주세요.', tgErr: '지금은 확인할 수 없습니다 – 1분 후 다시 시도하세요.', tgSteps: '1) 채널을 공개로 설정하세요. 2) "내 채널에 @yourhomeasiabot 추가"를 누르고 채널을 선택하세요 ("메시지 게시" 권한이 부여됩니다). 3) 여기에 채널 @이름을 입력하고 연결 확인 후 저장하세요. 최근 30일 매물과 모든 새 매물이 자동으로 게시됩니다.' },
+};
+for (const l in TXC) TX[l] = Object.assign(TX[l] || {}, TXC[l]);
+
 // Well-known sites: recognised from the link's address, shown with their own colour.
 export const SITES = [
   { k: 'booking', n: 'Booking.com', h: ['booking.com'], c: '#003580', a: 'B.' },
@@ -114,6 +128,23 @@ const PH = {
   web: 'https://…', other1: 'https://…', other2: 'https://…',
 };
 const LANG_OPTS = ['Khmer', 'English', 'Chinese', 'French', 'Thai', 'Vietnamese', 'Korean', 'Japanese', 'Russian'];
+
+// "Add @yourhomeasiabot to my channel": Telegram opens the channel picker and proposes the bot as admin with these rights
+const TG_ADD = 'https://t.me/yourhomeasiabot?startchannel&admin=post_messages+edit_messages+delete_messages';
+// asks api/tg-chan.js whether the bot can post in the channel; shows the answer under the field (inline) or as a toast (after Save)
+async function checkChannel(v, inline) {
+  const st = document.getElementById('tgcSt');
+  const name = String(v || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '');
+  if (!/^[A-Za-z0-9_]{5,32}$/.test(name)) { if (inline && st) { st.hidden = false; st.textContent = tx('tgChanBad'); } return false; }
+  if (inline && st) { st.hidden = false; st.style.color = ''; st.textContent = tx('tgChecking'); }
+  let j = { code: 'error' };
+  try { j = await (await fetch('/api/tg-chan?c=' + encodeURIComponent(name), { cache: 'no-store' })).json(); } catch (_) {}
+  const MSG = { ok: 'tgOk', bad_name: 'tgChanBad', not_found: 'tgNotFound', not_channel: 'tgNotChannel', not_admin: 'tgNotAdmin', no_post: 'tgNoPost' };
+  const msg = tx(MSG[j.code] || 'tgErr', { t: j.title ? '“' + j.title + '”' : '@' + name });
+  if (inline && st) { st.textContent = msg; st.style.color = j.ok ? '#16803C' : '#E00025'; }
+  else C.toast((j.ok ? '' : tx('profileSaved') + ' ') + msg, j.ok ? 4000 : 8000);
+  return !!j.ok;
+}
 
 let C = null; // context from app.js
 const tx = (k, v) => { let s = (TX[C.lang()] && TX[C.lang()][k]) ?? TX.en[k] ?? k; if (v) for (const x in v) s = s.replace('{' + x + '}', v[x]); return s; };
@@ -286,7 +317,9 @@ function form(el, a, hasOthers) {
     <div class="row"><label>${C.t('whatsapp')}<input name="whatsapp" maxlength="30" value="${C.esc(a.whatsapp || '')}" placeholder="+855 …"></label>
       <label>${tx('email')}<input name="email" type="email" maxlength="120" value="${C.esc(a.email || '')}"></label></div>
     <label>${tx('tgChan')}<input name="tg_channel" maxlength="40" value="${C.esc(a.tg_channel || '')}" placeholder="@mychannel"></label>
-    <p class="xl-note" style="margin-top:0">${tx('tgChanHelp')}</p>
+    <div class="ag-btns ag-tgc"><a class="btn ghost sm" href="${TG_ADD}" target="_blank" rel="noopener">${tx('tgAdd')}</a><button type="button" class="btn ghost sm" id="tgcBtn">${tx('tgCheck')}</button></div>
+    <p class="xl-note" id="tgcSt" style="margin-top:6px" hidden></p>
+    <p class="xl-note" style="margin-top:6px">${tx('tgSteps')}</p>
     <div class="ag-sub">${tx('otherSites')}</div><p class="xl-note" style="margin-top:0">${tx('otherSitesSub')}</p>
     ${linkInputs(PROFILE_FIELDS, a.links, 'al_')}
     <div class="ag-btns"><button class="btn red" id="agSave">${tx('saveProfile')}</button>
@@ -307,6 +340,8 @@ function form(el, a, hasOthers) {
     photo = C.sb.storage.from('yh-photos').getPublicUrl(path).data.publicUrl;
     document.getElementById('agPh').innerHTML = avatar({ ...a, photo }, 'ag-big');
   };
+  const tgcBtn = document.getElementById('tgcBtn');
+  tgcBtn.onclick = () => checkChannel(f.tg_channel.value, true);
   const del = document.getElementById('agDel');
   if (del) del.onclick = async () => { if (!confirm(tx('confirmDelProfile'))) return; const { error } = await C.sb.from('yh_agents').delete().eq('id', a.id); if (error) return C.toast(C.t('error') + error.message); C.go('#/account?tab=agent'); };
   f.onsubmit = async e => {
@@ -330,7 +365,10 @@ function form(el, a, hasOthers) {
     }
     btn.disabled = false;
     if (res.error) return C.toast(/duplicate|unique/i.test(res.error.message) ? tx('slugTaken') : C.t('error') + res.error.message, 5000);
-    C.toast(tx('profileSaved')); C.go('#/agent/' + res.data.slug);
+    // a channel was given: say at once whether the bot can post there; if it can, start posting now (not only at the next cron run)
+    if (row.tg_channel) { const ok = await checkChannel(row.tg_channel, false); if (ok) fetch('/api/tg-sync?quick=1', { keepalive: true }).catch(() => {}); }
+    else C.toast(tx('profileSaved'));
+    C.go('#/agent/' + res.data.slug);
   };
 }
 

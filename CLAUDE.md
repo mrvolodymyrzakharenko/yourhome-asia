@@ -526,6 +526,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
      with an "Open" button; cursor yh_channel_meta 'admin_cursor' moved before sending (never twice).
   2) AGENT'S OWN CHANNEL – yh_agents.tg_channel (@name, profile form "Your Telegram channel", 5 languages in agents.js TX); the agent
      makes @yourhomeasiabot an admin; agentChannels() posts the profile's new listings there too (yh_channel_posts chat = the channel).
+     CONNECT (owner, 2026-11-26: "Agent Telegram channel connect to website"): under the field a one-tap link "Add @yourhomeasiabot
+     to my channel" (t.me/yourhomeasiabot?startchannel&admin=post_messages+edit_messages+delete_messages) + "Check connection" →
+     api/tg-chan.js (read-only: public channel? bot admin with Post messages? → ok / not_found / not_channel / not_admin / no_post), also
+     run after Save (then /api/tg-sync?quick=1 starts posting at once). 3-step help tgSteps; texts TXC in agents.js (8 languages).
+     agentChannels() now: listings of the last 30 DAYS (so a newly connected channel gets the recent ones), a listing without agent_id
+     goes to its owner's channel when the owner has exactly one profile with a channel; a failed post is NOT kept (claim deleted, retried
+     next run, one try per broken channel per run).
   3) "STILL AVAILABLE?" – yh_listings.confirmed_at; 30 days after it the owner's Telegram (Telegram sign-in id, else the @handle of the
      listing/contact if that person pressed Start) gets the question with ✅ Yes (confirmed_at = now) / 🔴 Rented-sold (status rented/sold)
      buttons – yh_tg_reminders, answered in api/tg-bot.js (only the chat it was sent to). Unanswered listings stay live.

@@ -1129,3 +1129,17 @@ body.rpop-open{overflow:hidden}
 /* A hidden form field stays hidden (label{display:grid} beat the hidden attribute: "Price per" and "Other period" showed on
    the post form for Monthly rent – owner screenshot 2026-11-25) */
 label[hidden]{display:none!important}
+
+/* HOTEL · HOSTEL IN THE CATEGORY ROW (owner, 2026-11-26: "az elejére a kereső részbe… a hotelt és hostelt is be kell rakni"):
+   12 items – Rent · Daily · Buy · Rooms · Projects | Hotel · Hostel · Apartment · Condo · Studio · Villa · House.
+   PC: one row of 12 equal columns. Tablets: 2 × 6. Phones: 3 × 4 equal centred columns –
+   Rent · Daily · Buy · Rooms / Projects · Hotel · Hostel · House / Condo · Studio · Villa · Apartment. */
+@media (min-width:721px) and (max-width:900px){
+  #dealTabs.deal-tabs{display:grid!important;grid-template-columns:repeat(6,minmax(0,1fr))!important;row-gap:8px!important;width:100%}
+  #dealTabs button{text-align:center;justify-content:center;padding:9px 4px!important;white-space:nowrap}
+  #dealTabs button:nth-of-type(6n+1)::before,#dealTabs .dt-sep+button::before{display:none!important}
+}
+@media (max-width:720px){
+  #dealTabs.deal-tabs{grid-template-columns:repeat(4,minmax(0,1fr))!important}
+  #dealTabs .dt-cat[data-cat=hotel],#dealTabs .dt-cat[data-cat=hostel]{order:1}
+}

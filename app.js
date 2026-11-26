@@ -22,10 +22,13 @@ const districtOpts = (city, cur) => `<option value="">${distList(city).length ||
 const DISTRICTS = ['BKK1','BKK2','BKK3','Chamkar Mon','Daun Penh','Riverside','Toul Kork','Toul Tom Poung','Tonle Bassac','Sen Sok','Chroy Changvar','7 Makara','Russey Keo','Mean Chey','Chbar Ampov','Por Senchey','Dangkao','Olympic'];
 // property types like realestate.com.kh "All types" (owner, 2026-11-24 20:34); Studio is search-only (= 0 bedrooms)
 const TYPES = ['apartment','condo','house','villa','twin_villa','link_house','flat_house','flat','penthouse','shophouse','room','office','land'];
-const SEARCH_TYPES = [...TYPES.slice(0, 9), 'studio', ...TYPES.slice(9)];
+const SEARCH_TYPES = [...TYPES.slice(0, 9), 'studio', ...TYPES.slice(9), 'hotel', 'hostel'];
 const AMEN = ['edc','pool','gym','parking','balcony','elevator','security','generator','wifi','cleaning','utilities','pets','aircon','kitchen','washer','private_bath','female_only'];
 const QUICK = { rent: ['pool','gym','pets','parking'], daily: ['pool','gym','wifi','aircon'], room: ['pool','gym','private_bath','wifi','aircon','female_only'], sale: ['pool','gym','parking','security'], '': ['pool','gym','pets','parking'] };  // row 1 always shows Pool + Gym; EDC only in Filters (owner, 2026-11-24)
-const CATS = [['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
+// Hotel · Hostel at the front of the category row (owner, 2026-11-26: "az elejére a kereső részbe… a hotelt és hostelt is");
+// they open as short stays (deal daily) unless Buy is picked – STAY_CATS
+const STAY_CATS = ['hotel', 'hostel'];
+const CATS = [['hotel', 't_hotel'], ['hostel', 't_hostel'], ['apartment', 't_apartment'], ['condo', 't_condo'], ['studio', 'studio'], ['villa', 't_villa'], ['house', 't_house']];
 const FKEYS = ['beds','furn','amen','by','foreign','baths','area','lease','days','photos','title'];
 const MORE_KEYS = ['baths','area','lease','days','photos','title'];
 const LEASE = ['day','month','6m','1y'];
@@ -420,7 +423,7 @@ function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
 const budgetOpts = (deal, cur) => `<option value="">${t('any')}</option>` + BUDGET[deal].map(v => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>≤ ${money(v)}</option>`).join('');
 function wireSearchBox(onSubmit) {
   let deal = document.querySelector('#dealTabs .on').dataset.deal;
-  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: deal === 'room' ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
+  document.getElementById('dealTabs').onclick = e => { const b = e.target.closest('button'); if (!b) return; if (b.dataset.cat) { const p = new URLSearchParams({ deal: STAY_CATS.includes(b.dataset.cat) ? (deal === 'sale' ? 'sale' : 'daily') : deal === 'room' ? 'rent' : deal }); b.dataset.cat === 'studio' ? p.set('beds', '0') : p.set('type', b.dataset.cat); return go('#/search?' + p); } deal = b.dataset.deal; document.querySelectorAll('#dealTabs button').forEach(x => x.classList.toggle('on', x === b)); document.getElementById('maxSel').innerHTML = budgetOpts(deal); onSubmit && onSubmit(deal, true); };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); onSubmit(deal); };
   const cs = document.getElementById('citySel'), ds = document.getElementById('distSel');
   return () => deal;
@@ -577,7 +580,7 @@ async function viewSearch() {
     if (b.dataset.deal) return upd({ deal: b.dataset.deal, max: '' });
     const k = b.dataset.cat;
     if (k === 'studio') return upd({ beds: p.beds === '0' ? '' : '0' });
-    upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds });
+    upd({ type: p.type === k ? '' : k, beds: p.beds === '0' ? '' : p.beds, ...(STAY_CATS.includes(k) && p.type !== k && deal !== 'sale' ? { deal: 'daily', max: '' } : {}) });
   };
   document.getElementById('sbox').onsubmit = e => { e.preventDefault(); const f = new FormData(e.target); upd({ city: f.get('city'), q: f.get('q'), type: f.get('type'), max: f.get('max') }); };
   document.getElementById('sortSel').onchange = e => upd({ sort: e.target.value === 'new' ? '' : e.target.value });

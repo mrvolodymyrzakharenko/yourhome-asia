@@ -690,13 +690,15 @@ async function viewHome() {
   homeTools();
   const [all, counts] = await Promise.all([fetchListings({ limit: 300 }), cityCounts()]);
   const rent = all.filter(l => l.deal_type === 'rent');
-  const html = block(t('recommended'), all.filter(l => l.is_featured).concat(all.filter(l => !l.is_featured)), '#/search?sort=new')
-    + block(t('newest'), [...all].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)), '#/search?sort=new')
-    + block(t('cheapest'), rent.filter(l => l.price_period !== 'day').sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
-    + block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')
-    + block(t('dailyBlock'), rent.filter(l => l.price_period === 'day'), '#/search?deal=daily')
-    + block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale')
-    + (all.length ? citiesBlock(counts, all) : '');   // More cities – after the listing blocks (owner, 2026-11-26)
+  const blocks = [block(t('recommended'), all.filter(l => l.is_featured).concat(all.filter(l => !l.is_featured)), '#/search?sort=new')
+    , block(t('newest'), [...all].sort((a, b) => new Date(b.created_at) - new Date(a.created_at)), '#/search?sort=new')
+    , block(t('cheapest'), rent.filter(l => l.price_period !== 'day').sort((a, b) => a.price - b.price), '#/search?deal=rent&sort=cheap')
+    , block(t('rooms'), all.filter(l => l.deal_type === 'room'), '#/search?deal=room')
+    , block(t('dailyBlock'), rent.filter(l => l.price_period === 'day'), '#/search?deal=daily')
+    , block(t('forSale'), all.filter(l => l.deal_type === 'sale'), '#/search?deal=sale')].filter(Boolean);
+  // More cities ONE PLACE HIGHER (owner, 2026-11-26 10:11: "More cities lehetne feljebb eggyel"): before the LAST listing block
+  if (all.length) blocks.splice(Math.max(blocks.length - 1, 1), 0, citiesBlock(counts, all));
+  const html = blocks.join('');
   // the listing blocks are drawn AT ONCE; the New projects block (owner, 2026-11-24) joins under them when it arrives
   // (owner, 2026-11-25: "nem tudod egyből magát az oldalt betölteni?")
   const b0 = document.getElementById('blocks'); if (!b0) return;

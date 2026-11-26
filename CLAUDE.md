@@ -598,8 +598,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - partners.js + partners.css – Become a partner page and New projects (PT.* hooks in app.js).
 - Scroll fade (owner, 2026-11-24: "az összes tartalom ahogy lefelé görgetek fade in"): everything below the screen fades up
   as it scrolls into view (fade.js, second block); cards in a row one after another; off for "reduce motion".
-- MORE CITIES (owner, 2026-11-26: "More cities blokk – ez is jó ötlet", vietrent screenshot): homepage block after the listing blocks,
-  before New projects. Photo cards (rounded, dark fade, white city name 13/600 + "N properties").
+- MORE CITIES (owner, 2026-11-26: "More cities blokk – ez is jó ötlet", vietrent screenshot): homepage block just BEFORE the LAST
+  listing block (owner 10:11: "feljebb eggyel" – was after them). Photo cards (rounded, dark fade, white city name 13/600 + "N properties").
   SIX CARDS (owner, 2026-11-26 08:04: "lehet 6 kártya mint a servicenál"): PC one row of 6 (square), tablets 3, phones 2 per row.
   Phnom Penh · Siem Reap · Sihanoukville · Kampot · Battambang · Koh Kong (CITY_PH photos, free Unsplash/Pexels); order = main cities
   with listings, other cities with live listings, then the remaining main cities – always 6. Counts = live yh_listings per city (cityCounts()); 0 listings → "Be the first to post" → #/post?city=<city>

@@ -533,6 +533,16 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
      agentChannels() now: listings of the last 30 DAYS (so a newly connected channel gets the recent ones), a listing without agent_id
      goes to its owner's channel when the owner has exactly one profile with a channel; a failed post is NOT kept (claim deleted, retried
      next run, one try per broken channel per run).
+     CHANNEL → WEBSITE (owner, 2026-11-26: "ha saját csatornába feladja… a weblapon meg tud jelenni?" → "rád bízom" = opt-in + approval):
+     profile tick "Show my channel posts on the website too" (yh_agents.tg_import, help + "Open @yourhomeasiabot" link; TXC tgImp*). The bot
+     gets channel_post updates (tg-sync UPD) → api/tg-bot.js channelPost(): photo posts of a channel whose profile has tg_import, never our
+     own posts (yourhome.asia buttons) → yh_tg_imports (album pieces merged by RPC yh_tg_import_add; insert pings tg-sync, trigger
+     yh_tg_imports_ping) → processImports() (from tg-sync, waits until no new photo for 4 s, RPC yh_tg_import_claim) → parse() of the
+     caption; no price = skipped (agent told only if it looks like a listing) → HIDDEN listing with the agent profile + photos in yh-photos +
+     a yh_channel_posts row (message_id null, so it is never re-posted to that channel) → the agent's Telegram (sign-in id, else the profile /
+     contact @handle that pressed Start) gets photo + summary with ✅ Publish on the website (status active → central channel too) ·
+     ✏️ Edit first (/edit/<id>) · 🙈 Don't publish (hidden listing deleted). No reachable chat = the hidden listing waits in My listings.
+     Bot texts TI in api/_tgx.js (8 languages). The database now also lets agents save tg_channel / tg_import (column grants were missing).
   3) "STILL AVAILABLE?" – yh_listings.confirmed_at; 30 days after it the owner's Telegram (Telegram sign-in id, else the @handle of the
      listing/contact if that person pressed Start) gets the question with ✅ Yes (confirmed_at = now) / 🔴 Rented-sold (status rented/sold)
      buttons – yh_tg_reminders, answered in api/tg-bot.js (only the chat it was sent to). Unanswered listings stay live.

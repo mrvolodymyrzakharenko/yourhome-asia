@@ -171,7 +171,7 @@ async function ensureWebhook(req) {
     return `bot token refused by Telegram (${me.description || 'error'}) – TELEGRAM_BOT_TOKEN has ${v.length} characters, ${/\d{6,12}:[A-Za-z0-9_-]{30,}/.test(v) ? 'looks like a bot token: it is revoked or belongs to no bot – copy it again from @BotFather → /mybots → API Token' : 'does NOT look like a bot token (123456789:AA…) – copy it from @BotFather → /mybots → API Token'}`; }
   if (me.result.username && me.result.username.toLowerCase() !== 'yourhomeasiabot') return 'wrong bot: the token belongs to @' + me.result.username + ' – use the @yourhomeasiabot token';
   const info = await tg('getWebhookInfo', {});
-  const UPD = ['message', 'my_chat_member', 'callback_query'];   // callback_query: the "Still available?" / Publish / search buttons
+  const UPD = ['message', 'my_chat_member', 'callback_query', 'channel_post'];   // channel_post: agents' channels → website (api/tg-bot.js)   // callback_query: the "Still available?" / Publish / search buttons
   if (info.ok && info.result && info.result.url === want && UPD.every(u => (info.result.allowed_updates || ['message']).includes(u))) return 'ok';
   const secret = require('crypto').createHash('sha256').update('yh-webhook:' + token()).digest('hex').slice(0, 48);   // = api/tg-bot.js secret()
   const r = await tg('setWebhook', { url: want, secret_token: secret, allowed_updates: UPD, drop_pending_updates: false });
@@ -221,8 +221,10 @@ module.exports = async (req, res) => {
     const hook = await ensureWebhook(req).catch(e => String(e.message || e).slice(0, 120));
     // channel clean-up, admin alerts, agents' channels, "still available?", price drops, daily digest (api/_tgx.js)
     const extra = await require('./_tgx').runAll().catch(e => ({ error: String(e.message || e).slice(0, 200) }));
+    // agents' channel posts → hidden listing + "Publish on the website?" question (api/tg-bot.js processImports)
+    const imports = await require('./tg-bot').processImports().catch(e => ({ error: String(e.message || e).slice(0, 200) }));
     res.setHeader('Content-Type', 'application/json');
-    res.end(JSON.stringify({ channel: CHANNEL, posted: out, alerts, webhook: hook, extra }));
+    res.end(JSON.stringify({ channel: CHANNEL, posted: out, alerts, webhook: hook, extra, imports }));
   } catch (e) {
     res.statusCode = 500; res.end(JSON.stringify({ error: String(e.message || e).slice(0, 300), posted: out }));
   }

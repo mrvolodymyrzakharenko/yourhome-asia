@@ -10,6 +10,7 @@
 //     listing for the person's YourHome account (made for their Telegram if they have none), photos to Storage yh-photos
 //   • "Still available?" buttons (sent by api/_tgx.js reminders) → Yes = confirmed_at now · Rented/sold = status rented/sold
 //   • /stop – alerts off
+//   • CHANNEL → WEBSITE – photo posts in an agent's own channel (tg_import on) → hidden listing + Publish / Don't publish question
 // The webhook is registered by api/tg-sync.js itself (setWebhook with a secret header) – nothing to do by hand.
 // Env: TELEGRAM_BOT_TOKEN, SUPABASE_SERVICE_ROLE_KEY. Only the YourHome bot – never the Study and Work bot.
 const crypto = require('crypto');
@@ -158,6 +159,106 @@ async function publish(chat, from, st, lg) {
   return send(chat, tr(lg, 'published'), { reply_markup: { inline_keyboard: [[{ text: tr(lg, 'view'), url: ORIGIN + S.listingPath(l) }], [{ text: tr(lg, 'edit'), url: ORIGIN + '/edit/' + l.id }]] } });
 }
 
+// ---------- CHANNEL → WEBSITE (owner, 2026-11-26: "ha saját csatornába feladja, ott akkor a weblapon meg tud jelenni?" – "rád bízom") ----------
+// An agent who switched on "Show my channel posts on the website" (yh_agents.tg_import) and made @yourhomeasiabot an admin of the
+// channel: every photo post there is collected in yh_tg_imports (an album = several updates, merged by yh_tg_import_add). The insert
+// pings api/tg-sync (trigger yh_tg_imports_ping) which calls processImports(): once nothing new came for QUIET seconds the post is
+// turned into a HIDDEN listing (photos saved to yh-photos, agent profile attached) and the agent gets it on Telegram with
+// "Publish on the website" / "Edit first" / "Don't publish" – only Publish makes it live. Our own posts (yourhome.asia buttons) are
+// never taken back; the agent's original post is recorded in yh_channel_posts (message_id null), so it is not posted there again.
+const QUIET = 4;
+const sameCh = (a, b) => String(a || '').toLowerCase() === String(b || '').toLowerCase();
+async function importAgent(ch) {
+  const rows = await rest(`yh_agents?select=id,owner_id,name,phone,whatsapp,telegram,tg_channel,tg_import&tg_import=is.true&tg_channel=ilike.${encodeURIComponent(ch)}&limit=5`).catch(() => null) || [];
+  return rows.find(a => sameCh(a.tg_channel, ch)) || null;
+}
+async function channelPost(cp) {
+  const ch = cp.chat && cp.chat.type === 'channel' && cp.chat.username ? '@' + cp.chat.username : null;
+  if (!ch || sameCh(ch, CHANNEL)) return;
+  if (/yourhome\.asia/i.test(JSON.stringify(cp.reply_markup || {})) || cp.via_bot) return;   // our own post
+  const photo = cp.photo && cp.photo.length ? cp.photo[cp.photo.length - 1].file_id : null;
+  if (!photo) return;
+  if (!(await importAgent(ch))) return;
+  const gid = cp.media_group_id ? 'g' + cp.media_group_id : 'm' + cp.message_id;
+  await rpc('yh_tg_import_add', { p_channel: ch, p_gid: gid, p_msg: cp.message_id, p_photo: photo, p_caption: cp.caption || '' });
+}
+async function ownerChat(ag) {
+  const info = ((await rpc('yh_owner_tg', { p_ids: [ag.owner_id] }).catch(() => null)) || [])[0] || {};
+  let chat = info.tg_id ? Number(info.tg_id) : null;
+  if (!chat) for (const h of [ag.telegram, info.contact_telegram]) {
+    const u = String(h || '').trim().replace(/^https?:\/\/t\.me\//i, '').replace(/^@/, '');
+    if (!/^[A-Za-z0-9_]{5,32}$/.test(u)) continue;
+    const c = ((await rest(`yh_tg_chats?select=chat_id,blocked,username&username=ilike.${encodeURIComponent(u)}&limit=5`).catch(() => null)) || []).find(x => sameCh(x.username, u));
+    if (c && !c.blocked) { chat = Number(c.chat_id); break; }
+  }
+  if (!chat) return { chat: null, lg: 'en' };
+  const c = await getChat(chat);
+  if (c && c.blocked) return { chat: null, lg: 'en' };
+  return { chat, lg: X.langOf(c && c.language) };
+}
+async function importPost(imp, ag) {
+  const mark = (status, extra) => rest(`yh_tg_imports?id=eq.${imp.id}`, { method: 'PATCH', body: JSON.stringify({ status, agent_id: ag.id, updated_at: new Date().toISOString(), ...(extra || {}) }) });
+  const { chat, lg } = await ownerChat(ag);
+  const text = String(imp.caption || '').trim();
+  const p = parse(text);
+  if (!text || !p.price) {   // photos without a price: not a listing we can show – tell the agent only if it looks like one
+    if (chat && text && (p.deal || p.type || p.beds != null)) await send(chat, tr(lg, 'impNoPrice', { c: esc(ag.tg_channel) }));
+    return mark('skipped', { ask_chat: chat, note: 'no price' });
+  }
+  const first = text.split('\n').map(x => x.trim()).find(x => x.length >= 5) || '';
+  let title = first.length > 140 ? first.slice(0, 137) + '…' : first;
+  if (title.length < 5) title = 'Property for rent in Cambodia';
+  const photos = [];
+  for (const fid of (imp.photos || []).slice(0, 15)) { const u = await savePhoto(ag.owner_id, fid).catch(() => null); if (u) photos.push(u); }
+  const deal = p.deal === 'sale' ? 'sale' : p.deal === 'room' ? 'room' : 'rent';
+  const row = {
+    owner_id: ag.owner_id, agent_id: ag.id, deal_type: deal, property_type: deal === 'room' ? 'room' : (p.type && p.type !== 'room' ? p.type : 'apartment'),
+    price_period: deal === 'sale' ? 'total' : p.deal === 'daily' || p.period === 'day' ? 'day' : p.period === 'week' ? 'week' : 'month',
+    price: Number(p.price) || 0, bedrooms: p.beds != null ? Math.min(p.beds, 50) : null, bathrooms: p.baths || null, area_m2: p.area || null,
+    city: p.city || 'Phnom Penh', district: p.district || null, title, description: text.slice(0, 5000),
+    photos, amenities: p.amenities || [], furnished: !!p.furnished, contact_name: String(ag.name || '').slice(0, 80) || null,
+    contact_phone: ag.phone || null, contact_whatsapp: ag.whatsapp || null, contact_telegram: ag.telegram || null, status: 'hidden',
+  };
+  let l;
+  try { l = (await rest('yh_listings', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify(row) }))[0]; }
+  catch (e) { return mark('failed', { note: String(e.message || e).slice(0, 300) }); }
+  // the original post already is in the agent's channel – never post this listing there again
+  await rest('yh_channel_posts?on_conflict=listing_id,chat', { method: 'POST', headers: { Prefer: 'resolution=ignore-duplicates,return=minimal' }, body: JSON.stringify({ listing_id: l.id, chat: ag.tg_channel, error: 'imported from this channel' }) }).catch(() => {});
+  if (!chat) return mark('failed', { listing_id: l.id, note: 'no Telegram chat for the owner – hidden listing waits in the dashboard' });
+  const draft = { ...p, deal: p.deal, title };
+  const cap = tr(lg, 'impAsk', { c: esc(ag.tg_channel), s: draftSummary(draft, photos.length) });
+  const reply_markup = { inline_keyboard: [[{ text: tr(lg, 'impPub'), callback_data: 'ip:' + l.id }], [{ text: tr(lg, 'impEdit'), url: ORIGIN + '/edit/' + l.id }], [{ text: tr(lg, 'impNo'), callback_data: 'ix:' + l.id }]] };
+  let r = photos[0] && cap.length <= 1024 ? await tg('sendPhoto', { chat_id: chat, photo: photos[0], caption: cap, parse_mode: 'HTML', reply_markup }) : null;
+  if (!r || !r.ok) r = await send(chat, cap, { reply_markup });
+  return mark(r && r.ok ? 'asked' : 'failed', { listing_id: l.id, ask_chat: chat, note: r && r.ok ? null : String((r && r.description) || 'send failed').slice(0, 300) });
+}
+// called by api/tg-sync.js on every run (the insert of a channel post pings it at once)
+async function processImports() {
+  const open = await rest('yh_tg_imports?select=id,channel,updated_at&status=eq.open&order=updated_at.asc&limit=10') || [];
+  if (!open.length) return { open: 0 };
+  const t0 = Date.now();
+  let n = 0;
+  for (const o of open) {
+    // wait until the album is complete (no new photo for QUIET s); more photos may still arrive while we wait – up to ~35 s in all
+    let imp = null, at = Date.parse(o.updated_at);
+    while (!imp && Date.now() - t0 < 35000) {
+      const wait = at + (QUIET + 1) * 1000 - Date.now();
+      if (wait > 0) await new Promise(ok => setTimeout(ok, Math.min(wait, 8000)));
+      imp = ((await rpc('yh_tg_import_claim', { p_id: o.id, p_quiet: QUIET }).catch(() => null)) || [])[0] || null;
+      if (imp) break;
+      const cur = ((await rest(`yh_tg_imports?select=status,updated_at&id=eq.${o.id}`).catch(() => null)) || [])[0];
+      if (!cur || cur.status !== 'open') break;   // another run took it
+      at = Date.parse(cur.updated_at);
+    }
+    if (!imp) continue;
+    const ag = await importAgent(imp.channel);
+    if (!ag) { await rest(`yh_tg_imports?id=eq.${imp.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'skipped', note: 'import switched off' }) }); continue; }
+    await importPost(imp, ag).catch(e => rest(`yh_tg_imports?id=eq.${imp.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'failed', note: String(e.message || e).slice(0, 300) }) }));
+    n++;
+  }
+  return { imported: n };
+}
+
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (req.method !== 'POST') { res.statusCode = 405; return res.end('POST only'); }
@@ -167,6 +268,9 @@ module.exports = async (req, res) => {
   if (got.length !== want.length || !crypto.timingSafeEqual(Buffer.from(got), Buffer.from(want))) { res.statusCode = 401; return res.end('no'); }
   const u = await readBody(req);
   try {
+    // a post in an agent's own channel → collected for the website (see CHANNEL → WEBSITE above)
+    if (u.channel_post) await channelPost(u.channel_post);
+
     // blocked / unblocked the bot
     const mc = u.my_chat_member;
     if (mc && mc.chat && mc.chat.type === 'private') {
@@ -180,7 +284,23 @@ module.exports = async (req, res) => {
       const chat = cq.message.chat.id, data = String(cq.data || ''), lg = X.langOf(cq.from.language_code);
       await tg('answerCallbackQuery', { callback_query_id: cq.id });
       const m = data.match(/^(ok|gone):([0-9a-f-]{36})$/);
-      if (m) {   // "still available?" – only the chat the question was sent to may answer
+      const im = data.match(/^(ip|ix):([0-9a-f-]{36})$/);
+      if (im) {   // channel post → website: only the chat the question was sent to may answer
+        const r = ((await rest(`yh_tg_imports?select=id,status&listing_id=eq.${im[2]}&ask_chat=eq.${chat}&limit=1`)) || [])[0];
+        if (r && r.status === 'asked') {
+          const now = new Date().toISOString();
+          if (im[1] === 'ip') {
+            const l = ((await rest(`yh_listings?id=eq.${im[2]}`, { method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ status: 'active', confirmed_at: now }) })) || [])[0];
+            await rest(`yh_tg_imports?id=eq.${r.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'published', updated_at: now }) });
+            await send(chat, tr(lg, 'impDone'), l ? { reply_markup: { inline_keyboard: [[{ text: tr(lg, 'view'), url: ORIGIN + S.listingPath(l) }], [{ text: tr(lg, 'edit'), url: ORIGIN + '/edit/' + l.id }]] } } : undefined);
+          } else {
+            await rest(`yh_listings?id=eq.${im[2]}&status=eq.hidden`, { method: 'DELETE' });
+            await rest(`yh_tg_imports?id=eq.${r.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'declined', updated_at: now }) });
+            await send(chat, tr(lg, 'impNoDone'));
+          }
+          await tg('editMessageReplyMarkup', { chat_id: chat, message_id: cq.message.message_id, reply_markup: { inline_keyboard: [] } });
+        }
+      } else if (m) {   // "still available?" – only the chat the question was sent to may answer
         const rem = await rest(`yh_tg_reminders?select=listing_id,round&listing_id=eq.${m[2]}&chat_id=eq.${chat}&order=round.desc&limit=1`);
         if (rem && rem.length) {
           const l = (await rest(`yh_listings?select=id,deal_type&id=eq.${m[2]}`) || [])[0];
@@ -258,4 +378,5 @@ module.exports = async (req, res) => {
   res.statusCode = 200; res.end('ok');
 };
 module.exports.secret = secret;
+module.exports.processImports = processImports;
 module.exports.parse = parse;

@@ -1143,19 +1143,41 @@ label[hidden]{display:none!important}
   #dealTabs .dt-deal,#dealTabs .dt-cat{grid-column:auto!important;text-align:center;justify-content:center;padding:9px 4px!important;white-space:nowrap}
   #dealTabs button::before,#dealTabs button::after{display:none!important}
   #dealTabs .dt-deal{order:0}
-  #dealTabs .dt-cat[data-cat=hotel]{order:1}
-  #dealTabs .dt-cat[data-cat=office]{order:2}
-  #dealTabs .dt-cat[data-cat=house]{order:3}
-  #dealTabs .dt-cat[data-cat=condo]{order:4}
-  #dealTabs .dt-cat[data-cat=studio]{order:5}
-  #dealTabs .dt-cat[data-cat=villa],html[lang=fr] #dealTabs .dt-cat[data-cat=villa]{order:6}
-  #dealTabs .dt-cat[data-cat=apartment]{order:7}
-  #dealTabs .dt-cat[data-cat=hostel]{order:8}
-  #dealTabs .dt-cat[data-cat=commercial]{order:9}
+  /* SIMILAR WIDTHS STACKED (owner, 2026-11-26 06:54: "egymás fölött hasonló terjedelmű szavak legyenek, mert az alja zsúfolt,
+     teteje szabadabb"): the order was picked by measuring every word, per language (shortest total of the seven columns):
+     EN/ZH/TH  Rent · Daily · Buy · Rooms · Projects · Apartment · Hotel / House · Office · Villa · Condo · Studio · Commercial · Hostel
+     FR        Louer · Journée · Acheter · Chambres · Programmes · Hôtel · Bureau / Studio · Condo · Maison · Auberge · Appartement · Villa · Local
+     KM        Rent · Daily · Buy · Rooms · Projects · Commercial · Hotel / Condo · Apartment · House · Office · Studio · Villa · Hostel */
+  html[lang] #dealTabs .dt-cat[data-cat=apartment]{order:1}
+  html[lang] #dealTabs .dt-cat[data-cat=hotel]{order:2}
+  html[lang] #dealTabs .dt-cat[data-cat=house]{order:3}
+  html[lang] #dealTabs .dt-cat[data-cat=office]{order:4}
+  html[lang] #dealTabs .dt-cat[data-cat=villa]{order:5}
+  html[lang] #dealTabs .dt-cat[data-cat=condo]{order:6}
+  html[lang] #dealTabs .dt-cat[data-cat=studio]{order:7}
+  html[lang] #dealTabs .dt-cat[data-cat=commercial]{order:8}
+  html[lang] #dealTabs .dt-cat[data-cat=hostel]{order:9}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=hotel]{order:1}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=office]{order:2}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=studio]{order:3}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=condo]{order:4}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=house]{order:5}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=hostel]{order:6}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=apartment]{order:7}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=villa]{order:8}
+  html[lang=fr] #dealTabs .dt-cat[data-cat=commercial]{order:9}
+  html[lang=km] #dealTabs .dt-cat[data-cat=commercial]{order:1}
+  html[lang=km] #dealTabs .dt-cat[data-cat=hotel]{order:2}
+  html[lang=km] #dealTabs .dt-cat[data-cat=condo]{order:3}
+  html[lang=km] #dealTabs .dt-cat[data-cat=apartment]{order:4}
+  html[lang=km] #dealTabs .dt-cat[data-cat=house]{order:5}
+  html[lang=km] #dealTabs .dt-cat[data-cat=office]{order:6}
+  html[lang=km] #dealTabs .dt-cat[data-cat=studio]{order:7}
+  html[lang=km] #dealTabs .dt-cat[data-cat=villa]{order:8}
+  html[lang=km] #dealTabs .dt-cat[data-cat=hostel]{order:9}
 }
 @media (max-width:720px){
   #dealTabs.deal-tabs{grid-template-columns:repeat(7,auto)!important;justify-content:space-between!important;column-gap:4px!important}
-  html[lang=fr] #dealTabs.deal-tabs,html[lang=km] #dealTabs.deal-tabs{column-gap:0!important}
   #dealTabs .dt-deal,#dealTabs .dt-cat{padding:9px 2px!important;font-size:12.5px!important}
 }
 @media (max-width:400px){#dealTabs .dt-deal,#dealTabs .dt-cat{padding:9px 1px!important}}

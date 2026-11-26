@@ -74,9 +74,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   of styles.css. Hotel/Hostel = property_type 'hotel'/'hostel' (STAY_CATS in app.js) and open as Daily (Buy stays Buy).
 - OFFICE · COMMERCIAL (owner, 2026-11-26: "legyen külön portál a commercialra?" → no, a category on this site; "mehet"): the row is
   14 items – Rent · Daily · Buy · Rooms · Projects | Hotel · Hostel · Office · Commercial · Apartment · Condo · Studio · Villa · House.
-  PC one row (6px side room per word); tablets AND phones TWO rows of SEVEN: Rent · Daily · Buy · Rooms · Projects · Hotel · Office /
-  House · Condo · Studio · Villa · Apartment · Hostel · Commercial (Office over Commercial; phones 4px gaps, FR/KM 0). Office =
-  property_type 'office'; Commercial = search-only type 'commercial' = shophouse + office (COMMERCIAL_TYPES in app.js, also in
+  PC one row (6px side room per word); tablets AND phones TWO rows of SEVEN, 4px gaps. SIMILAR WIDTHS STACKED (owner, 2026-11-26
+  06:54: "egymás fölött hasonló terjedelmű szavak… az alja zsúfolt, teteje szabadabb") – order measured per language (CSS order,
+  last block of styles.css): EN/ZH/TH Rent · Daily · Buy · Rooms · Projects · Apartment · Hotel / House · Office · Villa · Condo ·
+  Studio · Commercial · Hostel; FR … Hôtel · Bureau / Studio · Condo · Maison · Auberge · Appartement · Villa · Local; KM … Commercial ·
+  Hotel / Condo · Apartment · House · Office · Studio · Villa · Hostel. Office =
+  property_type 'office'; Commercial = search-only type 'commercial' = shophouse + office (COMMERCIAL in app.js, also in
   api/tg-sync.js alerts and api/_seo.js landings). Both open as Rent (Buy stays Buy; from Daily/Rooms they switch to Rent – BIZ_CATS).
   Row labels t_office_s / t_comm_s (short: FR "Local", KM "អូហ្វីស" / "ហាង"); full name t_commercial. Landing pages
   /rent/phnom-penh/commercial and /rent/phnom-penh/office ("Commercial spaces" / "Offices for rent" in the Menu after Listings;

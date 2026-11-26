@@ -1569,6 +1569,9 @@ function fitRows() {
     while (fs > 11 && out(row)) { fs -= 0.5; kids.forEach(k => k.style.setProperty('font-size', fs + 'px', 'important')); }
     if (out(row)) row.classList.add('fitwrap');
   });
+  // HERO TITLE fits ONE line in every language (owner, 2026-11-26 13:22: "kilóg… kicsinyítsd a betűt, hogyha kell"): from the CSS size,
+  // the letters shrink until the text (measured without the underline) fits the title's own width; never below 16px.
+  document.querySelectorAll('.hero > h1').forEach(h => { h.style.removeProperty('font-size'); h.style.setProperty('font-size', 'clamp(26px,3.7vw,46px)'); if (innerWidth < 380) h.style.setProperty('font-size', '6.4vw', 'important'); const r = document.createRange(); r.selectNodeContents(h); let fs = parseFloat(getComputedStyle(h).fontSize) || 26, i = 0; while (fs > 16 && i++ < 80 && r.getBoundingClientRect().width > h.clientWidth - 2) { fs -= 0.5; h.style.setProperty('font-size', fs + 'px', 'important'); } });
   document.querySelectorAll('.hero > p').forEach(p => { p.style.removeProperty('font-size'); let fs = parseFloat(getComputedStyle(p).fontSize) || 13; while (fs > 10 && p.scrollWidth > p.clientWidth + 0.5) { fs -= 0.5; p.style.setProperty('font-size', fs + 'px', 'important'); } });   // hero line: ONE line (owner 20:29)
   const b = document.body, hdr = document.querySelector('.hdr-in');
   if (hdr) { b.classList.remove('hfit1', 'hfit2'); const ho = () => hdr.scrollWidth > hdr.clientWidth + 0.5 || [...hdr.querySelectorAll('.hdr-r > *')].some(c => c.offsetWidth && c.getBoundingClientRect().right > W + 0.5);

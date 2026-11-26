@@ -48,7 +48,7 @@ function menu(lg) {
 // ---------- understanding a short text (search words or a listing description) ----------
 const DISTRICTS = ['BKK1', 'BKK2', 'BKK3', 'Chamkar Mon', 'Daun Penh', 'Riverside', 'Toul Kork', 'Toul Tom Poung', 'Tonle Bassac', 'Sen Sok', 'Chroy Changvar', '7 Makara', 'Russey Keo', 'Mean Chey', 'Chbar Ampov', 'Por Senchey', 'Dangkao', 'Olympic'];
 const CITIES = ['Phnom Penh', 'Siem Reap', 'Sihanoukville', 'Battambang', 'Kampot', 'Kep', 'Kampong Cham', 'Poipet', 'Bavet', 'Koh Kong', 'Takeo', 'Kampong Speu', 'Kampong Chhnang', 'Kampong Thom', 'Pursat', 'Prey Veng', 'Svay Rieng', 'Kratie', 'Stung Treng', 'Ratanakiri', 'Mondulkiri', 'Preah Vihear', 'Oddar Meanchey', 'Banteay Meanchey', 'Pailin', 'Tbong Khmum'];
-const TYPES = [['penthouse', /penthouse/], ['twin_villa', /twin\s*villa/], ['villa', /villa/], ['link_house', /link\s*house|borey/], ['flat_house', /flat\s*house/], ['shophouse', /shop\s*house/], ['condo', /condo/], ['office', /office/], ['land', /\bland\b|plot/], ['house', /\bhouse\b|home\b/], ['flat', /\bflat\b/], ['apartment', /apartment|apt\b|serviced/], ['room', /\broom\b/]];
+const TYPES = [['hostel', /hostel|dorm/], ['hotel', /hotel|guest\s*house/], ['penthouse', /penthouse/], ['twin_villa', /twin\s*villa/], ['villa', /villa/], ['link_house', /link\s*house|borey/], ['flat_house', /flat\s*house/], ['shophouse', /shop\s*house/], ['condo', /condo/], ['office', /office/], ['land', /\bland\b|plot/], ['house', /\bhouse\b|home\b/], ['flat', /\bflat\b/], ['apartment', /apartment|apt\b|serviced/], ['room', /\broom\b/]];
 const norm = s => String(s || '').toLowerCase().replace(/\s+/g, ' ');
 function parse(text) {
   const t = norm(text), o = {};

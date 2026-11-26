@@ -55,8 +55,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   white pill on the photo (like the Study cards). fonts.css is loaded LAST and enforces it – new components add their
   classes there; no inline font-size above 13px or weight 700/800 in app.js/agents.js.
 - HOTEL · HOSTEL (owner, 2026-11-26: "az elejére a kereső részbe… a hotelt és hostelt is"): the row is now 12 items –
-  Rent · Daily · Buy · Rooms · Projects | Hotel · Hostel · Apartment · Condo · Studio · Villa · House. PC one row, tablets 2 × 6,
-  phones 3 × 4 (Rent · Daily · Buy · Rooms / Projects · Hotel · Hostel · House / Condo · Studio · Villa · Apartment) – last block
+  Rent · Daily · Buy · Rooms · Projects | Hotel · Hostel · Apartment · Condo · Studio · Villa · House. PC one row; tablets AND
+  phones TWO rows of six (owner 09:11: "nem fér el 2 sorban?"): Rent · Daily · Buy · Rooms · Projects · Hotel / House · Condo ·
+  Studio · Villa · Apartment · Hostel (Hotel over Hostel; phones: columns as wide as their longest word, spread evenly) – last block
   of styles.css. Hotel/Hostel = property_type 'hotel'/'hostel' (STAY_CATS in app.js) and open as Daily (Buy stays Buy).
 - SEARCH ROW (owner, 2026-11-24): Rent · Daily · Buy · Rooms · Projects | Apartment · Condo · Studio · Villa · House –
   10 items, phones 5 + 5 in equal centred columns (owner: "egymás alatt… egyenlő távolság"); Projects → #/projects;

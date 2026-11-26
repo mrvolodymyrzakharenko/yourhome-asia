@@ -1367,3 +1367,16 @@ label[hidden]{display:none!important}
 .yft .yft-pill{border-color:#AEB9CF;color:#0F172A;background:#fff;font-weight:500}
 .yft .yft-pill:hover,.yft .yft-pill:focus-visible{border-color:var(--blue);color:var(--blue);background:#EEF2FD}
 @media (max-width:900px){.yft-pop .yft-areas{flex-direction:column;align-items:flex-start}.yft-pop .yft-pills{flex-wrap:wrap}}
+/* POPULAR SEARCHES (owner, 2026-11-26: "több link… rent apartment in Phnom Penh… mehet"): own row under Popular areas – title +
+   small grey keyword links with thin dots between them (api/page.js footerLinks, live landing pages only); wraps, never sticks out. */
+.yft-ps:empty{display:none}
+.yft-psr{display:flex;align-items:baseline;gap:6px 16px;padding-bottom:24px}
+.yft-psr .yft-soc-t{margin:0;white-space:nowrap;color:#0b1d51}
+.yft-psl{min-width:0;overflow:hidden}
+.yft-psl>div{display:flex;flex-wrap:wrap;gap:6px 0;margin-left:-19px}
+.yft .yft-psl a{color:#475569;text-decoration:none;font-size:12px;white-space:nowrap;transition:color .2s}
+.yft .yft-psl a:hover,.yft .yft-psl a:focus-visible{color:var(--blue);text-decoration:underline;text-underline-offset:2px}
+.yft .yft-psl a{position:relative;padding-left:19px}
+.yft-psl a::before{content:"·";position:absolute;left:7px;color:#AEB9CF}   /* the dot of a line's first link sits in the clipped 19px – no line starts with a dot */
+.yft-pop .yft-areas{padding-bottom:18px}
+@media (max-width:900px){.yft-psr{flex-direction:column;align-items:flex-start}.yft-psl{align-self:stretch}.yft .yft-psl a{white-space:normal}}

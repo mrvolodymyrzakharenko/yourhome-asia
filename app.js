@@ -155,6 +155,8 @@ const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,p
 function applyStatic() {
   document.documentElement.lang = lang;
   document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = t(el.dataset.i18n));
+  // footer "Popular searches" (api/page.js footerLinks): template ps_* + plural type ftp_* + place name
+  document.querySelectorAll('[data-ps]').forEach(el => { el.textContent = t(el.dataset.ps, { x: el.dataset.psx ? t('ftp_' + el.dataset.psx) : '', p: el.dataset.psp || '' }); });
   document.getElementById('lang').value = lang;
   document.getElementById('year').textContent = new Date().getFullYear();
 }

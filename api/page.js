@@ -231,12 +231,31 @@ async function footerLinks() {
   const pills = Object.values(dist).sort((a, b) => b.n - a.n || a.name.localeCompare(b.name)).slice(0, 12)
     .map(d => `<a class="yft-pill" href="${d.path}">${esc(d.name)}</a>`).join('');
   const areas = pills ? `<div class="yft-areas"><span class="yft-soc-t" data-i18n="ft_areas">Popular areas</span><div class="yft-pills">${pills}</div></div>` : '';
-  FTC = { rent, sale, areas }; FTT = Date.now();
+  // POPULAR SEARCHES (owner, 2026-11-26: "több link… rent apartment in Phnom Penh… mehet"): long keyword links, only landing pages
+  // with live listings – type pages first, then districts, then other cities; most listings first, max 12. The app translates
+  // them (data-ps = template ps_*, data-psx = type, data-psp = place).
+  const TPL = { rent: ['ps_rentT', 'ps_rent', '{x} for rent in {p}', 'Homes for rent in {p}'], buy: ['ps_saleT', 'ps_sale', '{x} for sale in {p}', 'Property for sale in {p}'],
+    daily: ['ps_dailyT', 'ps_daily', '{x} for daily rent in {p}', 'Daily rentals in {p}'], rooms: [null, 'ps_rooms', null, 'Rooms for rent in {p}'] };
+  const ps = [];
+  for (const k of Object.keys(L)) {
+    const m = k.match(/^\/(rent|buy|rooms|daily)\/([^/]+)(?:\/([^/]+))?$/); if (!m) continue;
+    const [, deal, city, seg] = m, l0 = L[k][0], cityName = l0.city || 'Phnom Penh', T = TPL[deal];
+    const isType = seg && S.TYPE_PLURAL[seg];
+    if (isType && !T[0]) continue;
+    if (!seg && city === c) continue;                       // "/rent/phnom-penh" = the "All rentals" link already
+    const place = isType || !seg ? cityName : (l0.district || seg);
+    const rank = isType && city === c ? 0 : seg && city === c ? 1 : 2;
+    ps.push({ k, rank, n: L[k].length, key: isType ? T[0] : T[1], tpl: isType ? T[2] : T[3], x: isType ? seg : '', place });
+  }
+  const psLinks = ps.sort((a, b) => a.rank - b.rank || b.n - a.n || a.k.localeCompare(b.k)).slice(0, 12)
+    .map(e => `<a href="${e.k}" data-ps="${e.key}"${e.x ? ` data-psx="${e.x}"` : ''} data-psp="${esc(e.place)}">${esc(e.tpl.replace('{x}', S.TYPE_PLURAL[e.x] || '').replace('{p}', e.place))}</a>`).join('');
+  const psRow = psLinks ? `<div class="yft-psr"><span class="yft-soc-t" data-i18n="ft_ps">Popular searches</span><div class="yft-psl"><div>${psLinks}</div></div></div>` : '';
+  FTC = { rent, sale, areas, ps: psRow }; FTT = Date.now();
   return FTC;
 }
 function fillFooter(html, f) {
   if (!f) return html;
-  for (const k of ['rent', 'sale', 'areas']) html = html.replace(new RegExp(`<!--ft:${k}-->[\\s\\S]*?<!--/ft:${k}-->`), `<!--ft:${k}-->${f[k]}<!--/ft:${k}-->`);
+  for (const k of ['rent', 'sale', 'areas', 'ps']) html = html.replace(new RegExp(`<!--ft:${k}-->[\\s\\S]*?<!--/ft:${k}-->`), `<!--ft:${k}-->${f[k]}<!--/ft:${k}-->`);
   return html;
 }
 

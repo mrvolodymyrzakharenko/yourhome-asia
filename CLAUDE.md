@@ -44,6 +44,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   POPULAR AREAS = OWN ROW (owner, 2026-11-26 07:32: "legyen kicsit sötétebb… és egy sorban"): not in the brand column any more –
   div.yft-pop under the link columns (above the © row): "Popular areas" + the pills on ONE line, darker pills (border #AEB9CF,
   text #0F172A, 500); they wrap only when they no longer fit (phones: title above, pills wrap). styles.css "POPULAR AREAS" block.
+  POPULAR SEARCHES (owner, 2026-11-26: "több link… rent apartment in Phnom Penh… mehet"): row div.yft-ps under Popular areas –
+  "Popular searches" + up to 12 small grey keyword links ("Apartments for rent in Phnom Penh", "Homes for rent in BKK1", "Property for
+  sale in Chroy Changvar"…) with dots between them; ONLY landing pages with live listings (type pages of Phnom Penh first, then
+  districts, then other cities; most listings first) – api/page.js footerLinks() fills <!--ft:ps-->. Translated in the browser:
+  data-ps = template ps_* in i18n.js FT2 ({x} = ftp_<type>, {p} = place), applied next to data-i18n in app.js. A wrapped line never
+  starts with a dot (clipped 19px). styles.css "POPULAR SEARCHES" block.
   EVERY LINK COLUMN = 8 ROWS (owner, 2026-11-26: "egészítsd ki… legyen egységes – mehet a commercial is"): For rent = Apartments ·
   Condos · Houses · Villas · Commercial property · Rooms for rent · Daily rentals · All rentals; For sale = Condos · Apartments ·
   Houses · Villas · Land · Commercial property · New projects · All properties for sale; For advertisers = Post a listing – free ·

@@ -422,7 +422,7 @@ const dealRow = (deal, cat, id) => `<div class="deal-tabs" id="${id}">${['rent',
 function searchBox(p = {}, deal = p.deal || 'rent', cat = '') {
   return `${dealRow(deal, cat, 'dealTabs')}
   <form class="sbox" id="sbox">
-    <div class="f f-want"><label>${t('wantTo')}</label><select name="want" id="wantSel" aria-label="${esc(t('wantTo'))}">${[['rent', t('rent')], ['sell', t('sell')], ['buy', t('buy')]].map(([v, lab]) => `<option value="${v}"${v === (deal === 'sale' ? 'buy' : 'rent') ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select></div>
+    <div class="f f-want"><label><span class="mf-l">${t('wantTo')}</span><span class="mf-s">${t('wantShort')}</span></label><select name="want" id="wantSel" aria-label="${esc(t('wantTo'))}">${[['rent', t('rent')], ['sell', t('sell')], ['buy', t('buy')]].map(([v, lab]) => `<option value="${v}"${v === (deal === 'sale' ? 'buy' : 'rent') ? ' selected' : ''}>${esc(lab)}</option>`).join('')}</select></div>
     <div class="f"><label>${t('city')}</label><select name="city" id="citySel" aria-label="${esc(t('city'))}">${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (p.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></div>
     <div class="f addr"><label><span class="mf-l">📍 </span>${t('district')}</label><select name="q" id="distSel" aria-label="${esc(t('district'))}">${districtOpts(p.city || 'Phnom Penh', p.q)}</select></div>
     <div class="f"><label><span class="mf-l">${t('type')}</span><span class="mf-s">${t('typeShort')}</span></label><select name="type"><option value="">${t('any')}</option>${SEARCH_TYPES.map(x => `<option value="${x}" ${p.type === x ? 'selected' : ''}>${t(x === 'studio' ? 'studio' : 't_' + x)}</option>`).join('')}</select></div>

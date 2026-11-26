@@ -323,5 +323,5 @@ th: { ftp_commercial:'อสังหาฯ เชิงพาณิชย์', 
 };
 for (const k of Object.keys(FT2)) Object.assign(T[k], FT2[k]);
 /* Rent · Sell · Buy field in the search card (owner, 2026-11-26 07:08) */
-const WANT = { en:{wantTo:'I want to', sell:'Sell'}, km:{wantTo:'ខ្ញុំចង់', sell:'លក់'}, zh:{wantTo:'我想', sell:'出售'}, fr:{wantTo:'Je veux', sell:'Vendre'}, th:{wantTo:'ฉันต้องการ', sell:'ขาย'} };
+const WANT = { en:{wantTo:'I want to', wantShort:'I want', sell:'Sell'}, km:{wantTo:'ខ្ញុំចង់', wantShort:'ចង់', sell:'លក់'}, zh:{wantTo:'我想', wantShort:'我想', sell:'出售'}, fr:{wantTo:'Je veux', wantShort:'Je veux', sell:'Vendre'}, th:{wantTo:'ฉันต้องการ', wantShort:'ต้องการ', sell:'ขาย'} };
 for (const k of Object.keys(WANT)) Object.assign(T[k], WANT[k]);

@@ -124,8 +124,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - RENT · SELL · BUY FIELD (owner, 2026-11-26 07:08: "plusz mező, rent - sell - buy és legyen alapból a renten"; a two-row tab
   version was tried and reverted – "túl sok"): the FIRST field of the PC search card (#wantSel, label "I want to", wantTo / sell in
   i18n.js WANT), default Rent (Buy when the page's deal is sale). Buy = sale search, Rent = rent (Daily / Rooms tabs stay), Sell + Search
-  → #/post?deal=sale&type=<type> (goSell(); viewPost presets deal + type). Synced with the deal tabs. PC (≥901px) only: five equal
-  fields; phones/tablets keep their four fields (styles.css "RENT · SELL · BUY FIELD").
+  → #/post?deal=sale&type=<type> (goSell(); viewPost presets deal + type). Synced with the deal tabs. EVERY screen (owner 07:10 "mobilon???"): PC five
+  equal fields; tablets the field spans the row above City | District; phones FIVE fields in the one row, short label "I want" (wantShort).
 - PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),
   then Post listing + Search in the row below.
 - Posting a listing must always be visible straight away (header button – on phones a compact red "+ Post" before Menu,

@@ -16,49 +16,52 @@ const ICONS = {
 const pic = (u, w) => `${u}?auto=format&fit=crop&w=${w}&q=70`;
 const picSet = u => [480, 800, 1200].map(w => `${pic(u, w)} ${w}w`).join(', ');
 const out = (u, t) => `<a href="${u}" target="_blank" rel="noopener">${t}</a>`;
-const day = d => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+// UI words in the visitor's language (owner, 2026-11-26 14:01); the article texts themselves are English for now
+const tt = k => (C && C.t ? C.t(k) : k);
+const kick = k => { const v = tt('bk_' + (k || 'Guide')); return v.startsWith('bk_') ? (k || 'Guide') : v; };
+const day = d => { const l = C && C.lang ? C.lang() : 'en'; try { return new Date(d + 'T00:00:00').toLocaleDateString(l === 'en' ? 'en-GB' : l === 'km' ? 'km-KH' : l, { day: 'numeric', month: 'short', year: 'numeric' }); } catch { return new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } };
 function bcard(a, i) {
   const { esc } = C;
   return `<a class="card bcard" href="#/blog/${encodeURIComponent(a.slug)}">
-    ${a.img ? `<div class="bcov bph"><img src="${pic(a.img, 640)}" srcset="${picSet(a.img)}" sizes="(max-width:720px) 100vw, 320px" alt="${esc(a.imgAlt || a.title)}" loading="lazy" decoding="async"><span>${esc(a.kicker || 'Guide')}</span></div>`
-      : `<div class="bcov bc${i % 4}">${ICONS[a.icon] || ICONS.doc}<span>${esc(a.kicker || 'Guide')}</span></div>`}
-    <div class="cb"><small class="bdate">${esc(day(a.date))}</small><h3 class="ct">${esc(a.title)}</h3><p class="bdesc">${esc(a.desc)}</p><span class="prj-link">Read more <svg viewBox="0 0 24 24" class="pi" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>`;
+    ${a.img ? `<div class="bcov bph"><img src="${pic(a.img, 640)}" srcset="${picSet(a.img)}" sizes="(max-width:720px) 100vw, 320px" alt="${esc(a.imgAlt || a.title)}" loading="lazy" decoding="async"><span>${esc(kick(a.kicker))}</span></div>`
+      : `<div class="bcov bc${i % 4}">${ICONS[a.icon] || ICONS.doc}<span>${esc(kick(a.kicker))}</span></div>`}
+    <div class="cb"><small class="bdate">${esc(day(a.date))}</small><h3 class="ct">${esc(a.title)}</h3><p class="bdesc">${esc(a.desc)}</p><span class="prj-link">${esc(tt('bl_more'))} <svg viewBox="0 0 24 24" class="pi" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></div></a>`;
 }
 export async function homeBlock() {
   const list = (await load()).slice(0, 4);
   if (!list.length) return '';
-  return `<section class="block"><div class="bh"><h2>Blog</h2><a class="more" href="#/blog">See all →</a></div><div class="row4">${list.map(bcard).join('')}</div><div class="block-more"><a class="btn ghost" href="#/blog">Blog · See all →</a></div></section>`;
+  return `<section class="block"><div class="bh"><h2>${C.esc(tt('blog'))}</h2><a class="more" href="#/blog">${C.esc(tt('seeAll'))}</a></div><div class="row4">${list.map(bcard).join('')}</div><div class="block-more"><a class="btn ghost" href="#/blog">${C.esc(tt('bl_seeAll'))}</a></div></section>`;
 }
 export async function viewBlog() {
   const { app } = C;
-  document.title = 'Blog – renting & buying in Cambodia — YourHome';
+  document.title = tt('bl_title') + ' — YourHome';
   const list = await load();
   app.innerHTML = `<div class="wrap">
-    <nav class="crumbs"><a href="#/">Home</a><span>/</span><span>Blog</span></nav>
-    <div class="ab"><p class="ab-k">Blog</p><h1>Guides for renting and buying in Cambodia</h1><p class="ab-lead">Practical guides for tenants, buyers, owners and agents – areas, contracts, safety and the rules for foreigners.</p></div>
-    <div class="row4 blist">${list.map(bcard).join('') || '<div class="empty">No articles yet.</div>'}</div>
+    <nav class="crumbs"><a href="#/">${C.esc(tt('home'))}</a><span>/</span><span>${C.esc(tt('blog'))}</span></nav>
+    <div class="ab"><p class="ab-k">${C.esc(tt('blog'))}</p><h1>${C.esc(tt('bl_h1'))}</h1><p class="ab-lead">${C.esc(tt('bl_lead'))}</p></div>
+    <div class="row4 blist">${list.map(bcard).join('') || `<div class="empty">${C.esc(tt('bl_none'))}</div>`}</div>
   </div>`;
 }
 export async function viewArticle(slug) {
   const { app, esc } = C;
   const list = await load();
   const i = list.findIndex(a => a.slug === slug), a = list[i];
-  if (!a) { app.innerHTML = `<div class="wrap"><div class="empty">This article is not available. <a href="#/blog">All articles →</a></div></div>`; return; }
+  if (!a) { app.innerHTML = `<div class="wrap"><div class="empty">${esc(tt('bl_na'))} <a href="#/blog">${esc(tt('bl_all'))}</a></div></div>`; return; }
   document.title = a.title + ' — YourHome Blog';
   const more = list.filter(x => x.slug !== slug).slice(0, 3);
   // body = our own text from blog.json (not user content); internal links "/…" are handled by router.js
   app.innerHTML = `<div class="wrap">
-    <nav class="crumbs"><a href="#/">Home</a><span>/</span><a href="#/blog">Blog</a><span>/</span><span>${esc(a.title)}</span></nav>
+    <nav class="crumbs"><a href="#/">${esc(tt('home'))}</a><span>/</span><a href="#/blog">${esc(tt('blog'))}</a><span>/</span><span>${esc(a.title)}</span></nav>
     <article class="page bart">
-      ${a.img ? `<figure class="bfig"><img src="${pic(a.img, 1200)}" srcset="${picSet(a.img)}" sizes="(max-width:820px) 100vw, 780px" alt="${esc(a.imgAlt || a.title)}" decoding="async"><figcaption>Photo: ${a.credit ? out(esc(a.credit.page), esc(a.credit.name)) + ' / ' + out('https://unsplash.com/?utm_source=yourhome_asia&utm_medium=referral', 'Unsplash') : 'Unsplash'}</figcaption></figure>`
+      ${a.img ? `<figure class="bfig"><img src="${pic(a.img, 1200)}" srcset="${picSet(a.img)}" sizes="(max-width:820px) 100vw, 780px" alt="${esc(a.imgAlt || a.title)}" decoding="async"><figcaption>${esc(tt('bl_photo'))}: ${a.credit ? out(esc(a.credit.page), esc(a.credit.name)) + ' / ' + out('https://unsplash.com/?utm_source=yourhome_asia&utm_medium=referral', 'Unsplash') : 'Unsplash'}</figcaption></figure>`
         : `<div class="bcov bc${i % 4} bhero">${ICONS[a.icon] || ICONS.doc}<span>${esc(a.kicker || 'Guide')}</span></div>`}
-      <p class="ab-k">${esc(a.kicker || 'Guide')} · ${esc(day(a.date))}</p>
+      <p class="ab-k">${esc(kick(a.kicker))} · ${esc(day(a.date))}</p>${C.lang && C.lang() !== 'en' ? `<p class="bl-en">${esc(tt('bl_enOnly'))}</p>` : ''}
       <h1>${esc(a.title)}</h1>
       <p class="ab-lead">${esc(a.desc)}</p>
       <div class="bbody">${a.body}</div>
-      ${(a.sources || []).length ? `<div class="bsrc"><h2>Sources</h2><ul>${a.sources.map(x => `<li>${out(esc(x.url), esc(x.title))} – ${esc(x.name)}${x.date ? ', ' + esc(day(x.date)) : ''}</li>`).join('')}</ul><p>Our own summary of the sources above. Figures are as reported by them; check the original before you make a decision.</p></div>` : ''}
-      <div class="ab-cta"><div><b>Find your home in Cambodia</b><span>Free listings from owners and agents – search by area, type and budget.</span></div><div class="ab-btns"><a class="btn red" href="#/search?deal=rent">Homes for rent</a><a class="btn ghost" href="#/post">+ Post listing</a></div></div>
+      ${(a.sources || []).length ? `<div class="bsrc"><h2>${esc(tt('bl_src'))}</h2><ul>${a.sources.map(x => `<li>${out(esc(x.url), esc(x.title))} – ${esc(x.name)}${x.date ? ', ' + esc(day(x.date)) : ''}</li>`).join('')}</ul><p>${esc(tt('bl_srcNote'))}</p></div>` : ''}
+      <div class="ab-cta"><div><b>${esc(tt('bl_ctaT'))}</b><span>${esc(tt('bl_ctaS'))}</span></div><div class="ab-btns"><a class="btn red" href="#/search?deal=rent">${esc(tt('bl_ctaB'))}</a><a class="btn ghost" href="#/post">+ ${esc(tt('post'))}</a></div></div>
     </article>
-    ${more.length ? `<section class="block"><div class="bh"><h2>More from the blog</h2><a class="more" href="#/blog">See all →</a></div><div class="row4">${more.map(x => bcard(x, list.indexOf(x))).join('')}</div></section>` : ''}
+    ${more.length ? `<section class="block"><div class="bh"><h2>${esc(tt('bl_moreFrom'))}</h2><a class="more" href="#/blog">${esc(tt('seeAll'))}</a></div><div class="row4">${more.map(x => bcard(x, list.indexOf(x))).join('')}</div></section>` : ''}
   </div>`;
 }

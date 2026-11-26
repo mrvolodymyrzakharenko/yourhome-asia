@@ -42,8 +42,8 @@ function build() {
   dlg.innerHTML = `<div class="apm-back" data-apm="close"></div>
   <div class="apm-box" role="dialog" aria-modal="true" aria-labelledby="apm-title">
     <div class="apm-gal"><div class="apm-blur"></div><img class="apm-img" alt=""><span class="apm-date"></span>
-      <button type="button" class="apm-nav apm-prev" data-apm="prev" aria-label="Previous photo">${I.prev}</button>
-      <button type="button" class="apm-nav apm-next" data-apm="next" aria-label="Next photo">${I.next}</button>
+      <button type="button" class="apm-nav apm-prev" data-apm="prev" aria-label="${C.esc ? C.esc(C.t('ph_prev')) : 'Previous photo'}">${I.prev}</button>
+      <button type="button" class="apm-nav apm-next" data-apm="next" aria-label="${C.esc ? C.esc(C.t('ph_next')) : 'Next photo'}">${I.next}</button>
       <div class="apm-dots"></div></div>
     <div class="apm-side">
       <div class="apm-scroll"></div>
@@ -54,7 +54,7 @@ function build() {
         <button type="button" data-apm="tg" aria-label="Telegram" title="Telegram">${I.tg}</button>
         <button type="button" data-apm="fb" aria-label="Facebook" title="Facebook">${I.fb}</button>
         <button type="button" data-apm="wa" aria-label="WhatsApp" title="WhatsApp">${I.chat}</button>
-        <button type="button" data-apm="copy" aria-label="Copy link" title="Copy link">${I.copy}</button>
+        <button type="button" data-apm="copy" aria-label="${C.t('copyLink')}" title="${C.t('copyLink')}">${I.copy}</button>
         <button type="button" data-apm="save" aria-pressed="false" aria-label="Save" title="Save">${I.heart}</button>
       </div>
       <p class="apm-toast" role="status" aria-live="polite"></p>

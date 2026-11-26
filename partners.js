@@ -2,8 +2,13 @@
 // Port of the Study and Work portal's For Partners page (partner-program.html + partners.css) for a property portal.
 // Applications -> yh_partner_requests, project questions -> yh_project_leads (insert only, RLS). Projects: yh_projects
 // (added by our team; is_demo = sample). Wired from app.js with PT.init(ctx).
-let C = null;
+let C = null, TRP = null;
 export function init(ctx) { C = ctx; }
+// Become a partner page in the visitor's language: tr-pages.js PX (keyed by the English text below), loaded only when needed
+const P = s => (TRP && TRP.PX[C.lang()] && TRP.PX[C.lang()][s]) || s;
+const t = (k, v) => { let r = C.t(k); if (v) for (const x in v) r = r.replace('{' + x + '}', v[x]); return r; };
+const STAGE_T = () => ({ presale: C.t('st_presale'), construction: C.t('st_construction'), ready: C.t('st_ready') });
+const PAY_T = k => C.t('pay_' + k);
 const U = (id, w = 480, h = 360) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&h=${h}&q=75`;
 const IMG = (id, alt, w = 480, h = 360) => `<img src="${U(id, w, h)}" srcset="${U(id, w, h)} ${w}w, ${U(id, w * 2, h * 2)} ${w * 2}w" sizes="(max-width:600px) 92vw, 260px" alt="${alt}" loading="lazy" decoding="async" width="${w}" height="${h}">`;
 const S = p => `<svg class="pi" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
@@ -108,90 +113,91 @@ const LAP = `<svg class="pp-lap" viewBox="0 0 520 330" role="img" aria-label="Pa
   <path d="M20 282h480l-26 22H46z" fill="#C9CED8"/><path d="M20 282h480v6H20z" fill="#B5BBC7"/><rect x="226" y="284" width="68" height="5" rx="2.5" fill="#9EA5B3"/>
 </svg>`;
 
-export function viewPartners() {
+export async function viewPartners() {
   const { app, esc } = C;
-  document.title = 'Become a partner — YourHome Cambodia';
+  if (C.lang() !== 'en' && !TRP) { try { TRP = await import('./tr-pages.js?v=1'); } catch (e) { console.error(e); } }
+  document.title = P('Become a partner — YourHome Cambodia');
   const pre = new URLSearchParams(YH.h().split('?')[1] || '').get('type') || '';
-  const opt = (list) => list.map(x => `<option value="${x[0]}"${x[0] === pre ? ' selected' : ''}>${esc(x[1])}</option>`).join('');
+  const opt = (list) => list.map(x => `<option value="${x[0]}"${x[0] === pre ? ' selected' : ''}>${esc(P(x[1]))}</option>`).join('');
   app.innerHTML = `
 <section class="pp-hero">
-  ${IMG('1681505531034-8d67054e07f6', 'Business partners shaking hands over a deal', 1200, 700)}
+  ${IMG('1681505531034-8d67054e07f6', P('Business partners shaking hands over a deal'), 1200, 700)}
   <div class="wrap">
-    <nav class="crumbs" aria-label="Breadcrumb"><a href="#/">Home</a><span>/</span><span>Become a partner</span></nav>
-    <p class="pp-k">For Partners</p>
-    <h1>Partner With YourHome <em>Cambodia</em></h1>
-    <p>Grow your property business with Cambodia's new home portal – rentals, sales, rooms, new projects and every service a home needs.</p>
+    <nav class="crumbs" aria-label="Breadcrumb"><a href="#/">${esc(C.t('home'))}</a><span>/</span><span>${esc(C.t('becomePartner'))}</span></nav>
+    <p class="pp-k">${P('For Partners')}</p>
+    <h1>${P('Partner With YourHome <em>Cambodia</em>')}</h1>
+    <p>${P("Grow your property business with Cambodia's new home portal – rentals, sales, rooms, new projects and every service a home needs.")}</p>
     <div class="pp-btns">
-      <a class="pp-btn pp-btn-p" href="#/partners" data-pp-go="">Become a Partner ${I.arrow}</a>
-      <a class="pp-btn pp-btn-o" href="#/projects">See new projects</a>
+      <a class="pp-btn pp-btn-p" href="#/partners" data-pp-go="">${P('Become a Partner')} ${I.arrow}</a>
+      <a class="pp-btn pp-btn-o" href="#/projects">${P('See new projects')}</a>
     </div>
   </div>
 </section>
 <div class="wrap pp">
   <section class="pp-sec">
-    <h2>Who Can <em>Partner</em> With Us?</h2>
-    <div class="pp-who">${WHO.map(([k, n, img, alt, ic]) => `<a class="pp-wc" href="#/partners" data-pp-go="${k}"><figure>${IMG(img, alt)}<span class="pp-ic">${ic}</span></figure><h3>${n}</h3><span class="pp-wc-b">Join as partner ${I.arrow}</span></a>`).join('')}</div>
+    <h2>${P('Who Can <em>Partner</em> With Us?')}</h2>
+    <div class="pp-who">${WHO.map(([k, n, img, alt, ic]) => `<a class="pp-wc" href="#/partners" data-pp-go="${k}"><figure>${IMG(img, P(alt))}<span class="pp-ic">${ic}</span></figure><h3>${P(n)}</h3><span class="pp-wc-b">${P('Join as partner')} ${I.arrow}</span></a>`).join('')}</div>
   </section>
 
   <section class="pp-sec">
-    <h2>Home <em>Services</em> Partners</h2>
-    <p class="pp-lead">Every service a tenant, buyer or owner needs – choose your category and get customers from YourHome.</p>
-    <div class="pp-svc">${SERVICES.map(([k, n, d, ic]) => `<a class="pp-sc" href="#/partners" data-pp-go="${k}"><span class="pp-sci">${ic}</span><span class="pp-sct"><b>${n}</b><small>${d}</small></span><span class="pp-scb">Join ${I.arrow}</span></a>`).join('')}</div>
-    <div class="pp-who-more"><a class="pp-btn pp-btn-p" href="#/partners" data-pp-go="">Become a Partner ${I.arrow}</a></div>
+    <h2>${P('Home <em>Services</em> Partners')}</h2>
+    <p class="pp-lead">${P('Every service a tenant, buyer or owner needs – choose your category and get customers from YourHome.')}</p>
+    <div class="pp-svc">${SERVICES.map(([k, n, d, ic]) => `<a class="pp-sc" href="#/partners" data-pp-go="${k}"><span class="pp-sci">${ic}</span><span class="pp-sct"><b>${P(n)}</b><small>${P(d)}</small></span><span class="pp-scb">${P('Join')} ${I.arrow}</span></a>`).join('')}</div>
+    <div class="pp-who-more"><a class="pp-btn pp-btn-p" href="#/partners" data-pp-go="">${P('Become a Partner')} ${I.arrow}</a></div>
   </section>
 
   <section class="pp-sec pp-how">
-    <h2>How <em>Partnership</em> Works</h2>
-    <ol class="pp-steps">${STEPS.map(([h, p, ic], i) => `<li><div class="pp-sh"><span class="pp-sn">${i + 1}</span>${ic}</div><h3>${h}</h3><p>${p}</p></li>`).join('')}</ol>
+    <h2>${P('How <em>Partnership</em> Works')}</h2>
+    <ol class="pp-steps">${STEPS.map(([h, p, ic], i) => `<li><div class="pp-sh"><span class="pp-sn">${i + 1}</span>${ic}</div><h3>${P(h)}</h3><p>${P(p)}</p></li>`).join('')}</ol>
   </section>
 
-  <ul class="pp-feats" aria-label="Partner benefits">${FEATS.map(([img, alt, n]) => `<li>${IMG(img, alt)}<span>${n}</span></li>`).join('')}</ul>
+  <ul class="pp-feats" aria-label="${P('Partner benefits')}">${FEATS.map(([img, alt, n]) => `<li>${IMG(img, P(alt))}<span>${P(n)}</span></li>`).join('')}</ul>
 
   <section class="pp-sec">
-    <h2>Choose Your <em>Partnership Type</em></h2>
-    <div class="pp-types">${TYPES.map(([k, n, d, img, ic]) => `<a class="pp-tc" href="#/partners" data-pp-go="${k}"><figure>${IMG(img, n)}<span class="pp-ic">${ic}</span></figure><div><h3>${n}</h3><p>${d}</p></div></a>`).join('')}</div>
+    <h2>${P('Choose Your <em>Partnership Type</em>')}</h2>
+    <div class="pp-types">${TYPES.map(([k, n, d, img, ic]) => `<a class="pp-tc" href="#/partners" data-pp-go="${k}"><figure>${IMG(img, P(n))}<span class="pp-ic">${ic}</span></figure><div><h3>${P(n)}</h3><p>${P(d)}</p></div></a>`).join('')}</div>
   </section>
 
   <section class="pp-sec pp-dash">
-    ${LAP}
+    ${LAP.replace('aria-label="Partner Dashboard on a laptop"', 'aria-label="' + P('Partner Dashboard on a laptop') + '"').replace('>Leads<', '>' + P('Leads') + '<').replace('>Applicants<', '>' + P('Applicants') + '<').replace('>Applications<', '>' + P('Applications') + '<')}
     <div>
-      <h2>Partner <em>Dashboard</em></h2>
-      <p>Manage your listings, projects, services and customers in one place.</p>
-      <ul class="pp-check">${['Listings, projects & services', 'Leads, messages & Telegram alerts', 'Agent profile with your links (Booking, Agoda…)', 'Statistics: views, visitors, contact clicks', 'Verified partner badge after our check'].map(x => `<li>${I.check}${x}</li>`).join('')}</ul>
-      <a class="pp-btn pp-btn-p" href="#/account">Explore the Dashboard ${I.arrow}</a>
+      <h2>${P('Partner <em>Dashboard</em>')}</h2>
+      <p>${P('Manage your listings, projects, services and customers in one place.')}</p>
+      <ul class="pp-check">${['Listings, projects & services', 'Leads, messages & Telegram alerts', 'Agent profile with your links (Booking, Agoda…)', 'Statistics: views, visitors, contact clicks', 'Verified partner badge after our check'].map(x => `<li>${I.check}${P(x)}</li>`).join('')}</ul>
+      <a class="pp-btn pp-btn-p" href="#/account">${P('Explore the Dashboard')} ${I.arrow}</a>
     </div>
   </section>
 
   <section class="pp-sec pp-apply" id="ppApply">
-    <h2>Partner <em>Application</em></h2>
-    <p class="pp-lead">Free to apply. Our team answers within 1–2 working days on Telegram, WhatsApp or email.</p>
+    <h2>${P('Partner <em>Application</em>')}</h2>
+    <p class="pp-lead">${P('Free to apply. Our team answers within 1–2 working days on Telegram, WhatsApp or email.')}</p>
     <form class="pp-form" id="ppForm">
-      <label class="pp-full">Partner type
-        <select name="partner_type" required><option value="">Choose…</option>
-          <optgroup label="Who can partner">${opt(WHO)}</optgroup>
-          <optgroup label="Home services">${opt(SERVICES)}</optgroup>
-          <optgroup label="Partnership type">${opt(TYPES)}</optgroup>
-          <option value="other"${pre === 'other' ? ' selected' : ''}>Other</option>
+      <label class="pp-full">${P('Partner type')}
+        <select name="partner_type" required><option value="">${P('Choose…')}</option>
+          <optgroup label="${P('Who can partner')}">${opt(WHO)}</optgroup>
+          <optgroup label="${P('Home services')}">${opt(SERVICES)}</optgroup>
+          <optgroup label="${P('Partnership type')}">${opt(TYPES)}</optgroup>
+          <option value="other"${pre === 'other' ? ' selected' : ''}>${P('Other')}</option>
         </select></label>
-      <label>Your name<input name="name" required minlength="2" maxlength="120" autocomplete="name"></label>
-      <label>Company<input name="company" maxlength="160" autocomplete="organization"></label>
-      <label>Phone / WhatsApp<input name="phone" maxlength="40" inputmode="tel" autocomplete="tel"></label>
+      <label>${P('Your name')}<input name="name" required minlength="2" maxlength="120" autocomplete="name"></label>
+      <label>${P('Company')}<input name="company" maxlength="160" autocomplete="organization"></label>
+      <label>${P('Phone / WhatsApp')}<input name="phone" maxlength="40" inputmode="tel" autocomplete="tel"></label>
       <label>Telegram<input name="telegram" maxlength="60" placeholder="@username"></label>
-      <label>Email<input name="email" type="email" maxlength="160" autocomplete="email"></label>
-      <label>Website or Facebook page<input name="website" maxlength="300" placeholder="https://"></label>
-      <label class="pp-full">Areas you cover<input name="areas" maxlength="300" placeholder="e.g. BKK1, Toul Kork, all Phnom Penh"></label>
-      <label class="pp-full">About your business<textarea name="message" rows="4" maxlength="3000" placeholder="What you offer, how many listings or projects, languages…"></textarea></label>
-      <p class="pp-note pp-full">Give at least one contact: phone, Telegram or email.</p>
-      <button class="pp-btn pp-btn-p pp-full" type="submit">Send application ${I.arrow}</button>
-      <div class="pp-ok pp-full" id="ppOk" hidden>${I.check}<span><b>Thank you – your application is in.</b> Our team will contact you soon. Agents and owners can already <a href="#/post">post listings</a> and <a href="#/account?tab=agent">create an agent profile</a>.</span></div>
+      <label>${esc(C.t('email'))}<input name="email" type="email" maxlength="160" autocomplete="email"></label>
+      <label>${P('Website or Facebook page')}<input name="website" maxlength="300" placeholder="https://"></label>
+      <label class="pp-full">${P('Areas you cover')}<input name="areas" maxlength="300" placeholder="${P('e.g. BKK1, Toul Kork, all Phnom Penh')}"></label>
+      <label class="pp-full">${P('About your business')}<textarea name="message" rows="4" maxlength="3000" placeholder="${P('What you offer, how many listings or projects, languages…')}"></textarea></label>
+      <p class="pp-note pp-full">${P('Give at least one contact: phone, Telegram or email.')}</p>
+      <button class="pp-btn pp-btn-p pp-full" type="submit">${P('Send application')} ${I.arrow}</button>
+      <div class="pp-ok pp-full" id="ppOk" hidden>${I.check}<span>${P('<b>Thank you – your application is in.</b> Our team will contact you soon. Agents and owners can already <a>post listings</a> and <a>create an agent profile</a>.').replace('<a>', '<a href="#/post">').replace('<a>', '<a href="#/account?tab=agent">')}</span></div>
     </form>
   </section>
 
   <section class="pp-rep">
     ${I.globe}
-    <h2>Become an Official<br>Country Representative</h2>
-    <p>Represent YourHome in Vietnam, Indonesia, Thailand or your country – grow the portal, sign agents and developers within an agreed territory.</p>
-    <a class="pp-btn" href="#/partners" data-pp-go="representative">Apply for Representation ${I.arrow}</a>
+    <h2>${P('Become an Official<br>Country Representative')}</h2>
+    <p>${P('Represent YourHome in Vietnam, Indonesia, Thailand or your country – grow the portal, sign agents and developers within an agreed territory.')}</p>
+    <a class="pp-btn" href="#/partners" data-pp-go="representative">${P('Apply for Representation')} ${I.arrow}</a>
   </section>
 </div>`;
   const form = document.getElementById('ppForm');
@@ -204,7 +210,7 @@ export function viewPartners() {
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const f = Object.fromEntries(new FormData(form)); for (const k in f) f[k] = String(f[k]).trim() || null;
-    if (!f.phone && !f.telegram && !f.email) return C.toast('Please add a phone, Telegram or email.');
+    if (!f.phone && !f.telegram && !f.email) return C.toast(P('Please add a phone, Telegram or email.'));
     const btn = form.querySelector('button[type=submit]'); btn.disabled = true;
     const { error } = await C.sb.from('yh_partner_requests').insert({ ...f, lang: C.lang() });
     btn.disabled = false;
@@ -218,7 +224,7 @@ export function viewPartners() {
 const STAGE = { presale: 'Pre-sale', construction: 'Under construction', ready: 'Ready to move in' };
 const STAGE_C = { presale: 'yb-price', construction: 'yb-beds', ready: 'yb-type' };
 const PAY = { installment: 'Installments', full: 'Full payment', bank: 'Bank loan', developer: 'Developer financing' };
-const payTags = p => (p.payment || []).filter(k => PAY[k]).map(k => `<span class="prj-pay">${PAY[k]}</span>`).join('');
+const payTags = p => (p.payment || []).filter(k => PAY[k]).map(k => `<span class="prj-pay">${PAY_T(k)}</span>`).join('');
 const uprices = p => (Array.isArray(p.unit_prices) ? p.unit_prices : []).filter(u => u && u.type).slice(0, 4);
 const devLogo = p => p.developer_logo && /^https:\/\//.test(p.developer_logo) ? `<img class="prj-logo" src="${C.esc(p.developer_logo)}" alt="${C.esc(p.developer || '')}" loading="lazy">` : `<span class="prj-logo prj-ini">${C.esc(String(p.developer || '?').trim().charAt(0).toUpperCase())}</span>`;
 const fmt = n => n ? (window.yhMoney ? window.yhMoney(n) : '$' + Number(n).toLocaleString('en-US', { maximumFractionDigits: 0 })) : '';
@@ -229,7 +235,7 @@ const ARR = d => `<svg viewBox="0 0 24 24"><path d="${d < 0 ? 'M15 5l-7 7 7 7' :
 function pslider(p) {
   const ph = (p.photos || []).slice(0, 15); if (ph.length < 2) return '';
   const { esc } = C;
-  return `<div class="ygal">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 800))}" alt="${esc(p.name)} – photo ${i + 1}" decoding="async">`).join('')}</div><div class="ydots${ph.length > 8 ? ' many' : ''}">${ph.map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo">${ARR(1)}</button>`;
+  return `<div class="ygal">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 800))}" alt="${esc(p.name)} – ${esc(t('pj_photo', { n: i + 1 }))}" decoding="async">`).join('')}</div><div class="ydots${ph.length > 8 ? ' many' : ''}">${ph.map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="${esc(t('ph_n', { n: i + 1 }))}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="${esc(C.t('ph_prev'))}">${ARR(-1)}</button><button type="button" class="yarr ynext" data-yarr="1" aria-label="${esc(C.t('ph_next'))}">${ARR(1)}</button>`;
 }
 // PROJECT CARD = LISTING CARD (owner, 2026-11-26: "legyen egységes – mint az ingatlanos kártyák… hol vannak az elérhetőségek"):
 // same body as app.js card(): name · "● developer · district" · one icon row (floors · units · m² range) · the agent bar with the
@@ -250,16 +256,16 @@ function pcard(p) {
   const bar = window.yhAgentBar ? window.yhAgentBar({ id: '', contact_name: p.developer || p.name, contact_phone: p.phone, contact_whatsapp: p.whatsapp || p.phone, contact_telegram: p.telegram, contact_photo: /^https:\/\//.test(p.developer_logo || '') ? p.developer_logo : '' }) : '';
   return `<a class="card prj-card" href="${href}">
     <div class="ph">${img ? `<img src="${esc(pimg(img, 800))}" alt="${esc(p.name)}" loading="lazy">` : '<span class="noimg">🏗</span>'}${pslider(p)}
-      <span class="prj-badges">${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}<span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</span>
-      ${p.price_from ? `<span class="prj-price">from ${fmt(p.price_from)}</span>` : ''}
+      <span class="prj-badges">${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}<span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE_T()[p.stage] || p.stage)}</span>${p.is_demo ? `<span class="yb yb-demo">${esc(C.t('pj_sample'))}</span>` : ''}</span>
+      ${p.price_from ? `<span class="prj-price">${esc(t('pj_from', { x: fmt(p.price_from) }))}</span>` : ''}
       ${p.photos && p.photos.length > 1 ? `<span class="prj-count">${I.camera}${p.photos.length}</span>` : ''}
     </div>
     <div class="cb">
       <h3 class="ct">${esc(p.name)}</h3>
-      <div class="loc"><b>●</b> ${esc(p.developer || 'New project')} · ${esc(p.district || p.city || '')}</div>
-      <div class="specs-row"><span title="Floors">${SP.fl}${p.floors ? esc(String(p.floors)) + ' fl.' : '–'}</span><span title="Apartments">${SP.un}${p.unit_count ? esc(String(p.unit_count)) : '–'}</span><span title="Unit sizes">${SP.ar}${esc(area)}</span></div>
+      <div class="loc"><b>●</b> ${esc(p.developer || C.t('pj_new'))} · ${esc(p.district || p.city || '')}</div>
+      <div class="specs-row"><span title="${esc(C.t('pj_floors'))}">${SP.fl}${p.floors ? esc(t('pj_fl', { n: p.floors })) : '–'}</span><span title="${esc(C.t('pj_apts'))}">${SP.un}${p.unit_count ? esc(String(p.unit_count)) : '–'}</span><span title="${esc(C.t('pj_sizes'))}">${SP.ar}${esc(area)}</span></div>
       <p class="yname"><span class="yn1">${esc(p.name)}</span></p>
-      <div class="yfoot"><p class="ymeta">${SP.pin}<span class="yaddr"><span class="ya1">${esc(p.city || 'Phnom Penh')},</span> <span class="ya2">${esc(p.district || 'Cambodia')}</span></span></p></div>
+      <div class="yfoot"><p class="ymeta">${SP.pin}<span class="yaddr"><span class="ya1">${esc(!p.city || p.city === 'Phnom Penh' ? C.t('cityPP') : p.city)},</span> <span class="ya2">${esc(p.district || C.t('cambodia'))}</span></span></p></div>
       ${bar}
     </div></a>`;
 }
@@ -272,57 +278,57 @@ export async function fetchProjects(limit = 60) {
 export async function homeBlock() {
   const list = await fetchProjects(4);
   if (!list.length) return '';
-  return `<section class="block"><div class="bh"><h2>New projects</h2><a class="more" href="#/projects">See all →</a></div><div class="row4">${list.map(pcard).join('')}</div><div class="block-more"><a class="btn ghost" href="#/projects">New projects · See all →</a></div></section>`;
+  return `<section class="block"><div class="bh"><h2>${C.esc(C.t('newProjects'))}</h2><a class="more" href="#/projects">${C.esc(C.t('seeAll'))}</a></div><div class="row4">${list.map(pcard).join('')}</div><div class="block-more"><a class="btn ghost" href="#/projects">${C.esc(C.t('pj_seeAll'))}</a></div></section>`;
 }
 export async function viewProjects() {
   const { app } = C;
-  document.title = 'New projects in Cambodia — YourHome';
+  document.title = C.t('pj_title') + ' — YourHome';
   const st = new URLSearchParams(YH.h().split('?')[1] || '').get('stage') || '';
   app.innerHTML = `<div class="wrap prj-page">
-    <div class="prj-head"><nav class="crumbs"><a href="#/">Home</a><span>/</span><span>New projects</span></nav>
-      <h1>New <em>projects</em> in Cambodia</h1>
-      <p>Condos, apartments and homes from developers – pre-sale, under construction and ready to move in.</p>
-      <div class="deal-tabs prj-tabs">${[['', 'All'], ['presale', 'Pre-sale'], ['construction', 'Under construction'], ['ready', 'Ready']].map(([k, n]) => `<a class="${k === st ? 'on' : ''}" href="#/projects${k ? '?stage=' + k : ''}">${n}</a>`).join('')}</div>
+    <div class="prj-head"><nav class="crumbs"><a href="#/">${C.esc(C.t('home'))}</a><span>/</span><span>${C.esc(C.t('newProjects'))}</span></nav>
+      <h1>${C.t('pj_h1')}</h1>
+      <p>${C.esc(C.t('pj_lead'))}</p>
+      <div class="deal-tabs prj-tabs">${[['', C.t('all')], ['presale', C.t('st_presale')], ['construction', C.t('st_construction')], ['ready', C.t('pj_ready')]].map(([k, n]) => `<a class="${k === st ? 'on' : ''}" href="#/projects${k ? '?stage=' + k : ''}">${n}</a>`).join('')}</div>
     </div>
     <div id="prjList">${window.yhSkel ? window.yhSkel(false) : ''}</div>
-    <div class="prj-cta">${I.crane}<div><b>Are you a developer?</b><span>Show your project to buyers and tenants on YourHome.</span></div><a class="btn red" href="#/partners?type=developers">List your project</a></div>
+    <div class="prj-cta">${I.crane}<div><b>${C.esc(C.t('pj_devQ'))}</b><span>${C.esc(C.t('pj_devS'))}</span></div><a class="btn red" href="#/partners?type=developers">${C.esc(C.t('pj_devB'))}</a></div>
   </div>`;
   let list = await fetchProjects(200);
   if (st) list = list.filter(p => p.stage === st);
-  document.getElementById('prjList').innerHTML = list.length ? `<div class="grid prj-grid">${list.map(pcard).join('')}</div>` : `<div class="empty">No projects here yet.</div>`;
+  document.getElementById('prjList').innerHTML = list.length ? `<div class="grid prj-grid">${list.map(pcard).join('')}</div>` : `<div class="empty">${C.esc(C.t('pj_none'))}</div>`;
 }
 export async function viewProject(slug) {
   const { app, esc, sb } = C;
   const { data: p } = await sb.from('yh_projects').select('*').eq('slug', slug).eq('active', true).maybeSingle();
-  if (!p) { app.innerHTML = `<div class="wrap"><div class="empty">Project not found. <a href="#/projects">All projects →</a></div></div>`; return; }
-  document.title = p.name + ' — New project — YourHome';
+  if (!p) { app.innerHTML = `<div class="wrap"><div class="empty">${esc(C.t('pj_nf'))} <a href="#/projects">${esc(C.t('pj_all'))}</a></div></div>`; return; }
+  document.title = p.name + ' — ' + C.t('pj_new') + ' — YourHome';
   const ph = p.photos || [];
   const tg = p.telegram ? String(p.telegram).replace(/^@/, '').replace(/^https?:\/\/t\.me\//, '') : '';
   app.innerHTML = `<div class="wrap prj-one">
-    <nav class="crumbs"><a href="#/">Home</a><span>/</span><a href="#/projects">New projects</a><span>/</span><span>${esc(p.name)}</span></nav>
+    <nav class="crumbs"><a href="#/">${esc(C.t('home'))}</a><span>/</span><a href="#/projects">${esc(C.t('newProjects'))}</a><span>/</span><span>${esc(p.name)}</span></nav>
     ${gallery(p, ph)}
     <div class="prj-main">
       <div>
-        <div class="prj-tags"><span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE[p.stage] || p.stage)}</span>${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}${p.is_demo ? '<span class="yb yb-demo">SAMPLE</span>' : ''}</div>
+        <div class="prj-tags"><span class="yb ${STAGE_C[p.stage] || 'yb-beds'}">${esc(STAGE_T()[p.stage] || p.stage)}</span>${p.is_featured ? '<span class="yb yb-top">TOP</span>' : ''}${p.is_demo ? `<span class="yb yb-demo">${esc(C.t('pj_sample'))}</span>` : ''}</div>
         <h1>${esc(p.name)}</h1>
-        <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}${p.developer ? ' · by ' + esc(p.developer) : ''}</p>
-        <div class="prj-mbar"><div>${p.price_from ? `<span>Prices from</span><b>${fmt(p.price_from)}</b>` : '<b>Price on request</b>'}</div><a class="btn red" href="#prjForm" data-prj-ask>Ask about it</a></div>
+        <p class="prj-loc">${I.pin}${esc([p.district, p.city].filter(Boolean).join(', '))}${p.developer ? ' · ' + esc(t('pj_by', { x: p.developer })) : ''}</p>
+        <div class="prj-mbar"><div>${p.price_from ? `<span>${esc(C.t('pj_pricesFrom'))}</span><b>${fmt(p.price_from)}</b>` : `<b>${esc(C.t('pj_onReq'))}</b>`}</div><a class="btn red" href="#prjForm" data-prj-ask>${esc(C.t('pj_ask'))}</a></div>
         ${sheet(p)}
-        ${uprices(p).length ? `<section class="prj-sheet"><h3>Prices by unit type</h3><dl class="prj-units big">${uprices(p).map(u => `<div><dt>${esc(u.type)}</dt><dd>${u.size ? 'from ' + esc(String(u.size)) + ' m²' : ''}</dd><dd><b>${u.price ? 'from ' + fmt(u.price) : 'On request'}</b></dd></div>`).join('')}</dl></section>` : ''}
-        ${payTags(p) ? `<section class="prj-sheet"><h3>Payment options</h3><div class="prj-pays">${payTags(p)}</div></section>` : ''}
-        ${p.description ? `<h3>About the project</h3><p class="prj-desc">${esc(p.description)}</p>` : ''}
-        ${(p.amenities || []).length ? `<h3>Amenities</h3><div class="chips static">${p.amenities.map(a => `<span class="chip">${esc(C.t('am_' + a) === 'am_' + a ? a : C.t('am_' + a))}</span>`).join('')}</div>` : ''}
+        ${uprices(p).length ? `<section class="prj-sheet"><h3>${esc(C.t('pj_byType'))}</h3><dl class="prj-units big">${uprices(p).map(u => `<div><dt>${esc(u.type)}</dt><dd>${u.size ? esc(t('pj_fromM2', { n: u.size })) : ''}</dd><dd><b>${u.price ? esc(t('pj_from', { x: fmt(u.price) })) : esc(C.t('pj_onRequest'))}</b></dd></div>`).join('')}</dl></section>` : ''}
+        ${payTags(p) ? `<section class="prj-sheet"><h3>${esc(C.t('pj_payOpts'))}</h3><div class="prj-pays">${payTags(p)}</div></section>` : ''}
+        ${p.description ? `<h3>${esc(C.t('pj_about'))}</h3><p class="prj-desc">${esc(p.description)}</p>` : ''}
+        ${(p.amenities || []).length ? `<h3>${esc(C.t('amenities'))}</h3><div class="chips static">${p.amenities.map(a => `<span class="chip">${esc(C.t('am_' + a) === 'am_' + a ? a : C.t('am_' + a))}</span>`).join('')}</div>` : ''}
       </div>
       <aside class="prj-side">
-        <div class="prj-pbox">${p.price_from ? `<span>Prices from</span><b>${fmt(p.price_from)}</b>` : '<b>Price on request</b>'}</div>
-        <div class="prj-ct">${p.phone ? `<a class="btn ghost" href="tel:${esc(C.digits(p.phone))}">${I.phone} Call</a>` : ''}${tg ? `<a class="btn ghost" href="https://t.me/${esc(tg)}" target="_blank" rel="noopener">${I.tg} Telegram</a>` : ''}${p.whatsapp ? `<a class="btn ghost" href="https://wa.me/${esc(C.digits(p.whatsapp).replace('+', ''))}" target="_blank" rel="noopener">WhatsApp</a>` : ''}</div>
-        <form class="prj-form" id="prjForm"><b>Ask about this project</b>
-          <input name="name" required minlength="2" maxlength="120" placeholder="Your name">
-          <input name="phone" maxlength="40" placeholder="Phone / WhatsApp / Telegram">
-          <input name="email" type="email" maxlength="160" placeholder="Email">
-          <textarea name="message" rows="3" maxlength="2000" placeholder="Unit type, budget, questions…"></textarea>
-          <button class="btn red" type="submit">Send</button>
-          <p class="prj-sent" hidden>✓ Sent – the sales team will contact you.</p>
+        <div class="prj-pbox">${p.price_from ? `<span>${esc(C.t('pj_pricesFrom'))}</span><b>${fmt(p.price_from)}</b>` : `<b>${esc(C.t('pj_onReq'))}</b>`}</div>
+        <div class="prj-ct">${p.phone ? `<a class="btn ghost" href="tel:${esc(C.digits(p.phone))}">${I.phone} ${esc(C.t('call'))}</a>` : ''}${tg ? `<a class="btn ghost" href="https://t.me/${esc(tg)}" target="_blank" rel="noopener">${I.tg} Telegram</a>` : ''}${p.whatsapp ? `<a class="btn ghost" href="https://wa.me/${esc(C.digits(p.whatsapp).replace('+', ''))}" target="_blank" rel="noopener">WhatsApp</a>` : ''}</div>
+        <form class="prj-form" id="prjForm"><b>${esc(C.t('pj_askTitle'))}</b>
+          <input name="name" required minlength="2" maxlength="120" placeholder="${esc(C.t('yourName'))}">
+          <input name="phone" maxlength="40" placeholder="${esc(C.t('pj_phonePh'))}">
+          <input name="email" type="email" maxlength="160" placeholder="${esc(C.t('email'))}">
+          <textarea name="message" rows="3" maxlength="2000" placeholder="${esc(C.t('pj_msgPh'))}"></textarea>
+          <button class="btn red" type="submit">${esc(C.t('send'))}</button>
+          <p class="prj-sent" hidden>${esc(C.t('pj_sent'))}</p>
         </form>
       </aside>
     </div>
@@ -332,7 +338,7 @@ export async function viewProject(slug) {
   document.getElementById('prjForm').addEventListener('submit', async e => {
     e.preventDefault(); const form = e.target;
     const f = Object.fromEntries(new FormData(form)); for (const k in f) f[k] = String(f[k]).trim() || null;
-    if (!f.phone && !f.email) return C.toast('Please add a phone or email.');
+    if (!f.phone && !f.email) return C.toast(C.t('pj_needContact'));
     const { error } = await sb.from('yh_project_leads').insert({ project_id: p.id, ...f });
     if (error) return C.toast(C.t('error') + error.message);
     form.querySelectorAll('input,textarea,button').forEach(el => el.hidden = true);
@@ -350,14 +356,14 @@ function gallery(p, ph) {
   const n = ph.length, th = ph.slice(1, 9);
   return `<div class="pg${th.length ? '' : ' pg-one'}" id="pg">
     <div class="pg-main">
-      <div class="pg-track" id="pgTrack">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 1400))}" alt="${esc(p.name)} – photo ${i + 1}" data-pg="${i}" decoding="async">`).join('')}</div>
-      ${n > 1 ? `<button type="button" class="pg-arr pg-prev" data-pgarr="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="pg-arr pg-next" data-pgarr="1" aria-label="Next photo">${ARR(1)}</button>` : ''}
+      <div class="pg-track" id="pgTrack">${ph.map((u, i) => `<img ${i < 2 ? 'src' : 'data-src'}="${esc(pimg(u, 1400))}" alt="${esc(p.name)} – ${esc(t('pj_photo', { n: i + 1 }))}" data-pg="${i}" decoding="async">`).join('')}</div>
+      ${n > 1 ? `<button type="button" class="pg-arr pg-prev" data-pgarr="-1" aria-label="${esc(C.t('ph_prev'))}">${ARR(-1)}</button><button type="button" class="pg-arr pg-next" data-pgarr="1" aria-label="${esc(C.t('ph_next'))}">${ARR(1)}</button>` : ''}
       <span class="pg-count" id="pgCount">1 / ${n}</span>
-      <button type="button" class="pg-all" data-pgopen="0">${I.camera}All ${n} photos</button>
+      <button type="button" class="pg-all" data-pgopen="0">${I.camera}${esc(t('pj_allPhotos', { n }))}</button>
     </div>
     ${th.length ? `<div class="pg-thumbs">${th.map((u, k) => {
       const i = k + 1, morePc = k === 7 && n > 9 ? n - 9 : 0, morePh = k === 3 && n > 5 ? n - 5 : 0;
-      return `<button type="button" class="pg-th${k > 3 ? ' pg-th-pc' : ''}" data-pgth="${i}" aria-label="Photo ${i + 1}"><img src="${esc(pimg(u, 400))}" alt="" loading="lazy" decoding="async">${morePc ? `<span class="pg-plus pc">+${morePc}</span>` : ''}${morePh ? `<span class="pg-plus ph">+${morePh}</span>` : ''}</button>`;
+      return `<button type="button" class="pg-th${k > 3 ? ' pg-th-pc' : ''}" data-pgth="${i}" aria-label="${esc(t('ph_n', { n: i + 1 }))}"><img src="${esc(pimg(u, 400))}" alt="" loading="lazy" decoding="async">${morePc ? `<span class="pg-plus pc">+${morePc}</span>` : ''}${morePh ? `<span class="pg-plus ph">+${morePh}</span>` : ''}</button>`;
     }).join('')}</div>` : ''}
   </div>`;
 }
@@ -374,20 +380,20 @@ const SI = {
 };
 function sheet(p) {
   const { esc } = C;
-  const steps = [['presale', 'Pre-sale'], ['construction', 'Under construction'], ['ready', 'Ready to move in']];
+  const steps = [['presale', C.t('st_presale')], ['construction', C.t('st_construction')], ['ready', C.t('st_ready')]];
   const cur = Math.max(0, steps.findIndex(x => x[0] === p.stage));
   const rows = [
-    [SI.stage, 'Status', STAGE[p.stage] || p.stage],
-    [SI.start, 'Sales start', p.sales_start],
-    [SI.done, 'Completion', p.completion],
-    [SI.dev, 'Developer', p.developer],
-    [SI.types, 'Unit types', p.units],
-    [SI.units, 'Apartments', p.unit_count ? Number(p.unit_count).toLocaleString('en-US') + ' units' : ''],
-    [SI.floors, 'Floors', p.floors],
-    [SI.loc, 'Location', [p.district, p.city].filter(Boolean).join(', ')],
-    [SI.price, 'Prices from', p.price_from ? fmt(p.price_from) : 'On request']
+    [SI.stage, C.t('pj_status'), STAGE_T()[p.stage] || p.stage],
+    [SI.start, C.t('pj_salesStart'), p.sales_start],
+    [SI.done, C.t('pj_completion'), p.completion],
+    [SI.dev, C.t('pj_developer'), p.developer],
+    [SI.types, C.t('pj_unitTypes'), p.units],
+    [SI.units, C.t('pj_apts'), p.unit_count ? t('pj_units', { n: Number(p.unit_count).toLocaleString('en-US') }) : ''],
+    [SI.floors, C.t('pj_floors'), p.floors],
+    [SI.loc, C.t('pj_location'), [p.district, p.city].filter(Boolean).join(', ')],
+    [SI.price, C.t('pj_pricesFrom'), p.price_from ? fmt(p.price_from) : C.t('pj_onRequest')]
   ].filter(r => r[2] !== null && r[2] !== undefined && r[2] !== '');
-  return `<section class="prj-sheet"><h3>Project overview</h3>
+  return `<section class="prj-sheet"><h3>${esc(C.t('pj_overview'))}</h3>
     <ol class="prj-steps">${steps.map(([k, n], i) => `<li class="${i < cur ? 'done' : i === cur ? 'on' : ''}"><i></i><span>${n}</span></li>`).join('')}</ol>
     <dl class="prj-dl">${rows.map(([ic, k, v]) => `<div>${ic}<dt>${k}</dt><dd>${esc(String(v))}</dd></div>`).join('')}</dl>
   </section>`;
@@ -413,9 +419,9 @@ function lightbox(ph, name, start) {
   const { esc } = C; const n = ph.length;
   document.querySelector('.pgl')?.remove();
   const box = document.createElement('div'); box.className = 'pgl'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-label', name + ' photos');
-  box.innerHTML = `<div class="pgl-top"><span class="pgl-name">${esc(name)}</span><span class="pgl-n" id="pglN"></span><button type="button" class="pgl-x" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
-    <div class="pgl-track" id="pglTrack">${ph.map((u, i) => `<div class="pgl-s"><img data-src="${esc(pimg(u, 1800))}" alt="${esc(name)} – photo ${i + 1}"></div>`).join('')}</div>
-    ${n > 1 ? `<button type="button" class="pgl-arr pgl-prev" data-l="-1" aria-label="Previous photo">${ARR(-1)}</button><button type="button" class="pgl-arr pgl-next" data-l="1" aria-label="Next photo">${ARR(1)}</button>
+  box.innerHTML = `<div class="pgl-top"><span class="pgl-name">${esc(name)}</span><span class="pgl-n" id="pglN"></span><button type="button" class="pgl-x" aria-label="${esc(C.t('close'))}"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>
+    <div class="pgl-track" id="pglTrack">${ph.map((u, i) => `<div class="pgl-s"><img data-src="${esc(pimg(u, 1800))}" alt="${esc(name)} – ${esc(t('pj_photo', { n: i + 1 }))}"></div>`).join('')}</div>
+    ${n > 1 ? `<button type="button" class="pgl-arr pgl-prev" data-l="-1" aria-label="${esc(C.t('ph_prev'))}">${ARR(-1)}</button><button type="button" class="pgl-arr pgl-next" data-l="1" aria-label="${esc(C.t('ph_next'))}">${ARR(1)}</button>
     <div class="pgl-th">${ph.map((u, i) => `<button type="button" data-lt="${i}"><img src="${esc(pimg(u, 240))}" alt="" loading="lazy"></button>`).join('')}</div>` : ''}`;
   document.body.appendChild(box); document.documentElement.classList.add('pgl-open');
   const tr = box.querySelector('#pglTrack'), num = box.querySelector('#pglN');

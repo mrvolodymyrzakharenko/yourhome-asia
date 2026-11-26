@@ -232,6 +232,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   = ONLY the active language as text + chevron, NO flag (chevron never touches the code, also under hfit1). It opens .lpk: white cards
   with a drawn flag (never emoji) and the language in its own name; current = pink patch, red text. PC: centred, FOUR per row (2 rows of 4).
   Phones/tablets (≤900px): TWO per row, smaller cards (flag above the name), box 25% from the left, right and bottom. No inner scrollbar.
+- EVERY PAGE IN ALL 8 LANGUAGES (owner, 2026-11-26 14:01: "minden egyes oldalt fordíts le… became a partner még mindig nem orosz"):
+  short UI texts = i18n.js keys (PJ block: projects pj_*, payment pay_*, missing page miss_*, blog UI bl_* / bk_<kicker>, photo
+  labels ph_*). Long texts = tr-pages.js, loaded ONLY when the language is not English: PX = Become a partner page (English text →
+  translation, partners.js P()), PG = About / How it works / Safety / FAQ / Terms / Privacy HTML per language (app.js pageHtml();
+  Terms + Privacy carry "the English version prevails"). A changed English partner/page text needs its tr-pages.js entries updated
+  (else that sentence shows in English). Blog article BODIES stay English (note bl_enOnly) until the listing auto-translation
+  pipeline (Claude Haiku batch) exists – then they go through it too.
 - LONG LANGUAGES MUST FIT (owner screenshots 2026-11-26 13:23–13:25): fitRows() shrinks the phone search-card labels (min 9px) and picked
   values (min 9px; the "I want" field has extra room), the bottom-menu labels (min 8.5px) and the hero title; Menu word, project stages
   (st_*) and currency names (Intl.DisplayNames) are translated; the popup date follows the page language and its price never wraps.

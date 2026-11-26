@@ -238,7 +238,7 @@ function openLangs() {
   closeLangs();
   const p = document.createElement('div'); p.className = 'lpk';
   p.innerHTML = '<div class="lpk-bg"></div><div class="lpk-w" role="dialog" aria-modal="true" aria-label="' + esc(LANG_TITLE[lang] || 'Language') + '">'
-    + '<div class="lpk-h"><span>' + esc(LANG_TITLE[lang] || 'Language') + '</span><button type="button" class="lpk-x" aria-label="Close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>'
+    + '<div class="lpk-h"><span>' + esc(LANG_TITLE[lang] || 'Language') + '</span><button type="button" class="lpk-x" aria-label="' + esc(t('close')) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>'
     + '<div class="lpk-l">' + LANG_LIST.map(([c, n]) => '<button type="button" class="lpk-c' + (c === lang ? ' on' : '') + '" data-l="' + c + '" lang="' + c + '"' + (c === lang ? ' aria-current="true"' : '') + '><span class="lpk-f" aria-hidden="true">' + flagSvg(c) + '</span><span class="lpk-n">' + esc(n) + '</span>'
       + (c === lang ? '<svg class="lpk-i" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>' : '<svg class="lpk-i" viewBox="0 0 24 24" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>') + '</button>').join('') + '</div></div>';
   document.body.appendChild(p);
@@ -376,7 +376,7 @@ function card(l) {
       <button class="heart ${isSaved(l.id) ? 'on' : ''}" data-save="${l.id}" aria-label="${esc(t('saved'))}">${HEART}</button>
       <div class="pov">${money(l.price)}<small>${priceSuffix(l)}${pm ? ' · ' + esc(pm) : ''}</small></div>${dots}
       <span class="ybadges">${l.is_featured ? `<span class="yb yb-top">${t('top')}</span>` : ''}<span class="yb yb-price">${money(l.price)}${priceSuffix(l) ? ' ' + priceSuffix(l) : ''}</span><span class="yb yb-beds">${esc(l.bedrooms === 0 ? t('studio') : (l.bedrooms ?? '–') + ' ' + t(l.bedrooms === 1 ? 'bedroomOne' : 'bedrooms').toLowerCase())}</span>${l.bedrooms === 0 && l.property_type === 'studio' ? '' : `<span class="yb yb-type">${esc(t('t_' + l.property_type))}</span>`}${l.is_demo ? `<span class="yb yb-demo">${t('demo')}</span>` : ''}</span>
-      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<img ${cardSrc(u, i >= 2)} alt="${esc(photoAlt(l, i))}" ${i ? 'loading="lazy" ' : ''}decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots${l.photos.length > 8 ? ' many' : ''}">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="Previous photo"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="yarr ynext" data-yarr="1" aria-label="Next photo"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}` : ''}
+      ${l.photos && l.photos.length ? `<div class="ygal">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<img ${cardSrc(u, i >= 2)} alt="${esc(photoAlt(l, i))}" ${i ? 'loading="lazy" ' : ''}decoding="async">`).join('')}</div>${l.photos.length > 1 ? `<div class="ydots${l.photos.length > 8 ? ' many' : ''}">${l.photos.slice(0, MAX_PHOTOS).map((u, i) => `<button type="button" data-yd="${i}" class="${i ? '' : 'on'}" aria-label="Photo ${i + 1}"></button>`).join('')}</div><button type="button" class="yarr yprev" data-yarr="-1" aria-label="${esc(t('ph_prev'))}"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button><button type="button" class="yarr ynext" data-yarr="1" aria-label="${esc(t('ph_next'))}"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>` : ''}` : ''}
       <span class="ydate">${shortDate(l.created_at)}</span>
       <div class="yprice">${money(l.price)}${priceSuffix(l) || pm ? `<small>${esc(priceSuffix(l) + (pm ? ' · ' + pm : ''))}</small>` : ''}</div>
       ${l.photos && l.photos.length > 1 ? `<span class="ycount"><svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${l.photos.length}</span>` : ''}
@@ -932,7 +932,7 @@ async function viewPost(editId) {
   let mk = pos ? L.marker(pos).addTo(m) : null;
   m.on('click', e => { pos = [e.latlng.lat, e.latlng.lng]; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); });
   setTimeout(() => m.invalidateSize(), 60);
-  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(imgSrc(p, 800))}" alt=""><button type="button" data-rm="${i}" aria-label="Remove"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
+  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(imgSrc(p, 800))}" alt=""><button type="button" data-rm="${i}" aria-label="${esc(t('del'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
   drawPrev();
   document.getElementById('prev').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) { photos.splice(+b.dataset.rm, 1); drawPrev(); } };
   // UPLOADED PHOTOS ARE OPTIMIZED IN THE BROWSER (owner, 2026-11-25 – the Study portal's SWImageOpt rule: "ne legyen nagy
@@ -1362,7 +1362,7 @@ const PAGES = {
     <div class="ab-grid">
       <div class="ab-c"><b>Portal builders</b><p>Our designers and developers have launched multilingual portals with listings, maps, dashboards and Telegram alerts. Fast pages, clear filters and a phone-first design are our standard.</p></div>
       <div class="ab-c"><b>Real-estate professionals</b><p>Our property people work with landlords, agents and developers every day. They know what renters ask first – price, location, the real photos – and what owners need to rent out quickly.</p></div>
-      <div class="ab-c"><b>Made for Cambodia</b><p>Phnom Penh first, then the rest of the country. English, Khmer, Chinese, French and Thai, prices in US dollars, districts people actually search for.</p></div>
+      <div class="ab-c"><b>Made for Cambodia</b><p>Phnom Penh first, then the rest of the country. Eight languages – English, Khmer, Chinese, French, Thai, Russian, Vietnamese and Korean – prices in US dollars, districts people actually search for.</p></div>
       <div class="ab-c"><b>Free to post</b><p>Owners and agents list for free and go live at once. Paid TOP placement is optional and always marked, so the results stay honest.</p></div>
     </div>
     <h2>Our mission</h2>
@@ -1392,7 +1392,18 @@ const PAGES = {
 
 let skipNext = false, firstRoute = true;
 // Unknown address (seo-rules.md): friendly "currently unavailable" page + Contact our team (the server answers it with 404 + noindex)
-const viewMissing = () => { app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px"><b>This page is currently unavailable</b><br>The address may have changed, or the listing was removed.<br><br><a class="btn red" href="#/support">Contact our team</a> <a class="btn ghost" href="#/">Back to home</a></div></div>`; };
+const viewMissing = () => { app.innerHTML = `<div class="wrap"><div class="empty" style="margin-top:24px"><b>${esc(t('miss_t'))}</b><br>${esc(t('miss_s'))}<br><br><a class="btn red" href="#/support">${esc(t('miss_c'))}</a> <a class="btn ghost" href="#/">${esc(t('miss_h'))}</a></div></div>`; };
+// About / How / Safety / FAQ / Terms / Privacy in the visitor's language (owner, 2026-11-26 14:01): English = PAGES above (also read by
+// api/page.js for Google); other languages = tr-pages.js PG, loaded only when needed. Support is built from i18n keys.
+let TRP = null;
+async function pageHtml(k) {
+  if (lang !== 'en' && k !== 'support') {
+    try { TRP = TRP || await import('./tr-pages.js?v=1'); } catch (e) { console.error(e); }
+    const h = TRP && TRP.PG[lang] && TRP.PG[lang][k];
+    if (h) return h.replace(/\{\{terms\}\}/g, esc(t('terms'))).replace(/\{\{privacy\}\}/g, esc(t('privacy'))).replace(/\{\{email\}\}/g, SUPPORT_EMAIL);
+  }
+  return PAGES[k]();
+}
 let routes = 0;
 async function route() {
   if (routes++) PRE = null;   // the server's listings serve only the first page of a visit
@@ -1437,18 +1448,18 @@ async function route() {
     else if (parts[0] === 'saved') await viewSaved();
     else if (parts[0] === 'experts') await viewExperts();
     else if (parts[0] === 'agent' && parts[1]) await AG.viewAgent(decodeURIComponent(parts[1]));
-    else if (parts[0] === 'partners') PT.viewPartners();
+    else if (parts[0] === 'partners') await PT.viewPartners();
     else if (parts[0] === 'projects') await PT.viewProjects();
     else if (parts[0] === 'project' && parts[1]) await PT.viewProject(decodeURIComponent(parts[1]));
     else if (parts[0] === 'blog' && parts[1]) await BL.viewArticle(decodeURIComponent(parts[1]));
     else if (parts[0] === 'blog') await BL.viewBlog();
-    else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${PAGES[parts[0]]()}</div></div>`;
+    else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${await pageHtml(parts[0])}</div></div>`;
     else viewMissing();
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }
 AG.init({ sb, app, t, esc, card, go, toast, qs, tgHandle, digits, DISTRICTS, LISTING_COLS, user: () => user, lang: () => lang });
 PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
-BL.init({ app, esc });
+BL.init({ app, esc, t, lang: () => lang });
 // ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
 let ADMP = null;
 const adminMod = () => ADMP || (ADMP = import('./admin.js?v=5').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));

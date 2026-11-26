@@ -1481,3 +1481,6 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
   html[lang=km] #dealTabs .dt-cat[data-cat=house]{order:5}
   #dealTabs .dt-sep{display:none!important}
 }
+/* blog article in another language: a small note that the article text is English for now (owner, 2026-11-26 14:01) */
+.bart .bl-en{margin:-4px 0 10px;padding:7px 12px;border-radius:10px;background:#F1F4FA;color:#5B6478;font-size:12px}
+.page .ab-note{color:#8A93A6;font-size:12px;margin-top:14px}

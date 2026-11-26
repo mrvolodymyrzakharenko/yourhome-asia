@@ -1,38 +1,499 @@
 [
-  {
-    "slug": "renting-in-phnom-penh-as-a-foreigner",
-    "title": "Renting an apartment in Phnom Penh as a foreigner",
-    "kicker": "Renting guide",
-    "icon": "key",
-    "date": "2026-11-26",
-    "desc": "A step-by-step guide to renting in Phnom Penh: where to search, what to check at the viewing, deposits, contracts and utility bills.",
-    "body": "<p>Phnom Penh has homes for almost every budget – from simple rooms and studios to serviced apartments, condos and villas. Most landlords and agents are used to foreign tenants, and many listings are in English. This guide walks you through the process from the first search to moving in.</p><h2>1. Decide on area, budget and term</h2><p>Start with where you will spend your days: work, school or the places you visit most. Traffic can make a short distance slow at rush hour, so living close to your daily route matters more than in many other cities. Decide whether you want a long-term lease or a shorter stay first – a few weeks in a <a href=\"/daily\">daily or short-term rental</a> lets you get to know the neighbourhoods before you sign for a year.</p><h2>2. Search and shortlist</h2><p>Use the filters on <a href=\"/rent\">homes for rent</a> to narrow down by district, type, budget and amenities such as a pool, gym or furniture. Save the homes you like with the heart icon, and switch on Telegram alerts so new matching listings reach you first.</p><h2>3. View the home in person</h2><p>Always see the apartment before you pay anything. At the viewing, check:</p><ul><li>Water pressure and hot water in every bathroom</li><li>That every air-conditioner works and how old the units are</li><li>Signs of damp or leaks on ceilings and around windows, especially after rain</li><li>Mobile signal and internet options in the building</li><li>Noise from the street, construction sites or bars nearby</li><li>Security: entrance, guard, parking for your motorbike or car</li></ul><h2>4. Ask about the bills</h2><p>Ask how electricity and water are charged. Some landlords pass on the official EDC electricity rate, others charge their own, higher rate per kWh – this can make a big difference to your monthly cost. Also ask what is included in the rent: internet, cleaning, rubbish collection, parking and building fees.</p><h2>5. Deposit and contract</h2><p>A security deposit plus the first month's rent in advance is the usual practice; the exact amount is agreed with the landlord. Get a written contract in a language you understand that states the rent, the deposit, the term, the notice period, what is included and how the deposit is returned. Take dated photos of the apartment on move-in day and keep the receipts for every payment.</p><h2>6. Move in</h2><p>Check that you have all the keys and key cards, write down the meter readings on the first day, and save the landlord's or agent's phone and Telegram. If anything breaks, report it in writing so there is a record.</p><p>Ready to start? <a href=\"/rent\">Browse homes for rent</a> or read our <a href=\"/safety\">safety tips</a>.</p>"
+ {
+  "slug": "renting-in-phnom-penh-as-a-foreigner",
+  "title": "Renting an apartment in Phnom Penh as a foreigner",
+  "kicker": "Renting guide",
+  "icon": "key",
+  "date": "2026-11-26",
+  "desc": "A step-by-step guide to renting in Phnom Penh: where to search, what to check at the viewing, deposits, contracts and utility bills.",
+  "img": "https://images.unsplash.com/photo-1722487631997-cf1e0f92c2c4",
+  "imgAlt": "Hand holding the keys to a new apartment",
+  "credit": {
+   "name": "Jakub Żerdzicki",
+   "url": "https://unsplash.com/@jakubzerdzicki?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/a-person-holding-a-bunch-of-keys-in-their-hand-Ebj87ehFNNU?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
   },
-  {
-    "slug": "can-foreigners-buy-property-in-cambodia",
-    "title": "Can foreigners buy property in Cambodia?",
-    "kicker": "Buying guide",
-    "icon": "doc",
-    "date": "2026-11-26",
-    "desc": "What foreigners can and cannot own in Cambodia: condo units with strata title, the rules on land, and what to check before you buy.",
-    "body": "<p>Many people moving to Cambodia ask whether they can buy a home there. The short answer: foreigners can own an apartment in a condominium building, but they cannot own land in their own name. Here is what that means in practice.</p><h2>Condo units – yes</h2><p>Cambodia's 2010 law on foreign ownership in co-owned buildings allows foreigners to own private units in condominium buildings. The rules in short:</p><ul><li>The unit must be above the ground floor – the ground floor and underground floors cannot be foreign-owned.</li><li>Foreigners together may own at most 70% of the private units in a building.</li><li>The unit has its own strata title (a co-ownership title for the private unit plus a share of the common areas).</li></ul><p>That is why listings and projects are often marked as \"foreigner-friendly\" or \"foreign quota available\". On YourHome.asia you can filter sale listings with <a href=\"/buy\">Foreigners can buy</a>.</p><h2>Land and houses – not directly</h2><p>Land ownership is reserved for Cambodian citizens and Cambodian companies. This also covers houses, villas and link houses that sit on their own plot. Structures such as long-term leases or holding companies are sometimes used, but each has its own risks and rules – get independent legal advice before choosing one.</p><h2>Before you buy</h2><ul><li>Check the developer's track record and visit their finished buildings.</li><li>Confirm that the unit will receive a strata title and how long that will take.</li><li>Read the payment plan carefully – installments, full payment or bank loan – and what happens if construction is late.</li><li>Ask about management fees, sinking fund and the rules of the building.</li><li>Use a lawyer who works for you, not for the seller.</li></ul><p>This article is general information, not legal advice. Laws and practice can change, so always confirm the current rules with a qualified lawyer.</p><p>See <a href=\"/projects\">new projects</a> and <a href=\"/buy\">property for sale</a>.</p>"
+  "sources": [
+   {
+    "name": "Cambodianess",
+    "title": "Cost of Living in Phnom Penh in 2026: A Practical Guide for Expats and Digital Nomads",
+    "url": "https://cambodianess.com/article/cost-of-living-in-phnom-penh-in-2026-a-practical-guide-for-expats-and-digital-nomads",
+    "date": ""
+   },
+   {
+    "name": "Cambodia Investment Review",
+    "title": "APS Q3 2026 Update",
+    "url": "https://cambodiainvestmentreview.com/2026/10/13/aps-q3-2026-update-cambodias-property-market-splits-as-industrial-expansion-outpaces-housing-and-retail-recovery/",
+    "date": "2026-10-13"
+   }
+  ],
+  "body": "<p>Phnom Penh has homes for almost every budget – from simple rooms and studios to serviced apartments, condos and villas. Most landlords and agents are used to foreign tenants, and many listings are in English. This guide walks you through the process from the first search to moving in.</p><h2>What rent costs in 2026</h2><p>Early-2026 figures put average rents at around $11 per m² a month – from about $7 in simple local buildings to $20 in premium condos. A single person in a normal apartment should budget roughly $50–120 a month for electricity, water and internet, depending mostly on air-conditioning. Serviced apartments became cheaper during 2026: Grade A asking rents fell 13.5% in the third quarter, so there is room to negotiate.</p><h2>1. Decide on area, budget and term</h2><p>Start with where you will spend your days: work, school or the places you visit most. Traffic can make a short distance slow at rush hour, so living close to your daily route matters more than in many other cities. Decide whether you want a long-term lease or a shorter stay first – a few weeks in a <a href=\"/daily\">daily or short-term rental</a> lets you get to know the neighbourhoods before you sign for a year.</p><h2>2. Search and shortlist</h2><p>Use the filters on <a href=\"/rent\">homes for rent</a> to narrow down by district, type, budget and amenities such as a pool, gym or furniture. Save the homes you like with the heart icon, and switch on Telegram alerts so new matching listings reach you first.</p><h2>3. View the home in person</h2><p>Always see the apartment before you pay anything. At the viewing, check:</p><ul><li>Water pressure and hot water in every bathroom</li><li>That every air-conditioner works and how old the units are</li><li>Signs of damp or leaks on ceilings and around windows, especially after rain</li><li>Mobile signal and internet options in the building</li><li>Noise from the street, construction sites or bars nearby</li><li>Security: entrance, guard, parking for your motorbike or car</li></ul><h2>4. Ask about the bills</h2><p>Ask how electricity and water are charged. Some landlords pass on the official EDC electricity rate, others charge their own, higher rate per kWh – this can make a big difference to your monthly cost. Also ask what is included in the rent: internet, cleaning, rubbish collection, parking and building fees.</p><h2>5. Deposit and contract</h2><p>A security deposit plus the first month's rent in advance is the usual practice; the exact amount is agreed with the landlord. Get a written contract in a language you understand that states the rent, the deposit, the term, the notice period, what is included and how the deposit is returned. Take dated photos of the apartment on move-in day and keep the receipts for every payment.</p><h2>6. Move in</h2><p>Check that you have all the keys and key cards, write down the meter readings on the first day, and save the landlord's or agent's phone and Telegram. If anything breaks, report it in writing so there is a record.</p><p>Ready to start? <a href=\"/rent\">Browse homes for rent</a> or read our <a href=\"/safety\">safety tips</a>.</p>"
+ },
+ {
+  "slug": "can-foreigners-buy-property-in-cambodia",
+  "title": "Can foreigners buy property in Cambodia?",
+  "kicker": "Buying guide",
+  "icon": "doc",
+  "date": "2026-11-26",
+  "desc": "What foreigners can and cannot own in Cambodia: condo units with strata title, the rules on land, and what to check before you buy.",
+  "img": "https://images.unsplash.com/photo-1600184831467-29f64598f37e",
+  "imgAlt": "Phnom Penh riverside skyline with condo towers at night",
+  "credit": {
+   "name": "Kim Eang Eng",
+   "url": "https://unsplash.com/@stonefoto0903?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/06yn9Z1ePCo?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
   },
-  {
-    "slug": "phnom-penh-neighbourhood-guide",
-    "title": "Phnom Penh neighbourhood guide: where to live",
-    "kicker": "Area guide",
-    "icon": "map",
-    "date": "2026-11-26",
-    "desc": "BKK1, Toul Kork, Daun Penh, Chroy Changvar, Sen Sok and more – what each Phnom Penh area is like and who it suits.",
-    "body": "<p>Every part of Phnom Penh has its own character. Here is a quick look at the areas people ask about most, to help you decide where to start your search.</p><h2>BKK1 (Boeung Keng Kang 1)</h2><p>Central, green and popular with expats. Many cafés, restaurants, embassies and serviced apartments within walking distance of each other. Usually one of the pricier areas. <a href=\"/rent/phnom-penh/bkk1\">Homes in BKK1</a></p><h2>Daun Penh and the Riverside</h2><p>The historic centre with the Royal Palace, Wat Phnom, the markets and the riverfront promenade. Lively day and night, with older shophouse apartments as well as new condos. Good if you want the city on your doorstep.</p><h2>Toul Tom Poung (Russian Market)</h2><p>Busy, local and full of character around the Russian Market, with many cafés and smaller apartment buildings. Often a little more affordable than BKK1 while still central.</p><h2>Toul Kork</h2><p>A large residential district north-west of the centre, with Cambodian family life, schools, universities and newer condo towers. Popular with families and people who want more space for their money.</p><h2>Chroy Changvar</h2><p>The peninsula across the river from the centre, quieter and more open, with new developments and river views. A calmer choice if you do not need to cross the city every day.</p><h2>Sen Sok and the north-west</h2><p>Newer suburbs with gated communities, link houses and villas, near the AEON Mall Sen Sok. Suits families who want a house and garden rather than an apartment.</p><h2>Chamkarmon and BKK2 / BKK3</h2><p>Residential areas next to BKK1 with a mix of villas, apartment blocks and local streets – close to the centre but often quieter.</p><p>Tip: visit the area at different times of day before you sign – a street that is quiet at noon may be busy at night. Search by district on <a href=\"/rent/phnom-penh\">homes for rent in Phnom Penh</a>.</p>"
+  "sources": [
+   {
+    "name": "MLMUPC (unofficial translation)",
+    "title": "Law on Providing Foreigners with Ownership Rights in Private Units of Co-owned Buildings",
+    "url": "https://lib.ncdd.gov.kh/storage/app/public/library_backend/CAT_17699_1/2010-Foreigner%20bilding%20owner%20rights-en.pdf",
+    "date": "2010-05-24"
+   },
+   {
+    "name": "DFDL",
+    "title": "Cambodia Pointer: Foreign Ownership and Condominiums",
+    "url": "https://www.dfdl.com/insights/legal-and-tax-updates/dfdl-cambodia-pointer-foreign-ownership-and/",
+    "date": ""
+   },
+   {
+    "name": "The Cambodia Daily",
+    "title": "Foreign Ownership Law Signed, But Details Unsettled",
+    "url": "https://english.cambodiadaily.com/2010/06/07/foreign-ownership-law-signed-but-details-unsettled/",
+    "date": "2010-06-07"
+   }
+  ],
+  "body": "<p>Many people moving to Cambodia ask whether they can buy a home there. The short answer: foreigners can own an apartment in a condominium building, but they cannot own land in their own name. Here is what that means in practice.</p><h2>Condo units – yes</h2><p>Cambodia's 2010 law on foreign ownership in co-owned buildings allows foreigners to own private units in condominium buildings. The rules in short:</p><ul><li>The unit must be above the ground floor – the ground floor and underground floors cannot be foreign-owned.</li><li>Foreigners together may own at most 70% of the private units in a building.</li><li>The building may not be within 30 km of a land border.</li><li>The unit has its own strata title (a co-ownership title for the private unit plus a share of the common areas).</li></ul><p>That is why listings and projects are often marked as \"foreigner-friendly\" or \"foreign quota available\". On YourHome.asia you can filter sale listings with <a href=\"/buy\">Foreigners can buy</a>.</p><h2>Land and houses – not directly</h2><p>Land ownership is reserved for Cambodian citizens and Cambodian companies. This also covers houses, villas and link houses that sit on their own plot. Structures such as long-term leases or holding companies are sometimes used, but each has its own risks and rules – get independent legal advice before choosing one.</p><h2>Before you buy</h2><ul><li>Check the developer's track record and visit their finished buildings.</li><li>Confirm that the unit will receive a strata title and how long that will take.</li><li>Read the payment plan carefully – installments, full payment or bank loan – and what happens if construction is late.</li><li>Ask about management fees, sinking fund and the rules of the building.</li><li>Use a lawyer who works for you, not for the seller.</li></ul><p>This article is general information, not legal advice. Laws and practice can change, so always confirm the current rules with a qualified lawyer.</p><p>See <a href=\"/projects\">new projects</a> and <a href=\"/buy\">property for sale</a>.</p>"
+ },
+ {
+  "slug": "phnom-penh-neighbourhood-guide",
+  "title": "Phnom Penh neighbourhood guide: where to live",
+  "kicker": "Area guide",
+  "icon": "map",
+  "date": "2026-11-26",
+  "desc": "BKK1, Toul Kork, Daun Penh, Chroy Changvar, Sen Sok and more – what each Phnom Penh area is like and who it suits.",
+  "img": "https://images.unsplash.com/photo-1663075039775-c4c05356b8fe",
+  "imgAlt": "Aerial view of central Phnom Penh with a pagoda",
+  "credit": {
+   "name": "Norbert Braun",
+   "url": "https://unsplash.com/@medion4you?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/a-city-with-a-large-building-b2ezQTN2UaQ?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
   },
-  {
-    "slug": "rental-safety-checklist-cambodia",
-    "title": "Before you pay a deposit: a safety checklist",
-    "kicker": "Safety",
-    "icon": "shield",
-    "date": "2026-11-26",
-    "desc": "How to spot rental scams in Cambodia and what to check before you send money to a landlord or agent.",
-    "body": "<p>Most landlords and agents are honest, but fake listings exist in every country. A few simple checks protect you from losing money.</p><h2>Warning signs</h2><ul><li>The price is far below other similar homes in the same area.</li><li>The advertiser cannot show you the home and asks for a deposit to \"reserve\" it.</li><li>You are pushed to decide and pay today because \"many people are interested\".</li><li>The photos look like a hotel or appear on other websites under different names.</li><li>Payment is asked for by an unusual method or to a third person's account.</li></ul><h2>Before you pay</h2><ul><li>View the home in person, or ask someone you trust to view it for you.</li><li>Check that the person you deal with is the owner or works for the owner – ask to see an ID or the agency's details.</li><li>Get a written contract and a receipt for every payment.</li><li>Pay the deposit only when you receive the keys or sign the contract.</li><li>Prefer advertisers with a profile and a <b>Verified</b> badge on YourHome.asia.</li></ul><h2>If something looks wrong</h2><p>Do not send money. Report the listing to our team on Telegram, WhatsApp or by email from the <a href=\"/support\">support page</a> – we check every report and remove fake listings.</p><p>More tips on our <a href=\"/safety\">safety page</a>.</p>"
-  }
+  "sources": [
+   {
+    "name": "IQI",
+    "title": "Cambodia Property Market October 2026: Selective Stabilisation and Infrastructure-Led Growth",
+    "url": "https://iqiglobal.com/blog/cambodia-property-market-outlook-october-2026/",
+    "date": "2026-10-05"
+   },
+   {
+    "name": "Research Cambodia",
+    "title": "Phnom Penh’s Condo Market Is Quietly Becoming a Local Buyer’s Market",
+    "url": "https://researchcambodia.com/research/phnom-penh-condo-domestic-buyer-shift-2026",
+    "date": "2026-09-10"
+   }
+  ],
+  "body": "<p>Every part of Phnom Penh has its own character. Here is a quick look at the areas people ask about most, to help you decide where to start your search.</p><h2>BKK1 (Boeung Keng Kang 1)</h2><p>Central, green and popular with expats. Many cafés, restaurants, embassies and serviced apartments within walking distance of each other. Usually one of the pricier areas – new condos here cost around $2,800–3,500 per m² in 2026, and BKK1 draws more buyer interest than any other district. <a href=\"/rent/phnom-penh/bkk1\">Homes in BKK1</a></p><h2>Daun Penh and the Riverside</h2><p>The historic centre with the Royal Palace, Wat Phnom, the markets and the riverfront promenade. Lively day and night, with older shophouse apartments as well as new condos. Good if you want the city on your doorstep.</p><h2>Toul Tom Poung (Russian Market)</h2><p>Busy, local and full of character around the Russian Market, with many cafés and smaller apartment buildings. Often a little more affordable than BKK1 while still central.</p><h2>Toul Kork</h2><p>A large residential district north-west of the centre, with Cambodian family life, schools, universities and newer condo towers. Popular with families and people who want more space for their money.</p><h2>Chroy Changvar</h2><p>The peninsula across the river from the centre, quieter and more open, with new developments and river views. A calmer choice if you do not need to cross the city every day – and much cheaper to buy in, at around $1,400–1,800 per m² for new condos.</p><h2>Sen Sok and the north-west</h2><p>Newer suburbs with gated communities, link houses and villas, near the AEON Mall Sen Sok. Suits families who want a house and garden rather than an apartment.</p><h2>Chamkarmon and BKK2 / BKK3</h2><p>Residential areas next to BKK1 with a mix of villas, apartment blocks and local streets – close to the centre but often quieter.</p><p>Tip: visit the area at different times of day before you sign – a street that is quiet at noon may be busy at night. Search by district on <a href=\"/rent/phnom-penh\">homes for rent in Phnom Penh</a>.</p>"
+ },
+ {
+  "slug": "rental-safety-checklist-cambodia",
+  "title": "Before you pay a deposit: a safety checklist",
+  "kicker": "Safety",
+  "icon": "shield",
+  "date": "2026-11-26",
+  "desc": "How to spot rental scams in Cambodia and what to check before you send money to a landlord or agent.",
+  "img": "https://images.unsplash.com/photo-1744782351841-9cc6b86a5add",
+  "imgAlt": "Keys with a house keychain held in front of a staircase",
+  "credit": {
+   "name": "Jakub Żerdzicki",
+   "url": "https://unsplash.com/@jakubzerdzicki?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/heres-a-possible-caption-keys-being-held-in-front-of-a-staircase-V7Q94jc04wQ?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "The Star (Malaysia)",
+    "title": "Rental scams running rampant",
+    "url": "https://www.thestar.com.my/business/business-news/2026/05/24/rental-scams-running-rampant",
+    "date": "2026-05-24"
+   },
+   {
+    "name": "Asia News Network / Phnom Penh Post",
+    "title": "Early Feb sees 2,700 locations checked in Phnom Penh",
+    "url": "https://asianews.network/?p=258417",
+    "date": "2026-02-23"
+   }
+  ],
+  "body": "<p>Most landlords and agents are honest, but fake listings exist in every country. A few simple checks protect you from losing money.</p><h2>Warning signs</h2><ul><li>The price is far below other similar homes in the same area.</li><li>The advertiser cannot show you the home and asks for a deposit to \"reserve\" it.</li><li>You are pushed to decide and pay today because \"many people are interested\".</li><li>The photos look like a hotel or appear on other websites under different names.</li><li>Payment is asked for by an unusual method or to a third person's account.</li></ul><h2>Before you pay</h2><ul><li>View the home in person, or ask someone you trust to view it for you.</li><li>Check that the person you deal with is the owner or works for the owner – ask to see an ID or the agency's details.</li><li>Get a written contract and a receipt for every payment.</li><li>Pay the deposit only when you receive the keys or sign the contract.</li><li>Prefer advertisers with a profile and a <b>Verified</b> badge on YourHome.asia.</li></ul><h2>For landlords too</h2><p>Phnom Penh authorities inspected thousands of buildings, condos, apartments and guesthouses in 2026 in their campaign against online scam operations, and owners who rented to such groups faced fines. Know who your tenant is: meet them, keep a copy of their ID and a written contract, and register tenants as the local authorities require.</p><h2>If something looks wrong</h2><p>Do not send money. Report the listing to our team on Telegram, WhatsApp or by email from the <a href=\"/support\">support page</a> – we check every report and remove fake listings.</p><p>More tips on our <a href=\"/safety\">safety page</a>.</p>"
+ },
+ {
+  "slug": "cambodia-special-economic-zones-39-hubs",
+  "title": "39 special economic zones: where workers will need homes",
+  "kicker": "Market news",
+  "icon": "map",
+  "date": "2026-11-20",
+  "desc": "Cambodia’s special economic zones have grown to 39 active hubs valued at about $15 billion, with close to 270,000 jobs. Why it matters for rentals.",
+  "img": "https://images.unsplash.com/photo-1741591646737-e634ae96e83d",
+  "imgAlt": "Workers in an industrial garment factory",
+  "credit": {
+   "name": "EqualStock",
+   "url": "https://unsplash.com/@equalstock?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/workers-are-busy-in-an-industrial-garment-factory-Mv4gduCPx5Q?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Construction & Property News",
+    "title": "Cambodia’s Special Economic Zones Reach 39 Active Hubs Valued at $15 Billion",
+    "url": "https://construction-property.com/cambodias-special-economic-zones-reach-39-active-hubs-valued-at-15-billion/",
+    "date": "2026-11-19"
+   },
+   {
+    "name": "Construction & Property News",
+    "title": "Cambodia Secures $4.7 Billion in New Investments for the First Half of 2026",
+    "url": "https://construction-property.com/cambodia-secures-4-7-billion-in-new-investments-for-the-first-half-of-2026/",
+    "date": "2026-07-27"
+   }
+  ],
+  "body": "<p>Cambodia’s network of special economic zones (SEZs) keeps growing. According to Chea Vuthy, Secretary General of the Cambodian Investment Committee, the country now has 39 operating zones, valued at around $15 billion and providing close to 270,000 jobs. Much of this land was empty fields or unused plots only a few years ago.</p><h2>Why it matters for housing</h2><p>Every new factory brings workers, supervisors, engineers and managers – and they all need somewhere to live close to work. Around the zones this shows up as demand for:</p><ul><li><b>Simple rooms and shared rooms</b> for factory staff, often rented by the month.</li><li><b>Small apartments and flat houses</b> for supervisors and technicians.</li><li><b>Serviced apartments and houses</b> for foreign managers, usually in the nearest town or city.</li></ul><p>The trend also shows in the investment figures for the first half of 2026: of the projects registered by the Council for the Development of Cambodia, 69 were inside existing SEZs and seven were new zones.</p><h2>For owners and agents</h2><p>If you own rooms or houses near an industrial zone – for example around Phnom Penh’s outer districts, Bavet or Poipet – list them with clear monthly prices, what is included (water, electricity, Wi-Fi) and the distance to the zone. That is exactly what workers search for.</p><p><a href=\"/post\">Post your room or house for free</a> or browse <a href=\"/rooms\">rooms for rent</a>.</p>"
+ },
+ {
+  "slug": "chaktomuk-walking-street-water-festival-2026",
+  "title": "Phnom Penh Walking Street opens 21–25 November",
+  "kicker": "City news",
+  "icon": "map",
+  "date": "2026-11-19",
+  "desc": "No boat races in the capital this year, but Chaktomuk Walking Street on Sisowath Quay opens every evening from 21 to 25 November. What it means for short stays.",
+  "img": "https://images.unsplash.com/photo-1589640802044-1cac11427567",
+  "imgAlt": "Phnom Penh riverside skyline at night",
+  "credit": {
+   "name": "Tep Dara",
+   "url": "https://unsplash.com/@tepdara?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/city-skyline-during-night-time-z0_qJKVqIfE?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Cambodianess",
+    "title": "Walking Street to Open Despite Water Festival Cancellation",
+    "url": "https://cambodianess.com/article/walking-street-to-open-despite-water-festival-cancellation",
+    "date": "2026-11-18"
+   },
+   {
+    "name": "Cambodianess",
+    "title": "Cambodian Provinces Keep Water Festival Alive Despite Phnom Penh Cancellation",
+    "url": "https://cambodianess.com/article/cambodian-provinces-keep-water-festival-alive-despite-phnom-penh-cancellation",
+    "date": "2026-10-28"
+   }
+  ],
+  "body": "<p>The big Water Festival boat races on the Tonle Sap are cancelled in Phnom Penh for the second year in a row, but the riverfront will not be empty. The Phnom Penh Municipal Administration has announced that Chaktomuk Walking Street will open for five evenings, from 21 to 25 November 2026.</p><h2>When and where</h2><ul><li><b>Dates:</b> 21–25 November 2026 (the Water Festival public holidays are 23–25 November).</li><li><b>Hours:</b> 6 pm to 11 pm every evening.</li><li><b>Route:</b> Sisowath Quay, from Street 94 down to the Royal Palace.</li><li><b>What is on:</b> traditional and cultural performances, entertainment, local products and plenty of food stalls.</li></ul><p>The city says the longer five-day schedule is meant to give residents and visitors a festive evening out and to support domestic tourism. Provinces such as Siem Reap are holding their own festivities, with boat races, concerts and fairs.</p><h2>What it means if you rent or stay</h2><p>The holiday still brings people into the city and many Phnom Penh residents travel to their home provinces. If you are coming for a few days, the riverside, Daun Penh and the area around the Royal Palace are the most convenient bases for the walking street. Expect traffic and closed roads along the quay in the evenings – pick a place within walking distance if you can.</p><p>Looking for a few nights? See <a href=\"/daily\">daily rentals and short stays</a> or <a href=\"/rent/phnom-penh\">homes for rent in Phnom Penh</a>.</p>"
+ },
+ {
+  "slug": "macron-state-visit-cambodia-29-agreements",
+  "title": "Macron in Cambodia: a record 29 agreements signed",
+  "kicker": "Economy",
+  "icon": "doc",
+  "date": "2026-11-17",
+  "desc": "Emmanuel Macron’s state visit and the Francophonie Summit, 14–16 November 2026: what was signed and what it may mean for Phnom Penh.",
+  "img": "https://images.unsplash.com/photo-1504765604053-0353bd980f96",
+  "imgAlt": "The Royal Palace in Phnom Penh under a blue sky",
+  "credit": {
+   "name": "René DeAnda",
+   "url": "https://unsplash.com/@renedeanda?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/beige-building-under-clear-sky-during-daytime-evxOM30A3Tk?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Cambodianess",
+    "title": "Cambodia and France Sign Record 29 Agreements with Macron’s Visit",
+    "url": "https://cambodianess.com/article/cambodia-and-france-sign-record-29-agreements-with-macrons-visit",
+    "date": "2026-11-15"
+   },
+   {
+    "name": "Élysée",
+    "title": "State visit to Cambodia and Francophonie Summit",
+    "url": "https://www.elysee.fr/en/emmanuel-macron/2026/11/16/state-visit-to-cambodia-and-francophonie-summit",
+    "date": "2026-11-16"
+   },
+   {
+    "name": "The Star / Phnom Penh Post (ANN)",
+    "title": "Cambodia, France sign 29 agreements during Macron state visit",
+    "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/11/16/cambodia-france-sign-29-agreements-during-macron-state-visit",
+    "date": "2026-11-16"
+   }
+  ],
+  "body": "<p>Phnom Penh hosted the 20th Francophonie Summit in mid-November, and with it the first state visit by a French president since François Mitterrand in 1993. President Emmanuel Macron and Brigitte Macron were in Cambodia from 14 to 16 November 2026.</p><h2>What happened</h2><ul><li>On 15 November, Prime Minister Hun Manet and President Macron oversaw the signing of <b>29 agreements</b> – described as a record package with a single country.</li><li>The agreements cover defence, taxation, energy, cultural heritage, infrastructure and trade.</li><li>Macron visited the FrancoTech exhibition at the Koh Pich Exhibition and Convention Centre with the Prime Minister.</li><li>On 16 November he and King Norodom Sihamoni inaugurated the restored West Mebon temple in the Angkor area.</li></ul><h2>Why it matters for property</h2><p>A summit and a state visit do not change rents overnight. But closer economic ties usually bring more company staff, consultants, teachers and project teams to Phnom Penh – people who rent serviced apartments and family homes, often in BKK1, Tonle Bassac, Daun Penh and around the French and international schools. A tax agreement and infrastructure projects can also make it easier for French companies to set up in Cambodia.</p><p>Moving to Phnom Penh? Our site is also available in French – switch the language at the top. Browse <a href=\"/rent/phnom-penh\">homes for rent in Phnom Penh</a> or read our <a href=\"/blog/phnom-penh-neighbourhood-guide\">neighbourhood guide</a>.</p>"
+ },
+ {
+  "slug": "techo-international-airport-first-year",
+  "title": "Techo Airport turns one: what it means for housing",
+  "kicker": "Infrastructure",
+  "icon": "map",
+  "date": "2026-10-23",
+  "desc": "Phnom Penh’s $2.3 billion Techo International Airport turned one on 9 September 2026. Passengers, new airlines and what it means for housing.",
+  "img": "https://images.unsplash.com/photo-1594444406267-35a7730c6867",
+  "imgAlt": "Aerial view of Phnom Penh city buildings in daytime",
+  "credit": {
+   "name": "allPhoto Bangkok",
+   "url": "https://unsplash.com/@allphotobangkok?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/VoLyNETLCSU?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Cambodianess",
+    "title": "Techo Airport’s First Year Overshadowed by Falling Passenger Numbers",
+    "url": "https://cambodianess.com/article/techo-airports-first-year-overshadowed-by-falling-passenger-numbers",
+    "date": "2026-10-22"
+   },
+   {
+    "name": "Nomad Lawyer",
+    "title": "Cambodia Techo Int’l Airport Marks 1st Year: 2.4M Pax Handled in H1 2026",
+    "url": "https://www.nomadlawyer.org/cambodia-techo-international-airport-first-anniversary-passenger-growth-2026",
+    "date": "2026-09-11"
+   }
+  ],
+  "body": "<p>Techo International Airport, about 20 km south of Phnom Penh, completed its first year of operation on 9 September 2026. The $2.3 billion airport replaced the old Phnom Penh International Airport in September 2025.</p><h2>The first year in numbers</h2><ul><li>Phase 1 is designed for <b>13–15 million passengers</b> a year.</li><li>The airport handled about <b>2.4 million passengers</b> in the first half of 2026.</li><li>Cambodia’s three international airports together handled 4.56 million passengers in January–September 2026, about 11% fewer than a year earlier.</li><li>Etihad Airways and Turkish Airlines started flying to Techo; air cargo grew by 18% in the first nine months.</li></ul><h2>What it means for housing</h2><p>The airport is a long-term project with later phases planned, and it is one of the reasons developers are looking at the southern side of Phnom Penh, together with Ring Road 3. Today, though, most people still live in the city and drive out to the airport, so travel time matters more than distance.</p><ul><li><b>Frequent flyers</b> often choose the southern and central districts – Chamkarmon, BKK, Tonle Bassac, Chbar Ampov – for the easier drive.</li><li><b>Airline and airport staff</b> create demand for rooms and small apartments on the southern edge of the city.</li><li><b>Buyers</b> should treat “near the new airport” as a long-term story: check what is actually built around a project today.</li></ul><p>Search <a href=\"/rent/phnom-penh\">homes for rent in Phnom Penh</a> by district, or try a <a href=\"/daily\">short stay</a> before you decide.</p>"
+ },
+ {
+  "slug": "cambodia-provincial-spatial-plans-kampot-poipet",
+  "title": "New land-use plans for Kampot, Poipet and more",
+  "kicker": "Land & planning",
+  "icon": "map",
+  "date": "2026-10-18",
+  "desc": "On 2 October 2026 a national committee reviewed 12 provincial, town and district plans. Why zoning matters before you buy land or a house.",
+  "img": "https://images.unsplash.com/photo-1720720581826-4bbbb4d11e0a",
+  "imgAlt": "Boat on a river near Kampot, Cambodia",
+  "credit": {
+   "name": "Siborey Sean",
+   "url": "https://unsplash.com/@siborey?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/a-boat-on-a-lake-with-mountains-in-the-background-XrpE-fcUjaY?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Construction & Property News",
+    "title": "National Committee Approves Provincial Spatial Plans and Master Land-Use Frameworks Across Cambodia",
+    "url": "https://construction-property.com/national-committee-approves-provincial-spatial-plans-and-master-land-use-frameworks-across-cambodia/",
+    "date": "2026-10-17"
+   }
+  ],
+  "body": "<p>Cambodia is putting more of its provinces on a planning map. On 2 October 2026, the National Committee for Spatial Planning and Urbanization met at the Ministry of Land Management, Urban Planning and Construction, chaired by Deputy Prime Minister Say Samal with Transport Minister Peng Ponea. The committee reviewed draft plans so they can be submitted to the Royal Government for final approval.</p><h2>Which plans</h2><ul><li><b>Provincial spatial plans:</b> Svay Rieng, Stung Treng, Kampong Cham, Kampot and Banteay Meanchey.</li><li><b>Municipal land-use master plans:</b> Arey Ksat, Kampot, Poipet and Serei Saophoan.</li><li><b>District land-use plans:</b> Chhouk, O Ya Dav and Keo Seima.</li></ul><p>The plans divide land into zones for economic development, commercial centres, industrial parks, agriculture and conservation. The aim is fewer land disputes, less uncontrolled land conversion and more orderly growth of towns.</p><h2>What it means for buyers</h2><p>Zoning decides what may be built on a plot – a house, a shophouse, a factory or nothing at all. Before buying land or a house outside Phnom Penh, especially in growing places such as Kampot or Poipet:</p><ul><li>Ask which zone the plot is in once the final plans are published.</li><li>Check the title type (hard title or soft title) and that the seller is the registered owner.</li><li>Use a lawyer who works for you, not for the seller.</li></ul><p>Remember that foreigners cannot own land in their own name – see our guide <a href=\"/blog/can-foreigners-buy-property-in-cambodia\">Can foreigners buy property in Cambodia?</a> Browse <a href=\"/buy\">property for sale</a>.</p>"
+ },
+ {
+  "slug": "q3-2026-serviced-apartment-rents-fall",
+  "title": "Q3 2026: serviced apartment rents fall in Phnom Penh",
+  "kicker": "Market report",
+  "icon": "key",
+  "date": "2026-10-15",
+  "desc": "A Q3 2026 market update shows Grade A serviced apartment asking rents down 13.5% and high-end condo asking prices down 6.7%. What to do now.",
+  "img": "https://images.unsplash.com/photo-1741156386380-0236c72eb6f9",
+  "imgAlt": "Hand holding house keys at the entrance of a new home",
+  "credit": {
+   "name": "Jakub Żerdzicki",
+   "url": "https://unsplash.com/@jakubzerdzicki?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/holding-house-keys-in-front-of-the-entrance-bqUZEAeWuok?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Cambodia Investment Review",
+    "title": "APS Q3 2026 Update: Cambodia’s Property Market Splits as Industrial Expansion Outpaces Housing and Retail Recovery",
+    "url": "https://cambodiainvestmentreview.com/2026/10/13/aps-q3-2026-update-cambodias-property-market-splits-as-industrial-expansion-outpaces-housing-and-retail-recovery/",
+    "date": "2026-10-13"
+   }
+  ],
+  "body": "<p>The third-quarter 2026 update from the Phnom Penh agency APS, reported by Cambodia Investment Review, describes a split market: industrial property is expanding, while housing and retail are recovering only slowly. For people looking for a home to rent, the numbers are mostly good news.</p><h2>The key figures</h2><ul><li>Grade A serviced apartment asking rents fell <b>13.5%</b> to about <b>$17.30 per m² per month</b>.</li><li>Grade B serviced apartments stood at about <b>$13 per m²</b>.</li><li>High-end condominium asking prices fell <b>6.7%</b> from the previous quarter.</li><li>Average office occupancy in Phnom Penh was <b>63.9%</b>, retail occupancy <b>57.1%</b>.</li></ul><h2>For tenants</h2><p>More competition between buildings means you have room to negotiate. Ask for a lower rent on a 12-month lease, a free month, included cleaning or internet, or a smaller deposit. Compare several buildings in the same street – the price differences are often bigger than you expect.</p><h2>For owners and agents</h2><p>Tenants now compare more. Good photos (12–15 per listing), an honest price, a clear list of what is included and a fast reply on Telegram make the difference. Listings that state the electricity rate and building fees get fewer “wasted” viewings.</p><p>Find your next home on <a href=\"/rent\">homes for rent</a>, or <a href=\"/post\">post your listing for free</a>.</p>"
+ },
+ {
+  "slug": "local-buyers-phnom-penh-condo-market-2026",
+  "title": "Cambodians now buy more than a fifth of condos",
+  "kicker": "Market news",
+  "icon": "doc",
+  "date": "2026-09-24",
+  "desc": "Local buyers have grown to about 22% of condo purchases, up from 18.2%. One-bedroom units dominate demand and BKK1 leads buyer interest.",
+  "img": "https://images.unsplash.com/photo-1645948715176-2641d507050f",
+  "imgAlt": "Aerial view of condo towers in Phnom Penh",
+  "credit": {
+   "name": "SethiZelo Phat",
+   "url": "https://unsplash.com/@sethizelo?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/an-aerial-view-of-a-city-with-tall-buildings-Ftlwq_oVGvs?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Research Cambodia",
+    "title": "Phnom Penh’s Condo Market Is Quietly Becoming a Local Buyer’s Market",
+    "url": "https://researchcambodia.com/research/phnom-penh-condo-domestic-buyer-shift-2026",
+    "date": "2026-09-10"
+   }
+  ],
+  "body": "<p>For years, most Phnom Penh condos were bought by people from abroad. That is slowly changing. Figures from a large Cambodian property portal’s own transaction records, analysed by Research Cambodia in September 2026, put Cambodian buyers at about <b>22%</b> of condo purchases – up from <b>18.2%</b> a year earlier.</p><h2>What buyers are looking for</h2><ul><li><b>One-bedroom units</b> account for about 61% of buyer preferences, two-bedroom units about 20.5%.</li><li><b>BKK1</b> leads buyer interest with about 36%, followed by Toul Tom Poung, BKK3 and Toul Kork.</li><li>Local demand comes mainly from young professionals and couples who want a small, well-run unit close to work.</li></ul><h2>Read the numbers carefully</h2><p>The data comes from one company’s client mix and covers the whole country, not only Phnom Penh. Foreign buyers are still the large majority. But the direction is clear: more Cambodians are buying, and they choose small, central, practical apartments rather than investor stock.</p><h2>What this means for you</h2><p>If you are selling or renting out a one-bedroom unit in a central area, you are in the segment with the deepest demand – price it realistically and show the building’s facilities and fees clearly. If you are buying, compare the management fee and the quality of the building, not just the price per m².</p><p>See <a href=\"/buy/phnom-penh\">condos and homes for sale in Phnom Penh</a> or <a href=\"/projects\">new projects</a>.</p>"
+ },
+ {
+  "slug": "camdx-single-window-borey-condo-approvals",
+  "title": "One window for borey and condo approvals (CamDX)",
+  "kicker": "Rules & law",
+  "icon": "doc",
+  "date": "2026-08-28",
+  "desc": "A joint approval workflow for boreys and condos started on 26 August 2026 on CamDX. Which ministry checks what – and what buyers should still check.",
+  "img": "https://images.unsplash.com/photo-1723358049559-4f98d449ab92",
+  "imgAlt": "Residential towers and housing in Phnom Penh",
+  "credit": {
+   "name": "Deepavali Gaind",
+   "url": "https://unsplash.com/@deepavalig?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/a-view-of-a-city-with-tall-buildings-4imZM-GfYR4?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Construction & Property News",
+    "title": "Cambodia Streamlines Borey and Condo Approvals Through Inter-Ministerial CamDX Framework",
+    "url": "https://construction-property.com/cambodia-streamlines-borey-and-condo-approvals-through-inter-ministerial-camdx-framework/",
+    "date": "2026-08-27"
+   }
+  ],
+  "body": "<p>Gated housing estates (boreys) and condominium buildings need approvals from many government offices. On 26 August 2026 the Ministry of Land Management, Urban Planning and Construction brought those offices together in one workflow on the Cambodia Data Exchange platform (CamDX), described as a single-window service.</p><h2>Who checks what</h2><ul><li><b>Land Ministry:</b> land title, zoning, building height, setbacks, parking, waste, construction safety and the housing class (from affordable to luxury).</li><li><b>Ministry of Interior:</b> administrative boundaries.</li><li><b>Ministry of Public Works and Transport:</b> road access and drainage.</li><li><b>Industry and Energy ministries:</b> clean water and electricity plans.</li><li><b>Ministry of Post and Telecommunications:</b> telecom and internet.</li><li><b>Ministry of Economy and Finance:</b> the final commercial licence once everything else is in order.</li></ul><p>The goal is fewer duplicated steps, lower costs and fewer delays – and, according to the ministry, better protection for buyers by reducing the risk of poorly prepared projects.</p><h2>What buyers should still check</h2><p>The announcement does not list new buyer-facing rules such as refunds or disclosure duties. So the usual checks stay important:</p><ul><li>Ask the developer for the construction permit and the project’s licence.</li><li>Check that the land title is in the developer’s name and free of disputes.</li><li>Read what happens to your payments if construction is late.</li><li>Visit a finished project by the same developer.</li></ul><p>Browse <a href=\"/projects\">new projects</a> or <a href=\"/buy\">houses and condos for sale</a>.</p>"
+ },
+ {
+  "slug": "cambodia-investment-first-half-2026",
+  "title": "$4.7 billion new investment in the first half of 2026",
+  "kicker": "Economy",
+  "icon": "doc",
+  "date": "2026-07-28",
+  "desc": "276 investment projects worth about $4.7 billion approved in January–June 2026, with about 160,000 jobs. What it means for housing.",
+  "img": "https://images.unsplash.com/photo-1722079358008-2c72a8973998",
+  "imgAlt": "Construction site with a crane and a new building",
+  "credit": {
+   "name": "Adrian Sulyok",
+   "url": "https://unsplash.com/@sulyok_imaging?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/a-construction-site-with-a-crane-and-a-building-in-the-background-UssjZ_2hI3Q?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Construction & Property News",
+    "title": "Cambodia Secures $4.7 Billion in New Investments for the First Half of 2026",
+    "url": "https://construction-property.com/cambodia-secures-4-7-billion-in-new-investments-for-the-first-half-of-2026/",
+    "date": "2026-07-27"
+   }
+  ],
+  "body": "<p>According to a press release from the Council for the Development of Cambodia (CDC) on 14 July 2026, Cambodia approved <b>276 new investment projects</b> worth about <b>$4.7 billion</b> in the first half of the year.</p><h2>The details</h2><ul><li>The CDC itself registered 181 projects worth about $4.4 billion; provincial and capital sub-committees registered 95 projects worth about $291 million.</li><li>The projects are expected to create around <b>160,000 jobs</b>.</li><li>Of the CDC projects, 105 are outside special economic zones, 69 inside existing zones and 7 are new zones.</li><li>Sectors include renewable energy (wind, solar and biomass power plants) and manufacturing – among them an electric-vehicle assembly plant, a motorcycle factory and a tyre factory.</li></ul><h2>What it means for housing</h2><p>New investment means new jobs, and new jobs mean new tenants. The first demand usually appears for rooms and small apartments near factories and zones, then for family homes and serviced apartments for managers and engineers in the nearest city. Owners near industrial areas and along the main national roads are well placed – as long as their homes are clean, safe and clearly priced.</p><p>Have a room or apartment to rent out? <a href=\"/post\">Post it for free</a> – or look for <a href=\"/rooms\">rooms</a> and <a href=\"/rent\">homes for rent</a>.</p>"
+ },
+ {
+  "slug": "gato-tower-bkk1-groundbreaking",
+  "title": "G.A.T.O Tower breaks ground in BKK1: 67 floors",
+  "kicker": "New projects",
+  "icon": "key",
+  "date": "2026-07-27",
+  "desc": "Miraku Capital broke ground on the 67-storey G.A.T.O Tower in BKK1 on 25 July 2026 – 472 homes and a 224-room hotel, with completion targeted for Q4 2030.",
+  "img": "https://images.unsplash.com/photo-1717913002194-59d265ba019e",
+  "imgAlt": "High-rise condo building in Phnom Penh",
+  "credit": {
+   "name": "Phanoth DYNA",
+   "url": "https://unsplash.com/@photna?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/a-tall-building-with-a-sign-on-top-of-it-0GGyKO-eokk?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "Cambodia Investment Review",
+    "title": "Miraku Capital Breaks Ground on 67-Story G.A.T.O Tower",
+    "url": "https://cambodiainvestmentreview.com/2026/07/27/miraku-capital-breaks-ground-on-67-story-g-a-t-o-tower-following-resounding-success-of-pre-launch-and-sales-gallery-opening/",
+    "date": "2026-07-27"
+   },
+   {
+    "name": "Cambodia Investment Review",
+    "title": "LBL International Construction Formalizes Partnership on GATO Tower",
+    "url": "https://cambodiainvestmentreview.com/2026/05/14/lbl-international-construction-formalizes-partnership-on-gato-tower/",
+    "date": "2026-05-14"
+   }
+  ],
+  "body": "<p>Phnom Penh’s skyline is getting another landmark. On 25 July 2026, the Japanese-Cambodian developer Miraku Capital &amp; Development held the groundbreaking ceremony for <b>G.A.T.O Tower</b> in Boeung Keng Kang 1 (BKK1).</p><h2>The project in short</h2><ul><li><b>Location:</b> Street 334 at the corner of Norodom Boulevard, BKK1.</li><li><b>Height:</b> 67 floors, about 297 metres.</li><li><b>Homes:</b> 472 residential units plus a 224-room five-star hotel and penthouses on the top floors.</li><li><b>Design:</b> Japanese architect Shin Takamatsu; construction partner LBL International.</li><li><b>Completion:</b> targeted for the fourth quarter of 2030.</li></ul><h2>Why it matters</h2><p>A project of this size shows that developers still trust prime BKK1, even while the wider condo market recovers only slowly. It joins several other tall towers launched in BKK1 in 2026 and will add a large number of new homes and hotel rooms to the district by the end of the decade.</p><h2>If you are thinking of buying off-plan</h2><ul><li>A 2030 completion date means four years of payments before you get the keys – read the payment plan and the penalties for delays.</li><li>Check the foreign-ownership quota if you are not Cambodian.</li><li>Compare with ready buildings nearby, where you can see the finished quality and rent the unit out at once.</li></ul><p>See <a href=\"/projects\">new projects in Phnom Penh</a> and <a href=\"/rent/phnom-penh/bkk1\">homes in BKK1</a>.</p>"
+ },
+ {
+  "slug": "water-festival-2026-cancelled-phnom-penh",
+  "title": "No Water Festival in Phnom Penh in 2026",
+  "kicker": "City news",
+  "icon": "map",
+  "date": "2026-07-03",
+  "desc": "Phnom Penh cancels its Water Festival for the second year; the 23–25 November holidays remain. What it means for short-stay hosts.",
+  "img": "https://images.unsplash.com/photo-1637749563093-7d1a8f380c26",
+  "imgAlt": "Sunset over the river in Phnom Penh",
+  "credit": {
+   "name": "SAM sokkolinmony",
+   "url": "https://unsplash.com/@kolinmony?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/the-sun-is-setting-over-a-large-body-of-water-Sv-Fai9GH84?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "The Star / Phnom Penh Post (ANN)",
+    "title": "Cambodia calls off traditional water festival for second consecutive year",
+    "url": "https://www.thestar.com.my/aseanplus/aseanplus-news/2026/07/01/cambodia-calls-off-traditional-water-festival-for-second-consecutive-year",
+    "date": "2026-07-01"
+   },
+   {
+    "name": "Asia News Network",
+    "title": "Phnom Penh Water Festival suspended; government focus on border crisis, displaced civilians",
+    "url": "https://asianews.network/phnom-penh-water-festival-suspended-government-focus-on-border-crisis-displaced-civilians/",
+    "date": "2026-07-02"
+   }
+  ],
+  "body": "<p>For the second year in a row, there will be no Water Festival (Bon Om Touk) celebrations in Phnom Penh. A government circular published on 1 July 2026 cancelled the main events planned for 23–25 November along the Tonle Sap in front of the Royal Palace.</p><h2>Why</h2><p>The government says it is prioritising the border situation with Thailand and support for displaced people. Provinces may still hold their own celebrations according to local tradition, and the three public holidays on 23–25 November remain in place.</p><h2>What it means for hosts and travellers</h2><ul><li><b>Short-stay owners in Daun Penh and along the riverside</b> should not count on the usual festival rush in November – adjust prices and minimum stays early.</li><li><b>Hosts in the provinces</b> – Siem Reap, Kampot, Battambang and others – may see more domestic visitors during the holiday.</li><li><b>Travellers</b> can enjoy a quieter riverside, but should check local events before booking.</li></ul><p>List your apartment as a <a href=\"/daily\">daily rental</a> for free, or find a <a href=\"/rent\">long-term home</a>.</p>"
+ },
+ {
+  "slug": "affordable-housing-policy-2026-cambodia",
+  "title": "Affordable housing policy 2026: what renters should know",
+  "kicker": "Rules & law",
+  "icon": "doc",
+  "date": "2026-06-18",
+  "desc": "The 2026 affordable housing policy targets homes under $28,000 and adds a low-cost rental category for students and workers. The key points.",
+  "img": "https://images.unsplash.com/photo-1609860850812-86de933acace",
+  "imgAlt": "Apartment buildings in Phnom Penh at night",
+  "credit": {
+   "name": "Kim Eang Eng",
+   "url": "https://unsplash.com/@stonefoto0903?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/city-skyline-during-night-time-FTU03hKgMZo?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "IPS Cambodia",
+    "title": "Cambodian Government’s New 2026 Housing Vision: Bridging the Gap for Low and Middle-Income Families",
+    "url": "https://ips-cambodia.com/cambodian-governments-new-2026-housing-vision-bridging-the-gap-for-low-and-middle-income-families/",
+    "date": "2026-05-09"
+   }
+  ],
+  "body": "<p>Owning a home in Phnom Penh is out of reach for many families. The government’s <b>Social and Affordable Housing Development Policy 2026</b> sets out how it wants to change that – and, for the first time, it also covers renting.</p><h2>The main points</h2><ul><li><b>Who it is for:</b> families who cannot afford homes priced above about <b>$28,000</b>, low- and middle-income civil servants and retirees, vulnerable groups and people in informal settlements.</li><li><b>What “affordable” means:</b> the price of a home should be no more than about three times the household’s yearly income, and monthly housing costs (rent or loan) no more than 30% of gross monthly income.</li><li><b>New rental category:</b> “Affordable Housing for Rent” for students, factory workers and people moving to the city for work.</li><li><b>For developers:</b> tax incentives, simpler approval procedures and government help with access roads, water and electricity.</li><li><b>Quality:</b> projects must meet safety standards and be close to public services, transport and healthcare.</li></ul><h2>What it means in practice</h2><p>The policy is a framework – the exact incentives and income limits depend on the official texts, so check them before you rely on them. But the direction is clear: more low-cost homes and rooms, especially on the edge of the big cities and near industrial areas.</p><p>Simple, cheap rentals are already the most searched homes on YourHome.asia. Find <a href=\"/rooms\">rooms for rent</a> and <a href=\"/rent\">budget homes</a>, or <a href=\"/post\">post yours for free</a>.</p>"
+ },
+ {
+  "slug": "construction-permit-45-working-days",
+  "title": "New construction permit rules: about 45 working days",
+  "kicker": "Rules & law",
+  "icon": "doc",
+  "date": "2026-06-08",
+  "desc": "Guideline No. 291 sets time limits for building permits and occupancy certificates. What buyers of new homes should ask the developer.",
+  "img": "https://images.unsplash.com/photo-1592925411437-e1990c4f1b02",
+  "imgAlt": "Red construction crane next to a building in Phnom Penh",
+  "credit": {
+   "name": "Vanna Phon",
+   "url": "https://unsplash.com/@phonvanna?utm_source=yourhome_asia&utm_medium=referral",
+   "page": "https://unsplash.com/photos/red-crane-near-blue-building-it9fondAduw?utm_source=yourhome_asia&utm_medium=referral",
+   "site": "Unsplash"
+  },
+  "sources": [
+   {
+    "name": "DFDL",
+    "title": "Cambodia: New Construction Permit Regime – Faster Approvals, Greater Certainty for Investors",
+    "url": "https://www.dfdl.com/insights/legal-and-tax-updates/cambodia-new-construction-permit-regime-faster-approvals-greater-certainty-for-investors/",
+    "date": "2026-06-05"
+   }
+  ],
+  "body": "<p>How long does it take to get a building permit in Cambodia? A guideline from the Ministry of Land Management, Urban Planning and Construction – No. 291, in force since 4 February 2026 and explained by the law firm DFDL in June – now gives a clear answer.</p><h2>The time limits</h2><ul><li>The clock starts when a <b>complete</b> file is handed in at the One Window Service.</li><li>Four checks – cadastre, land management and urban planning, housing, and construction technical review – each have up to <b>20 working days</b>.</li><li>If these checks run in parallel, the whole process takes about <b>45 working days</b>; if they run one after another, up to <b>105 working days</b>.</li><li>A <b>certificate of occupancy</b> must be obtained after construction and before the building is used. The National Construction Laboratory first confirms that the building meets the standards; approval usually takes one to three months.</li></ul><h2>Why this matters to buyers and tenants</h2><p>A building without a certificate of occupancy should not be lived in yet. When you buy off-plan or rent in a brand-new building, ask:</p><ul><li>Does the project have a construction permit? May I see it?</li><li>Has the building received its certificate of occupancy?</li><li>For condos: when will the strata titles be issued?</li></ul><p>A clear, faster process is good news for honest developers – and makes it easier to spot projects that cannot show their papers.</p><p>Browse <a href=\"/projects\">new projects</a> and <a href=\"/buy\">property for sale</a>.</p>"
+ }
 ]

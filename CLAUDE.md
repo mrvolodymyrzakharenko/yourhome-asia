@@ -331,6 +331,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - BLOG: blog.json = the articles (English, our own text, no invented figures); blog.js draws #/blog, #/blog/<slug> and the
   homepage "Blog" block (last, 4 cards); api/page.js gives /blog + /blog/<slug> their own head (BlogPosting) and text,
   api/sitemap.js lists them (both read blog.json – vercel.json includeFiles). New article = new entry in blog.json.
+  ARTICLES = REAL NEWS + GUIDES WITH PHOTO AND SOURCES (owner, 2026-11-26: "normális cikkek… képet hozzájuk… legalább 12 cikk, fél évre
+  visszamenőleg… forrást add meg"): 17 articles (13 Cambodia property/economy news Jun–Nov 2026 + 4 guides). Every entry has img (Unsplash
+  base URL, free licence – blog.js adds ?w=), imgAlt, credit {name, url, page} shown under the article photo, and sources [{name, title,
+  url, date}] listed as "Sources" at the end (new tab, rel=noopener). Article date never earlier than its newest source. Our own words,
+  no links to competing portals; server head = NewsArticle + og:image = the article photo. Lists are sorted newest first.
 - SHARE PICTURE (owner, 2026-11-26: "kambodzsai kép, valami igazi"): default og:image = real Phnom Penh houses (Unsplash photo-1593510649240,
   Vanna Phon) – OG_DEFAULT in api/_seo.js + index.html; listings/projects keep their own first photo.
 - NOT TAKEN for Cambodia: auction, mortgage, ₾/$ switch (the Georgian portal will need mortgage + currency).

@@ -57,7 +57,7 @@ async function preData() {
 let BLOG = null;
 function blogPosts() {
   if (BLOG) return BLOG;
-  for (const f of [path.join(process.cwd(), 'blog.json'), path.join(__dirname, '..', 'blog.json')]) { try { BLOG = JSON.parse(fs.readFileSync(f, 'utf8')); return BLOG; } catch (_) {} }
+  for (const f of [path.join(process.cwd(), 'blog.json'), path.join(__dirname, '..', 'blog.json')]) { try { BLOG = JSON.parse(fs.readFileSync(f, 'utf8')).sort((x, y) => y.date.localeCompare(x.date)); return BLOG; } catch (_) {} }
   return [];
 }
 const PRE_PAGES = new Set(['', 'rent', 'buy', 'rooms', 'daily', 'search', 'listing']);
@@ -178,9 +178,11 @@ async function build(p, q) {
     const a = parts.length === 2 && posts.find(x => x.slug === parts[1]);
     if (!a) return null;
     const pth = '/blog/' + a.slug;
-    return { path: pth, title: title(a.title), desc: desc(a.desc), ogType: 'article',
-      ld: [crumbs([['Home', '/'], ['Blog', '/blog'], [a.title, pth]]), { '@type': 'BlogPosting', headline: a.title, description: a.desc, datePublished: a.date, dateModified: a.updated || a.date, url: ORIGIN + pth, mainEntityOfPage: ORIGIN + pth, author: { '@id': ORIGIN + '/#org' }, publisher: { '@id': ORIGIN + '/#org' } }],
-      body: `<div class="ssr wrap"><div class="page"><h1>${esc(a.title)}</h1><p>${esc(a.desc)}</p>${a.body}</div></div>` };
+    const img = a.img ? a.img + '?auto=format&fit=crop&w=1200&h=630&q=70' : null;   // og:image = the article's own photo
+    const src = (a.sources || []).map(x => `<li><a href="${esc(x.url)}" target="_blank" rel="noopener">${esc(x.title)}</a> – ${esc(x.name)}${x.date ? ', ' + esc(x.date) : ''}</li>`).join('');
+    return { path: pth, title: title(a.title), desc: desc(a.desc), ogType: 'article', ...(img ? { image: img } : {}),
+      ld: [crumbs([['Home', '/'], ['Blog', '/blog'], [a.title, pth]]), { '@type': 'NewsArticle', headline: a.title, description: a.desc, datePublished: a.date, dateModified: a.updated || a.date, url: ORIGIN + pth, mainEntityOfPage: ORIGIN + pth, ...(img ? { image: [img] } : {}), author: { '@id': ORIGIN + '/#org' }, publisher: { '@id': ORIGIN + '/#org' }, ...((a.sources || []).length ? { citation: a.sources.map(x => x.url) } : {}) }],
+      body: `<div class="ssr wrap"><div class="page">${img ? `<img src="${esc(img)}" alt="${esc(a.imgAlt || a.title)}">` : ''}<h1>${esc(a.title)}</h1><p>${esc(a.desc)}</p>${a.body}${src ? `<h2>Sources</h2><ul>${src}</ul>` : ''}</div></div>` };
   }
 
   if (STATIC[p0] && parts.length === 1) {

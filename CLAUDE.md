@@ -252,6 +252,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - BOXES WITHOUT INNER SCROLLING – BASE RULE (owner, 2026-11-26: "sok helyet így kéne megcsinálni a boxokat"): every box / panel /
   popup is sized to its content so it needs no inner scrollbar; items get more compact on short screens instead. Only a genuinely
   long list (dozens of districts) gets a search field / groups rather than a tiny scrolling box.
+- TELEGRAM ALERT BOX (owner, 2026-11-27 09:15 screenshot: "a jobb széle teljesen fölösleges… 25-30%-kal szűkebbre, középre"):
+  alertModal() form.alm on phones = 72% of the screen (max 320px), centred, buttons share the row equally (end of styles.css).
 - PHONE BOXES = 25% FREE – BASE RULE (owner, 2026-11-26 08:02: "jobbról balról lentről 25% szabad hely kell, ez alap szabály"): on
   phones/tablets a popup box / small list leaves 25% of the screen free on the left, the right and below (language picker; picker.js
   .ypk lists – end of styles.css). Contents get smaller or go two per row to fit. Exception: the two-column Type list (.ypk-all)

@@ -792,9 +792,9 @@ async function viewSearch() {
 function alertModal(filters) {
   const wrap = document.createElement('div');
   wrap.style.cssText = 'position:fixed;inset:0;background:rgba(15,23,42,.45);z-index:2500;display:grid;place-items:center;padding:16px';
-  wrap.innerHTML = `<form class="panel form" style="max-width:420px;width:100%"><h3>🔔 ${t('newListingsAlert')}</h3><p style="margin:0;color:var(--muted)">${t('newListingsSub')}</p>
+  wrap.innerHTML = `<form class="panel form alm" style="max-width:420px;width:100%"><h3>🔔 ${t('newListingsAlert')}</h3><p style="margin:0;color:var(--muted)">${t('newListingsSub')}</p>
     <label>${t('tgUser')}<input name="tg" placeholder="@username" required></label>
-    <div style="display:flex;gap:8px"><button class="btn blue">${t('tgSave')}</button><button type="button" class="btn ghost" data-x>${t('cancel')}</button></div></form>`;
+    <div class="alm-b" style="display:flex;gap:8px"><button class="btn blue">${t('tgSave')}</button><button type="button" class="btn ghost" data-x>${t('cancel')}</button></div></form>`;
   document.body.appendChild(wrap);
   wrap.querySelector('[data-x]').onclick = () => wrap.remove();
   wrap.onclick = e => { if (e.target === wrap) wrap.remove(); };

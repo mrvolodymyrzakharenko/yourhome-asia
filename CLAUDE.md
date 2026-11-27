@@ -609,7 +609,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   icon) → #/account?tab=agent (agent profile with the channel field; signed-out visitors go through sign-in) – same tab, not Telegram.
   HEADER TELEGRAM ICON (owner, 2026-11-27 09:05: "a fejlécbe is… egy telegramos ikont… mindjárt az elején"): ORDER (owner 2026-11-27 04:32: "legyen normális
   sorrend"): language · currency · TELEGRAM · contact · account – the first of the round icons, right after the language / currency
-  pills (phones: EN · Telegram · + Post · Menu; phones 34px, hfit1 30px), LOOK (owner 09:13 "nagyon kék" → 09:14 "kék telegramikon,
+  pills (phones: EN · Telegram · + Post · Menu; phones ALWAYS 34px with an 18px plane = Menu / Post height, also under hfit1–hfit4 – owner 2026-11-27 13:41: "legyen ugyanolyan nagyságú, magasságban, mint a post gomb"; never shrink it), LOOK (owner 09:13 "nagyon kék" → 09:14 "kék telegramikon,
   a háromszög fehér, ilyen körbe, mint a language"): white circle with the language button's thin border; FINAL (owner 2026-11-27 04:30: "háromszög kék, gomb többi
   része fehér"): ONLY the plane is blue #229ED9 (19px, phones 18px) – no blue circle,
   [data-tgch] → the same three-choice card, dropping down under the header (.tgch.at-top). header.css last block.

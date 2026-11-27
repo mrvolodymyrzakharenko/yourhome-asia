@@ -101,7 +101,11 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .hdr .rb-tg svg{width:19px;height:19px;fill:#229ED9;stroke:none;margin-left:-2px}
 .tgch.at-top{top:calc(68px + env(safe-area-inset-top));bottom:auto}
 @media (max-width:720px){.hdr .rb-tg{width:34px;height:34px}.tgch.at-top{top:calc(58px + env(safe-area-inset-top))}}
-@media (max-width:720px){.hdr .rb-tg svg{width:18px;height:18px}body.hfit1 .hdr .rb-tg{width:30px;height:30px}body.hfit1 .hdr .rb-tg svg{width:16px;height:16px}}
+@media (max-width:720px){.hdr .rb-tg svg{width:18px;height:18px}}
+/* SAME HEIGHT AS POST / MENU (owner, 2026-11-27 13:41: "megint a Telegram ikon olyan pici lett, legyen ugyanolyan nagyságú, magasságban,
+   mint a post gomb vagy a többi"): on phones the Telegram circle stays 34px (= the Menu button) with an 18px plane in EVERY tightening
+   step (hfit1–hfit4) – it never shrinks to 30px again; the header makes room elsewhere. */
+@media (max-width:720px){body[class*="hfit"] .hdr .rb-tg{width:34px!important;height:34px!important}body[class*="hfit"] .hdr .rb-tg svg{width:18px!important;height:18px!important}}
 
 /* MENU = SOFT PINK TILES (owner, 2026-11-27 11:27: "összebb kéne húzni… begombozni az összes menüt nagyon enyhe pirosra…
    ne legyen csík, ne legyen border… a currency-nál se legyen border… rálóg a keresés ikonra"): every link is a borderless

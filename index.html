@@ -21,14 +21,14 @@
 <style>#app>.ssr{opacity:0!important;visibility:hidden!important;animation:none!important;min-height:60vh}</style>
 <script src="/router.js?v=1"></script>
 <link rel="modulepreload" href="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm">
-<link rel="modulepreload" href="/app.js?v=20261127sf1"><link rel="modulepreload" href="/i18n.js"><link rel="modulepreload" href="/agents.js"><link rel="modulepreload" href="/popup.js"><link rel="modulepreload" href="/partners.js"><link rel="modulepreload" href="/blog.js">
+<link rel="modulepreload" href="/app.js?v=20261127sp1"><link rel="modulepreload" href="/i18n.js"><link rel="modulepreload" href="/agents.js"><link rel="modulepreload" href="/popup.js"><link rel="modulepreload" href="/partners.js"><link rel="modulepreload" href="/blog.js">
 <meta name="theme-color" content="#032EA1">
 <link rel="icon" href="/favicon.ico?v=3" sizes="32x32"><link rel="icon" href="/icon-192.png?v=3" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
 <link rel="manifest" href="/manifest.json">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="/styles.css?v=20261127fol1">
 <link rel="stylesheet" href="/header.css?v=20261127tg2">
 <link rel="stylesheet" href="/agents.css?v=1">
@@ -124,7 +124,7 @@
 </nav>
 
 <div id="toast" class="toast" hidden></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" async></script><!-- async (2026-11-27 speed): the map library never holds up the page; app.js needL() waits for it where a map is drawn -->
 <script>
 (function(){var b=document.getElementById('menuBtn'),d=document.getElementById('drawer');
 /* phones/tablets: the menu is 10% wider than its content needs (owner, 2026-11-27 08:49) */
@@ -147,6 +147,6 @@ document.getElementById('drClose').addEventListener('click',function(e){e.stopPr
 </script>
 <script src="/picker.js?v=6" defer></script>
 <script src="/fade.js?v=3" defer></script>
-<script type="module" src="/app.js?v=20261127sf1"></script>
+<script type="module" src="/app.js?v=20261127sp1"></script>
 </body>
 </html>

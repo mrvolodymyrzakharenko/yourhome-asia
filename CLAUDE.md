@@ -8,6 +8,9 @@ Data lives in the shared Supabase project "eleon" (same as the Study and Work po
 never touch the Study tables. When a new standing rule is agreed with the owner, add it here.
 
 ## Working style
+- SPEED (2026-11-27, owner: Facebook-ad visitors left before the page showed): Leaflet loads ASYNC (index.html) and its CSS non-blocking
+  (media=print onload) – a map waits for it with needL() in app.js (search map view, post form); never make leaflet.js blocking again.
+  vercel.json "regions": ["fra1"] – the functions run next to the Supabase database (eu-central-1).
 - JS CACHE (2026-11-27): index.html loads /app.js?v=… (script + modulepreload, same value) – raise it when app.js changes in a way phones must see.
 - PAGE CACHE (owner, 2026-11-27 "chrome-ban nem frissül"): api/page.js sends the browser Cache-Control 'public, max-age=0, must-revalidate'
   (NEVER stale-while-revalidate there – Chrome then shows the old page); the edge cache lives only in Vercel-CDN-Cache-Control.

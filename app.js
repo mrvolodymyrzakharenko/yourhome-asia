@@ -526,6 +526,8 @@ document.addEventListener('click', e => {
   b.classList.toggle('on', s.includes(id));
 });
 
+// SPEED (2026-11-27, Facebook ad visitors leaving before the page showed): Leaflet loads async – a map waits for it here
+const needL = () => window.L ? Promise.resolve() : new Promise(ok => { const s = document.querySelector('script[src*="leaflet"]'); const t = setInterval(() => { if (window.L) { clearInterval(t); ok(); } }, 80); s && s.addEventListener('load', () => { clearInterval(t); ok(); }, { once: true }); setTimeout(() => { clearInterval(t); ok(); }, 10000); });
 function clearMaps() { maps.forEach(m => m.remove()); maps = []; }
 function tiles(m) { L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(m); }
 function listingsMap(el, list) {
@@ -884,7 +886,7 @@ async function viewSearch() {
   const list = await fetchListings(p);
   const res = document.getElementById('res');
   if (!list.length) { res.innerHTML = `<div class="empty">${t('noResults')}<br><br><a class="btn red" href="#/post">+ ${t('post')}</a></div>`; return; }
-  if (view === 'map') { res.innerHTML = '<div id="map"></div>'; listingsMap(document.getElementById('map'), list); }
+  if (view === 'map') { res.innerHTML = '<div id="map"></div>'; needL().then(() => { const el = document.getElementById('map'); if (el && el.isConnected && window.L) listingsMap(el, list); }); }
   else res.innerHTML = `<div class="grid">${list.map(card).join('')}</div>`;
   placeCtas(res);
 }
@@ -950,7 +952,7 @@ async function viewListing(id) {
   app.querySelectorAll('[data-ev]').forEach(a => a.addEventListener('click', () => track(l, a.dataset.ev)));
   AG.listingExtras(l);
   app.querySelectorAll('.thumbs img').forEach(img => img.onclick = () => { document.getElementById('gmain').innerHTML = `<img src="${esc(photos[img.dataset.i])}" alt="">`; app.querySelectorAll('.thumbs img').forEach(x => x.classList.toggle('on', x === img)); });
-  if (l.lat && l.lng) { const m = L.map('mmap').setView([l.lat, l.lng], 15); tiles(m); L.marker([l.lat, l.lng]).addTo(m); maps.push(m); }
+  if (l.lat && l.lng && window.L) { const m = L.map('mmap').setView([l.lat, l.lng], 15); tiles(m); L.marker([l.lat, l.lng]).addTo(m); maps.push(m); }
   document.getElementById('inq').onsubmit = async e => {
     e.preventDefault(); const f = Object.fromEntries(new FormData(e.target)); const btn = e.target.querySelector('button'); btn.disabled = true;
     const { error } = await sb.from('yh_inquiries').insert({ listing_id: l.id, name: f.name.trim(), contact: f.contact.trim(), message: f.message.trim() || null });
@@ -1088,6 +1090,7 @@ async function viewPost(editId) {
       noteL.hidden = per.value !== 'other'; noteL.querySelector('input').required = per.value === 'other'; };
     per.addEventListener('change', sync); dl.addEventListener('change', sync); sync(); }
   let pos = l.lat && l.lng ? [l.lat, l.lng] : null;
+  await needL();
   const m = L.map('pmap').setView(pos || cityCenter(l.city || 'Phnom Penh'), pos ? 16 : 13); tiles(m); maps.push(m);
   document.getElementById('pCity').addEventListener('change', e => {   // every city has its own district list (owner, 2026-11-24 20:28)
     document.getElementById('pDist').innerHTML = '<option value="">—</option>' + distList(e.target.value).map(d => `<option>${esc(d)}</option>`).join('');

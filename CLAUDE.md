@@ -605,6 +605,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   .tgch card "YourHome on Telegram" with Join our channel (t.me/yourhomeasia) · Post a listing in the bot (t.me/yourhomeasiabot?start=post
   – the bot goes straight into posting) · Search in the bot (?start=search); a choice opens Telegram and closes the card; the card still
   opens by itself once per visitor. tgCardFill() in app.js, texts tgo* (i18n.js TB), styles .tgch-o.
+  FOURTH CHOICE (owner, 2026-11-27 13:40: "Connect My Channel a Telegram gombokon"): "Connect my channel" (tgo4 / tgo4s, 8 languages, link
+  icon) → #/account?tab=agent (agent profile with the channel field; signed-out visitors go through sign-in) – same tab, not Telegram.
   HEADER TELEGRAM ICON (owner, 2026-11-27 09:05: "a fejlécbe is… egy telegramos ikont… mindjárt az elején"): ORDER (owner 2026-11-27 04:32: "legyen normális
   sorrend"): language · currency · TELEGRAM · contact · account – the first of the round icons, right after the language / currency
   pills (phones: EN · Telegram · + Post · Menu; phones 34px, hfit1 30px), LOOK (owner 09:13 "nagyon kék" → 09:14 "kék telegramikon,

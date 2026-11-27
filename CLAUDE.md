@@ -548,6 +548,12 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - DEMOS ARE NEVER DELETED AUTOMATICALLY (owner, 2026-11-27: "ne vedd le semmi demót… ha szólok, törüld"): the database triggers
   yh_demo_purge_listings / yh_demo_purge_projects are DISABLED (not dropped); demos and test listings are deleted only when the owner
   says so – and their Telegram channel posts go with them (tg-sync channel clean-up).
+- GUEST POSTING = FORM FIRST, SIGN-IN AT PUBLISH (owner, 2026-11-27 14:20: "csináld így" – the old rule sent signed-out visitors
+  straight to the sign-in page): /post shows the form to everyone; a guest's photos are optimized and kept in the browser (object URLs);
+  at Publish the draft (fields, map pin, photo blobs) goes to IndexedDB yh_draft, toast gp_login, the sign-in page opens with
+  yh_next = post?resume=1; after Google / Telegram sign-in viewPost uploads the photos (upPhoto), refills the form (fillForm) and
+  submits it by itself (toast gp_pub); the draft is deleted after a successful publish and ignored after 3 days. Editing (/edit/<id>)
+  still needs an account. An email magic link opened in another browser finds no draft (empty form). Texts gp_* (i18n.js GP).
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.

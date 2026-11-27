@@ -985,8 +985,37 @@ function viewLogin(next) {
   };
 }
 
+// GUEST DRAFT (owner, 2026-11-27 14:20): a signed-out visitor's listing waits in IndexedDB (fields + photo blobs) until sign-in
+const draftDb = () => new Promise((ok, no) => { const r = indexedDB.open('yh_draft', 1); r.onupgradeneeded = () => r.result.createObjectStore('d'); r.onsuccess = () => ok(r.result); r.onerror = () => no(r.error); });
+async function draftSet(v) { const db = await draftDb(); return new Promise((ok, no) => { const tx = db.transaction('d', 'readwrite'); const st = tx.objectStore('d'); v == null ? st.delete('post') : st.put(v, 'post'); tx.oncomplete = () => ok(); tx.onerror = () => no(tx.error); }); }
+async function draftGet() { try { const db = await draftDb(); return await new Promise(ok => { const r = db.transaction('d').objectStore('d').get('post'); r.onsuccess = () => ok(r.result || null); r.onerror = () => ok(null); }); } catch (_) { return null; } }
+async function upPhoto(big, small) {   // the optimized photo pair → Supabase Storage yh-photos; returns the public URL of the large copy
+  const webp = big.type === 'image/webp', base = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+  const path = webp ? base + '-L.webp' : base + '.jpg';
+  const { error } = await sb.storage.from('yh-photos').upload(path, big, { contentType: big.type, cacheControl: '31536000' });
+  if (error) { toast(t('error') + error.message); return null; }
+  if (webp && small && small.type === 'image/webp') await sb.storage.from('yh-photos').upload(base + '-s.webp', small, { contentType: 'image/webp', cacheControl: '31536000' });
+  return sb.storage.from('yh-photos').getPublicUrl(path).data.publicUrl;
+}
+function fillForm(pf, fields) {   // put a saved draft back into the post form
+  const by = {}; fields.forEach(([k, v]) => (by[k] = by[k] || []).push(v));
+  const setSel = (el, v) => { if (el.tagName === 'SELECT' && v && ![...el.options].some(o => o.value === v)) el.add(new Option(v, v)); el.value = v; };
+  if (by.city) { setSel(pf.city, by.city[0]); pf.city.dispatchEvent(new Event('change')); }
+  for (const [k, vals] of Object.entries(by)) {
+    if (k === 'city') continue;
+    pf.querySelectorAll(`[name="${CSS.escape(k)}"]`).forEach(el => {
+      if (el.type === 'checkbox' || el.type === 'radio') el.checked = vals.includes(el.value);
+      else if (el.type !== 'file') setSel(el, vals[0]);
+    });
+  }
+  pf.querySelectorAll('input[type=checkbox]').forEach(el => { if (!by[el.name]) el.checked = false; });
+  pf.deal_type.dispatchEvent(new Event('change'));
+}
 async function viewPost(editId) {
-  if (!user) return viewLogin(editId ? 'edit/' + editId : 'post');
+  // GUEST POSTING (owner, 2026-11-27 14:20: "csináld így"): a signed-out visitor sees the form at once; photos are optimized and kept
+  // in the browser; at Publish the whole draft (fields, map pin, photo blobs) goes to IndexedDB, the sign-in page opens, and after
+  // sign-in #/post?resume=1 uploads the photos, refills the form and publishes it by itself. Editing still needs an account.
+  if (!user && editId) return viewLogin('edit/' + editId);
   let l = { deal_type: 'rent', property_type: 'apartment', price_period: 'month', photos: [], furnished: false };
   if (editId) {
     const { data } = await sb.from('yh_listings').select('*').eq('id', editId).eq('owner_id', user.id).maybeSingle();
@@ -1055,7 +1084,7 @@ async function viewPost(editId) {
   let mk = pos ? L.marker(pos).addTo(m) : null;
   m.on('click', e => { pos = [e.latlng.lat, e.latlng.lng]; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); });
   setTimeout(() => m.invalidateSize(), 60);
-  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(imgSrc(p, 800))}" alt=""><button type="button" data-rm="${i}" aria-label="${esc(t('del'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
+  const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(typeof p === 'string' ? imgSrc(p, 800) : p.url)}" alt=""><button type="button" data-rm="${i}" aria-label="${esc(t('del'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
   drawPrev();
   document.getElementById('prev').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) { photos.splice(+b.dataset.rm, 1); drawPrev(); } };
   // UPLOADED PHOTOS ARE OPTIMIZED IN THE BROWSER (owner, 2026-11-25 – the Study portal's SWImageOpt rule: "ne legyen nagy
@@ -1070,17 +1099,20 @@ async function viewPost(editId) {
       if (!/^image\/(jpeg|png|webp|heic|heif)$/.test(f.type) || f.size > 30 * 1024 * 1024) { toast(t('error') + f.name); continue; }
       const big = await shrinkPhoto(f, 1600, .8), small = await shrinkPhoto(f, 800, .72);
       if (!big || big.size > 2 * 1024 * 1024) { toast(t('error') + f.name); continue; }
-      const webp = big.type === 'image/webp', base = `${user.id}/${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
-      const path = webp ? base + '-L.webp' : base + '.jpg';
-      const { error } = await sb.storage.from('yh-photos').upload(path, big, { contentType: big.type, cacheControl: '31536000' });
-      if (error) { toast(t('error') + error.message); continue; }
-      if (webp && small && small.type === 'image/webp') await sb.storage.from('yh-photos').upload(base + '-s.webp', small, { contentType: 'image/webp', cacheControl: '31536000' });
-      photos.push(sb.storage.from('yh-photos').getPublicUrl(path).data.publicUrl); drawPrev();
+      if (!user) { photos.push({ big, small, url: URL.createObjectURL(big) }); drawPrev(); continue; }   // guest: kept until sign-in
+      const url = await upPhoto(big, small); if (url) { photos.push(url); drawPrev(); }
     }
     drawPrev(); e.target.value = '';
   };
   document.getElementById('pform').onsubmit = async e => {
-    e.preventDefault(); const btn = document.getElementById('pbtn'); btn.disabled = true;
+    e.preventDefault(); const btn = document.getElementById('pbtn');
+    if (!user) {   // guest: keep the whole draft, then the one-tap sign-in; publishing continues at #/post?resume=1
+      btn.disabled = true;
+      const fields = [...new FormData(e.target).entries()].filter(([, v]) => typeof v === 'string');
+      try { await draftSet({ fields, pos, photos: photos.map(p => typeof p === 'string' ? { url: p } : { big: p.big, small: p.small }), at: Date.now() }); } catch (_) {}
+      btn.disabled = false; toast(t('gp_login'), 6000); window.scrollTo(0, 0); return viewLogin('post?resume=1');
+    }
+    btn.disabled = true;
     const fd = new FormData(e.target); const f = Object.fromEntries(fd);
     const num = v => v === '' || v == null ? null : Number(v);
     const row = {
@@ -1102,8 +1134,21 @@ async function viewPost(editId) {
                        : await sb.from('yh_listings').insert(row).select('id').single();
     btn.disabled = false;
     if (res.error) return toast(t('error') + res.error.message);
+    if (!editId) draftSet(null).catch(() => {});
     toast(editId ? t('savedOk') : t('published'), 4000); go('#/l/' + res.data.id);
   };
+  // back from the sign-in with a guest draft → upload its photos, refill the form and publish it by itself
+  if (user && !editId && qs().get('resume')) {
+    const d = await draftGet();
+    if (d && Date.now() - (d.at || 0) < 3 * 864e5) {
+      toast(t('gp_pub'), 5000);
+      const pf = document.getElementById('pform'); fillForm(pf, d.fields || []);
+      if (d.pos) { pos = d.pos; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); m.setView(pos, 16); }
+      for (const p of d.photos || []) { if (p.url) photos.push(p.url); else if (p.big) { const u = await upPhoto(p.big, p.small); if (u) photos.push(u); } }
+      drawPrev();
+      if (pf.isConnected) { if (pf.reportValidity()) pf.requestSubmit(); }
+    }
+  }
 }
 
 // WHO ARE YOU? (owner, 2026-11-25: "legyen ugyanúgy, mint a study portálon, választási lehetősége, hogy ő hirdető, vagy ő

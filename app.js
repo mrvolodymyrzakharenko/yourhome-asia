@@ -307,7 +307,7 @@ if (TG_CHANNEL) {
 // slides in by itself (PC bottom-left, phones just above the bottom menu) – no dark overlay, the page stays usable. It closes itself
 // after 12 s (a thin red bar shows the time left; hovering pauses it), never on /post /edit /account /admin, never over another
 // popup / picker / the Telegram card, at most once every 3 days per visitor (localStorage yh_freead). Texts fa_* (i18n.js FA).
-const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 25000, FA_LIFE = 12000;
+const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000, FA_LIFE = 12000;
 const faBlocked = () => /^#\/(post|edit|account|admin|login)/.test(YH.h()) || document.body.classList.contains('adm-mode');
 function faClose(c) { c = c || document.getElementById('fad'); if (!c || c.hidden) return; c.classList.remove('on'); clearTimeout(c._t); setTimeout(() => { c.hidden = true; }, 300); }
 function faOpen() {

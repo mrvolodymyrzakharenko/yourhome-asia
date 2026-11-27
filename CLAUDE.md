@@ -611,7 +611,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
     that agent (S.lst.agent, "Show all listings" clears it).
 
 - FREE-LISTING NUDGE (owner, 2026-11-27: "nem szabványos pop up, hanem ideiglenes ablak – Hirdess ingyen ingatlant"): NOT a modal –
-  a small white card slides in by itself 25 s after load (PC bottom-left corner 390px, phones/tablets centred just above the bottom menu),
+  a small white card slides in by itself 5 s after load (owner 2026-11-27: "sok a 25 másodperc, legyen 5") (PC bottom-left corner 390px, phones/tablets centred just above the bottom menu),
   no dark overlay: red house badge, "Advertise your property for free" + one line, red "Post for free" pill → /post, drawn × top-right,
   a thin red bar at the bottom shrinks for 12 s and then it closes itself (hover pauses). At most once every 3 days per visitor
   (localStorage yh_freead); never on /post /edit /account /admin /login, never over another popup, picker, the open menu or the Telegram

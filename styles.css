@@ -1613,3 +1613,23 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
   .fad-go{height:30px;padding:0 10px;font-size:12px}
 }
 @media (prefers-reduced-motion:reduce){.fad{transition:opacity .2s}.fad-bar{display:none}}
+/* NUDGE BIGGER + FROM THE RIGHT (owner, 2026-11-27 07:17: "legyen nagyobb – jobbról balra csússzon be"): the card sits at the RIGHT
+   edge and slides in from right to left; ~20% bigger box, badge and button; title 14px (owner's exception to the 13px rule, like the
+   card price). */
+.fad{left:auto;right:20px;bottom:28px;width:460px;gap:14px;padding:16px 44px 18px 16px;border-radius:20px;transform:translateX(calc(100% + 40px));transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.fad.on{transform:none}
+.fad-ic{width:50px;height:50px}.fad-ic svg{width:26px;height:26px}
+.fad-t{gap:3px}
+.fad-t b{font-size:14px}
+.fad-t small{font-size:13px}
+.fad-go{height:40px;padding:0 16px;font-size:13px}
+.fad-x{top:9px;right:9px;width:28px;height:28px}.fad-x svg{width:13px;height:13px}
+.fad-bar{height:4px}
+@media (max-width:900px){
+  .fad{left:auto;right:10px;bottom:calc(96px + env(safe-area-inset-bottom));width:calc(100% - 20px);max-width:440px;gap:11px;padding:14px 40px 16px 12px;transform:translateX(calc(100% + 30px))}
+  .fad.on{transform:none}
+  .fad-ic{width:44px;height:44px}.fad-ic svg{width:23px;height:23px}
+  .fad-t b{font-size:14px}
+  .fad-t small{font-size:12.5px}
+  .fad-go{height:38px;padding:0 13px;font-size:13px}
+}

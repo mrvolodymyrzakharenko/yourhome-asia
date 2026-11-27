@@ -472,3 +472,17 @@ ko: {"gp_login": "거의 다 됐어요! 한 번에 로그인하면 바로 매물
 th: {"gp_login": "ใกล้เสร็จแล้ว! เข้าสู่ระบบด้วยการแตะครั้งเดียว – ประกาศของคุณจะเผยแพร่ทันที", "gp_pub": "กำลังเผยแพร่ประกาศของคุณ…"}
 };
 for (const k of Object.keys(GP)) T[k] = Object.assign(T[k] || {}, GP[k]); }
+
+/* SHORT POST FORM (owner, 2026-11-27 14:33): moreOpt / descShort / titleAuto */
+{ const SF = {
+en: {"moreOpt": "More options", "descShort": "Short description", "titleAuto": "Leave empty – we write it for you"},
+km: {"moreOpt": "ជម្រើសបន្ថែម", "descShort": "ការពិពណ៌នាខ្លី", "titleAuto": "ទុកទទេ – យើងសរសេរឲ្យអ្នក"},
+zh: {"moreOpt": "更多选项", "descShort": "简短描述", "titleAuto": "留空 – 我们为您生成"},
+fr: {"moreOpt": "Plus d’options", "descShort": "Courte description", "titleAuto": "Laissez vide – nous l’écrivons pour vous"},
+ja: {"moreOpt": "その他のオプション", "descShort": "短い説明", "titleAuto": "空欄でOK – 自動で作成します"},
+ru: {"moreOpt": "Дополнительно", "descShort": "Краткое описание", "titleAuto": "Оставьте пустым – мы напишем сами"},
+vi: {"moreOpt": "Thêm tùy chọn", "descShort": "Mô tả ngắn", "titleAuto": "Để trống – chúng tôi sẽ tự viết"},
+ko: {"moreOpt": "추가 옵션", "descShort": "짧은 설명", "titleAuto": "비워 두면 자동으로 작성됩니다"},
+th: {"moreOpt": "ตัวเลือกเพิ่มเติม", "descShort": "คำอธิบายสั้นๆ", "titleAuto": "เว้นว่างไว้ – เราเขียนให้"}
+};
+for (const k of Object.keys(SF)) T[k] = Object.assign(T[k] || {}, SF[k]); }

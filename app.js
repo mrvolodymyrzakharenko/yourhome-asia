@@ -1011,6 +1011,15 @@ function fillForm(pf, fields) {   // put a saved draft back into the post form
   pf.querySelectorAll('input[type=checkbox]').forEach(el => { if (!by[el.name]) el.checked = false; });
   pf.deal_type.dispatchEvent(new Event('change'));
 }
+// AUTO TITLE (owner, 2026-11-27 14:33 short form): an empty title is written for the advertiser – "2-bedroom apartment for rent in BKK1"
+function autoTitle(f) {
+  const own = String(f.title || '').trim(); if (own.length >= 5) return own;
+  const type = String(T.en['t_' + f.property_type] || f.property_type || 'Property').toLowerCase(), b = Number(f.bedrooms);
+  const deal = f.deal_type === 'sale' ? 'for sale' : f.deal_type === 'daily' ? 'for daily rent' : 'for rent';
+  const what = f.deal_type === 'room' ? 'room' : (f.bedrooms === '0' ? 'studio ' + (type === 'studio' ? '' : type) : (b > 0 ? b + '-bedroom ' : '') + type).trim();
+  const s = `${what} ${f.deal_type === 'room' ? 'for rent' : deal} in ${f.district || f.city || 'Cambodia'}`;
+  return (s.charAt(0).toUpperCase() + s.slice(1)).slice(0, 140);
+}
 async function viewPost(editId) {
   // GUEST POSTING (owner, 2026-11-27 14:20: "csináld így"): a signed-out visitor sees the form at once; photos are optimized and kept
   // in the browser; at Publish the whole draft (fields, map pin, photo blobs) goes to IndexedDB, the sign-in page opens, and after
@@ -1033,38 +1042,41 @@ async function viewPost(editId) {
   const sel = (name, opts, cur) => `<select name="${name}">${opts.map(([v, lab]) => `<option value="${v}" ${String(cur) === String(v) ? 'selected' : ''}>${esc(lab)}</option>`).join('')}</select>`;
   app.innerHTML = `<div class="wrap"><form class="narrow panel form" id="pform">
     <h1 style="margin:0">${editId ? t('editTitle') : t('postTitle')}</h1>
+    <!-- SHORT FORM (owner, 2026-11-27 14:33: "rövidített űrlap… ami a kártyán megjelenik… a többi more"): photos first, then only what the card shows; everything else under More options -->
+    <label>${t('photos')}<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple></label>
+    <p class="phint">${esc(t('photosHint'))} <b id="pcount"></b></p>
+    <div class="prev" id="prev"></div>
     <div class="row"><label>${t('dealType')} *${sel('deal_type', [['daily', t('dailyRent')], ['weekly', t('d_weekly')], ['rent', t('d_monthly')], ['longterm', t('d_longterm')], ['rentother', t('d_other')], ['sale', t('buy')], ['room', t('room')]], postDeal(l))}</label>
       <label>${t('propType')} *<select name="property_type">${typeOpts(l.property_type, false)}</select></label></div>
-    <label>${t('title')} *<input name="title" required minlength="5" maxlength="140" placeholder="${esc(t('titlePh'))}" value="${esc(l.title || '')}"></label>
     <div class="row"><label>${t('price')} *<input name="price" type="number" min="0" step="1" required value="${l.price ?? ''}"></label>
       <label id="pPerL">${t('period')}${sel('price_period', [['day', t('p_day')], ['week', t('p_week')], ['month', t('p_month')], ['other', t('p_other')], ['total', t('p_total')]], l.price_period)}</label></div>
     <label id="pNoteL"${l.price_period === 'other' ? '' : ' hidden'}>${t('p_otherNote')} *<input name="period_note" maxlength="40" placeholder="${esc(t('p_otherPh'))}" value="${esc(l.period_note || '')}"></label>
-    <div class="row3"><label>${t('bedrooms')}${sel('bedrooms', [['', t('notSet')], ['0', t('studio')], ['1', '1 ' + t('bedroomOne')], ['2', '2 ' + t('bedrooms').toLowerCase()], ['3', '3 ' + t('bedrooms').toLowerCase()], ['4', '4 ' + t('bedrooms').toLowerCase()], ['5', '5+ ' + t('bedrooms').toLowerCase()], ...(l.bedrooms > 5 ? [[String(l.bedrooms), l.bedrooms + ' ' + t('bedrooms').toLowerCase()]] : [])], l.bedrooms ?? '')}</label>
-      <label>${t('bathrooms')}${sel('bathrooms', [['', t('notSet')], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5+'], ...(l.bathrooms > 5 || l.bathrooms === 0 ? [[String(l.bathrooms), String(l.bathrooms)]] : [])], l.bathrooms ?? '')}</label>
-      <label>${t('area')}<input name="area_m2" type="number" min="0" step="0.1" value="${l.area_m2 ?? ''}"></label></div>
+    <div class="row"><label>${t('bedrooms')}${sel('bedrooms', [['', t('notSet')], ['0', t('studio')], ['1', '1 ' + t('bedroomOne')], ['2', '2 ' + t('bedrooms').toLowerCase()], ['3', '3 ' + t('bedrooms').toLowerCase()], ['4', '4 ' + t('bedrooms').toLowerCase()], ['5', '5+ ' + t('bedrooms').toLowerCase()], ...(l.bedrooms > 5 ? [[String(l.bedrooms), l.bedrooms + ' ' + t('bedrooms').toLowerCase()]] : [])], l.bedrooms ?? '')}</label>
+      <label>${t('bathrooms')}${sel('bathrooms', [['', t('notSet')], ['1', '1'], ['2', '2'], ['3', '3'], ['4', '4'], ['5', '5+'], ...(l.bathrooms > 5 || l.bathrooms === 0 ? [[String(l.bathrooms), String(l.bathrooms)]] : [])], l.bathrooms ?? '')}</label></div>
+    <div><div class="mp-lab" style="margin-top:0">${t('amenities')}</div><div class="amen-pick">${['wifi','aircon','parking','pool'].map(a => `<label class="chk"><input type="checkbox" name="amen" value="${a}" ${(l.amenities || []).includes(a) ? 'checked' : ''}> ${t('am_' + a)}</label>`).join('')}</div></div>
+    <label>${t('descShort')}<textarea name="description" rows="3" maxlength="5000">${esc(l.description || '')}</textarea></label>
+    <div class="row"><label>${t('city')} *<select name="city" id="pCity" required>${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (l.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></label>
+      <label>${t('district')} *<select name="district" id="pDist" required><option value="">—</option>${(l.district && !distList(l.city || 'Phnom Penh').includes(l.district) ? [l.district, ...distList(l.city || 'Phnom Penh')] : distList(l.city || 'Phnom Penh')).map(d => `<option ${l.district === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select></label></div>
+    ${(() => { const ap = parseAddr(l.address), inp = (k, ph) => `<label>${t('ad_' + k)}<input name="a_${k}" maxlength="${k === 'street' ? 80 : 50}" placeholder="${esc(ph)}" value="${esc(ap[k] || '')}"></label>`;
+      return `<div class="row">${inp('house', '24')}${inp('street', '278')}</div>`; })()}
+    <div class="row"><label>${t('contactName')}<input name="contact_name" maxlength="80" value="${esc(l.contact_name || '')}"></label>
+      <label>${t('phone')}<input name="contact_phone" maxlength="30" value="${esc(l.contact_phone || '')}" placeholder="+855 …"></label></div>
+    <div class="row"><label>${t('telegram')}<input name="contact_telegram" maxlength="40" value="${esc(l.contact_telegram || '')}" placeholder="@username"></label>
+      <label>${t('whatsapp')}<input name="contact_whatsapp" maxlength="30" value="${esc(l.contact_whatsapp || '')}" placeholder="+855 …"></label></div>
+    <details class="pmore"${editId ? ' open' : ''}><summary>${t('moreOpt')}</summary><div class="pmore-in">
+    <label>${t('title')}<input name="title" maxlength="140" placeholder="${esc(t('titleAuto'))}" value="${esc(l.title || '')}"></label>
+    <div class="row"><label>${t('area')}<input name="area_m2" type="number" min="0" step="0.1" value="${l.area_m2 ?? ''}"></label><span></span></div>
     <label class="chk"><input type="checkbox" name="furnished" ${l.furnished ? 'checked' : ''}> ${t('furnished')}</label>
     <div class="row"><label>${t('postedBy')}${sel('posted_by', [['', t('notSet')], ['owner', t('by_owner')], ['agent', t('by_agent')]], l.posted_by ?? '')}</label>
       <label>${t('minLease')}${sel('min_lease', [['', t('notSet')], ...LEASE.map(x => [x, t('l_' + x)])], l.min_lease ?? '')}</label></div>
     <div class="row"><label>${t('titleType')} (${t('saleOnly')})${sel('title_type', [['', t('notSet')], ...['hard', 'soft', 'strata'].map(x => [x, t('tt_' + x)])], l.title_type ?? '')}</label>
       <label class="chk" style="align-self:end;padding-bottom:10px"><input type="checkbox" name="foreigner_ok" ${l.foreigner_ok ? 'checked' : ''}> ${t('foreignerOk')} (${t('saleOnly')})</label></div>
-    <div><div class="mp-lab" style="margin-top:0">${t('amenities')}</div><div class="amen-pick">${AMEN.map(a => `<label class="chk"><input type="checkbox" name="amen" value="${a}" ${(l.amenities || []).includes(a) ? 'checked' : ''}> ${t('am_' + a)}</label>`).join('')}</div></div>
-    <label>${t('description')}<textarea name="description" maxlength="5000">${esc(l.description || '')}</textarea></label>
-    <div class="row"><label>${t('city')} *<select name="city" id="pCity" required>${CITY_NAMES.map(c => `<option value="${esc(c)}"${c === (l.city || 'Phnom Penh') ? ' selected' : ''}>${esc(cityLabel(c))}</option>`).join('')}</select></label>
-      <label>${t('district')} *<select name="district" id="pDist" required><option value="">—</option>${(l.district && !distList(l.city || 'Phnom Penh').includes(l.district) ? [l.district, ...distList(l.city || 'Phnom Penh')] : distList(l.city || 'Phnom Penh')).map(d => `<option ${l.district === d ? 'selected' : ''}>${esc(d)}</option>`).join('')}</select></label></div>
-    ${(() => { const ap = parseAddr(l.address), inp = (k, ph) => `<label>${t('ad_' + k)}<input name="a_${k}" maxlength="${k === 'street' ? 80 : 50}" placeholder="${esc(ph)}" value="${esc(ap[k] || '')}"></label>`;
-      return `<div><div class="mp-lab" style="margin-top:0">${t('address')} <span style="color:var(--muted);font-weight:400">(${t('optional')})</span></div>
-      <div class="row">${inp('house', '24')}${inp('street', '278')}</div>
-      <div class="row">${inp('village', '3')}${inp('sangkat', 'Boeung Keng Kang 1')}</div>
-      <div class="row">${inp('khan', 'Chamkarmon')}<span></span></div></div>`; })()}
+    <div><div class="mp-lab" style="margin-top:0">${t('amenities')}</div><div class="amen-pick">${AMEN.filter(a => !['wifi','aircon','parking','pool'].includes(a)).map(a => `<label class="chk"><input type="checkbox" name="amen" value="${a}" ${(l.amenities || []).includes(a) ? 'checked' : ''}> ${t('am_' + a)}</label>`).join('')}</div></div>
+    ${(() => { const ap = parseAddr(l.address), inp = (k, ph) => `<label>${t('ad_' + k)}<input name="a_${k}" maxlength="50" placeholder="${esc(ph)}" value="${esc(ap[k] || '')}"></label>`;
+      return `<div class="row">${inp('village', '3')}${inp('sangkat', 'Boeung Keng Kang 1')}</div><div class="row">${inp('khan', 'Chamkarmon')}<span></span></div>`; })()}
     <label>${t('pickMap')}<div class="pick-map" id="pmap"></div></label>
-    <label>${t('photos')}<input type="file" id="files" accept="image/jpeg,image/png,image/webp" multiple></label>
-    <p class="phint">${esc(t('photosHint'))} <b id="pcount"></b></p>
-    <div class="prev" id="prev"></div>
-    <div class="row"><label>${t('contactName')}<input name="contact_name" maxlength="80" value="${esc(l.contact_name || '')}"></label>
-      <label>${t('phone')}<input name="contact_phone" maxlength="30" value="${esc(l.contact_phone || '')}" placeholder="+855 …"></label></div>
-    <div class="row"><label>${t('telegram')}<input name="contact_telegram" maxlength="40" value="${esc(l.contact_telegram || '')}" placeholder="@username"></label>
-      <label>${t('whatsapp')}<input name="contact_whatsapp" maxlength="30" value="${esc(l.contact_whatsapp || '')}" placeholder="+855 …"></label></div>
     ${agBlock}
+    </div></details>
     <button class="btn red wide" id="pbtn">${editId ? t('saveChanges') : t('publish')}</button></form></div>`;
   { const pf = document.getElementById('pform'), per = pf.price_period, dl = pf.deal_type, noteL = document.getElementById('pNoteL');
     // RENT KINDS (owner, 2026-11-25: "daily rent, weekly rent, monthly rent, long term rent… other request"): the rent kind sets
@@ -1084,6 +1096,7 @@ async function viewPost(editId) {
   let mk = pos ? L.marker(pos).addTo(m) : null;
   m.on('click', e => { pos = [e.latlng.lat, e.latlng.lng]; mk ? mk.setLatLng(pos) : (mk = L.marker(pos).addTo(m)); });
   setTimeout(() => m.invalidateSize(), 60);
+  document.querySelector('#pform .pmore')?.addEventListener('toggle', () => setTimeout(() => m.invalidateSize(), 60));   // the map sits under More options
   const drawPrev = () => { document.getElementById('prev').innerHTML = photos.map((p, i) => `<div class="pi"><img src="${esc(typeof p === 'string' ? imgSrc(p, 800) : p.url)}" alt=""><button type="button" data-rm="${i}" aria-label="${esc(t('del'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>`).join(''); const c = document.getElementById('pcount'); if (c) c.textContent = t('photosCount', { n: photos.length }); const fi = document.getElementById('files'); if (fi) fi.disabled = photos.length >= MAX_PHOTOS; };
   drawPrev();
   document.getElementById('prev').onclick = e => { const b = e.target.closest('[data-rm]'); if (b) { photos.splice(+b.dataset.rm, 1); drawPrev(); } };
@@ -1116,7 +1129,7 @@ async function viewPost(editId) {
     const fd = new FormData(e.target); const f = Object.fromEntries(fd);
     const num = v => v === '' || v == null ? null : Number(v);
     const row = {
-      deal_type: ['daily', 'weekly', 'longterm', 'rentother'].includes(f.deal_type) ? 'rent' : f.deal_type, property_type: f.property_type, title: f.title.trim(), description: f.description.trim() || null,
+      deal_type: ['daily', 'weekly', 'longterm', 'rentother'].includes(f.deal_type) ? 'rent' : f.deal_type, property_type: f.property_type, title: autoTitle(f), description: f.description.trim() || null,
       price: Number(f.price), price_period: ({ sale: 'total', daily: 'day', weekly: 'week', rent: 'month', longterm: 'month', rentother: 'other' })[f.deal_type] || f.price_period,
       period_note: (f.deal_type === 'rentother' || (f.deal_type === 'room' && f.price_period === 'other')) ? (String(f.period_note || '').trim().slice(0, 40) || null) : null,
       bedrooms: num(f.bedrooms), bathrooms: num(f.bathrooms), area_m2: num(f.area_m2), furnished: !!f.furnished,

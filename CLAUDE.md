@@ -554,6 +554,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   yh_next = post?resume=1; after Google / Telegram sign-in viewPost uploads the photos (upPhoto), refills the form (fillForm) and
   submits it by itself (toast gp_pub); the draft is deleted after a successful publish and ignored after 3 days. Editing (/edit/<id>)
   still needs an account. An email magic link opened in another browser finds no draft (empty form). Texts gp_* (i18n.js GP).
+- SHORT POST FORM (owner, 2026-11-27 14:33: "kell a rövidített űrlap… ami a kártyán megjelenik… fotók, rövid leírás, cím, wifi meg
+  ilyenek… 4 alap… a többi more option"): order = Photos (first) · Listing type | Property type · Price | Price per (+ Other period) ·
+  Bedrooms | Bathrooms · 4 basic amenities (Wi-Fi, Air-con, Parking, Pool) · Short description (3 rows) · City | District · House no. |
+  Street · Contact name | Phone · Telegram | WhatsApp → details.pmore "More options" (closed for new listings, open when editing):
+  Title (optional – autoTitle() writes "2-bedroom apartment for rent in BKK1" when empty), Area, Furnished, Posted by | Min. lease,
+  Title type | Foreigners, the other amenities, Village / Sangkat / Khan, the map pin, the agent profile + other-site links.
+  Texts moreOpt / descShort / titleAuto (i18n.js SF); styles "SHORT POST FORM – MORE OPTIONS" at the end of styles.css.
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.

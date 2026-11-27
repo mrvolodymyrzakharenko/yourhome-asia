@@ -441,15 +441,15 @@ th:{ft_followFb:'ติดตามเราบน Facebook',ft_joinTg:'เข�
 };
 for (const k of Object.keys(FOL)) T[k] = Object.assign(T[k] || {}, FOL[k]);
 const FOL2 = {
-en:{ft_fl1:'Follow us',ft_onFb:'on Facebook',ft_onTg:'on Telegram'},
-km:{ft_fl1:'តាមដានយើង',ft_onFb:'នៅលើ Facebook',ft_onTg:'នៅលើ Telegram'},
-zh:{ft_fl1:'关注我们',ft_onFb:'Facebook',ft_onTg:'Telegram'},
-fr:{ft_fl1:'Suivez-nous',ft_onFb:'sur Facebook',ft_onTg:'sur Telegram'},
-ja:{ft_fl1:'フォローする',ft_onFb:'Facebook',ft_onTg:'Telegram'},
-ru:{ft_fl1:'Подпишитесь',ft_onFb:'в Facebook',ft_onTg:'в Telegram'},
-vi:{ft_fl1:'Theo dõi chúng tôi',ft_onFb:'trên Facebook',ft_onTg:'trên Telegram'},
-ko:{ft_fl1:'팔로우하기',ft_onFb:'Facebook',ft_onTg:'Telegram'},
-th:{ft_fl1:'ติดตามเรา',ft_onFb:'บน Facebook',ft_onTg:'บน Telegram'}
+en:{ft_folT:'Never miss a new home',ft_folS:'New listings every day in Phnom Penh and all of Cambodia – follow us and see them first.',ft_fl1:'Follow us',ft_onFb:'on Facebook',ft_onTg:'on Telegram'},
+km:{ft_folT:'កុំខកខានផ្ទះថ្មី',ft_folS:'ការផ្សាយថ្មីៗរៀងរាល់ថ្ងៃនៅភ្នំពេញ និងទូទាំងកម្ពុជា – តាមដានយើង ដើម្បីឃើញមុនគេ។',ft_fl1:'តាមដានយើង',ft_onFb:'នៅលើ Facebook',ft_onTg:'នៅលើ Telegram'},
+zh:{ft_folT:'不错过任何新房源',ft_folS:'金边及柬埔寨全境每天都有新房源——关注我们，第一时间看到。',ft_fl1:'关注我们',ft_onFb:'Facebook',ft_onTg:'Telegram'},
+fr:{ft_folT:'Ne manquez aucun nouveau logement',ft_folS:'De nouvelles annonces chaque jour à Phnom Penh et partout au Cambodge – suivez-nous pour les voir en premier.',ft_fl1:'Suivez-nous',ft_onFb:'sur Facebook',ft_onTg:'sur Telegram'},
+ja:{ft_folT:'新着物件を見逃さない',ft_folS:'プノンペンとカンボジア全土の新着物件を毎日お届け――フォローしていち早くチェック。',ft_fl1:'フォローする',ft_onFb:'Facebook',ft_onTg:'Telegram'},
+ru:{ft_folT:'Не пропустите новое жильё',ft_folS:'Новые объявления каждый день в Пномпене и по всей Камбодже – подпишитесь и смотрите первыми.',ft_fl1:'Подпишитесь',ft_onFb:'в Facebook',ft_onTg:'в Telegram'},
+vi:{ft_folT:'Không bỏ lỡ căn nhà mới nào',ft_folS:'Tin đăng mới mỗi ngày tại Phnom Penh và khắp Campuchia – theo dõi để xem đầu tiên.',ft_fl1:'Theo dõi chúng tôi',ft_onFb:'trên Facebook',ft_onTg:'trên Telegram'},
+ko:{ft_folT:'새 매물을 놓치지 마세요',ft_folS:'프놈펜과 캄보디아 전역의 새 매물이 매일 올라옵니다 – 팔로우하고 가장 먼저 확인하세요.',ft_fl1:'팔로우하기',ft_onFb:'Facebook',ft_onTg:'Telegram'},
+th:{ft_folT:'ไม่พลาดบ้านใหม่',ft_folS:'ประกาศใหม่ทุกวันในพนมเปญและทั่วกัมพูชา – ติดตามเราเพื่อดูก่อนใคร',ft_fl1:'ติดตามเรา',ft_onFb:'บน Facebook',ft_onTg:'บน Telegram'}
 };
 for (const k of Object.keys(FOL2)) T[k] = Object.assign(T[k] || {}, FOL2[k]);
 // Telegram pill line 1 = "Join us" (owner, 2026-11-27 14:14)

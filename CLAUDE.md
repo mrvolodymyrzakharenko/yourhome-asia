@@ -37,7 +37,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - FOOTER = STUDY PORTAL FOOTER (owner, 2026-11-24: "profi lábléc… Terms and Conditions… Facebook, Telegram, WhatsApp, Viber…
   mint a Study portálon"): index.html footer.yft – brand column (logo, one line, phone +855 96 306 8590, info@yourhome.asia,
   Phnom Penh, reply line) · Find a home (incl. New projects) · For advertisers (Become a partner → #/partners) · "Chat with us" (brand-coloured pills Telegram t.me/+855963068590,
-  WhatsApp wa.me/855963068590, Facebook + red Post listing; NO VIBER anywhere on the site – owner, 2026-11-27: "vedd már ki a vibert!!!!!") · bottom row © · Terms and Conditions · Privacy Policy ·
+  WhatsApp wa.me/855963068590, Facebook + red Post listing; NO VIBER anywhere on the site – owner, 2026-11-27: "vedd már ki a vibert!!!!!")
+  FOLLOW ROW (owner, 2026-11-27 09:48: "pont hogy egy sorban kéne lennie… szöveget, ami kitölti a sor szélességét"): the "Follow us on
+  Facebook" + "Join us on Telegram" pills are NOT in the brand column any more – own full-width pale-blue band (.yft-folrow, inside a .wrap)
+  under the link columns, above Popular areas: title "Never miss a new home" + one line (ft_folT / ft_folS, 9 languages) on the left, the
+  two pills side by side on the right; phones: text above, pills under it. styles.css "FOLLOW ROW". · bottom row © · Terms and Conditions · Privacy Policy ·
   Support + safety line. The same number is the owner's Telegram and WhatsApp. Facebook shows "coming soon" until
   its page link is filled in (href + remove data-soon). The Support page reuses the chat pills. Texts: FT block in i18n.js;
   styles "FOOTER" in styles.css, sizes at the end of fonts.css; phones: link columns two side by side.

@@ -1721,3 +1721,12 @@ html:lang(km) .fadm .fadm-h,html:lang(zh) .fadm .fadm-h,html:lang(th) .fadm .fad
 .pmore>summary::after{content:"";width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:transform .2s}
 .pmore[open]>summary::after{transform:rotate(-135deg) translateY(-1px)}
 .pmore-in{display:flex;flex-direction:column;gap:14px;padding-top:14px}
+/* FOLLOW ROW (owner, 2026-11-27 09:48: "pont hogy egy sorban kéne lennie… írhatnál ki valami szöveget, ami kitölti a sor szélességét"):
+   the Facebook + Telegram pills left the narrow brand column – own full-width pale-blue band under the link columns: text on the left
+   (title + one line), the two pills side by side on the right. Phones: text above, pills under it. */
+.yft-folrow{display:flex;align-items:center;gap:24px;margin-bottom:22px;padding:14px 16px 14px 22px;border-radius:20px;background:#EEF2FD}
+.yft-folt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.yft-folt b{color:#0b1d51;font-size:13px;font-weight:600;letter-spacing:-.025em}
+.yft-folt span{color:#475569;font-size:13px}
+.yft-folrow .yft-fol{margin:0!important;flex-wrap:nowrap!important;max-width:none!important;flex:none}
+@media (max-width:720px){.yft-folrow{flex-direction:column;align-items:stretch;gap:12px;padding:16px}.yft-folrow .yft-fol{flex-wrap:wrap!important}.yft-folrow .yft-fl{flex:1 1 0!important;justify-content:flex-start}}

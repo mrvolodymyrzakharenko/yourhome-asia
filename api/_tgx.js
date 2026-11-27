@@ -261,7 +261,10 @@ const T = {
     drop: '📉 <b>Giảm giá</b> ở tin phù hợp thông báo của bạn: <s>{old}</s> → <b>{new}</b>',
   },
 };
-const langOf = code => { const c = String(code || '').slice(0, 2).toLowerCase(); return T[c] ? c : 'en'; };
+// ONLY THE 8 CAMBODIA LANGUAGES (owner, 2026-11-27 14:24: "a Telegram bot miért magyar? miért nem angol?"): a Telegram set to any
+// other language (Hungarian, German, Czech, Polish, Japanese…) gets ENGLISH – the de/cs/pl/hu/ja texts stay in T for later portals
+const BOT_LANGS = ['en', 'km', 'zh', 'fr', 'th', 'ru', 'vi', 'ko'];
+const langOf = code => { const c = String(code || '').slice(0, 2).toLowerCase(); return BOT_LANGS.includes(c) && T[c] ? c : 'en'; };
 // CHANNEL → WEBSITE (owner, 2026-11-26: "ha saját csatornába feladja, ott akkor a weblapon meg tud jelenni?" → "rád bízom"):
 // the approval message the agent gets for a post found in their own channel (api/tg-bot.js channelPost). 8 Cambodia languages.
 const TI = {

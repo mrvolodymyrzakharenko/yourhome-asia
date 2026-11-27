@@ -611,7 +611,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   5) SEARCH IN THE BOT – any text (e.g. "2 bedroom BKK1 600") or Rent / Daily / Buy / Rooms buttons → 5 newest matches (real ones first,
      samples marked) + "See all on the website" with the same filters.
   6) PRICE DROPS – trigger yh_price_drop logs a cheaper live listing in yh_price_drops → alert subscribers whose search matches get it once.
-  7) LANGUAGES – the bot answers in all 12 site languages (en, km, zh, fr, th, ru, de, cs, pl, hu, ko, ja) by the person's Telegram language (T in api/_tgx.js).
+  7) LANGUAGES – the bot answers in the 8 Cambodia languages (en, km, zh, fr, th, ru, vi, ko) by the person's Telegram language; ANY
+     other Telegram language (hu, de, cs, pl, ja…) gets ENGLISH (owner, 2026-11-27 14:24: "miért magyar? miért nem angol?" – BOT_LANGS in
+     api/_tgx.js langOf(); the other texts stay in T for the later portals).
   8) DAILY DIGEST – from 19:00 Cambodia time, if 3+ new listings in 24 h: "Today's new homes" list post in the channel (once a day).
   TELEGRAM BUTTON = THREE CHOICES (owner, 2026-11-27: "csatornára feliratkozhat, amikor oda kattint a Telegramra, és hirdetést adhat
   fel… mehet"; replaces the 2026-11-25 one-click rule): the bottom-menu Telegram button and the footer Telegram icon open the small

@@ -339,7 +339,7 @@ function faBig() {
   return true;
 }
 function faOpen() {
-  if (FA_ADV) return faBig();
+  return faBig();   // EVERYONE gets the big card now (owner, 2026-11-27 13:48: "ez a kis becsúszó szar") – the small slide-in below is kept only as history
   if (faBlocked() || document.querySelector('.lpk:not([hidden]), .ypk:not([hidden]), .rpop, .apm:not([hidden]), .tgch:not([hidden]), #drawer:not([hidden])')) return false;
   let c = document.getElementById('fad');
   if (!c) { c = document.createElement('div'); c.id = 'fad'; c.className = 'fad'; c.setAttribute('role', 'status'); c.hidden = true; document.body.appendChild(c); }

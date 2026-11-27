@@ -1664,3 +1664,18 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 }
 html:lang(km) .fadm .fadm-h,html:lang(zh) .fadm .fadm-h,html:lang(th) .fadm .fadm-h,html:lang(ru) .fadm .fadm-h,html:lang(ko) .fadm .fadm-h,html:lang(ja) .fadm .fadm-h{font-weight:700}
 @media (prefers-reduced-motion:reduce){.fadm,.fadm-card{transition:none}}
+
+/* BIG CARD FOR EVERYONE + PHONE SIZE (owner, 2026-11-27 13:48: "telefonon piciben jelenik meg, nem látom, hogy elblúrozna… bal szélétől,
+   jobb szélétől 15-15% szabad hely, föntről, lentről 30-30… a kis becsúszó szar"): every visitor gets faBig(); phones/tablets: the card is
+   70% of the screen wide (15% free each side) and at least 40% tall (about 30% free top and bottom); the blur behind is clearly visible. */
+.fadm{background:rgba(15,23,42,.22);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+@media (max-width:900px){
+  .fadm{padding:0}
+  .fadm-card{width:70vw;max-width:none;min-height:40vh}
+  .fadm-body{padding:16px 14px 20px;gap:10px}
+  .fadm .fadm-h{font-size:21px;line-height:1.2}
+  .fadm-l{font-size:12.5px}
+  .fadm-go{width:100%;min-width:0;height:46px;padding:0 12px;font-size:15px}
+  .fadm-close{height:40px}
+}
+@media (max-width:900px) and (max-height:640px){.fadm-ic{display:none}}

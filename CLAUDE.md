@@ -644,6 +644,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   the screen, PC 520px), page behind blurred 2px + faint dim, full-width "✕ Close window" strip on top, house badge, title "Post your property
   for FREE" 26px / 800 (phones 23px; FREE red; fa_big / fa_free), fa_line, big red "Post now" pill (fa_now) → /post. No timer – it stays
   until Close window, a tap outside or Escape. Styles "BIG FREE-LISTING CARD" at the end of styles.css.
+  → FOR EVERYONE (owner, 2026-11-27 13:48: "a kis becsúszó szar… telefonon 15-15% szabad hely oldalt, föntről, lentről 30-30… blúrozza be a
+  többit"): faOpen() always draws faBig() – the small slide-in card is retired (this replaces "NOT a modal" above). Timing unchanged: ad
+  visitors 1.2 s every visit; others 5 s, once every 3 days (?fad=1 = test). Phones/tablets: card 70vw wide, min-height 40vh, title 21px;
+  blur 3px + dim .22; screens under 640px tall hide the house badge (no inner scrolling).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

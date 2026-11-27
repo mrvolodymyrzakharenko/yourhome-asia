@@ -277,6 +277,7 @@ function tgCardFill(c) {
       ${opt('https://t.me/' + TG_BOT + '?start=search', '<circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/>', 'tgo3')}`
       : `<p>${t('tgchLine')}</p><span class="tgch-n">${t('tgchSoon')}</span>`}`;
   c.setAttribute('aria-label', url ? t('tgoTitle') : t('tgchTitle'));
+  c.classList.toggle('tgch-opts', !!url);   // compact, as wide as its content (owner, 2026-11-27 04:34: "mennyi fehér hely")
 }
 function tgCardOpen(auto, top) {
   const c = tgCard(); tgCardFill(c); c.hidden = false;
@@ -1494,7 +1495,7 @@ async function route() {
     else if (parts[0] === 'project' && parts[1]) await PT.viewProject(decodeURIComponent(parts[1]));
     else if (parts[0] === 'blog' && parts[1]) await BL.viewArticle(decodeURIComponent(parts[1]));
     else if (parts[0] === 'blog') await BL.viewBlog();
-    else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page">${await pageHtml(parts[0])}</div></div>`;
+    else if (PAGES[parts[0]]) app.innerHTML = `<div class="wrap"><div class="page${parts[0] === 'support' ? ' page-sup' : ''}">${await pageHtml(parts[0])}</div></div>`;
     else viewMissing();
   } catch (err) { console.error(err); toast(t('error') + err.message); }
 }

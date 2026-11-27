@@ -254,6 +254,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   long list (dozens of districts) gets a search field / groups rather than a tiny scrolling box.
 - TELEGRAM ALERT BOX (owner, 2026-11-27 09:15 screenshot: "a jobb széle teljesen fölösleges… 25-30%-kal szűkebbre, középre"):
   alertModal() form.alm on phones = 72% of the screen (max 320px), centred, buttons share the row equally (end of styles.css).
+- NO EMPTY WHITE SPACE (owner, 2026-11-27 04:34: "mi ez a sok üres hely?… itt is mennyi fehér hely, ami nem kell"): /support = a
+  520px card, centred, content centred (.page-sup); the Telegram three-choice card is only as wide as its content (.tgch-opts,
+  max-content, tighter rows). Boxes are sized to their content – no big empty right side.
 - PHONE BOXES = 25% FREE – BASE RULE (owner, 2026-11-26 08:02: "jobbról balról lentről 25% szabad hely kell, ez alap szabály"): on
   phones/tablets a popup box / small list leaves 25% of the screen free on the left, the right and below (language picker; picker.js
   .ypk lists – end of styles.css). Contents get smaller or go two per row to fit. Exception: the two-column Type list (.ypk-all)

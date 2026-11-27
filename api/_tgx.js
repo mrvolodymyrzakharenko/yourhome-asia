@@ -457,6 +457,16 @@ async function digest() {
   return { posted: !!r.ok, n: list.length, err: r.ok ? undefined : r.description };
 }
 
+// /api/tg-sync?admintest=1 – a test alert to every admin chat (shows whether the bot can reach the owner's Telegram)
+async function adminTest() {
+  const chats = (await rest('yh_tg_admin_chats?select=chat_id') || []).map(r => r.chat_id);
+  const out = [];
+  for (const c of chats) {
+    const r = await tg('sendMessage', { chat_id: c, text: '✅ <b>Test alert from www.yourhome.asia</b>\nNew accounts, new listings, messages and requests will arrive here.', parse_mode: 'HTML' });
+    out.push({ chat: c, ok: !!r.ok, error: r.ok ? undefined : r.description });
+  }
+  return out;
+}
 async function runAll() {
   const out = {};
   for (const [name, fn] of [['cleanup', channelCleanup], ['admin', adminFeed], ['agents', agentChannels], ['reminders', reminders], ['priceDrops', priceDrops], ['digest', digest]]) {
@@ -465,4 +475,4 @@ async function runAll() {
   return out;
 }
 
-module.exports = { runAll, T, tr, langOf, caption, sendListing, priceText, rest, rpc, tg, esc, LCOLS, CHANNEL, SB_URL, key, token };
+module.exports = { runAll, adminTest, T, tr, langOf, caption, sendListing, priceText, rest, rpc, tg, esc, LCOLS, CHANNEL, SB_URL, key, token };

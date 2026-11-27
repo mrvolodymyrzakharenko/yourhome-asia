@@ -181,6 +181,10 @@ async function ensureWebhook(req) {
 module.exports = async (req, res) => {
   res.setHeader('Cache-Control', 'no-store');
   if (!token() || !key()) { res.statusCode = 503; return res.end('not configured'); }
+  if (/[?&]admintest=1\b/.test(req.url || '')) {
+    const r = await require('./_tgx').adminTest().catch(e => [{ error: String(e.message || e) }]);
+    res.setHeader('Content-Type', 'application/json'); return res.end(JSON.stringify({ admin_test: r }));
+  }
   // ?welcome=1 – the channel's first post (once only: yh_channel_meta 'welcome'); also tells whether the bot can post there
   if (/[?&]welcome=1\b/.test(req.url || '')) {
     try {

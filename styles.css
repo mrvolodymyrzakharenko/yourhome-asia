@@ -1690,3 +1690,15 @@ html:lang(km) .fadm .fadm-h,html:lang(zh) .fadm .fadm-h,html:lang(th) .fadm .fad
 .yft-fl-fb{background:#1877F2}
 .yft-fl-tg{background:linear-gradient(135deg,#37AEE2,#1E96C8)}
 @media (max-width:720px){.yft-fol{max-width:none}}
+
+/* ONE ROW (owner, 2026-11-27 14:02: "a két gomb egy sorba legyen… ne legyen sok üres hely") */
+.yft-fol{flex-direction:row;gap:6px;max-width:none}
+.yft-fl{flex:1 1 0;min-width:0;gap:6px;padding:5px 10px 5px 5px;line-height:1.2}
+.yft-fl>span:last-child{white-space:normal}
+.yft-fl-i{width:26px;height:26px}
+.yft-fl-i svg{width:15px;height:15px}
+@media (min-width:1101px){
+  .yft-g{grid-template-columns:1.75fr 1fr 1fr 1fr 1fr 1.15fr!important}
+  .yft-fl{font-size:12px!important;padding:5px 8px 5px 5px;gap:5px}
+}
+.yft-fol{max-width:440px!important}

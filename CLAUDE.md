@@ -9,6 +9,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 
 ## Working style
 - JS CACHE (2026-11-27): index.html loads /app.js?v=… (script + modulepreload, same value) – raise it when app.js changes in a way phones must see.
+- PAGE CACHE (owner, 2026-11-27 "chrome-ban nem frissül"): api/page.js sends the browser Cache-Control 'public, max-age=0, must-revalidate'
+  (NEVER stale-while-revalidate there – Chrome then shows the old page); the edge cache lives only in Vercel-CDN-Cache-Control.
 - CSS CACHE: index.html loads styles.css / header.css / fonts.css with ?v=… – RAISE the version of every CSS file you change in the
   same commit (lesson 2026-11-27: phones kept the old styles and the owner saw no change).
 - The owner writes in Hungarian; answer in Hungarian. Cambodia offers 8 languages (owner, 2026-11-26 13:30: German, Czech, Polish, Hungarian taken off, Vietnamese added; 13:34 Japanese taken off): English, Khmer, Chinese, French, Thai, Russian, Vietnamese, Korean (i18n.js T + NL + T.vi; agents.js TX; bot api/_tgx.js T). The de/cs/pl/hu/ja texts stay in the files for the later European portals but are not offered here (a stored de/cs/pl/hu/ja choice falls back to English). A NEW text key needs all 8 – a missing one falls back to English.

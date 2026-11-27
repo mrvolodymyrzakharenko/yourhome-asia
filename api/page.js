@@ -312,7 +312,11 @@ module.exports = async (req, res) => {
     if (!page) page = { status: 404, noindex: true, path: p, title: 'This page is currently unavailable | YourHome Cambodia', desc: 'The page you are looking for is not available. Search homes for rent and sale in Cambodia or contact our team.', body: body('This page is currently unavailable', 'The address may have changed, or the page was removed.', '<p><a href="/support">Contact our team</a> · <a href="/">Back to home</a></p>') };
     res.statusCode = page.status || 200;
     if (page.noindex) res.setHeader('X-Robots-Tag', 'noindex, follow');
-    res.setHeader('Cache-Control', page.status ? 'public, s-maxage=60' : page.pre ? 'public, max-age=0, s-maxage=30, stale-while-revalidate=120' : 'public, max-age=0, s-maxage=300, stale-while-revalidate=86400');
+    // PHONES ALWAYS GET THE NEWEST PAGE (owner, 2026-11-27: "miért nem frissül telefonon? chrome-ban nem frissül"): stale-while-revalidate in
+    // Cache-Control let Chrome show an OLD copy of the page and fetch the new one only in the background. Now the browser must ask every
+    // time (max-age=0, must-revalidate); only Vercel's edge keeps its short cache (Vercel-CDN-Cache-Control – emptied on every deploy).
+    res.setHeader('Cache-Control', 'public, max-age=0, must-revalidate');
+    res.setHeader('Vercel-CDN-Cache-Control', page.status ? 'max-age=60' : page.pre ? 'max-age=30, stale-while-revalidate=120' : 'max-age=300, stale-while-revalidate=86400');
     return res.end(fillFooter(render(page), ft));
   } catch (err) {
     console.error('page', p, err && err.message);

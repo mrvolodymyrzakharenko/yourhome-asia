@@ -1633,3 +1633,5 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
   .fad-t small{font-size:12.5px}
   .fad-go{height:38px;padding:0 13px;font-size:13px}
 }
+/* phones: the nudge sits 14px above the floating round Search button (it touched it before) */
+@media (max-width:900px){.fad{bottom:calc(116px + env(safe-area-inset-bottom))}}

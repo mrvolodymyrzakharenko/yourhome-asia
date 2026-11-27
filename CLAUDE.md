@@ -8,6 +8,7 @@ Data lives in the shared Supabase project "eleon" (same as the Study and Work po
 never touch the Study tables. When a new standing rule is agreed with the owner, add it here.
 
 ## Working style
+- JS CACHE (2026-11-27): index.html loads /app.js?v=… (script + modulepreload, same value) – raise it when app.js changes in a way phones must see.
 - CSS CACHE: index.html loads styles.css / header.css / fonts.css with ?v=… – RAISE the version of every CSS file you change in the
   same commit (lesson 2026-11-27: phones kept the old styles and the owner saw no change).
 - The owner writes in Hungarian; answer in Hungarian. Cambodia offers 8 languages (owner, 2026-11-26 13:30: German, Czech, Polish, Hungarian taken off, Vietnamese added; 13:34 Japanese taken off): English, Khmer, Chinese, French, Thai, Russian, Vietnamese, Korean (i18n.js T + NL + T.vi; agents.js TX; bot api/_tgx.js T). The de/cs/pl/hu/ja texts stay in the files for the later European portals but are not offered here (a stored de/cs/pl/hu/ja choice falls back to English). A NEW text key needs all 8 – a missing one falls back to English.
@@ -614,7 +615,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
     that agent (S.lst.agent, "Show all listings" clears it).
 
 - FREE-LISTING NUDGE (owner, 2026-11-27: "nem szabványos pop up, hanem ideiglenes ablak – Hirdess ingyen ingatlant"): NOT a modal –
-  a small white card slides in by itself 5 s after load (owner 2026-11-27: "sok a 25 másodperc, legyen 5") (owner 07:17 "nagyobb – jobbról balra": RIGHT edge, slides in from right to left, PC 460px, phones full width − 20px above the bottom menu, title 14px),
+  a small white card slides in by itself 5 s after load (owner 2026-11-27: "sok a 25 másodperc, legyen 5") (owner 07:17 "nagyobb – jobbról balra": RIGHT edge, slides in from right to left, PC 460px, phones full width − 20px, 14px above the floating Search button, title 14px),
   no dark overlay: red house badge, "Advertise your property for free" + one line, red "Post for free" pill → /post, drawn × top-right,
   a thin red bar at the bottom shrinks for 12 s and then it closes itself (hover pauses). At most once every 3 days per visitor
   (localStorage yh_freead); never on /post /edit /account /admin /login, never over another popup, picker, the open menu or the Telegram

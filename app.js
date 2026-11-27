@@ -332,6 +332,7 @@ window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
 (function faPlan() {
   let last = 0; try { last = +localStorage.getItem(FA_KEY) || 0; } catch (_) {}
   const force = /[?&]fad=1/.test(location.search);   // test link: yourhome.asia/?fad=1 shows it every time (skips the 3-day lock)
+  if (force) { try { localStorage.removeItem(FA_KEY); } catch (_) {} }
   if (!force && (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search))) return;
   let tries = 0;
   const tryOpen = () => {

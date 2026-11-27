@@ -407,3 +407,17 @@ vi: {"tbTitle": "Đăng tin qua Telegram – 4 bước", "tb1t": "Mở bot", "tb
 ko: {"tbTitle": "텔레그램으로 매물 등록 – 4단계", "tb1t": "봇 열기", "tb1s": "@yourhomeasiabot → Start", "tb2t": "사진 보내기", "tb2s": "최대 15장", "tb3t": "메시지 하나 쓰기", "tb3s": "예: 2 bedroom BKK1 $650/month", "tb4t": "Publish 누르기", "tb4s": "웹사이트와 채널에 바로 게시", "tbGo": "텔레그램으로 등록", "tbWeb": "또는 웹사이트에서 등록", "cv_tg": "텔레그램 봇에 사진을 보내면 1분 안에 매물이 게시됩니다", "cvs_tg": "텔레그램으로 1분 만에 등록", "cvb_tg": "봇 열기", "tgoTitle": "텔레그램의 YourHome", "tgo1": "채널 구독하기", "tgo1s": "모든 새 매물", "tgo2": "봇에서 매물 등록", "tgo2s": "사진 + 메시지 하나", "tgo3": "봇에서 검색", "tgo3s": "예: rent BKK1 600", "tbFix": "잘못 올렸나요? 대시보드에서 언제든지 매물을 수정할 수 있습니다:", "dx_tgl": "텔레그램 매물", "dx_tglSub": "텔레그램에서 {n}개", "dx_tglIntro": "@yourhomeasiabot 또는 내 텔레그램 채널로 올린 매물입니다. 잘못된 내용(가격, 사진, 지역)이 있나요? 수정을 누르면 웹사이트와 채널에 바로 반영됩니다.", "dx_tglEmpty": "아직 텔레그램 매물이 없습니다. @yourhomeasiabot에 사진과 메시지 하나를 보내면 여기에 표시됩니다.", "dx_tglBot": "봇", "dx_tglCh": "채널", "dx_tglWait": "승인 대기 중 – 아직 웹사이트에 없음", "dx_tglPub": "게시", "dx_tglWaitN": "{n}개 승인 대기", "dx_tglWaitSub": "채널 게시물 – 확인 후 게시하세요", "dx_tglChan": "내 채널 연결", "dx_tglDone": "웹사이트에 게시됨"}
 };
 for (const k of Object.keys(TB)) T[k] = Object.assign(T[k] || {}, TB[k]);
+/* FREE-LISTING NUDGE (owner, 2026-11-27: "ideiglenes ablak – Hirdess ingyen ingatlant"): the small card that slides in once every 3 days – app.js faOpen() */
+const FA = {
+en: {"fa_title": "Advertise your property for free", "fa_line": "Rent out or sell – live right away, no fees.", "fa_go": "Post for free"},
+km: {"fa_title": "ផ្សាយអចលនទ្រព្យរបស់អ្នកដោយឥតគិតថ្លៃ", "fa_line": "ជួល ឬលក់ – បង្ហាញភ្លាមៗ គ្មានថ្លៃសេវា។", "fa_go": "ប្រកាសឥតគិតថ្លៃ"},
+zh: {"fa_title": "免费发布您的房产", "fa_line": "出租或出售 – 立即上线，无任何费用。", "fa_go": "免费发布"},
+fr: {"fa_title": "Publiez votre bien gratuitement", "fa_line": "Louez ou vendez – en ligne tout de suite, sans frais.", "fa_go": "Publier gratuitement"},
+th: {"fa_title": "ลงประกาศอสังหาฯ ของคุณฟรี", "fa_line": "ให้เช่าหรือขาย – ขึ้นทันที ไม่มีค่าธรรมเนียม", "fa_go": "ลงประกาศฟรี"},
+ru: {"fa_title": "Разместите объект бесплатно", "fa_line": "Сдайте или продайте – сразу онлайн, без комиссий.", "fa_go": "Разместить бесплатно"},
+vi: {"fa_title": "Đăng tin bất động sản miễn phí", "fa_line": "Cho thuê hoặc bán – lên ngay, không mất phí.", "fa_go": "Đăng tin miễn phí"},
+ko: {"fa_title": "내 부동산을 무료로 광고하세요", "fa_line": "임대 또는 매매 – 바로 게시, 수수료 없음.", "fa_go": "무료로 등록"},
+de: {"fa_title": "Immobilie kostenlos inserieren", "fa_line": "Vermieten oder verkaufen – sofort online, ohne Gebühren.", "fa_go": "Kostenlos inserieren"},
+hu: {"fa_title": "Hirdesd ingyen az ingatlanod", "fa_line": "Kiadás vagy eladás – azonnal megjelenik, díjmentesen.", "fa_go": "Hirdetés ingyen"}
+};
+for (const k of Object.keys(FA)) T[k] = Object.assign(T[k] || {}, FA[k]);

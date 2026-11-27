@@ -303,6 +303,41 @@ if (TG_CHANNEL) {
   try { if (!localStorage.getItem('yh_tgch')) { localStorage.setItem('yh_tgch', '1'); setTimeout(() => tgCardOpen(true), 3000); } } catch (_) {}
 }
 
+// FREE-LISTING NUDGE (owner, 2026-11-27: "nem szabványos pop up, hanem ideiglenes ablak – Hirdess ingyen ingatlant"): a small card
+// slides in by itself (PC bottom-left, phones just above the bottom menu) – no dark overlay, the page stays usable. It closes itself
+// after 12 s (a thin red bar shows the time left; hovering pauses it), never on /post /edit /account /admin, never over another
+// popup / picker / the Telegram card, at most once every 3 days per visitor (localStorage yh_freead). Texts fa_* (i18n.js FA).
+const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 25000, FA_LIFE = 12000;
+const faBlocked = () => /^#\/(post|edit|account|admin|login)/.test(YH.h()) || document.body.classList.contains('adm-mode');
+function faClose(c) { c = c || document.getElementById('fad'); if (!c || c.hidden) return; c.classList.remove('on'); clearTimeout(c._t); setTimeout(() => { c.hidden = true; }, 300); }
+function faOpen() {
+  if (faBlocked() || document.querySelector('.lpk:not([hidden]), .ypk:not([hidden]), .rpop, .apm:not([hidden]), .tgch:not([hidden]), #drawer:not([hidden])')) return false;
+  let c = document.getElementById('fad');
+  if (!c) { c = document.createElement('div'); c.id = 'fad'; c.className = 'fad'; c.setAttribute('role', 'status'); c.hidden = true; document.body.appendChild(c); }
+  c.innerHTML = `<button type="button" class="fad-x" aria-label="${esc(t('close'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <span class="fad-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M12 12v5M9.5 14.5h5"/></svg></span>
+    <span class="fad-t"><b>${esc(t('fa_title'))}</b><small>${esc(t('fa_line'))}</small></span>
+    <a class="fad-go" href="/post">${esc(t('fa_go'))}</a><i class="fad-bar" aria-hidden="true"></i>`;
+  c.hidden = false; void c.offsetWidth; c.classList.add('on');
+  const bar = c.querySelector('.fad-bar'); let left = FA_LIFE, t0 = Date.now();
+  const run = () => { t0 = Date.now(); bar.style.transition = 'none'; bar.style.transform = `scaleX(${left / FA_LIFE})`; void bar.offsetWidth; bar.style.transition = `transform ${left}ms linear`; bar.style.transform = 'scaleX(0)'; c._t = setTimeout(() => faClose(c), left); };
+  const pause = () => { clearTimeout(c._t); left = Math.max(1500, left - (Date.now() - t0)); bar.style.transition = 'none'; bar.style.transform = `scaleX(${left / FA_LIFE})`; };
+  c.onmouseenter = pause; c.onmouseleave = run; run();
+  c.onclick = e => { if (e.target.closest('.fad-x')) { faClose(c); return; } if (e.target.closest('.fad-go')) { e.preventDefault(); faClose(c); YH.go('#/post'); } };
+  return true;
+}
+window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
+(function faPlan() {
+  let last = 0; try { last = +localStorage.getItem(FA_KEY) || 0; } catch (_) {}
+  if (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search)) return;
+  let tries = 0;
+  const tryOpen = () => {
+    if (document.hidden || !faOpen()) { if (++tries < 12) setTimeout(tryOpen, 10000); return; }   // busy → try again in 10 s
+    try { localStorage.setItem(FA_KEY, String(Date.now())); } catch (_) {}
+  };
+  setTimeout(tryOpen, FA_DELAY);
+})();
+
 // Footer / Support chat buttons: a channel without an address yet (Facebook) shows a "coming soon" bubble instead of opening
 document.addEventListener('click', e => {
   const a = e.target.closest('.yft-ch[data-soon],.yft-s[data-soon]'); if (!a) return;

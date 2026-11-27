@@ -1556,3 +1556,14 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 .tgch.tgch-opts{min-width:270px;padding:12px}
 .tgch.tgch-opts .tgch-h{padding-left:0;padding-right:36px;gap:8px}
 .tgch.tgch-opts .tgch-o{padding-right:34px}
+/* CLOSE STRIP + NARROWER CHOICES (owner, 2026-11-27 09:51: "mint a menünél… ne X legyen, hanem fönt az, hogy close… lehet szűkebb…
+   a YourHome Telegram-tól picit szűkebb legyen az alatta lévő három mező"): the card starts with a full-width "✕ Close" strip like the
+   Menu list's (pale red, red text, hairline under it), then the centred title, then the three choices inset a little narrower than the
+   title row; no round × any more, so the card needs no side room for it */
+.tgch.tgch-opts{min-width:0;width:max-content;padding:0 0 12px;overflow:hidden}
+.tgch.tgch-opts .tgch-close{position:static;width:100%!important;height:auto!important;border-radius:0;display:flex!important;align-items:center;justify-content:center;gap:7px;background:#fff5f6;color:var(--red);border-bottom:1px solid var(--line);padding:9px 14px!important;font:inherit;font-size:13px;font-weight:600;line-height:1.2!important;letter-spacing:-.01em!important}
+.tgch.tgch-opts .tgch-close svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.tgch.tgch-opts .tgch-h{justify-content:center;padding:4px 16px 0;gap:8px}
+.tgch.tgch-opts .tgch-o{margin:0 26px;padding:6px 12px 6px 7px}
+.tgch.tgch-opts .tgch-o>span:last-child{padding-right:20px}
+.tgch.tgch-opts .tgch-close svg{display:block}

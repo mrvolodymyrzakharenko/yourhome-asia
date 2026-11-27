@@ -270,7 +270,9 @@ function tgCardFill(c) {
   const ic = d => `<span class="tgch-oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></span>`;
   const opt = (href, d, k) => `<a class="tgch-o" href="${href}" target="_blank" rel="noopener">${ic(d)}<span><b>${esc(t(k))}</b><small>${esc(t(k + 's'))}</small></span></a>`;
   // THREE CHOICES (owner, 2026-11-27: "csatornára feliratkozhat, amikor oda kattint a Telegramra, és hirdetést adhat fel")
-  c.innerHTML = `<button type="button" class="tgch-x" aria-label="${esc(t('close'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  // CLOSE ROW ON TOP like the Menu list (owner, 2026-11-27 09:51: "mint a menünél… ne X legyen, hanem fönt az, hogy close"): with the
+  // channel set the card opens with a "✕ Close" strip; without it the old round × stays
+  c.innerHTML = (url ? `<button type="button" class="tgch-x tgch-close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>${esc(t('close'))}</span></button>` : `<button type="button" class="tgch-x" aria-label="${esc(t('close'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>`) + `
     <div class="tgch-h"><span class="tgch-ic"><svg viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.4 0 1.7l4.7 1.5 1.8 5.6c.2.6.9.8 1.4.4l2.6-2.1 5 3.7c.7.5 1.6.1 1.8-.7l3.1-14.9c.2-1-.8-1.8-1.8-1.4z"/></svg></span><b>${url ? t('tgoTitle') : t('tgchTitle')}</b></div>
     ${url ? `${opt(url, '<path d="M4 10v4h3l5 4V6L7 10z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>', 'tgo1')}
       ${opt('https://t.me/' + TG_BOT + '?start=post', '<path d="M12 5v14M5 12h14"/>', 'tgo2')}

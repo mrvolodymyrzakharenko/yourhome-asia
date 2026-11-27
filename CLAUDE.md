@@ -258,7 +258,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   alertModal() form.alm on phones = 72% of the screen (max 320px), centred, buttons share the row equally (end of styles.css).
 - NO EMPTY WHITE SPACE (owner, 2026-11-27 04:34: "mi ez a sok üres hely?… itt is mennyi fehér hely, ami nem kell"): /support = a
   520px card, centred, content centred (.page-sup); the Telegram three-choice card is only as wide as its content (.tgch-opts,
-  max-content, tighter rows) + ~10% room so the title never runs under the × (owner 09:43 / 09:44: min-width 262px, title padding-right 40px). Boxes are sized to their content – no big empty right side.
+  max-content, tighter rows) + ~10% room so the title never runs under the × (owner 09:43 / 09:44: min-width 262px, title padding-right 40px); 09:48 "középre igazítva és picit elnyújtva": title and
+  choice texts CENTRED (icon left), min-width 300px, letter-spacing .012em. Boxes are sized to their content – no big empty right side.
 - PHONE BOXES = 25% FREE – BASE RULE (owner, 2026-11-26 08:02: "jobbról balról lentről 25% szabad hely kell, ez alap szabály"): on
   phones/tablets a popup box / small list leaves 25% of the screen free on the left, the right and below (language picker; picker.js
   .ypk lists – end of styles.css). Contents get smaller or go two per row to fit. Exception: the two-column Type list (.ypk-all)

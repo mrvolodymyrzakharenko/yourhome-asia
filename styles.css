@@ -1545,3 +1545,10 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 .tgch.tgch-opts{min-width:262px;padding:12px 14px}
 .tgch.tgch-opts .tgch-h{padding-right:40px}
 .tgch.tgch-opts .tgch-o{padding-right:22px}
+/* CENTRED + A LITTLE STRETCHED (owner, 2026-11-27 09:48: "legyen a szöveg középre igazítva és picit elnyújtva"): the title row and the
+   text of each choice are centred (icon stays on the left of its row), the card is a bit wider and the letters slightly airier */
+.tgch.tgch-opts{min-width:300px}
+.tgch.tgch-opts .tgch-h{justify-content:center;padding-left:36px;padding-right:36px}
+.tgch.tgch-opts .tgch-o{padding-right:40px}
+.tgch.tgch-opts .tgch-o>span:last-child{flex:1;text-align:center}
+.tgch.tgch-opts .tgch-h b,.tgch.tgch-opts .tgch-o b,.tgch.tgch-opts .tgch-o small{letter-spacing:.012em}

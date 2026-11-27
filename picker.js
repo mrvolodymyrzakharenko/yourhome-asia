@@ -15,6 +15,8 @@
     var lastG = null;
     for (var i = 0; i < sel.options.length; i++) {
       var o = sel.options[i]; if (o.hidden) continue;
+      // Property type list: no "Any" row (owner, 2026-11-27 08:24: "az any oda nem kell") – tapping the picked type again clears it
+      if (sel.hasAttribute('data-all') && o.value === '') continue;
       // option groups (Property type, owner 2026-11-26): the group name centred with a thin line under it, its items below
       var g = o.parentNode && o.parentNode.tagName === 'OPTGROUP' ? o.parentNode : null;
       if (g && g !== lastG) h += '<div class="ypk-g" role="presentation">' + (g.label || '').replace(/</g, '&lt;') + '</div>';
@@ -27,7 +29,7 @@
     requestAnimationFrame(function () { box && box.classList.add('in'); var on = box && box.querySelector('.on'); if (on) on.scrollIntoView({ block: 'center' }); });
     box.addEventListener('click', function (e) {
       var b = e.target.closest('button[data-i]');
-      if (b) { var s = cur; s.selectedIndex = +b.dataset.i; s.dispatchEvent(new Event('change', { bubbles: true })); s.dispatchEvent(new Event('input', { bubbles: true })); }
+      if (b) { var s = cur; var ix = +b.dataset.i; if (s.hasAttribute('data-all') && ix === s.selectedIndex) { for (var k = 0; k < s.options.length; k++) if (s.options[k].value === '') { ix = k; break; } } s.selectedIndex = ix; s.dispatchEvent(new Event('change', { bubbles: true })); s.dispatchEvent(new Event('input', { bubbles: true })); }
       if (b || e.target.classList.contains('ypk-bg') || e.target.closest('.ypk-x')) close();
     });
   }

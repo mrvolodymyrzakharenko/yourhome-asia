@@ -1575,3 +1575,16 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
    sit exactly 12px from the left and right edge – the same gap as under the last choice */
 .tgch.tgch-opts{padding-bottom:12px}
 .tgch.tgch-opts .tgch-o{margin-left:12px;margin-right:12px}
+/* PROPERTY TYPE LIST SMALLER (owner, 2026-11-27 08:24: "lehetne kisebb, az any nem kell… sok a fehér hely… a kategóriák lehetnek
+   pirososak, mint a close menü… 20%-kal lehet szűkíteni"): phones/tablets – box 20% narrower (88vw → 70vw), tighter rows, the group
+   names = pale-pink strip with red text like "Close menu"; no "Any" row (picker.js; tap the picked type again to clear). */
+@media (max-width:900px){
+  .ypk.ypk-all .ypk-w{left:15vw!important;right:15vw!important}
+  .ypk.ypk-all .ypk-h{min-height:40px;padding:6px 44px 4px}
+  .ypk.ypk-all .ypk-x{top:6px;right:6px;width:30px;height:30px}
+  .ypk.ypk-all .ypk-x svg{width:15px;height:15px}
+  .ypk.ypk-all .ypk-l{gap:0 2px;padding:0 8px 10px}
+  .ypk.ypk-all .ypk-l button{padding:6px 2px;font-size:12.5px;line-height:1.2}
+  .ypk.ypk-all .ypk-g,.ypk.ypk-all .ypk-l .ypk-g:first-child,.ypk.ypk-all .ypk-l button+.ypk-g{margin:6px 0 3px;padding:6px 8px;border:0;border-radius:9px;background:#fff5f6;color:#E00025;font-size:10.5px}
+  .ypk.ypk-all .ypk-l .ypk-g:first-child{margin-top:0}
+}

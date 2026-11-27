@@ -196,6 +196,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   Flat · Penthouse · Room · Hotel · Hostel · Land | thin line | Office · Shophouse · Commercial (SEARCH_TYPES in app.js; data-sep on
   Office). On phones/tablets it opens in TWO COLUMNS, as tall as its content, so every type shows without scrolling
   (select[data-all] → .ypk-all, picker.js + last block of styles.css; only this list).
+  SMALLER (owner, 2026-11-27 08:24: "lehetne kisebb, az any nem kell… sok a fehér hely… kategóriák pirososak, mint a close menü… 20%-kal
+  szűkíteni"): box 70vw (was 88vw), tight rows (12.5px), group names = pale-pink strip + red text like "Close menu", NO "Any" row –
+  tapping the picked type again clears it (picker.js); last block of styles.css.
 - PROPERTY TYPES IN GROUPS (owner, 2026-11-26 07:43: "land, shop, territory, wood, mi lehet még?… elválasztva, alsó csíkkal, szépen,
   kategória név fent középen, alatta az alkategóriák"): TYPE_GROUPS in app.js, drawn as <optgroup>s by typeOpts() in the search card and
   the post form; picker.js shows each group name centred (royal-blue spaced capitals, .ypk-g) with a thin line under it, its types below.

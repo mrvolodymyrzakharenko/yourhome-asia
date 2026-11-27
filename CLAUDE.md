@@ -528,6 +528,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   how they came; one card per visitor, online first: flag + city/country, online / last seen, new or returning, the page they
   are on now, device · browser · system · language · source (+ utm), the pages they went through, the listings they opened
   (yh_events joined by the same visitor id). RPC yh_admin_live(minutes); refreshes itself every 15 s while open. Own devices never show.
+- BOTS + OWN DATA OUT OF VISITORS (owner, 2026-11-27: "a robotot… ne tüntesd fel… a Telegram feliratkozóknál én vagyok az egyetlen"):
+  api/track.js also marks as bot every page view from a data-centre town (DC_CITY: Meta Prineville / Clonee / Luleå…, Google Council
+  Bluffs, AWS Boardman / Ashburn…) and, outside Cambodia, a system / screen mismatch (Android or iPhone "desktop", Windows "tablet") –
+  Facebook's ad checker. Bots never show in Live now / Visitors. The owner's test visits (HU, GE, AM, GB, US) were deleted from
+  yh_pageviews + yh_events on 2026-11-27, his own alert too; admin.js hides alerts of his Telegram @mrvolodymyrzakharenko (OWN_TG).
 - A NEW thing visitors can send or post gets its place here in the same task (inbox kind or section + count).
 
 ## Rules for listings

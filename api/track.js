@@ -5,6 +5,12 @@
 const SB_URL = 'https://uuzevmbfcxtvjuguiygy.supabase.co';
 const SB_KEY = 'sb_publishable__Q20CYCQEZ3YzjiEeqpxkQ_W4dW-i34';
 const BOT = /bot|crawl|spider|slurp|preview|headless|lighthouse|pingdom|monitor|curl|wget|python|axios|node-fetch|go-http|facebookexternalhit|whatsapp|telegrambot|vercel/i;
+// DATA-CENTRE "VISITORS" (owner, 2026-11-27: "a robotot… ne tüntesd fel"): Facebook's ad checker and cloud crawlers send a normal
+// browser user agent, so the UA test misses them. They come from the big data-centre towns (Meta: Prineville, Clonee, Luleå, Odense,
+// Altoona, Forest City, Los Lunas…; Google: Council Bluffs, The Dalles…; AWS: Boardman, Ashburn…) and their screen size never
+// matches their system (an Android/iPhone "desktop", a Windows "tablet"; only outside Cambodia, so a real KH tablet is never lost) – both are marked as bots and never counted.
+const DC_CITY = /^(prineville|clonee|lule[aå]|odense|altoona|forest city|los lunas|fort worth|henrico|sandston|new albany|papillion|eagle mountain|huntsville|gallatin|dekalb|kuna|sarpy|council bluffs|the dalles|moncks corner|lenoir|pryor|midlothian|ashburn|boardman|hilliard|dublin 15|st\.? ghislain|eemshaven|hamina|middenmeer|quincy|boydton|des moines|cheyenne|north charleston|hillsboro|coffeyville|leesburg|sterling|reston|chantilly|manassas)$/i;
+const mismatch = (os, device) => ((os === 'Android' || os === 'iOS') && device === 'desktop') || (os === 'Windows' && (device === 'tablet' || device === 'mobile')) || os === 'Other';
 const cut = (s, n) => (s == null ? null : String(s).slice(0, n) || null);
 
 function browserOf(ua) {
@@ -49,6 +55,7 @@ module.exports = async (req, res) => {
       country: cut(h('x-vercel-ip-country'), 4), city: cut(h('x-vercel-ip-city'), 60),
       is_bot: !ua || BOT.test(ua) || !!b.wd,
     };
+    if (!row.is_bot && (DC_CITY.test(row.city || '') || (row.country !== 'KH' && mismatch(row.os, row.device)))) row.is_bot = true;
     const r = await fetch(SB_URL + '/rest/v1/yh_pageviews', {
       method: 'POST', headers: { apikey: SB_KEY, Authorization: 'Bearer ' + SB_KEY, 'Content-Type': 'application/json', Prefer: 'return=minimal' },
       body: JSON.stringify(row),

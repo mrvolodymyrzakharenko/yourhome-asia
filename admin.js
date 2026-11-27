@@ -77,7 +77,7 @@ async function load() {
   S.loading = true;
   const sb = C.sb, from = since(S.days), f90 = since(90);
   const q = (p) => p.then(r => r.error ? (console.warn(r.error), []) : (r.data || []));
-  const [listings, events, inq, leads, partners, verify, agents, alerts, projects, users, vis, imports] = await Promise.all([
+  let [listings, events, inq, leads, partners, verify, agents, alerts, projects, users, vis, imports] = await Promise.all([
     q(sb.from('yh_listings').select('id,owner_id,title,deal_type,property_type,price,price_period,period_note,city,district,photos,status,is_featured,is_demo,created_at,updated_at,contact_name,contact_phone,contact_telegram,agent_id,source').order('created_at', { ascending: false }).limit(2000)),
     q(sb.from('yh_events').select('listing_id,kind,visitor,source,device,lang,created_at').gte('created_at', f90).order('created_at', { ascending: false }).limit(20000)),
     q(sb.from('yh_inquiries').select('*').order('created_at', { ascending: false }).limit(1000)),
@@ -91,6 +91,9 @@ async function load() {
     sb.rpc('yh_admin_visitors', { p_days: S.days, p_tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Phnom_Penh' }).then(r => r.data || null),
     q(sb.rpc('yh_admin_tg_imports')),   // posts taken from agents' own channels (api/tg-bot.js) – 2026-11-27
   ]);
+  // OWNER'S OWN TELEGRAM SUBSCRIPTIONS NEVER COUNT (owner, 2026-11-27: "a Telegram feliratkozóknál én vagyok az egyetlen")
+  const OWN_TG = /^@?(mrvolodymyrzakharenko)$/i;
+  alerts = alerts.filter(a => !OWN_TG.test(String(a.telegram || '').trim()));
   const L = Object.fromEntries(listings.map(l => [l.id, l])), P = Object.fromEntries(projects.map(p => [p.id, p]));
   const ev = events.filter(e => e.created_at >= from);
   const msgs = [

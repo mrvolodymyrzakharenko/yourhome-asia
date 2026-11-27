@@ -1660,7 +1660,7 @@ PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
 BL.init({ app, esc, t, lang: () => lang });
 // ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
 let ADMP = null;
-const adminMod = () => ADMP || (ADMP = import('./admin.js?v=6').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
+const adminMod = () => ADMP || (ADMP = import('./admin.js?v=7').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });

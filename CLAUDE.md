@@ -43,6 +43,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   styles "FOOTER" in styles.css, sizes at the end of fonts.css; phones: link columns two side by side.
   RICHER (owner, 2026-11-24 20:18: "about us… profi portáltervezők, profi ingatlanosok… study stílusra"): + "Follow us" round
   brand icons (Facebook, Telegram channel, Instagram, TikTok, YouTube – "coming soon" bubble until a link is filled in) and a
+  → FOLLOW = FACEBOOK + TELEGRAM (owner, 2026-11-27 13:56: "vedd ki az 5 ikont, csak a Facebookot… Follow us on Facebook… alá a Telegramot"):
+  the five round icons are gone; .yft-fol = a full-width blue "Follow us on Facebook" row (facebook.com/yourhomeasia, logo) with the
+  "Join us on Telegram" row UNDER it ([data-tgch] card). Keys ft_followFb / ft_joinTg (i18n.js FOL). The Chat-with-us Facebook pill is live too.
   Company column: About us (#/about), How it works (#/how), Safety tips (#/safety), FAQ (#/faq), Contact us, Terms, Privacy.
   Those pages are PAGES in app.js (English, no invented numbers), styles .ab-* (kicker, H1 with a red word, cards, blue CTA band).
   FOOTER LINKS LIKE MVP VIETNAM (owner, 2026-11-26: "mehet"): SIX columns on PC – brand (+ "Popular areas" district pills under the

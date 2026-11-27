@@ -1702,3 +1702,14 @@ html:lang(km) .fadm .fadm-h,html:lang(zh) .fadm .fadm-h,html:lang(th) .fadm .fad
   .yft-fl{font-size:12px!important;padding:5px 8px 5px 5px;gap:5px}
 }
 .yft-fol{max-width:440px!important}
+
+/* TWO-LINE PILLS (owner, 2026-11-27 14:10: "20%-kal magasabbak… follow us egy sor, alatta on Facebook / on Telegram… legyen hely… a gomb
+   lehet szűkebb"): pills only as wide as their text, ~20% taller, line 1 "Follow us", line 2 "on Facebook" / "on Telegram" */
+.yft-fol{gap:8px}
+.yft-fl{flex:0 0 auto!important;padding:8px 16px 8px 8px!important;gap:8px!important;line-height:1.25}
+.yft-fl-i{width:30px!important;height:30px!important}
+.yft-fl-i svg{width:16px!important;height:16px!important}
+.yft-fl-t{display:flex;flex-direction:column;white-space:nowrap}
+.yft-fl-t b{font-weight:500;font-size:11.5px;opacity:.9}
+.yft-fl-t em{font-style:normal;font-weight:600;font-size:13px}
+.yft-fol{flex-wrap:wrap}

@@ -48,6 +48,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   "Join us on Telegram" row UNDER it ([data-tgch] card). Keys ft_followFb / ft_joinTg (i18n.js FOL). The Chat-with-us Facebook pill is live too.
   ONE ROW (owner, 2026-11-27 14:02: "a két gomb egy sorba legyen… ne legyen sok üres hely"): the two pills share one row (max 440px),
   text wraps to two lines in a narrow column; on PC (>1100px) the brand column is wider (1.75fr) so they fit. End of styles.css.
+  TWO-LINE PILLS (owner, 2026-11-27 14:10): each pill only as wide as its text, ~20% taller with room above/below the text: line 1
+  "Follow us" (ft_fl1), line 2 "on Facebook" / "on Telegram" (ft_onFb / ft_onTg, i18n.js FOL2) – .yft-fl-t b / em.
   Company column: About us (#/about), How it works (#/how), Safety tips (#/safety), FAQ (#/faq), Contact us, Terms, Privacy.
   Those pages are PAGES in app.js (English, no invented numbers), styles .ab-* (kicker, H1 with a red word, cards, blue CTA band).
   FOOTER LINKS LIKE MVP VIETNAM (owner, 2026-11-26: "mehet"): SIX columns on PC – brand (+ "Popular areas" district pills under the

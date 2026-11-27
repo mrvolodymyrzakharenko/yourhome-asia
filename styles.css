@@ -1635,3 +1635,32 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 }
 /* phones: the nudge sits 14px above the floating round Search button (it touched it before) */
 @media (max-width:900px){.fad{bottom:calc(116px + env(safe-area-inset-bottom))}}
+
+/* BIG FREE-LISTING CARD FOR AD VISITORS (owner, 2026-11-27 13:45: "az oldal 30%-át takarja be… egy nagyon picit blurozza be a többit…
+   close window… nagy betűkkel… post now"): app.js faBig(). Light blur + faint dim behind; centred white card about a third of the
+   screen tall; full-width "✕ Close window" strip on top like the Menu list; title 26px / 800 (phones 23px – owner's exception to the
+   13px rule) with the red FREE word; big red "Post now" pill. */
+.fadm{position:fixed;inset:0;z-index:2600;display:grid;place-items:center;padding:16px;background:rgba(15,23,42,.16);-webkit-backdrop-filter:blur(2px);backdrop-filter:blur(2px);opacity:0;transition:opacity .25s}
+.fadm.on{opacity:1}
+.fadm[hidden]{display:none}
+.fadm-card{width:min(520px,100%);min-height:32vh;display:flex;flex-direction:column;background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 0 22px rgba(15,23,42,.12),0 24px 60px rgba(15,23,42,.24);transform:translateY(14px) scale(.98);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.fadm.on .fadm-card{transform:none}
+.fadm-close{display:flex;align-items:center;justify-content:center;gap:7px;width:100%;height:42px;border:0;background:#fff3f5;color:#E00025;font:inherit;font-size:13px;font-weight:600;letter-spacing:-.025em;cursor:pointer}
+.fadm-close svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round}
+.fadm-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:22px 26px 28px}
+.fadm-ic{width:62px;height:62px;border-radius:50%;background:#fff3f5;color:#E00025;display:grid;place-items:center}
+.fadm-ic svg{width:32px;height:32px}
+.fadm .fadm-h{font-size:26px;font-weight:800;letter-spacing:-.03em;line-height:1.18;color:#0F172A;max-width:420px}
+.fadm .fadm-h em{font-style:normal;color:#E00025}
+.fadm-l{margin:0;font-size:13px;line-height:1.45;color:var(--muted)}
+.fadm-go{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;min-width:200px;height:50px;margin-top:6px;padding:0 28px;border-radius:999px;background:#E00025;color:#fff;text-decoration:none;font-size:15px;font-weight:700;letter-spacing:-.02em;box-shadow:0 8px 20px rgba(224,0,37,.28)}
+.fadm-go:hover{background:#C4001F}
+@media (max-width:720px){
+  .fadm-card{border-radius:20px}
+  .fadm-body{padding:18px 18px 24px;gap:10px}
+  .fadm-ic{width:54px;height:54px}.fadm-ic svg{width:28px;height:28px}
+  .fadm .fadm-h{font-size:23px}
+  .fadm-go{width:100%;min-width:0;height:48px}
+}
+html:lang(km) .fadm .fadm-h,html:lang(zh) .fadm .fadm-h,html:lang(th) .fadm .fadm-h,html:lang(ru) .fadm .fadm-h,html:lang(ko) .fadm .fadm-h,html:lang(ja) .fadm .fadm-h{font-weight:700}
+@media (prefers-reduced-motion:reduce){.fadm,.fadm-card{transition:none}}

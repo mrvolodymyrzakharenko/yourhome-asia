@@ -314,7 +314,32 @@ function faDue() { try { return Date.now() - (+localStorage.getItem('yh_freead')
 const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000; let FA_LIFE = 12000, FA_ADV = false;
 const faBlocked = () => /^#\/(post|edit|account|admin|login)/.test(YH.h()) || document.body.classList.contains('adm-mode');
 function faClose(c) { c = c || document.getElementById('fad'); if (!c || c.hidden) return; c.classList.remove('on'); clearTimeout(c._t); setTimeout(() => { c.hidden = true; }, 300); }
+// BIG VERSION FOR AD VISITORS (owner, 2026-11-27 13:45: "legyen nagyobb, az oldal 30%-át takarja be… egy nagyon picit blurozza be a többit…
+// close window… nagy betűkkel post your property for free… gomb post now"): centred card over a lightly blurred page, "✕ Close window"
+// strip on top (like the Menu list), big title with the red FREE word, red "Post now" button; tap outside / Escape closes it
+function faBig() {
+  if (faBlocked() || document.querySelector('.lpk:not([hidden]), .ypk:not([hidden]), .rpop, .apm:not([hidden]), #drawer:not([hidden])')) return false;
+  document.getElementById('tgch') && tgCardClose();
+  let o = document.getElementById('fadm');
+  if (!o) { o = document.createElement('div'); o.id = 'fadm'; o.className = 'fadm'; o.hidden = true; document.body.appendChild(o); }
+  const big = esc(t('fa_big')).replace('{f}', `<em>${esc(t('fa_free'))}</em>`);
+  o.innerHTML = `<div class="fadm-card" role="dialog" aria-modal="true" aria-label="${esc(t('fa_title'))}">
+    <button type="button" class="fadm-close"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span>${esc(t('fa_closeW'))}</span></button>
+    <div class="fadm-body"><span class="fadm-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11 12 4l9 7"/><path d="M5.5 9.5V20h13V9.5"/><path d="M12 12v5M9.5 14.5h5"/></svg></span>
+    <div class="fadm-h">${big}</div><p class="fadm-l">${esc(t('fa_line'))}</p>
+    <a class="fadm-go" href="/post">${esc(t('fa_now'))}</a></div></div>`;
+  const close = () => { o.classList.remove('on'); document.removeEventListener('keydown', key); setTimeout(() => { o.hidden = true; }, 250); };
+  const key = e => { if (e.key === 'Escape') close(); };
+  document.addEventListener('keydown', key);
+  o.onclick = e => {
+    if (e.target.closest('.fadm-go')) { e.preventDefault(); close(); YH.go('#/post'); return; }
+    if (e.target.closest('.fadm-close') || !e.target.closest('.fadm-card')) close();
+  };
+  o.hidden = false; void o.offsetWidth; o.classList.add('on');
+  return true;
+}
 function faOpen() {
+  if (FA_ADV) return faBig();
   if (faBlocked() || document.querySelector('.lpk:not([hidden]), .ypk:not([hidden]), .rpop, .apm:not([hidden]), .tgch:not([hidden]), #drawer:not([hidden])')) return false;
   let c = document.getElementById('fad');
   if (!c) { c = document.createElement('div'); c.id = 'fad'; c.className = 'fad'; c.setAttribute('role', 'status'); c.hidden = true; document.body.appendChild(c); }
@@ -330,7 +355,7 @@ function faOpen() {
   c.onclick = e => { if (e.target.closest('.fad-x')) { faClose(c); return; } if (e.target.closest('.fad-go')) { e.preventDefault(); faClose(c); YH.go('#/post'); } };
   return true;
 }
-window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
+window.addEventListener('hashchange', () => { if (faBlocked()) { faClose(); const o = document.getElementById('fadm'); if (o && !o.hidden) { o.classList.remove('on'); o.hidden = true; } } });
 (function faPlan() {
   let last = 0; try { last = +localStorage.getItem(FA_KEY) || 0; } catch (_) {}
   // VISITORS FROM THE FACEBOOK / INSTAGRAM AD (owner, 2026-11-27 13:44: "pop-up ablakot, hogy post your property now for free, és tudja

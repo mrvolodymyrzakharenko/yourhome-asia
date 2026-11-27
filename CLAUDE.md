@@ -639,6 +639,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   FROM THE AD (owner, 2026-11-27 13:44: "pop-up ablakot, hogy post your property now for free, és tudja becsukni" – the ad stays on the
   homepage): a visitor with fbclid / igshid / utm_source=facebook|fb|ig|instagram|meta or a facebook.com / instagram.com referrer gets the
   card after 1.2 s, on every visit (no 3-day lock), and it stays 20 s (FA_ADV in faPlan()).
+  BIG FOR AD VISITORS (owner, 2026-11-27 13:45: "legyen nagyobb, az oldal 30%-át takarja be… egy nagyon picit blurozza… close window… nagy
+  betűkkel post your property for free… gomb post now"): ad visitors get faBig() instead of the small card – centred white card (~a third of
+  the screen, PC 520px), page behind blurred 2px + faint dim, full-width "✕ Close window" strip on top, house badge, title "Post your property
+  for FREE" 26px / 800 (phones 23px; FREE red; fa_big / fa_free), fa_line, big red "Post now" pill (fa_now) → /post. No timer – it stays
+  until Close window, a tap outside or Escape. Styles "BIG FREE-LISTING CARD" at the end of styles.css.
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

@@ -1423,7 +1423,7 @@ label[hidden]{display:none!important}
 .hdr .lang-btn{cursor:pointer;color:var(--ink);font:inherit;border:1px solid var(--line);border-radius:99px;width:auto!important;max-width:none!important;padding-right:28px!important}
 .hdr .lang-btn{background-position:right 11px center!important;padding-left:12px!important}
 body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;padding-right:23px!important;background-position:right 7px center!important}   /* chevron never touches the code (owner screenshot 13:23) */
-.lpk{position:fixed;inset:0;z-index:1200}
+.lpk{position:fixed;inset:0;z-index:2700}
 .lpk-bg{position:absolute;inset:0;background:rgba(15,23,42,.38);opacity:0;transition:opacity .18s}
 .lpk-w{--lg:10px;--lh:56px;position:absolute;top:50%;left:50%;width:min(780px,calc(100vw - 32px));background:#f6f8fc;border-radius:22px;
   box-shadow:0 24px 60px rgba(15,23,42,.28);padding:10px 14px 14px;transform:translate(-50%,-48%) scale(.98);opacity:0;transition:transform .18s,opacity .18s}

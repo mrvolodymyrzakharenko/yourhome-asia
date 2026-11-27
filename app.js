@@ -235,7 +235,7 @@ function langBtnDraw() {
 function closeLangs() { const p = document.querySelector('.lpk'); if (!p) return; p.classList.remove('in'); setTimeout(() => p.remove(), 180); document.removeEventListener('keydown', langKey); }
 function langKey(e) { if (e.key === 'Escape') closeLangs(); }
 function openLangs() {
-  closeLangs();
+  closeLangs(); tgCardClose();   // the Telegram card (z 2600) must never sit over the language cards (owner, 2026-11-27)
   const p = document.createElement('div'); p.className = 'lpk';
   p.innerHTML = '<div class="lpk-bg"></div><div class="lpk-w" role="dialog" aria-modal="true" aria-label="' + esc(LANG_TITLE[lang] || 'Language') + '">'
     + '<div class="lpk-h"><span>' + esc(LANG_TITLE[lang] || 'Language') + '</span><button type="button" class="lpk-x" aria-label="' + esc(t('close')) + '"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>'
@@ -282,6 +282,7 @@ function tgCardFill(c) {
   c.classList.toggle('tgch-opts', !!url);   // compact, as wide as its content (owner, 2026-11-27 04:34: "mennyi fehér hely")
 }
 function tgCardOpen(auto, top) {
+  if (auto && document.querySelector('.lpk, .ypk, .rpop')) return;   // never pop up over an open picker / popup
   const c = tgCard(); tgCardFill(c); c.hidden = false;
   c.classList.toggle('at-top', !!top);   // opened from the header icon → the card drops down under the header
   requestAnimationFrame(() => c.classList.add('on'));

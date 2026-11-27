@@ -311,7 +311,7 @@ if (TG_CHANNEL) {
 // after 12 s (a thin red bar shows the time left; hovering pauses it), never on /post /edit /account /admin, never over another
 // popup / picker / the Telegram card, at most once every 3 days per visitor (localStorage yh_freead). Texts fa_* (i18n.js FA).
 function faDue() { try { return Date.now() - (+localStorage.getItem('yh_freead') || 0) >= 3 * 864e5; } catch (_) { return false; } }   // hoisted: used by the Telegram card above
-const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000, FA_LIFE = 12000;
+const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000; let FA_LIFE = 12000, FA_ADV = false;
 const faBlocked = () => /^#\/(post|edit|account|admin|login)/.test(YH.h()) || document.body.classList.contains('adm-mode');
 function faClose(c) { c = c || document.getElementById('fad'); if (!c || c.hidden) return; c.classList.remove('on'); clearTimeout(c._t); setTimeout(() => { c.hidden = true; }, 300); }
 function faOpen() {
@@ -333,7 +333,11 @@ function faOpen() {
 window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
 (function faPlan() {
   let last = 0; try { last = +localStorage.getItem(FA_KEY) || 0; } catch (_) {}
-  const force = /[?&]fad=1/.test(location.search);   // test link: yourhome.asia/?fad=1 shows it every time (skips the 3-day lock)
+  // VISITORS FROM THE FACEBOOK / INSTAGRAM AD (owner, 2026-11-27 13:44: "pop-up ablakot, hogy post your property now for free, és tudja
+  // becsukni"): the ad promises free posting, so they get the card after 1.2 s (not 5 s), every visit from an ad, and it stays 20 s
+  const fromAd = /[?&](fbclid|igshid)=|[?&]utm_source=(facebook|fb|ig|instagram|meta)\b/i.test(location.search) || /(^|\.)(facebook|instagram)\.com|^android-app:\/\/com\.facebook/i.test((() => { try { return new URL(document.referrer).hostname || document.referrer; } catch (_) { return document.referrer || ''; } })());
+  if (fromAd) { FA_ADV = true; }
+  const force = /[?&]fad=1/.test(location.search) || fromAd;   // test link: yourhome.asia/?fad=1 shows it every time (skips the 3-day lock)
   if (force) { try { localStorage.removeItem(FA_KEY); } catch (_) {} }
   if (!force && (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search))) return;
   let tries = 0;
@@ -341,7 +345,8 @@ window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
     if (document.hidden || !faOpen()) { if (++tries < 60) setTimeout(tryOpen, 2000); return; }   // busy → try again in 2 s
     try { localStorage.setItem(FA_KEY, String(Date.now())); } catch (_) {}
   };
-  setTimeout(tryOpen, FA_DELAY);
+  if (FA_ADV) FA_LIFE = 20000;
+  setTimeout(tryOpen, FA_ADV ? 1200 : FA_DELAY);
 })();
 
 // Footer / Support chat buttons: a channel without an address yet (Facebook) shows a "coming soon" bubble instead of opening

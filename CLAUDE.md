@@ -636,6 +636,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   (localStorage yh_freead); never on /post /edit /account /admin /login, never over another popup, picker, the open menu or the Telegram
   card (busy → retries every 2 s). FIRST VISIT (owner 07:13: "nem sok a 15 másodperc, 5-6 mp"): the nudge comes first at 5 s and the
   once-per-visitor Telegram channel card waits (TEST: yourhome.asia/?fad=1 shows the nudge every time, skipping the 3-day lock) – it auto-opens at 20 s instead of 3 s when the nudge is due, and never over the nudge. faOpen() in app.js, texts fa_* (i18n.js FA), styles "FREE-LISTING NUDGE" at the end of styles.css.
+  FROM THE AD (owner, 2026-11-27 13:44: "pop-up ablakot, hogy post your property now for free, és tudja becsukni" – the ad stays on the
+  homepage): a visitor with fbclid / igshid / utm_source=facebook|fb|ig|instagram|meta or a facebook.com / instagram.com referrer gets the
+  card after 1.2 s, on every visit (no 3-day lock), and it stays 20 s (FA_ADV in faPlan()).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

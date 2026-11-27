@@ -17,7 +17,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - Structure copies vietrent.net (portal look), but in Cambodian flag colours: royal blue #032EA1 (main), red #E00025
   (accents: TOP badge, prices, Post buttons), white background.
 - LOGO = IMAGE (owner, 2026-11-26: "Logo – rakd fel"): header AND footer show /logo.png (the owner's YourHome.asia CAMBODIA logo,
-  transparent background, 420×144) as img.brand-img – header 42px tall (phones 34px, ≤379px 30px, ≤339px 26px), footer 54px
+  transparent background, 420×157; replaced by the owner's new version 2026-11-27) as img.brand-img – header 42px tall (phones 34px, ≤379px 30px, ≤339px 26px), footer 54px
   (phones 46px); sizes at the end of fonts.css. Phones: .hdr .logo keeps the OLD logo width (min-width 146px) so the Menu button stays as wide as before (owner 10:36: "a menüt nem kell ennyire széthúzni"). MENU BUTTON = FIXED 64px on phones (56px under hfit1), the button group right-aligned – it never stretches to fill the row (owner 2026-11-26 16:17: "miért ekkora böszme nagy most a menü gomb?" – it had grown to 99px after the flag left the language button; end of header.css). Favicon / app icons = the roof from that logo: favicon.ico, icon-192.png,
   icon-512.png, apple-touch-icon.png (manifest.json); schema Organization logo = /logo.png. This REPLACES the drawn SVG house +
   "www.yourhome.asia / CAMBODIA" text logo described in the next line (kept only as history).

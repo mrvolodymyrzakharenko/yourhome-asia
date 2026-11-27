@@ -216,6 +216,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - MENU LIST (owner, 2026-11-24 20:59): on phones/tablets the open Menu is 70% of the screen wide (right side), scrolls if long;
   its first row is a red "✕ Close menu" button (#drClose, closeMenu in i18n.js).
   The menu links sit in TWO COLUMNS (owner 21:02: "menüpontok két sorban"); Close menu and Currency span both (end of header.css).
+  HEIGHT (owner, 2026-11-27 11:36: "lehet nagyobb azért, legyen 5px-re a nagyítótól"): on phones/tablets the open menu ends EXACTLY
+  5px above the floating Search button – index.html fitH() measures it, sets the height and grows the tiles (--dpy padding) to fill it;
+  a screen too short for the menu keeps it scrolling inside (same 5px gap).
   SOFT PINK TILES + PAIRS (owner, 2026-11-27 11:27–11:29): every link and currency button is a borderless very light red
   tile (#fff3f5), tight gaps, NO divider lines or borders anywhere in the menu; on phones it ends above the floating Search
   button (scrolls inside if needed). Rows pair one-word with one-word and two-word with two-word items, all on ONE line:

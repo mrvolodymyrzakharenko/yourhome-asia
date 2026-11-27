@@ -129,3 +129,5 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .drawer a{display:flex!important;align-items:center}
 .drawer a.dr-partner{justify-content:center}
 .drawer.dr-wrap a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+/* Menu tiles grow to fill the height down to 5px above the Search button (index.html fitH() sets --dpy; owner 2026-11-27 11:36) */
+@media (max-width:900px){.drawer>a{padding-top:calc(8px + var(--dpy,0px))!important;padding-bottom:calc(8px + var(--dpy,0px))!important}}

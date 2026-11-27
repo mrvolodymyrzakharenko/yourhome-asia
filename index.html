@@ -30,7 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/styles.css?v=20261127l1">
-<link rel="stylesheet" href="/header.css?v=20261127m2">
+<link rel="stylesheet" href="/header.css?v=20261127m3">
 <link rel="stylesheet" href="/agents.css?v=1">
 <link rel="stylesheet" href="/popup.css?v=c5">
 <link rel="stylesheet" href="/partners.css?v=3">
@@ -126,7 +126,16 @@
 <script>
 (function(){var b=document.getElementById('menuBtn'),d=document.getElementById('drawer');
 function fit(){d.classList.remove('dr-wrap');if([].some.call(d.querySelectorAll('a'),function(a){return a.scrollWidth>a.clientWidth+1}))d.classList.add('dr-wrap');}
-b.addEventListener('click',function(e){e.stopPropagation();d.hidden=!d.hidden;if(!d.hidden)fit();});
+/* phones/tablets: the open menu reaches down to 5px above the floating Search button; if it is shorter, its tiles grow to fill
+   that height (owner, 2026-11-27 11:36: "lehet nagyobb azért, legyen 5px-re a nagyítótól") */
+function fitH(){d.style.removeProperty('max-height');d.style.removeProperty('height');d.style.removeProperty('--dpy');if(d.hidden||innerWidth>900)return;
+var s=document.querySelector('.bnav .bs');if(!s)return;var av=Math.floor(s.getBoundingClientRect().top-d.getBoundingClientRect().top-5);if(av<200)return;
+d.style.setProperty('max-height',av+'px','important');var ex=av-d.scrollHeight;if(ex<=0)return;d.style.setProperty('height',av+'px');
+var tops={};[].forEach.call(d.querySelectorAll(':scope>a'),function(a){tops[a.offsetTop]=1});var n=Object.keys(tops).length;
+if(!n)return;var v=Math.min(14,Math.floor(ex/n/2*10)/10);d.style.setProperty('--dpy',v+'px');
+while(v>0&&d.scrollHeight>d.clientHeight+1){v=Math.max(0,Math.round((v-.1)*10)/10);d.style.setProperty('--dpy',v+'px');}}
+window.addEventListener('resize',fitH);
+b.addEventListener('click',function(e){e.stopPropagation();d.hidden=!d.hidden;if(!d.hidden){fit();fitH();}});
 document.addEventListener('click',function(e){if(!d.hidden&&!d.contains(e.target))d.hidden=true;});
 window.addEventListener('hashchange',function(){d.hidden=true;});
 document.getElementById('drClose').addEventListener('click',function(e){e.stopPropagation();d.hidden=true;});})();

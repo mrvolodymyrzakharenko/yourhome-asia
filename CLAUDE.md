@@ -160,6 +160,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   equal fields; tablets the field spans the row above City | District; phones FIVE fields in the one row, short label "I want" (wantShort).
 - PHONE SEARCH CARD (owner, 2026-11-24 20:08): City · District · Type · Budget in ONE row (City a little wider, short labels),
   then Post listing + Search in the row below.
+- POST LISTING RIPPLE (owner, 2026-11-27: "mint a study portálon vibráljon, hullámozzon, de ne nagyon, kellemesen"): the header and
+  footer "+ Post listing" buttons stand still while a soft red patch spreads out from behind them and fades (Study Apply Now ripple,
+  softer: scale 1.1 × 1.32, opacity .3, 2.8 s) – never a zoom/pulse. End of header.css.
 - Posting a listing must always be visible straight away (header button – on phones a compact red "+ Post" before Menu,
   the header account icon then left to the bottom menu (owner, 2026-11-24 20:13) –, bottom menu, banner on the homepage, and a white
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).

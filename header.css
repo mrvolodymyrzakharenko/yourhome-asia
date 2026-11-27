@@ -131,3 +131,10 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .drawer.dr-wrap a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
 /* Menu tiles grow to fill the height down to 5px above the Search button (index.html fitH() sets --dpy; owner 2026-11-27 11:36) */
 @media (max-width:900px){.drawer>a{padding-top:calc(8px + var(--dpy,0px))!important;padding-bottom:calc(8px + var(--dpy,0px))!important}}
+/* POST LISTING RIPPLE (owner, 2026-11-27: "mint a study portálon vibráljon, hullámozzon, de ne nagyon, kellemesen"):
+   the Study portal's Apply Now effect (page.css ripple-h) but softer – the button stands still, a soft red patch in its own
+   colour spreads out from behind it and fades, again and again. Header + footer Post listing. Off for "reduce motion". */
+.hdr-post,.yft-post{position:relative;isolation:isolate}
+.hdr-post::before,.yft-post::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:inherit;pointer-events:none;animation:yh-ripple 2.8s ease-out infinite}
+@keyframes yh-ripple{0%{transform:scale(1);opacity:.3}100%{transform:scale(1.1,1.32);opacity:0}}
+@media (prefers-reduced-motion:reduce){.hdr-post::before,.yft-post::before{animation:none;opacity:0}}

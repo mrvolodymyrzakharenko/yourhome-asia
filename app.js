@@ -278,8 +278,9 @@ function tgCardFill(c) {
       : `<p>${t('tgchLine')}</p><span class="tgch-n">${t('tgchSoon')}</span>`}`;
   c.setAttribute('aria-label', url ? t('tgoTitle') : t('tgchTitle'));
 }
-function tgCardOpen(auto) {
+function tgCardOpen(auto, top) {
   const c = tgCard(); tgCardFill(c); c.hidden = false;
+  c.classList.toggle('at-top', !!top);   // opened from the header icon → the card drops down under the header
   requestAnimationFrame(() => c.classList.add('on'));
   clearTimeout(c._t); if (auto) c._t = setTimeout(tgCardClose, 7000);
 }
@@ -289,7 +290,7 @@ document.addEventListener('click', e => {
   // (owner, 2026-11-27: the button opens the small card with three choices – channel · post in the bot · search in the bot –
   // instead of going straight to the channel; a choice opens Telegram and closes the card)
   if (e.target.closest('.tgch-o')) { setTimeout(tgCardClose, 50); return; }
-  if (b) { e.preventDefault(); const c = document.getElementById('tgch'); c && !c.hidden ? tgCardClose() : tgCardOpen(); return; }
+  if (b) { e.preventDefault(); const c = document.getElementById('tgch'); c && !c.hidden ? tgCardClose() : tgCardOpen(false, !!b.closest('.hdr')); return; }
   const c = document.getElementById('tgch');
   if (c && !c.hidden && (e.target.closest('.tgch-x') || !c.contains(e.target))) tgCardClose();
 });

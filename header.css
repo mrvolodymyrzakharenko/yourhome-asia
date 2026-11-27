@@ -90,3 +90,12 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
   .hdr .hdr-r .menu-btn{flex:0 0 auto!important;width:64px;min-width:0!important;padding-left:6px!important;padding-right:6px!important}
   body.hfit1 .hdr .hdr-r .menu-btn{width:56px;min-width:0!important}
 }
+/* TELEGRAM IN THE HEADER (owner, 2026-11-27: "a fejlécbe is berakhatsz egy telegramos ikont… mindjárt az elején"): first round
+   button of the header row, Telegram sky-blue with the white plane; it opens the same three-choice card (channel · post in the bot ·
+   search in the bot), here dropping down under the header (.tgch.at-top) */
+.hdr .rb-tg{background:#229ED9;border-color:#229ED9;color:#fff}
+.hdr .rb-tg:hover{background:#1C8FC4;border-color:#1C8FC4}
+.hdr .rb-tg svg{width:17px;height:17px;fill:#fff;stroke:none;margin-left:-1px}
+.tgch.at-top{top:calc(68px + env(safe-area-inset-top));bottom:auto}
+@media (max-width:720px){.hdr .rb-tg{width:34px;height:34px}.tgch.at-top{top:calc(58px + env(safe-area-inset-top))}}
+@media (max-width:720px){body.hfit1 .hdr .rb-tg{width:30px;height:30px}body.hfit1 .hdr .rb-tg svg{width:15px;height:15px}}

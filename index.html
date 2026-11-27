@@ -125,11 +125,14 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){var b=document.getElementById('menuBtn'),d=document.getElementById('drawer');
-function fit(){d.classList.remove('dr-wrap');if([].some.call(d.querySelectorAll('a'),function(a){return a.scrollWidth>a.clientWidth+1}))d.classList.add('dr-wrap');}
-/* phones/tablets: the open menu reaches down to 5px above the floating Search button; if it is shorter, its tiles grow to fill
+/* phones/tablets: the menu is 10% wider than its content needs (owner, 2026-11-27 08:49) */
+function fit(){d.style.removeProperty('width');d.classList.remove('dr-wrap');
+if(innerWidth<=900){var w=d.getBoundingClientRect().width;d.style.setProperty('width',Math.min(Math.round(w*1.1),innerWidth-24)+'px','important');}
+if([].some.call(d.querySelectorAll('a'),function(a){return a.scrollWidth>a.clientWidth+1}))d.classList.add('dr-wrap');}
+/* phones/tablets: the open menu reaches down to 7px above the floating Search button (5px, then 2px higher – owner 08:49); if it is shorter, its tiles grow to fill
    that height (owner, 2026-11-27 11:36: "lehet nagyobb azért, legyen 5px-re a nagyítótól") */
 function fitH(){d.style.removeProperty('max-height');d.style.removeProperty('height');d.style.removeProperty('--dpy');if(d.hidden||innerWidth>900)return;
-var s=document.querySelector('.bnav .bs');if(!s)return;var av=Math.floor(s.getBoundingClientRect().top-d.getBoundingClientRect().top-5);if(av<200)return;
+var s=document.querySelector('.bnav .bs');if(!s)return;var av=Math.floor(s.getBoundingClientRect().top-d.getBoundingClientRect().top-7);if(av<200)return;
 d.style.setProperty('max-height',av+'px','important');var ex=av-d.scrollHeight;if(ex<=0)return;d.style.setProperty('height',av+'px');
 var tops={};[].forEach.call(d.querySelectorAll(':scope>a'),function(a){tops[a.offsetTop]=1});var n=Object.keys(tops).length;
 if(!n)return;var v=Math.min(14,Math.floor(ex/n/2*10)/10);d.style.setProperty('--dpy',v+'px');

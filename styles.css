@@ -1552,3 +1552,7 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 .tgch.tgch-opts .tgch-o{padding-right:40px}
 .tgch.tgch-opts .tgch-o>span:last-child{flex:1;text-align:center}
 .tgch.tgch-opts .tgch-h b,.tgch.tgch-opts .tgch-o b,.tgch.tgch-opts .tgch-o small{letter-spacing:.012em}
+/* 10% NARROWER AGAIN (owner, 2026-11-27 09:49: "szűkítsd le 10%"): 300 → 270px, title still centred and clear of the × */
+.tgch.tgch-opts{min-width:270px;padding:12px}
+.tgch.tgch-opts .tgch-h{padding-left:0;padding-right:36px;gap:8px}
+.tgch.tgch-opts .tgch-o{padding-right:34px}

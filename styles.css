@@ -1571,3 +1571,7 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
    of the three choices are half as wide – the card gets narrower with them */
 .tgch.tgch-opts .tgch-h{padding-left:8px;padding-right:8px}
 .tgch.tgch-opts .tgch-o{margin-left:13px;margin-right:13px}
+/* SIDES = BOTTOM (owner, 2026-11-27 10:34: "olyan legyen a két szélén, mint az alsó mező utolsó vonala és az alja között"): the choices
+   sit exactly 12px from the left and right edge – the same gap as under the last choice */
+.tgch.tgch-opts{padding-bottom:12px}
+.tgch.tgch-opts .tgch-o{margin-left:12px;margin-right:12px}

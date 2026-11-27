@@ -532,6 +532,11 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   rentals would bring the wrong listings); the database still accepts 'hour' but the form never offers it.
 - SALE LISTINGS OPEN TO EVERYONE FOR NOW (owner, 2026-11-25 18:52: "bárki kérheti, és majd később módosítjuk"): a verified-only
   sale rule was tried and removed the same evening; the database keeps yh_is_verified(uid) for a later paid / verified-only rule.
+- REAL LISTINGS FIRST (owner, 2026-11-27: "balról jobbra kéne megjelenjenek"): realFirst() in app.js – in every homepage block and
+  every list a real listing stands before every demo (also before TOP demos), so a new listing is the first card on the left.
+- DEMOS ARE NEVER DELETED AUTOMATICALLY (owner, 2026-11-27: "ne vedd le semmi demót… ha szólok, törüld"): the database triggers
+  yh_demo_purge_listings / yh_demo_purge_projects are DISABLED (not dropped); demos and test listings are deleted only when the owner
+  says so – and their Telegram channel posts go with them (tg-sync channel clean-up).
 - Posting is free; listings go live immediately (owner/admin can hide). Paid TOP placement is set only by admin
   (is_featured – advertisers cannot set it). Demo listings have is_demo=true and show a DEMO badge; delete them at launch.
 - Login: email magic link + Google (Supabase Auth). Redirect URL https://yourhome.asia/** must be allowed in Supabase.

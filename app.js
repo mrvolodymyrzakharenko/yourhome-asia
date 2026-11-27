@@ -510,7 +510,7 @@ function fromPre(f) {
   if (sort === 'cheap') l.sort((a, b) => n(a.price) - n(b.price)); else if (sort === 'exp') l.sort((a, b) => n(b.price) - n(a.price));
   else if (sort === 'big') l.sort((a, b) => n(b.area_m2, -1) - n(a.area_m2, -1)); else if (sort === 'small') l.sort((a, b) => n(a.area_m2, 1e12) - n(b.area_m2, 1e12));
   const ag = PRE.agents || {};
-  return l.slice(0, f.limit || 300).map(x => Object.assign({}, x, { _agent: x.agent_id ? ag[x.agent_id] || null : null }));
+  return realFirst(l).slice(0, f.limit || 300).map(x => Object.assign({}, x, { _agent: x.agent_id ? ag[x.agent_id] || null : null }));
 }
 async function fetchListings(f = {}) {
   const pre = fromPre(f); if (pre) return pre;
@@ -545,7 +545,7 @@ async function fetchListings(f = {}) {
   if (error) { toast(t('error') + error.message); return []; }
   const aids = [...new Set(data.map(l => l.agent_id).filter(Boolean))];   // agent photo + name for the card's agent bar
   if (aids.length) { const { data: ags } = await sb.from('yh_agents').select('id,name,kind,photo,phone,whatsapp,telegram').in('id', aids); const m = Object.fromEntries((ags || []).map(a => [a.id, a])); data.forEach(l => { l._agent = m[l.agent_id] || null; }); }
-  return data;
+  return realFirst(data);
 }
 
 // TOP ROW = Rent · Sell · Buy · Rooms · Projects (owner, 2026-11-26 07:11: "Sell-t nem kéne a felülre rakni? és a daily-t kivenni…
@@ -621,7 +621,11 @@ function wireChips(root, st, onChange) {
 }
 const postCard = () => `<a class="card" href="#/post" style="border:2px dashed #c7d2fe;box-shadow:none;background:#fbfcff"><div class="ph" style="background:#e8edfb"><span style="position:relative;z-index:2;width:64px;height:64px;border-radius:50%;background:#E00025;color:#fff;font-size:38px;display:grid;place-items:center;box-shadow:0 8px 20px rgba(224,0,37,.3);line-height:1">+</span></div><div class="cb"><h3 class="ct" style="color:#E00025">${t('post')}</h3><div class="loc">${t('postSub')}</div></div></a>`;
 const fill4 = list => { const items = list.slice(0, 4).map(card); while (items.length < 4) items.push(postCard()); return items.join(''); };
+// REAL LISTINGS FIRST (owner, 2026-11-27: "balról jobbra kéne megjelenjenek"): in every block and list a real listing comes
+// before every demo (even a TOP demo), so a new listing is always the first card on the left; order kept otherwise
+const realFirst = l => l.filter(x => !x.is_demo).concat(l.filter(x => x.is_demo));
 function block(title, list, more) {
+  list = realFirst(list);
   if (!list.length) return '';
   return `<section class="block"><div class="bh"><h2>${title}</h2><a class="more" href="${more}">${t('seeAll')}</a></div><div class="row4">${fill4(list)}</div><div class="block-more"><a class="btn ghost" href="${more}">${title} · ${t('seeAll')}</a></div></section>`;
 }

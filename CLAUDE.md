@@ -656,7 +656,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   AD PERIOD = EVERY HOMEPAGE VISIT (owner, 2026-11-27 14:03: "akárhányszor a fő oldalra megyek, mindig a Facebook hirdetési időszakban…
   legyen ott a felugró ablak a kezdő oldalon"): FA_ALWAYS = true in app.js – the big card opens 1.2 s after EVERY arrival at the homepage
   (first load + each later navigation to Home), for everyone, no 3-day lock; never on other pages. When the ad period ends, set
-  FA_ALWAYS = false (back to: ad visitors every visit, others once every 3 days).
+  FA_ALWAYS = false (back to: ad visitors every visit, others once every 3 days). A click on the LOGO (header / footer) or any link to "/"
+  opens it too, even when already on the homepage (owner 14:06: "akkor is működjön, hogyha valaki a logóra kattint").
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

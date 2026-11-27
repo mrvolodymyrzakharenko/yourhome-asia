@@ -376,6 +376,9 @@ window.addEventListener('hashchange', () => { if (faBlocked()) { faClose(); cons
     };
     let was = YH.h();
     window.addEventListener('hashchange', () => { const now = YH.h(); if (now !== was) { was = now; plan(); } });
+    // the LOGO (header + footer) and every other link to "/" open it too – also when the visitor is already on the homepage
+    // (owner, 2026-11-27 14:06: "akkor is működjön, hogyha valaki a logóra kattint")
+    document.addEventListener('click', e => { const l = e.target.closest('a.logo, a[href="/"], a[href="#/"]'); if (l) setTimeout(() => { was = YH.h(); plan(); }, 60); });
     plan();
     return;
   }

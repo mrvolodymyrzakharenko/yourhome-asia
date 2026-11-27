@@ -164,6 +164,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - POST LISTING RIPPLE (owner, 2026-11-27: "mint a study portálon vibráljon, hullámozzon, de ne nagyon, kellemesen"): the header and
   footer "+ Post listing" buttons stand still while a soft red patch spreads out from behind them and fades (Study Apply Now ripple,
   softer: scale 1.1 × 1.32, opacity .3, 2.8 s) – never a zoom/pulse. End of header.css.
+  LABEL (owner, 2026-11-27: "berakni a FREE szót"): header (PC/tablet) and footer button read "+ Post for free" (key fa_go, all 8
+  languages: Publier gratuitement, Разместить бесплатно, 免费发布…); the phone header keeps the short "+ Post" (postShort).
 - Posting a listing must always be visible straight away (header button – on phones a compact red "+ Post" before Menu,
   the header account icon then left to the bottom menu (owner, 2026-11-24 20:13) –, bottom menu, banner on the homepage, and a white
   "+ Post listing" button (red text) right before the red Search button in the search card – owner, 2026-11-24; .sbtns, phones two equal buttons in one row).

@@ -301,7 +301,7 @@ document.addEventListener('click', e => {
 });
 if (TG_CHANNEL) {
   document.querySelectorAll('.yft-s-tg').forEach(a => { a.setAttribute('aria-label', 'Telegram channel'); a.querySelector('.yft-tip')?.remove(); });
-  try { if (!localStorage.getItem('yh_tgch')) { localStorage.setItem('yh_tgch', '1'); setTimeout(() => tgCardOpen(true), faDue() ? 20000 : 3000); } } catch (_) {}   // the free-listing nudge goes first (5 s), the channel card after it
+  try { if (!localStorage.getItem('yh_tgch')) { localStorage.setItem('yh_tgch', '1'); setTimeout(() => tgCardOpen(true), faDue() || /[?&]fad=1/.test(location.search) ? 20000 : 3000); } } catch (_) {}   // the free-listing nudge goes first (5 s), the channel card after it
 }
 
 // FREE-LISTING NUDGE (owner, 2026-11-27: "nem szabványos pop up, hanem ideiglenes ablak – Hirdess ingyen ingatlant"): a small card
@@ -331,7 +331,8 @@ function faOpen() {
 window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
 (function faPlan() {
   let last = 0; try { last = +localStorage.getItem(FA_KEY) || 0; } catch (_) {}
-  if (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search)) return;
+  const force = /[?&]fad=1/.test(location.search);   // test link: yourhome.asia/?fad=1 shows it every time (skips the 3-day lock)
+  if (!force && (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search))) return;
   let tries = 0;
   const tryOpen = () => {
     if (document.hidden || !faOpen()) { if (++tries < 60) setTimeout(tryOpen, 2000); return; }   // busy → try again in 2 s

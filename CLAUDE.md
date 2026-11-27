@@ -260,7 +260,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   520px card, centred, content centred (.page-sup); the Telegram three-choice card is only as wide as its content (.tgch-opts,
   max-content, tighter rows) + ~10% room so the title never runs under the × (owner 09:43 / 09:44: min-width 262px, title padding-right 40px); 09:48 "középre igazítva és picit elnyújtva": title and
   choice texts CENTRED (icon left), min-width 300px, letter-spacing .012em; 09:49 "szűkítsd le 10%": min-width 270px. 09:51 "mint a menünél… fönt az, hogy close": NO round × – a full-width "✕ Close"
-  strip on top like the Menu list (.tgch-close, pale red, red text), centred title, the three choices inset 26px each side (a little
+  strip on top like the Menu list (.tgch-close, pale red, red text), centred title, the three choices inset 13px each side since 10:33 "szűkebb szélek, 50%" (title row 8px; a little
   narrower than the title row); card = max-content width. Boxes are sized to their content – no big empty right side.
 - PHONE BOXES = 25% FREE – BASE RULE (owner, 2026-11-26 08:02: "jobbról balról lentről 25% szabad hely kell, ez alap szabály"): on
   phones/tablets a popup box / small list leaves 25% of the screen free on the left, the right and below (language picker; picker.js

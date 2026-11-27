@@ -74,7 +74,8 @@ function img(u, w) {
 
 function org() {
   return { '@type': 'Organization', '@id': ORIGIN + '/#org', name: SITE, url: ORIGIN + '/', logo: ORIGIN + '/logo.png',
-    telephone: PHONE, email: EMAIL, address: { '@type': 'PostalAddress', addressLocality: 'Phnom Penh', addressCountry: 'KH' } };
+    telephone: PHONE, email: EMAIL, address: { '@type': 'PostalAddress', addressLocality: 'Phnom Penh', addressCountry: 'KH' },
+    sameAs: ['https://www.facebook.com/yourhomeasia', 'https://t.me/yourhomeasia'] };
 }
 function crumbs(list) {   // [[name, path], …] – Home first
   return { '@type': 'BreadcrumbList', itemListElement: list.map(([name, p], i) => ({ '@type': 'ListItem', position: i + 1, name, item: ORIGIN + p })) };

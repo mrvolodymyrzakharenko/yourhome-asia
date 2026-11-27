@@ -421,3 +421,6 @@ de: {"fa_title": "Immobilie kostenlos inserieren", "fa_line": "Vermieten oder ve
 hu: {"fa_title": "Hirdesd ingyen az ingatlanod", "fa_line": "Kiadás vagy eladás – azonnal megjelenik, díjmentesen.", "fa_go": "Hirdetés ingyen"}
 };
 for (const k of Object.keys(FA)) T[k] = Object.assign(T[k] || {}, FA[k]);
+// Phone header "+ Post" badge (owner 2026-11-27: "a post free… mobil nézetben")
+const FREE_TAG = {en:'FREE', km:'ឥតគិតថ្លៃ', zh:'免费', fr:'GRATUIT', th:'ฟรี', ru:'БЕСПЛАТНО', vi:'MIỄN PHÍ', ko:'무료', de:'GRATIS', cs:'ZDARMA', pl:'ZA DARMO', hu:'INGYEN', ja:'無料'};
+for (const k of Object.keys(FREE_TAG)) T[k] = Object.assign(T[k] || {}, {freeTag: FREE_TAG[k]});

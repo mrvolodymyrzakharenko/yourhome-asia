@@ -138,3 +138,13 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .hdr-post::before,.yft-post::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:inherit;pointer-events:none;animation:yh-ripple 2.8s ease-out infinite}
 @keyframes yh-ripple{0%{transform:scale(1);opacity:.3}100%{transform:scale(1.1,1.32);opacity:0}}
 @media (prefers-reduced-motion:reduce){.hdr-post::before,.yft-post::before{animation:none;opacity:0}}
+/* PHONE "FREE" BADGE (owner, 2026-11-27: "a post free még mindig nem jelenik meg mobil nézetben"): the phone header has no room
+   for "+ Post for free", so a small white badge with red "FREE" (freeTag, all 8 languages) sits on the top-right corner of the
+   red "+ Post" button – it takes no width. Phones only (where the short label shows). */
+.hp-free{display:none}
+@media (max-width:720px){
+  .hdr-post{overflow:visible}
+  .hdr-post .hp-free{display:block;position:absolute;top:-7px;right:-5px;z-index:2;font-style:normal;font-size:8.5px!important;font-weight:700!important;
+    line-height:1;letter-spacing:.02em;padding:2.5px 5px;border-radius:99px;background:#fff;color:var(--red,#E00025);
+    box-shadow:0 1px 4px rgba(224,0,37,.28);white-space:nowrap;pointer-events:none}
+}

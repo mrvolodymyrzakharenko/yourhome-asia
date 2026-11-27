@@ -8,6 +8,8 @@ Data lives in the shared Supabase project "eleon" (same as the Study and Work po
 never touch the Study tables. When a new standing rule is agreed with the owner, add it here.
 
 ## Working style
+- CSS CACHE: index.html loads styles.css / header.css / fonts.css with ?v=… – RAISE the version of every CSS file you change in the
+  same commit (lesson 2026-11-27: phones kept the old styles and the owner saw no change).
 - The owner writes in Hungarian; answer in Hungarian. Cambodia offers 8 languages (owner, 2026-11-26 13:30: German, Czech, Polish, Hungarian taken off, Vietnamese added; 13:34 Japanese taken off): English, Khmer, Chinese, French, Thai, Russian, Vietnamese, Korean (i18n.js T + NL + T.vi; agents.js TX; bot api/_tgx.js T). The de/cs/pl/hu/ja texts stay in the files for the later European portals but are not offered here (a stored de/cs/pl/hu/ja choice falls back to English). A NEW text key needs all 8 – a missing one falls back to English.
 - The owner tests live: finished work goes straight to production on yourhome.asia – no temporary preview links.
 - Design is approved: never change layout, classes or styles unless asked. Copy changes keep the design.
@@ -256,7 +258,7 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   alertModal() form.alm on phones = 72% of the screen (max 320px), centred, buttons share the row equally (end of styles.css).
 - NO EMPTY WHITE SPACE (owner, 2026-11-27 04:34: "mi ez a sok üres hely?… itt is mennyi fehér hely, ami nem kell"): /support = a
   520px card, centred, content centred (.page-sup); the Telegram three-choice card is only as wide as its content (.tgch-opts,
-  max-content, tighter rows) + ~10% room so the title never runs under the × (owner 09:43: min-width 250px, title padding-right 40px). Boxes are sized to their content – no big empty right side.
+  max-content, tighter rows) + ~10% room so the title never runs under the × (owner 09:43 / 09:44: min-width 262px, title padding-right 40px). Boxes are sized to their content – no big empty right side.
 - PHONE BOXES = 25% FREE – BASE RULE (owner, 2026-11-26 08:02: "jobbról balról lentről 25% szabad hely kell, ez alap szabály"): on
   phones/tablets a popup box / small list leaves 25% of the screen free on the left, the right and below (language picker; picker.js
   .ypk lists – end of styles.css). Contents get smaller or go two per row to fit. Exception: the two-column Type list (.ypk-all)

@@ -1542,6 +1542,6 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 .tgch.tgch-opts .tgch-x{top:9px;right:9px;width:24px;height:24px}
 /* 10% WIDER (owner, 2026-11-27 09:43 screenshot: "legyen 10%-kal szélesebb, mert az x rálóg"): more room on the right so the title
    never runs under the round × */
-.tgch.tgch-opts{min-width:250px;padding:12px 14px}
+.tgch.tgch-opts{min-width:262px;padding:12px 14px}
 .tgch.tgch-opts .tgch-h{padding-right:40px}
 .tgch.tgch-opts .tgch-o{padding-right:22px}

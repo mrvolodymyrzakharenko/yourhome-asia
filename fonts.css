@@ -109,7 +109,7 @@ label{font-weight:500}
 /* HERO TITLE NOT TOO HEAVY IN NON-LATIN LANGUAGES (owner, 2026-11-26 16:47, Russian screenshot: "ez túl vastag"): Plus Jakarta Sans
    has no Cyrillic / Khmer / CJK / Thai / Hangul, so those fall back to a system font where 800 = its Black cut. Use 700 there. */
 html:lang(ru) .hero h1,html:lang(ru) .hero h1 em,html:lang(km) .hero h1,html:lang(km) .hero h1 em,
-html:lang(zh) .hero h1,html:lang(zh) .hero h1 em,html:lang(th) .hero h1,html:lang(th) .hero h1 em,
+html:lang(zh) .hero h1,html:lang(zh) .hero h1 em,html:lang(th) .hero h1,html:lang(th) .hero h1 em,html:lang(ja) .hero h1,html:lang(ja) .hero h1 em,
 html:lang(ko) .hero h1,html:lang(ko) .hero h1 em{font-weight:700;letter-spacing:-.02em}
 /* TELEGRAM BOT POSTING (2026-11-27) – Study portal sizes */
 .tgb-c b,.tgch-o b{font-size:13px;font-weight:600;letter-spacing:-.025em}

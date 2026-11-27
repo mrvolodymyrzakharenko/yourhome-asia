@@ -17,7 +17,7 @@ const STATIC = {
   'how-it-works': ['How it works – search, contact, move in', 'How to find a home on YourHome.asia in three steps, and how owners and agents post for free, get verified and follow their statistics.', 'How it works', 'how'],
   safety: ['Safety tips for renting & buying in Cambodia', 'Never pay before a viewing, meet in person and check the documents – our safety tips for renting and buying property in Cambodia.', 'Safety tips'],
   faq: ['FAQ – questions and answers', 'Answers to common questions: free posting, contacting owners, the Verified badge, Telegram alerts, covered cities and reporting a listing.', 'FAQ'],
-  support: ['Contact us – support for renters & advertisers', 'Questions, feedback or a problem with a listing? Write to the YourHome.asia team on Telegram, WhatsApp, Viber or email – we reply quickly.', 'Contact us'],
+  support: ['Contact us – support for renters & advertisers', 'Questions, feedback or a problem with a listing? Write to the YourHome.asia team on Telegram, WhatsApp or email – we reply quickly.', 'Contact us'],
   terms: ['Terms and Conditions', 'The rules for using YourHome.asia: who publishes listings, free posting, TOP placements, removed listings and what advertisers must follow.', 'Terms and Conditions'],
   privacy: ['Privacy Policy', 'What YourHome.asia stores – account email, listings, messages and anonymous visit statistics – where it is kept and how to delete it.', 'Privacy Policy'],
   partners: ['Become a partner – agents, developers, services', 'Partner with YourHome.asia: agents and agencies, owners, developers, short-stay hosts and home-service companies across Cambodia. Apply online.', 'Become a partner'],

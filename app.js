@@ -1569,7 +1569,7 @@ const PAGES = {
     <ul class="ab-list"><li><b>For renters and buyers:</b> search by city, district, type, budget and amenities, save favourites and get new listings on Telegram.</li><li><b>For owners and agents:</b> post in two minutes, manage listings in a clear dashboard and see who viewed what and when.</li><li><b>For developers and partners:</b> present new projects, reach foreign and local buyers and work with us as a partner.</li></ul>
     <h2>Trust and safety</h2>
     <p>Advertisers can ask to be verified by our team with a short call – verified accounts get a ✓ badge. Visitors can report a listing at any time, and we hide listings that look misleading until we check them.</p>
-    <div class="ab-cta"><div><b>Have a question or want to work with us?</b><span>Write to us on Telegram, WhatsApp or Viber: +855 96 306 8590</span></div><div class="ab-btns"><a class="btn red" href="#/post">+ Post listing</a><a class="btn ghost" href="#/support">Contact us</a></div></div>
+    <div class="ab-cta"><div><b>Have a question or want to work with us?</b><span>Write to us on Telegram or WhatsApp: +855 96 306 8590</span></div><div class="ab-btns"><a class="btn red" href="#/post">+ Post listing</a><a class="btn ghost" href="#/support">Contact us</a></div></div>
   </div>`,
   how: () => `<div class="ab"><p class="ab-k">How it works</p><h1>Find, contact, move in – <em>in three steps</em></h1>
     <ol class="ab-steps"><li><b>Search</b><p>Choose Rent, Buy or Rooms, then the district, type and budget. Switch between the list and the map.</p></li><li><b>Contact</b><p>Open a listing and call, write on Telegram or WhatsApp, or send a message from the page – straight to the owner or agent.</p></li><li><b>Visit and decide</b><p>See the property in person, meet the owner and agree on the terms directly with them.</p></li></ol>
@@ -1577,14 +1577,14 @@ const PAGES = {
     <div class="ab-cta"><div><b>Ready to start?</b><span>Posting is free.</span></div><div class="ab-btns"><a class="btn red" href="#/post">+ Post listing</a><a class="btn ghost" href="#/search">Search homes</a></div></div></div>`,
   safety: () => `<div class="ab"><p class="ab-k">Safety tips</p><h1>Rent and buy <em>safely</em></h1>
     <ul class="ab-list"><li><b>Never pay before a viewing.</b> Do not send a deposit or rent before you have seen the property and met the owner or agent.</li><li><b>Meet in person.</b> Visit the address, check that keys, rooms and photos match the listing.</li><li><b>Get it in writing.</b> Ask for a written rental agreement with the price, deposit, utilities and the rental term.</li><li><b>Check who you deal with.</b> Prefer advertisers with the ✓ Verified badge and ask for the owner's or agent's ID or company details.</li><li><b>Report anything strange.</b> If a listing looks fake or the price is far too low, tell us – we check it and take it down if needed.</li></ul>
-    <div class="ab-cta"><div><b>Something wrong with a listing?</b><span>Write to us: +855 96 306 8590 (Telegram, WhatsApp, Viber)</span></div><div class="ab-btns"><a class="btn red" href="#/support">Contact us</a></div></div></div>`,
+    <div class="ab-cta"><div><b>Something wrong with a listing?</b><span>Write to us: +855 96 306 8590 (Telegram, WhatsApp)</span></div><div class="ab-btns"><a class="btn red" href="#/support">Contact us</a></div></div></div>`,
   faq: () => `<div class="ab"><p class="ab-k">FAQ</p><h1>Questions <em>and answers</em></h1>
     <details class="ab-q" open><summary>Is posting a listing free?</summary><p>Yes. Owners and agents post for free and the listing goes live at once. Paid TOP placement is optional and always marked TOP.</p></details>
     <details class="ab-q"><summary>How do I contact an owner or agent?</summary><p>Open the listing: you can call, write on Telegram or WhatsApp, or send a message from the page.</p></details>
     <details class="ab-q"><summary>What does the ✓ Verified badge mean?</summary><p>Our team talked to the advertiser in a short phone or video call. You can ask for it in your account – no ID upload is needed.</p></details>
     <details class="ab-q"><summary>Can I get new listings on Telegram?</summary><p>Yes. On the results page tap Subscribe (the Telegram logo) and we send you new listings that match your search.</p></details>
     <details class="ab-q"><summary>Which cities do you cover?</summary><p>Phnom Penh first; other Cambodian cities follow, and every listing already carries its city.</p></details>
-    <details class="ab-q"><summary>How do I report a listing?</summary><p>Write to us on Telegram, WhatsApp or Viber (+855 96 306 8590) or use the Support page – we check it quickly.</p></details>
+    <details class="ab-q"><summary>How do I report a listing?</summary><p>Write to us on Telegram or WhatsApp (+855 96 306 8590) or use the Support page – we check it quickly.</p></details>
     <div class="ab-cta"><div><b>Still have a question?</b><span>We usually reply within an hour.</span></div><div class="ab-btns"><a class="btn red" href="#/support">Contact us</a></div></div></div>`
 };
 

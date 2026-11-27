@@ -159,7 +159,6 @@ label{font-size:13px;font-weight:700;color:var(--muted);display:grid;gap:6px}
 .yft-ch:hover,.yft-ch:focus-visible{transform:translateY(-2px);box-shadow:0 10px 22px rgba(15,23,42,.18)}
 .yft-tg{background:linear-gradient(135deg,#37AEE2,#1E96C8)}
 .yft-wa{background:#25D366}
-.yft-vb{background:#7360F2}
 .yft-fb{background:#1877F2}
 .yft-ch[data-soon]{cursor:default}
 .yft-tip{position:absolute;bottom:calc(100% + 9px);left:50%;transform:translate(-50%,4px);padding:6px 10px;border-radius:8px;background:#0b1d51;color:#fff;font-style:normal;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:5}

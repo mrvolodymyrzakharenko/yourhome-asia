@@ -150,13 +150,13 @@ async function publish(chat, from, st, lg) {
     price: Number(d.price) || 0, bedrooms: d.beds != null ? Math.min(d.beds, 50) : null, bathrooms: d.baths || null, area_m2: d.area || null,
     city: d.city || 'Phnom Penh', district: d.district || null, title: d.title, description: String(d.text || '').slice(0, 5000),
     photos, amenities: d.amenities || [], furnished: !!d.furnished, contact_name: [from.first_name, from.last_name].filter(Boolean).join(' ').slice(0, 80) || null,
-    contact_telegram: from.username ? '@' + from.username : null, status: 'active',
+    contact_telegram: from.username ? '@' + from.username : null, status: 'active', source: 'bot',
   };
   let l;
   try { l = (await rest('yh_listings', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify(row) }))[0]; }
   catch (e) { return send(chat, '⚠️ ' + esc(String(e.message || e).slice(0, 200)) + '\n' + ORIGIN + '/post'); }
   await setState(chat, null);
-  return send(chat, tr(lg, 'published'), { reply_markup: { inline_keyboard: [[{ text: tr(lg, 'view'), url: ORIGIN + S.listingPath(l) }], [{ text: tr(lg, 'edit'), url: ORIGIN + '/edit/' + l.id }]] } });
+  return send(chat, tr(lg, 'published') + '\n\n' + tr(lg, 'fixHint'), { reply_markup: { inline_keyboard: [[{ text: tr(lg, 'view'), url: ORIGIN + S.listingPath(l) }], [{ text: tr(lg, 'edit'), url: ORIGIN + '/edit/' + l.id }]] } });
 }
 
 // ---------- CHANNEL → WEBSITE (owner, 2026-11-26: "ha saját csatornába feladja, ott akkor a weblapon meg tud jelenni?" – "rád bízom") ----------
@@ -217,7 +217,7 @@ async function importPost(imp, ag) {
     price: Number(p.price) || 0, bedrooms: p.beds != null ? Math.min(p.beds, 50) : null, bathrooms: p.baths || null, area_m2: p.area || null,
     city: p.city || 'Phnom Penh', district: p.district || null, title, description: text.slice(0, 5000),
     photos, amenities: p.amenities || [], furnished: !!p.furnished, contact_name: String(ag.name || '').slice(0, 80) || null,
-    contact_phone: ag.phone || null, contact_whatsapp: ag.whatsapp || null, contact_telegram: ag.telegram || null, status: 'hidden',
+    contact_phone: ag.phone || null, contact_whatsapp: ag.whatsapp || null, contact_telegram: ag.telegram || null, status: 'hidden', source: 'channel',
   };
   let l;
   try { l = (await rest('yh_listings', { method: 'POST', headers: { Prefer: 'return=representation' }, body: JSON.stringify(row) }))[0]; }
@@ -292,7 +292,7 @@ module.exports = async (req, res) => {
           if (im[1] === 'ip') {
             const l = ((await rest(`yh_listings?id=eq.${im[2]}`, { method: 'PATCH', headers: { Prefer: 'return=representation' }, body: JSON.stringify({ status: 'active', confirmed_at: now }) })) || [])[0];
             await rest(`yh_tg_imports?id=eq.${r.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'published', updated_at: now }) });
-            await send(chat, tr(lg, 'impDone'), l ? { reply_markup: { inline_keyboard: [[{ text: tr(lg, 'view'), url: ORIGIN + S.listingPath(l) }], [{ text: tr(lg, 'edit'), url: ORIGIN + '/edit/' + l.id }]] } } : undefined);
+            await send(chat, tr(lg, 'impDone') + '\n\n' + tr(lg, 'fixHint'), l ? { reply_markup: { inline_keyboard: [[{ text: tr(lg, 'view'), url: ORIGIN + S.listingPath(l) }], [{ text: tr(lg, 'edit'), url: ORIGIN + '/edit/' + l.id }]] } } : undefined);
           } else {
             await rest(`yh_listings?id=eq.${im[2]}&status=eq.hidden`, { method: 'DELETE' });
             await rest(`yh_tg_imports?id=eq.${r.id}`, { method: 'PATCH', body: JSON.stringify({ status: 'declined', updated_at: now }) });
@@ -334,7 +334,10 @@ module.exports = async (req, res) => {
       // a photo sent without starting /post = the person wants to post a listing
       if (!st && m.photo && !/^\//.test(text)) { st = { mode: 'post', photos: [], at: Date.now() }; await setState(chat, st); }
 
-      if (/^\/(start|help|menu)\b/.test(text)) {
+      // deep links from the website (owner, 2026-11-27): t.me/yourhomeasiabot?start=post → straight into posting
+      if (/^\/start\s+post\b/.test(text)) {
+        await setState(chat, { mode: 'post', photos: [], at: Date.now() }); await send(chat, tr(lg, 'postIntro'));
+      } else if (/^\/(start|help|menu)\b/.test(text)) {
         if (st) await setState(chat, null);
         await send(chat, tr(lg, 'welcome') + noUser, { reply_markup: menu(lg) });
       } else if (/^\/stop\b/.test(text)) {

@@ -161,7 +161,7 @@ const ICON = {
   map: '<svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2zM9 4v14M15 6v14"/></svg>',
   sliders: '<svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2"/><circle cx="10" cy="17" r="2"/></svg>',
 };
-const LISTING_COLS = 'id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id,contact_photo,period_note';
+const LISTING_COLS = 'source,id,owner_id,district,deal_type,property_type,title,price,price_period,bedrooms,bathrooms,area_m2,lat,lng,photos,status,is_featured,is_demo,created_at,contact_name,amenities,posted_by,address,city,contact_phone,contact_whatsapp,contact_telegram,agent_id,contact_photo,period_note';
 
 function applyStatic() {
   document.documentElement.lang = lang;
@@ -267,11 +267,16 @@ function tgCard() {
 }
 function tgCardFill(c) {
   const url = TG_CHANNEL ? 'https://t.me/' + TG_CHANNEL : '';
+  const ic = d => `<span class="tgch-oi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg></span>`;
+  const opt = (href, d, k) => `<a class="tgch-o" href="${href}" target="_blank" rel="noopener">${ic(d)}<span><b>${esc(t(k))}</b><small>${esc(t(k + 's'))}</small></span></a>`;
+  // THREE CHOICES (owner, 2026-11-27: "csatornára feliratkozhat, amikor oda kattint a Telegramra, és hirdetést adhat fel")
   c.innerHTML = `<button type="button" class="tgch-x" aria-label="${esc(t('close'))}"><svg class="xic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
-    <div class="tgch-h"><span class="tgch-ic"><svg viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.4 0 1.7l4.7 1.5 1.8 5.6c.2.6.9.8 1.4.4l2.6-2.1 5 3.7c.7.5 1.6.1 1.8-.7l3.1-14.9c.2-1-.8-1.8-1.8-1.4z"/></svg></span><b>${t('tgchTitle')}</b></div>
-    <p>${t('tgchLine')}</p>
-    ${url ? `<a class="tgch-go" href="${url}" target="_blank" rel="noopener">${t('tgchJoin')}</a><span class="tgch-n">@${esc(TG_CHANNEL)}</span>` : `<span class="tgch-n">${t('tgchSoon')}</span>`}`;
-  c.setAttribute('aria-label', t('tgchTitle'));
+    <div class="tgch-h"><span class="tgch-ic"><svg viewBox="0 0 24 24"><path d="M21.5 4.2 2.9 11.4c-1 .4-1 1.4 0 1.7l4.7 1.5 1.8 5.6c.2.6.9.8 1.4.4l2.6-2.1 5 3.7c.7.5 1.6.1 1.8-.7l3.1-14.9c.2-1-.8-1.8-1.8-1.4z"/></svg></span><b>${url ? t('tgoTitle') : t('tgchTitle')}</b></div>
+    ${url ? `${opt(url, '<path d="M4 10v4h3l5 4V6L7 10z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>', 'tgo1')}
+      ${opt('https://t.me/' + TG_BOT + '?start=post', '<path d="M12 5v14M5 12h14"/>', 'tgo2')}
+      ${opt('https://t.me/' + TG_BOT + '?start=search', '<circle cx="11" cy="11" r="6"/><path d="m20 20-4.5-4.5"/>', 'tgo3')}`
+      : `<p>${t('tgchLine')}</p><span class="tgch-n">${t('tgchSoon')}</span>`}`;
+  c.setAttribute('aria-label', url ? t('tgoTitle') : t('tgchTitle'));
 }
 function tgCardOpen(auto) {
   const c = tgCard(); tgCardFill(c); c.hidden = false;
@@ -281,9 +286,9 @@ function tgCardOpen(auto) {
 function tgCardClose() { const c = document.getElementById('tgch'); if (!c || c.hidden) return; c.classList.remove('on'); setTimeout(() => { c.hidden = true; }, 250); }
 document.addEventListener('click', e => {
   const b = e.target.closest('[data-tgch]');
-  // ONE CLICK (owner, 2026-11-25: "egyszerűbben egy klikkre"): with the channel set, the bottom-menu Telegram button and the
-  // footer icon open t.me/<channel> straight away (the Telegram app on phones); the card only appears by itself once per visitor
-  if (b && TG_CHANNEL) { e.preventDefault(); tgCardClose(); window.open('https://t.me/' + TG_CHANNEL, '_blank', 'noopener'); return; }
+  // (owner, 2026-11-27: the button opens the small card with three choices – channel · post in the bot · search in the bot –
+  // instead of going straight to the channel; a choice opens Telegram and closes the card)
+  if (e.target.closest('.tgch-o')) { setTimeout(tgCardClose, 50); return; }
   if (b) { e.preventDefault(); const c = document.getElementById('tgch'); c && !c.hidden ? tgCardClose() : tgCardOpen(); return; }
   const c = document.getElementById('tgch');
   if (c && !c.hidden && (e.target.closest('.tgch-x') || !c.contains(e.target))) tgCardClose();
@@ -588,12 +593,15 @@ window.yhSkel = skelRow;
 // CALL-TO-ACTION STRIPS BETWEEN THE LISTINGS (owner, 2026-11-25): a random strip (post a listing / daily rental / sale / room /
 // become a partner / post a project / get verified) after every 4–6 listings on phones and every 8–12 on PC/tablet –
 // never two of the same kind in a row. Texts CTA_V in i18n.js (cv_<key>, cvs_<key> = short phone line, cvb_<key> = button).
-const CTA_KINDS = [['rent', '#/post'], ['daily', '#/post'], ['sale', '#/post'], ['room', '#/post'], ['partner', '#/partners'], ['project', '#/partners?type=developers'], ['verify', '#/account?tab=settings&v=1']];
+const CTA_KINDS = [['tg', 'https://t.me/' + TG_BOT + '?start=post'], ['rent', '#/post'], ['daily', '#/post'], ['sale', '#/post'], ['room', '#/post'], ['partner', '#/partners'], ['project', '#/partners?type=developers'], ['verify', '#/account?tab=settings&v=1']];
 let ctaLast = '';
 function ctaStrip() {
   let k; do { k = CTA_KINDS[Math.floor(Math.random() * CTA_KINDS.length)]; } while (k[0] === ctaLast); ctaLast = k[0];
   const d = document.createElement('div'); d.className = 'cta cta-x cta-' + k[0];
-  d.innerHTML = `<div><span class="ic">+</span><span class="cta-l">${esc(t('cv_' + k[0]))}</span><span class="cta-s">${esc(t('cvs_' + k[0]))}</span></div><a href="${k[1]}" class="btn">${esc(t('cvb_' + k[0]))} →</a>`;
+  // 'tg' = post through the Telegram bot (owner, 2026-11-27) – opens @yourhomeasiabot in Telegram, with the Telegram plane as icon
+  const ext = /^https:/.test(k[1]);
+  const ic = k[0] === 'tg' ? '<span class="ic ic-tg"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#fff" d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5z"/></svg></span>' : '<span class="ic">+</span>';
+  d.innerHTML = `<div>${ic}<span class="cta-l">${esc(t('cv_' + k[0]))}</span><span class="cta-s">${esc(t('cvs_' + k[0]))}</span></div><a href="${k[1]}" class="btn"${ext ? ' target="_blank" rel="noopener"' : ''}>${esc(t('cvb_' + k[0]))} →</a>`;
   return d;
 }
 function placeCtas(root) {
@@ -634,6 +642,20 @@ function svcSection(all) {
     </div></div><div class="svc-g svc-g2"><div class="bh"><h2>${t('svcAcc')}</h2></div><div class="svc-row">
     ${card('c-stat', stats, 'svc5', '#/account?as=advertiser')}${card('c-own', own, 'svc6', '#/post')}
     </div></div></section>`;
+}
+// TELEGRAM BOT POSTING – 4 STEPS (owner, 2026-11-27: "a fő oldalon… a Telegram boton keresztül… ilyen 4 kártyára kiírva… mehet"):
+// homepage block after the third listing block – four white step cards (open the bot · send photos · one message · Publish), a blue
+// "Post on Telegram" button (→ @yourhomeasiabot?start=post) and "Or post on the website", plus the line that a wrong listing can be
+// fixed any time in the dashboard ("Telegram listings"). Texts tb* in i18n.js (TB, 8 languages), styles "TELEGRAM BOT POSTING".
+function tgBotSection() {
+  const bot = 'https://t.me/' + TG_BOT + '?start=post';
+  const SVt = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+  const plane = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.7 4.1 3.1 10.9c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 1.7 5.3c.2.6.1.8.7.8.5 0 .7-.2.9-.5l2.2-2.1 4.6 3.4c.8.5 1.4.2 1.6-.8l3-14.3c.3-1.2-.5-1.8-1.4-1.5z"/></svg>';
+  const icons = [plane, SVt('<rect x="3" y="6" width="18" height="14" rx="3"/><circle cx="12" cy="13" r="3.5"/><path d="M8 6l1.5-2h5L16 6"/>'), SVt('<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>'), SVt('<circle cx="12" cy="12" r="9"/><path d="m8 12.5 3 3 5-6"/>')];
+  return `<section class="tgb" aria-label="${esc(t('tbTitle'))}"><div class="bh"><h2>${t('tbTitle')}</h2></div>
+    <div class="tgb-row">${[1, 2, 3, 4].map(i => `<a class="tgb-c" href="${bot}" target="_blank" rel="noopener"><span class="tgb-n">${i}</span><span class="tgb-ic">${icons[i - 1]}</span><b>${t('tb' + i + 't')}</b><span class="tgb-s">${esc(t('tb' + i + 's'))}</span></a>`).join('')}</div>
+    <div class="tgb-btns"><a class="btn tgb-go" href="${bot}" target="_blank" rel="noopener">${plane}${t('tbGo')}</a><a class="btn ghost" href="#/post">${t('tbWeb')}</a></div>
+    <p class="tgb-fix">${t('tbFix')} <a href="#/account?tab=tglist">${t('dx_tgl')} →</a></p></section>`;
 }
 // MORE CITIES block (owner, 2026-11-26: "More cities blokk – ez is jó ötlet", vietrent screenshot): photo cards with a dark
 // fade, the city name and "N properties"; the four main cities always show (one row of 4), any other city with live
@@ -712,6 +734,7 @@ async function viewHome() {
   const b1 = b0.querySelector('section.block');
   if (b1) { b1.insertAdjacentHTML('afterend', svcSection(all));
     const al = b0.querySelector('[data-svc-alert]'); if (al) al.onclick = e => { e.preventDefault(); alertModal({ deal: getDeal() }); }; }
+  { const bl = b0.querySelectorAll(':scope > section.block:not(.cities)'); const at = bl[2] || bl[bl.length - 1]; if (at) at.insertAdjacentHTML('afterend', tgBotSection()); }
   const [prj, blog] = await Promise.all([PT.homeBlock(), BL.homeBlock()]);
   if (!b0.isConnected) return;
   if (prj) b0.insertAdjacentHTML('beforeend', prj);
@@ -1080,7 +1103,7 @@ async function viewAccount() {
   const SV = d => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   const DI = { overview: SV('<rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/>'),
     messages: SV('<path d="M3 13h5l1.5 3h5L16 13h5"/><path d="M5.5 5h13L21 13v6H3v-6z"/>'), stats: SV('<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>'),
-    listings: SV('<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>'), post: SV('<path d="M12 5v14M5 12h14"/>'), agent: SV('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>'),
+    listings: SV('<path d="M4 11 12 4l8 7v9h-5v-6H9v6H4z"/>'), tglist: SV('<path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/><path d="m9 13 8-6"/>'), post: SV('<path d="M12 5v14M5 12h14"/>'), agent: SV('<circle cx="12" cy="8" r="4"/><path d="M4 21c1.4-4 4.4-6 8-6s6.6 2 8 6"/>'),
     telegram: SV('<path d="M21 4 3 11l6 2 2 6 3-4 5 4z"/><path d="m9 13 8-6"/>'), settings: SV('<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/><path d="m9 12 2 2 4-4"/>'),
     back: SV('<path d="M19 12H5M11 6l-6 6 6 6"/>'), out: SV('<path d="M15 4h4v16h-4M10 8l-4 4 4 4M6 12h11"/>'), check: SV('<path d="m5 12 5 5 9-10"/>'), open: SV('<path d="M14 4h6v6M20 4l-9 9M19 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5"/>'),
     phone: SV('<path d="M5 3h4l2 5-2.5 1.5a11 11 0 0 0 6 6L16 13l5 2v4a2 2 0 0 1-2 2A17 17 0 0 1 3 5a2 2 0 0 1 2-2"/>'), wa: SV('<path d="M4 20l1.3-3.9A8 8 0 1 1 8 19z"/>'), mail: SV('<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/>'), shield: SV('<path d="M12 3 4.5 6v5.5c0 4.6 3.1 8.3 7.5 9.5 4.4-1.2 7.5-4.9 7.5-9.5V6z"/>') };
@@ -1088,10 +1111,14 @@ async function viewAccount() {
   const unread = inq.filter(i => !readSet.has(i.id));
   const live = mine.filter(l => l.status === 'active');
   const isAgent = ['agent', 'agency'].includes((user.user_metadata || {}).adv_kind), noProfile = !(myAgents || []).length;
-  const SECS = ['overview', 'messages', 'stats', 'listings', 'post', 'agent', 'telegram', 'settings'];
-  const secName = { overview: t('overview'), messages: t('inquiries'), stats: t('stats'), listings: t('my'), post: t('post'), agent: AG.label('myAgent'), telegram: t('tgAlerts'), settings: t('settings') };
+  // TELEGRAM LISTINGS (owner, 2026-11-27: "legyen egy olyan külön kocka, külön menü… a telegramos hirdetéseim"): listings posted through
+  // @yourhomeasiabot (source 'bot') or taken from the agent's own channel (source 'channel'), with Edit / status / delete, and the channel
+  // posts still waiting for approval (hidden) with a Publish button – a wrong listing is fixed here.
+  const tgl = mine.filter(l => l.source === 'bot' || l.source === 'channel'), tgWait = tgl.filter(l => l.source === 'channel' && l.status === 'hidden');
+  const SECS = ['overview', 'messages', 'stats', 'listings', 'tglist', 'post', 'agent', 'telegram', 'settings'];
+  const secName = { overview: t('overview'), messages: t('inquiries'), stats: t('stats'), listings: t('my'), tglist: t('dx_tgl'), post: t('post'), agent: AG.label('myAgent'), telegram: t('tgAlerts'), settings: t('settings') };
   const secSub = { overview: `${views.length} ${t('views').toLowerCase()}`, messages: unread.length ? `${unread.length} ${t('dx_unread')}` : `${inq.length}`, stats: `${uniq} ${t('dx_people')}`,
-    listings: `${live.length} ${t('dx_live')}`, post: t('dx_free'), agent: noProfile ? t('dx_create') : `${myAgents.length}`, telegram: alerts.length ? t('dx_on') : t('dx_off'),
+    listings: `${live.length} ${t('dx_live')}`, tglist: tgWait.length ? t('dx_tglWaitN').replace('{n}', tgWait.length) : t('dx_tglSub').replace('{n}', tgl.length), post: t('dx_free'), agent: noProfile ? t('dx_create') : `${myAgents.length}`, telegram: alerts.length ? t('dx_on') : t('dx_off'),
     settings: vState === 'done' ? '✓ ' + t('ad_verified') : vState === 'pending' ? '⏳' : t('v_title') };
   const panel = (title, inner, extra = '') => `<section class="apanel"><div class="aph"><h3>${title}</h3>${extra}</div>${inner}</section>`;
   const emptyB = x => `<div class="aempty">${x}</div>`;
@@ -1124,6 +1151,7 @@ async function viewAccount() {
       isAgent && noProfile && [t('r_agentStart'), t('r_agentStartSub'), '#/account?tab=agent', 'red', DI.agent],
       !mine.length && [t('dx_noListing'), t('postSub'), '#/post', 'red', DI.post],
       vState !== 'done' && vState !== 'pending' && [t('v_cardTitle'), t('v_cardSub'), '#/account?tab=settings&v=1', 'blue', DI.shield],
+      tgWait.length && [t('dx_tglWaitN').replace('{n}', tgWait.length), t('dx_tglWaitSub'), '#/account?tab=tglist', 'red', DI.tglist],
       mine.some(l => l.status === 'hidden') && [`${mine.filter(l => l.status === 'hidden').length} ${t('dx_hidden')}`, t('dx_hiddenSub'), '#/account?tab=listings', 'blue', DI.listings],
     ].filter(Boolean);
     const topL = Object.entries(views.reduce((mm, e) => (mm[e.listing_id] = (mm[e.listing_id] || 0) + 1, mm), {})).sort((a, b) => b[1] - a[1]).slice(0, 6);
@@ -1169,6 +1197,17 @@ async function viewAccount() {
         <div class="dx-lact"><select data-status="${l.id}" ${l.status === 'rejected' ? 'disabled' : ''}>${['active', 'hidden', l.deal_type === 'sale' ? 'sold' : 'rented', ...(l.status === 'rejected' ? ['rejected'] : [])].map(x => `<option value="${x}" ${l.status === x ? 'selected' : ''}>${t('s_' + x)}</option>`).join('')}</select>
         <a class="btn ghost sm" href="#/edit/${l.id}">${t('edit')}</a><button class="btn ghost sm" data-del="${l.id}">${t('del')}</button></div></div>`).join('')}</div>`
       : `${emptyB(t('noMine'))}<div style="text-align:center;margin-top:10px"><a class="btn red" href="#/post">+ ${t('post')}</a></div>`, `<a class="alink" href="#/post">+ ${t('post')}</a>`);
+  } else if (tab === 'tglist') {
+    const bot = 'https://t.me/' + TG_BOT + '?start=post';
+    const row = l => `<div class="arow dx-lrow"><a class="ath" href="#/l/${l.id}">${thumb(l)}</a><div style="min-width:0"><b>${esc(l.title)}</b>
+        <small><span class="atag t-${l.source === 'bot' ? 'blue' : 'red'}">${t(l.source === 'bot' ? 'dx_tglBot' : 'dx_tglCh')}</span> ${money(l.price)}${priceSuffix(l)} · ${esc(l.district || l.city || '')} · ${shortDate(l.created_at)}</small>
+        ${l.source === 'channel' && l.status === 'hidden' ? `<small style="color:var(--red);font-weight:600">${t('dx_tglWait')}</small>` : `<small>${views.filter(e => e.listing_id === l.id).length} ${t('views').toLowerCase()} · ${contacts.filter(e => e.listing_id === l.id).length} ${t('contacts').toLowerCase()} · ${inq.filter(i => i.listing_id === l.id).length} ✉</small>`}</div>
+        <div class="dx-lact">${l.source === 'channel' && l.status === 'hidden' ? `<button class="btn red sm" data-tgpub="${l.id}">${t('dx_tglPub')}</button>` : `<select data-status="${l.id}" ${l.status === 'rejected' ? 'disabled' : ''}>${['active', 'hidden', l.deal_type === 'sale' ? 'sold' : 'rented', ...(l.status === 'rejected' ? ['rejected'] : [])].map(x => `<option value="${x}" ${l.status === x ? 'selected' : ''}>${t('s_' + x)}</option>`).join('')}</select>`}
+        <a class="btn ghost sm" href="#/edit/${l.id}">${t('edit')}</a><button class="btn ghost sm" data-del="${l.id}">${t('del')}</button></div></div>`;
+    body = `${panel(t('dx_tgl'), `<p class="dx-tgi">${t('dx_tglIntro')}</p>
+        <div class="dx-tgb"><a class="btn tgb-go" href="${bot}" target="_blank" rel="noopener">${DI.tglist}${t('tbGo')}</a><a class="btn ghost" href="#/account?tab=agent">${t('dx_tglChan')}</a></div>`)}
+      ${tgWait.length ? panel(t('dx_tglWaitN').replace('{n}', tgWait.length), `<div class="alist">${tgWait.map(row).join('')}</div>`) : ''}
+      ${panel(`${t('dx_tgl')} · ${tgl.length}`, tgl.length ? `<div class="alist">${tgl.filter(l => !tgWait.includes(l)).map(row).join('')}</div>` : emptyB(t('dx_tglEmpty')))}`;
   } else if (tab === 'agent') {
     body = '<div id="agTab"></div>';
   } else if (tab === 'settings') {
@@ -1203,7 +1242,7 @@ async function viewAccount() {
     <div class="atop"><div class="atl"><span class="alogo">${DI.listings}</span><div><b>${t('hello')}, ${esc(user.user_metadata?.full_name || shownEmail(user))}</b><small>${t('dash')} · ${isAgent ? t('k_' + ((user.user_metadata || {}).adv_kind || 'agent')) : t('k_owner')}${vState === 'done' ? ' · ✓ ' + t('ad_verified') : ''}</small></div></div>
       <div class="atr dx-btns">${await adminCheck() ? `<a class="dxb" href="#/admin">${DI.shield}<span>Admin</span></a>` : ''}<a class="dxb" href="#/">${DI.back}<span>${esc(t('backSite').replace(/^←\s*/, ''))}</span></a><button class="dxb dxb-out" id="logout">${DI.out}<span>${esc(t('logout'))}</span></button></div></div>
     ${roleSwitch('advertiser')}
-    <nav class="acards" aria-label="${esc(t('dash'))}">${SECS.map(k => `<a href="${k === 'post' ? '#/post' : '#/account' + (k === 'overview' ? '' : '?tab=' + k)}" class="acard${tab === k ? ' on' : ''}${k === 'post' ? ' dx-post' : ''}"><span class="aci">${DI[k]}</span><b>${secName[k]}</b><small>${esc(secSub[k])}</small>${k === 'messages' && unread.length ? `<em class="abadge">${unread.length}</em>` : ''}</a>`).join('')}</nav>
+    <nav class="acards" aria-label="${esc(t('dash'))}">${SECS.map(k => `<a href="${k === 'post' ? '#/post' : '#/account' + (k === 'overview' ? '' : '?tab=' + k)}" class="acard${tab === k ? ' on' : ''}${k === 'post' ? ' dx-post' : ''}"><span class="aci">${DI[k]}</span><b>${secName[k]}</b><small>${esc(secSub[k])}</small>${k === 'messages' && unread.length ? `<em class="abadge">${unread.length}</em>` : ''}${k === 'tglist' && tgWait.length ? `<em class="abadge">${tgWait.length}</em>` : ''}</a>`).join('')}</nav>
     <div id="asec" class="asec">${body}</div></div>`;
   { const un = document.getElementById('dxUnread'); if (un) un.onclick = () => { readSet.delete(qs().get('m')); store.set('yh_inq_read', [...readSet]); go('#/account?tab=messages'); }; }
   app.querySelectorAll('[data-msg]').forEach(b => b.onclick = () => go('#/account?tab=messages&m=' + b.dataset.msg));
@@ -1228,6 +1267,7 @@ async function viewAccount() {
     if (error) return toast(t('error') + error.message);
     toast(t('v_sent'), 5000); route();
   };
+  app.querySelectorAll('[data-tgpub]').forEach(b => b.onclick = async () => { b.disabled = true; const { error } = await sb.from('yh_listings').update({ status: 'active' }).eq('id', b.dataset.tgpub); if (error) { b.disabled = false; return toast(t('error') + error.message); } toast(t('dx_tglDone')); viewAccount(); });
   app.querySelectorAll('[data-status]').forEach(s => s.onchange = async () => { const { error } = await sb.from('yh_listings').update({ status: s.value }).eq('id', s.dataset.status); toast(error ? t('error') + error.message : t('savedOk')); });
   app.querySelectorAll('[data-del]').forEach(b => b.onclick = async () => { if (!confirm(t('confirmDel'))) return; const { error } = await sb.from('yh_listings').delete().eq('id', b.dataset.del); if (error) return toast(t('error') + error.message); route(); });
   const tf = document.getElementById('tgform');
@@ -1462,7 +1502,7 @@ PT.init({ sb, app, t, esc, toast, digits, lang: () => lang });
 BL.init({ app, esc, t, lang: () => lang });
 // ADMIN DASHBOARD (owner, 2026-11-25) – admin.js loads only when /admin is opened
 let ADMP = null;
-const adminMod = () => ADMP || (ADMP = import('./admin.js?v=5').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
+const adminMod = () => ADMP || (ADMP = import('./admin.js?v=6').then(m => { m.init({ sb, app, esc, toast, qs, tgHandle, digits, imgSrc, money, priceSuffix, viewLogin, user: () => user, listingHref: l => '#/l/' + l.id, tgChannel: () => TG_CHANNEL, signOut: async () => { await sb.auth.signOut(); store.set('yh_next', 'admin'); viewLogin('admin'); } }); return m; }));
 const toggleSave = id => { let s = saved(); const on = !s.includes(id); s = on ? [id, ...s] : s.filter(x => x !== id); if (on) track({ id, status: 'active' }, 'save'); store.set('yh_saved', s.slice(0, 200)); document.querySelectorAll(`[data-save="${id}"]`).forEach(b => { b.classList.toggle('on', on);  }); return on; };
 POP.init({ sb, t, esc, money, priceSuffix, addrRows, tgHandle, digits, track, toast, facts: detailFacts, listingExtras: l => AG.listingExtras(l), isSaved, toggleSave, skipRoute: () => { skipNext = true; setTimeout(() => { skipNext = false; }, 400); }, route: () => route() });
 window.addEventListener('hashchange', () => { if (skipNext) { skipNext = false; return; } route(); });

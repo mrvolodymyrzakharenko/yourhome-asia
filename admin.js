@@ -6,7 +6,7 @@
 // yh_admin_visitors / yh_admin_users / yh_admin_mark / yh_admin_listing / yh_admin_agent / yh_admin_project / yh_admin_verify.
 let C = null;
 export function init(ctx) { C = ctx; }
-const S = { sec: 'overview', days: 30, data: null, loading: false, inbox: { f: 'all', q: '', open: null }, lst: { f: 'all', q: '' }, acc: { f: 'all', q: '' }, timer: null };
+const S = { sec: 'overview', days: 30, data: null, loading: false, inbox: { f: 'all', q: '', open: null }, lst: { f: 'all', q: '', agent: null }, acc: { f: 'all', q: '' }, timer: null };
 const $ = id => document.getElementById(id);
 const esc = s => C.esc(s);
 const SV = p => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${p}</svg>`;
@@ -77,18 +77,19 @@ async function load() {
   S.loading = true;
   const sb = C.sb, from = since(S.days), f90 = since(90);
   const q = (p) => p.then(r => r.error ? (console.warn(r.error), []) : (r.data || []));
-  const [listings, events, inq, leads, partners, verify, agents, alerts, projects, users, vis] = await Promise.all([
-    q(sb.from('yh_listings').select('id,owner_id,title,deal_type,property_type,price,price_period,period_note,city,district,photos,status,is_featured,is_demo,created_at,updated_at,contact_name,contact_phone,contact_telegram,agent_id').order('created_at', { ascending: false }).limit(2000)),
+  const [listings, events, inq, leads, partners, verify, agents, alerts, projects, users, vis, imports] = await Promise.all([
+    q(sb.from('yh_listings').select('id,owner_id,title,deal_type,property_type,price,price_period,period_note,city,district,photos,status,is_featured,is_demo,created_at,updated_at,contact_name,contact_phone,contact_telegram,agent_id,source').order('created_at', { ascending: false }).limit(2000)),
     q(sb.from('yh_events').select('listing_id,kind,visitor,source,device,lang,created_at').gte('created_at', f90).order('created_at', { ascending: false }).limit(20000)),
     q(sb.from('yh_inquiries').select('*').order('created_at', { ascending: false }).limit(1000)),
     q(sb.from('yh_project_leads').select('*').order('created_at', { ascending: false }).limit(1000)),
     q(sb.from('yh_partner_requests').select('*').order('created_at', { ascending: false }).limit(1000)),
     q(sb.from('yh_verify_requests').select('*').order('created_at', { ascending: false }).limit(1000)),
-    q(sb.from('yh_agents').select('id,owner_id,slug,name,kind,company,photo,phone,telegram,whatsapp,email,verified_at,created_at').order('created_at', { ascending: false }).limit(2000)),
+    q(sb.from('yh_agents').select('id,owner_id,slug,name,kind,company,photo,phone,telegram,whatsapp,email,verified_at,created_at,tg_channel,tg_import').order('created_at', { ascending: false }).limit(2000)),
     q(sb.from('yh_alerts').select('*').order('created_at', { ascending: false }).limit(2000)),
     q(sb.from('yh_projects').select('id,slug,name,developer,district,stage,price_from,photos,active,is_featured,is_demo,created_at').order('created_at', { ascending: false }).limit(500)),
     q(sb.rpc('yh_admin_users')),
     sb.rpc('yh_admin_visitors', { p_days: S.days, p_tz: Intl.DateTimeFormat().resolvedOptions().timeZone || 'Asia/Phnom_Penh' }).then(r => r.data || null),
+    q(sb.rpc('yh_admin_tg_imports')),   // posts taken from agents' own channels (api/tg-bot.js) – 2026-11-27
   ]);
   const L = Object.fromEntries(listings.map(l => [l.id, l])), P = Object.fromEntries(projects.map(p => [p.id, p]));
   const ev = events.filter(e => e.created_at >= from);
@@ -98,7 +99,7 @@ async function load() {
     ...partners.map(x => ({ kind: 'partner', id: x.id, at: x.created_at, name: x.name + (x.company ? ' · ' + x.company : ''), contact: [x.phone, x.telegram, x.email].filter(Boolean).join(' · '), phone: x.phone, telegram: x.telegram, email: x.email, text: x.message, status: x.status, read: !!x.admin_read_at, star: x.admin_star, note: x.admin_note, raw: x })),
     ...verify.map(x => ({ kind: 'verify', id: x.id, at: x.created_at, name: x.email || 'Advertiser', contact: x.contact, email: x.email, text: [x.method ? 'Method: ' + x.method : '', x.preferred_time ? 'Best time: ' + x.preferred_time : '', x.note || ''].filter(Boolean).join('\n'), status: x.status, read: !!x.admin_read_at, star: x.admin_star, note: x.admin_note, raw: x })),
   ].sort((a, b) => b.at.localeCompare(a.at));
-  S.data = { listings, L, events, ev, msgs, inq, leads, partners, verify, agents, alerts, projects, P, users, vis, from, at: new Date() };
+  S.data = { listings, L, events, ev, msgs, inq, leads, partners, verify, agents, alerts, projects, P, users, vis, imports, from, at: new Date() };
   S.loading = false;
 }
 
@@ -192,9 +193,9 @@ function draw(keepScroll) {
     accounts: `${d.users.length} accounts`,
     agents: c.verifyWait ? `${c.verifyWait} waiting` : `${d.agents.length} profiles`,
     partners: c.partnerNew ? `${c.partnerNew} new` : `${d.projects.length} projects`,
-    telegram: `${d.alerts.filter(a => a.active !== false).length} subscribers`,
+    telegram: `${d.listings.filter(l => l.source === 'bot' || l.source === 'channel').length} listings · ${d.alerts.filter(a => a.active !== false).length} alerts`,
   };
-  const badge = { live: v.now || 0, inbox: c.unread, agents: c.verifyWait, partners: c.partnerNew };
+  const badge = { live: v.now || 0, inbox: c.unread, agents: c.verifyWait, partners: c.partnerNew, telegram: d.imports.filter(i => i.status === 'asked').length };
   C.app.innerHTML = `<div class="wrap adm">
     <div class="atop">
       <div class="atl"><span class="alogo">${I.agents}</span><div><b>YourHome Admin</b><small>Updated ${d.at.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })} · <span class="alive"><i></i>${fmt(v.now || 0)} online now</span></small></div></div>
@@ -230,6 +231,7 @@ SEC.overview = () => {
     c.unread && [`${c.unread} unread message${c.unread > 1 ? 's' : ''}`, 'Open the reader', 'inbox:unread', 'red', I.inbox],
     c.verifyWait && [`${c.verifyWait} verification request${c.verifyWait > 1 ? 's' : ''}`, 'Call or message, then mark verified', 'agents', 'blue', I.agents],
     c.partnerNew && [`${c.partnerNew} new partner request${c.partnerNew > 1 ? 's' : ''}`, 'Agencies, developers, services', 'inbox:partner', 'blue', I.partners],
+    d.imports.filter(i => i.status === 'asked').length && [`${d.imports.filter(i => i.status === 'asked').length} channel post(s) waiting for the agent's approval`, 'Telegram → posts from agents’ channels', 'telegram', 'blue', I.telegram],
     d.listings.filter(l => l.is_demo).length && [`${d.listings.filter(l => l.is_demo).length} demo listings still live`, 'Delete them when real listings come in', 'listings:demo', 'grey', I.listings],
   ].filter(Boolean);
   const topL = Object.entries(views.reduce((m, e) => (m[e.listing_id] = (m[e.listing_id] || 0) + 1, m), {})).sort((a, b) => b[1] - a[1]).slice(0, 6);
@@ -359,8 +361,12 @@ SEC.listings = () => {
   const d = S.data, st = S.lst, ls = d.listings, q = st.q.trim().toLowerCase();
   const ev = d.ev, cnt = (id, k) => ev.filter(e => e.listing_id === id && (k === 'c' ? ['phone', 'telegram', 'whatsapp'].includes(e.kind) : e.kind === k)).length;
   const inq = id => d.inq.filter(i => i.listing_id === id).length;
-  const F = { all: () => true, active: l => l.status === 'active', hidden: l => l.status === 'hidden' || l.status === 'rejected', done: l => l.status === 'rented' || l.status === 'sold', top: l => l.is_featured, demo: l => l.is_demo, real: l => !l.is_demo };
-  const list = ls.filter(F[st.f] || F.all).filter(l => !q || [l.title, l.district, l.city, l.contact_name, l.contact_phone, l.property_type].join(' ').toLowerCase().includes(q));
+  const F = { all: () => true, active: l => l.status === 'active', hidden: l => l.status === 'hidden' || l.status === 'rejected', done: l => l.status === 'rented' || l.status === 'sold', top: l => l.is_featured, demo: l => l.is_demo, real: l => !l.is_demo, tg: l => l.source === 'bot' || l.source === 'channel' };
+  // AGENT FILTER (owner, 2026-11-27: "az admin dashboardon én is lássam az ügynököket, és lássam a hirdetéseiket"): Verification →
+  // a profile's "Listings" button opens this list with only that agent's listings (its profile or the same account)
+  const ag = st.agent && d.agents.find(a => a.id === st.agent);
+  const byAg = l => !ag || l.agent_id === ag.id || l.owner_id === ag.owner_id;
+  const list = ls.filter(byAg).filter(F[st.f] || F.all).filter(l => !q || [l.title, l.district, l.city, l.contact_name, l.contact_phone, l.property_type].join(' ').toLowerCase().includes(q));
   const owner = id => d.users.find(u => u.id === id);
   return `<div class="akpis">
       ${tile(ls.filter(F.active).length, 'Live', 'visible on the site', 'blue', 'listings:active')}
@@ -369,12 +375,13 @@ SEC.listings = () => {
       ${tile(ls.filter(F.demo).length, 'Demo listings', 'delete at launch', 'grey', 'listings:demo')}
     </div>
     ${panel('All listings', `<div class="aitools"><input id="alq" type="search" placeholder="Search title, district, contact…" value="${esc(st.q)}">
-      <div class="apills">${pill(st.f === 'all', 'all', 'All', ls.length)}${pill(st.f === 'active', 'active', 'Live', ls.filter(F.active).length)}${pill(st.f === 'hidden', 'hidden', 'Hidden', ls.filter(F.hidden).length)}${pill(st.f === 'done', 'done', 'Rented / sold', ls.filter(F.done).length)}${pill(st.f === 'top', 'top', 'TOP', ls.filter(F.top).length)}${pill(st.f === 'demo', 'demo', 'Demo', ls.filter(F.demo).length)}</div></div>
+      <div class="apills">${pill(st.f === 'all', 'all', 'All', ls.length)}${pill(st.f === 'active', 'active', 'Live', ls.filter(F.active).length)}${pill(st.f === 'hidden', 'hidden', 'Hidden', ls.filter(F.hidden).length)}${pill(st.f === 'done', 'done', 'Rented / sold', ls.filter(F.done).length)}${pill(st.f === 'top', 'top', 'TOP', ls.filter(F.top).length)}${pill(st.f === 'demo', 'demo', 'Demo', ls.filter(F.demo).length)}${pill(st.f === 'tg', 'tg', 'Telegram', ls.filter(F.tg).length)}</div></div>
+      ${ag ? `<div class="awarn">Showing only the listings of <b>${esc(ag.name)}</b>${ag.company ? ' · ' + esc(ag.company) : ''} (${ls.filter(byAg).length}). <button class="btn ghost sm" id="alAgOff">Show all listings</button></div>` : ''}
       ${st.f === 'demo' && list.length ? `<div class="awarn">Demo listings are samples. When real listings are live you can remove them all at once. <button class="btn ghost sm" id="alDemo">${I.trash} Delete all ${list.length} demo listings</button></div>` : ''}
       <div class="alcards">${list.length ? list.map(l => { const o = owner(l.owner_id); return `<div class="alc">
         <a class="alcp" href="${C.listingHref(l)}">${thumb(l)}${l.is_featured ? '<i class="atop1">TOP</i>' : ''}${l.is_demo ? '<i class="ademo">DEMO</i>' : ''}</a>
         <div class="alcb"><b>${esc(l.title)}</b><small>${esc(DEAL(l))} · ${esc(l.district || l.city || '')} · ${C.money(l.price)}${C.priceSuffix(l)}</small>
-          <small class="amut">${esc(o?.email || l.contact_name || 'Owner')} · ${when(l.created_at)}</small>
+          <small class="amut">${l.source === 'bot' ? '<span class="atag t-blue">Telegram bot</span> ' : l.source === 'channel' ? '<span class="atag t-red">Agent channel</span> ' : ''}${esc((d.agents.find(a => a.id === l.agent_id) || {}).name || o?.email || l.contact_name || 'Owner')} · ${when(l.created_at)}</small>
           <div class="alcs"><span title="Views ${PERIODS.find(p => p[0] === S.days)[1]}">${I.visitors}${cnt(l.id, 'view')}</span><span title="Contact clicks">${I.phone}${cnt(l.id, 'c')}</span><span title="Messages">${I.msg}${inq(l.id)}</span><span title="Saved">${I.star}${cnt(l.id, 'save')}</span></div></div>
         <div class="alca"><select data-lst="${l.id}" aria-label="Status">${['active', 'hidden', 'rented', 'sold', 'rejected'].map(s => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${({ active: 'Live', hidden: 'Hidden', rented: 'Rented', sold: 'Sold', rejected: 'Rejected' })[s]}</option>`).join('')}</select>
           <button class="atb${l.is_featured ? ' on' : ''}" data-top="${l.id}">${I.top}<span>${l.is_featured ? 'TOP on' : 'Make TOP'}</span></button>
@@ -382,6 +389,7 @@ SEC.listings = () => {
 };
 BIND.listings = root => {
   const st = S.lst;
+  const off = $('alAgOff'); if (off) off.onclick = () => { st.agent = null; $('asec').innerHTML = SEC.listings(); BIND.listings(root); };
   const q = $('alq'); if (q) q.oninput = () => { st.q = q.value; const pos = q.selectionStart; $('asec').innerHTML = SEC.listings(); BIND.listings(root); const n = $('alq'); n.focus(); n.setSelectionRange(pos, pos); };
   root.querySelectorAll('.apanel [data-f]').forEach(b => b.onclick = () => { st.f = b.dataset.f; redraw(); });
   const L = S.data.L, rpc = async (args, msg) => { const { error } = await C.sb.rpc('yh_admin_listing', args); if (error) { C.toast('Error: ' + error.message); return false; } if (msg) C.toast(msg); return true; };
@@ -430,14 +438,15 @@ SEC.agents = () => {
       ${tile(d.agents.filter(a => a.kind === 'agency').length, 'Agencies', `${d.agents.filter(a => a.kind === 'agent').length} agents · ${d.agents.filter(a => a.kind === 'owner').length} owners`, 'blue')}
     </div>
     ${panel(`Verification requests – waiting (${pend.length})`, pend.length ? `<div class="alist">${pend.map(vrow).join('')}</div>` : `<div class="aok">${I.check} No request is waiting.</div>`)}
-    ${panel('Agent & agency profiles', d.agents.length ? `<div class="alist">${d.agents.map(a => `<div class="arow"><span class="aav">${a.photo && /^https:/.test(a.photo) ? `<img src="${esc(a.photo)}" alt="">` : esc((a.name || '?')[0])}</span><div><b>${esc(a.name)}${a.verified_at ? ' <i class="aver">✓ Verified</i>' : ''}</b><small>${esc(a.kind || '')}${a.company ? ' · ' + esc(a.company) : ''} · ${d.listings.filter(l => l.agent_id === a.id).length} listings · ${when(a.created_at)}</small></div>
-      <div class="aaca"><a class="atb" href="#/agent/${esc(a.slug)}">${I.open}<span>Open profile</span></a><button class="btn ${a.verified_at ? 'ghost' : 'blue'} sm" data-agv="${a.id}" data-on="${a.verified_at ? 1 : 0}">${a.verified_at ? 'Remove ✓' : '✓ Verify'}</button></div></div>`).join('')}</div>` : empty('No agent profiles yet'))}
+    ${panel('Agents, agencies and their listings', d.agents.length ? `<div class="alist">${d.agents.map(a => `<div class="arow"><span class="aav">${a.photo && /^https:/.test(a.photo) ? `<img src="${esc(a.photo)}" alt="">` : esc((a.name || '?')[0])}</span><div><b>${esc(a.name)}${a.verified_at ? ' <i class="aver">✓ Verified</i>' : ''}</b><small>${esc(a.kind || '')}${a.company ? ' · ' + esc(a.company) : ''} · ${d.listings.filter(l => l.agent_id === a.id || l.owner_id === a.owner_id).length} listings (${d.listings.filter(l => (l.agent_id === a.id || l.owner_id === a.owner_id) && l.status === 'active').length} live) · ${when(a.created_at)}</small>${a.tg_channel ? `<small class="amut"><a href="https://t.me/${esc(a.tg_channel.replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(a.tg_channel)}</a>${a.tg_import ? ' · channel → website on' : ''}</small>` : ''}</div>
+      <div class="aaca">${contactLinks({ phone: a.phone, telegram: a.telegram, whatsapp: a.whatsapp, email: a.email })}<button class="atb" data-agl="${a.id}">${I.listings}<span>Listings</span></button><a class="atb" href="#/agent/${esc(a.slug)}">${I.open}<span>Open profile</span></a><button class="btn ${a.verified_at ? 'ghost' : 'blue'} sm" data-agv="${a.id}" data-on="${a.verified_at ? 1 : 0}">${a.verified_at ? 'Remove ✓' : '✓ Verify'}</button></div></div>`).join('')}</div>` : empty('No agent profiles yet'))}
     ${done.length ? panel('Decided requests', `<div class="alist">${done.slice(0, 30).map(vrow).join('')}</div>`) : ''}`;
 };
 BIND.agents = root => {
   const act = ok => async e => { const b = e.currentTarget; b.disabled = true; const { error } = await C.sb.rpc('yh_admin_verify', { p_id: b.dataset.vok || b.dataset.vno, p_ok: ok }); if (error) { b.disabled = false; return C.toast('Error: ' + error.message); } await load(); C.toast(ok ? 'Verified ✓' : 'Rejected'); redraw(); };
   root.querySelectorAll('[data-vok]').forEach(b => b.onclick = act(true));
   root.querySelectorAll('[data-vno]').forEach(b => b.onclick = act(false));
+  root.querySelectorAll('[data-agl]').forEach(b => b.onclick = () => { S.lst.agent = b.dataset.agl; S.lst.f = 'all'; S.sec = 'listings'; draw(); $('asec')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   root.querySelectorAll('[data-agv]').forEach(b => b.onclick = async () => { const on = b.dataset.on === '1'; const { error } = await C.sb.rpc('yh_admin_agent', { p_id: b.dataset.agv, p_verified: !on }); if (error) return C.toast('Error: ' + error.message); await load(); C.toast(on ? 'Badge removed' : 'Verified ✓'); redraw(); });
 };
 
@@ -468,23 +477,33 @@ BIND.partners = root => {
 
 // ================= TELEGRAM =================
 SEC.telegram = () => {
-  const d = S.data, al = d.alerts, ch = C.tgChannel();
+  const d = S.data, al = d.alerts, ch = C.tgChannel(), per = PERIODS.find(p => p[0] === S.days)[1].toLowerCase();
+  // TELEGRAM LISTINGS (owner, 2026-11-27: "az admin dashboardra is be kéne rakni, mindenképpen"): listings posted through the bot,
+  // posts taken from agents' own channels (yh_tg_imports via RPC yh_admin_tg_imports), connected agent channels, alert subscribers
+  const tgl = d.listings.filter(l => l.source === 'bot' || l.source === 'channel'), inPer = l => l.created_at >= d.from;
+  const wait = d.imports.filter(i => i.status === 'asked'), chans = d.agents.filter(a => a.tg_channel);
   const kinds = Object.entries(al.reduce((m, a) => (m[a.kind] = (m[a.kind] || 0) + 1, m), {})).map(([k, n]) => ({ k: ({ my_messages: 'Advertisers: new messages', new_listings: 'Seekers: new listing alerts' })[k] || k, n }));
   const step = (done, t, s) => `<div class="astep${done ? ' ok' : ''}"><span>${done ? I.check : ''}</span><div><b>${t}</b><small>${s}</small></div></div>`;
+  const ST = { asked: ['Waiting for the agent', 'red'], published: ['Published', 'blue'], declined: ['Not published', 'grey'], skipped: ['Skipped – no price', 'grey'], failed: ['Not sent', 'grey'], open: ['Arriving…', 'grey'], working: ['Processing…', 'grey'] };
+  const agName = l => (d.agents.find(a => a.id === l.agent_id) || {}).name || l.contact_name || (d.users.find(u => u.id === l.owner_id) || {}).email || 'Owner';
   return `<div class="akpis">
-      ${tile(ch ? '@' + esc(ch) : '–', 'Channel', ch ? 'live on the site' : 'not set yet', ch ? 'blue' : 'grey')}
+      ${tile(tgl.filter(l => l.source === 'bot' && inPer(l)).length, 'Posted via the bot', `${per} · ${tgl.filter(l => l.source === 'bot').length} in all`, 'blue', 'listings:tg')}
+      ${tile(tgl.filter(l => l.source === 'channel' && inPer(l)).length, 'From agents’ channels', `${per} · ${tgl.filter(l => l.source === 'channel').length} in all`, 'blue', 'listings:tg')}
+      ${tile(wait.length, 'Waiting for approval', 'channel posts the agent has not answered', wait.length ? 'red' : 'grey')}
+      ${tile(chans.length, 'Agent channels', `${chans.filter(a => a.tg_import).length} send posts to the site`, 'blue', 'agents')}
+      ${tile(ch ? '@' + esc(ch) : '–', 'Central channel', ch ? 'live on the site' : 'not set yet', ch ? 'blue' : 'grey')}
       ${tile(al.length, 'Alert requests', `${al.filter(a => a.active !== false).length} active`, 'red')}
-      ${tile(al.filter(a => a.kind === 'new_listings').length, 'Listing alerts', 'seekers waiting for homes', 'blue')}
-      ${tile(al.filter(a => a.kind === 'my_messages').length, 'Message alerts', 'advertisers', 'blue')}
     </div>
+    ${panel(`Listings from Telegram (${tgl.length})`, tgl.length ? `<div class="atable"><table><tr><th>When</th><th>Listing</th><th>From</th><th>Agent / owner</th><th>Status</th><th></th></tr>${tgl.slice(0, 200).map(l => `<tr><td>${when(l.created_at)}</td><td class="tp"><a href="${C.listingHref(l)}">${esc(l.title)}</a><br><small class="amut">${C.money(l.price)}${C.priceSuffix(l)} · ${esc(l.district || l.city || '')}</small></td><td><span class="atag t-${l.source === 'bot' ? 'blue' : 'red'}">${l.source === 'bot' ? 'Bot' : 'Agent channel'}</span></td><td>${esc(agName(l))}</td><td>${esc(({ active: 'Live', hidden: l.source === 'channel' ? 'Waiting' : 'Hidden', rented: 'Rented', sold: 'Sold', rejected: 'Rejected' })[l.status] || l.status)}</td><td><a class="atb" href="#/edit/${l.id}">${I.open}<span>Edit</span></a></td></tr>`).join('')}</table></div>` : empty('No listings from Telegram yet – they appear here as soon as someone posts through @yourhomeasiabot'))}
+    ${panel(`Posts from agents’ channels (${d.imports.length})`, d.imports.length ? `<div class="atable"><table><tr><th>When</th><th>Channel</th><th>Agent</th><th>Photos</th><th>Status</th><th></th></tr>${d.imports.slice(0, 200).map(i => `<tr><td>${when(i.created_at)}</td><td><a href="https://t.me/${esc(String(i.channel).replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(i.channel)}</a></td><td>${esc(i.agent_name || '–')}</td><td>${i.photos}</td><td><span class="atag t-${(ST[i.status] || ['', 'grey'])[1]}">${esc((ST[i.status] || [i.status])[0])}</span>${i.note && i.status !== 'published' ? `<br><small class="amut">${esc(i.note)}</small>` : ''}</td><td>${i.listing_id && d.L[i.listing_id] ? `<a class="atb" href="${C.listingHref(d.L[i.listing_id])}">${I.open}<span>Open</span></a>` : ''}</td></tr>`).join('')}</table></div>` : empty('No channel posts yet – an agent switches this on in the profile (“Show my channel posts on the website too”)'))}
     <div class="agrid2">
       ${panel('Telegram setup', `<div class="asteps">
-        ${step(!!ch, 'Central channel', ch ? `t.me/${esc(ch)} – the bottom menu and footer button point here` : 'Create the channel, send me its @username – the site’s Telegram buttons switch on at once')}
-        ${step(false, 'YourHome bot', 'Posts every new listing to the central channel and to the agent’s own channel, sends the alerts below and alerts you about new messages')}
-        ${step(al.length > 0, 'Alert requests are being collected', 'Saved now – sent as soon as the bot is connected')}
-        ${step(false, 'Admin alerts to your Telegram', 'New message, partner request, verification request, new listing → straight to your phone')}
+        ${step(!!ch, 'Central channel', ch ? `t.me/${esc(ch)} – every new listing is posted there` : 'Create the channel and set its @username')}
+        ${step(true, 'YourHome bot @yourhomeasiabot', 'Posting through the bot, search, alerts, “still available?”, agents’ channels both ways')}
+        ${step(true, 'Admin alerts to your Telegram', 'New listing, message, partner request, verification request → your phone')}
+        ${step(chans.length > 0, 'Agents’ own channels', chans.length ? chans.map(a => esc(a.tg_channel)).join(' · ') : 'No agent has connected a channel yet')}
       </div>`)}
-      ${panel('Requests by type', bars(kinds, 'n', 'k', 6))}
+      ${panel('Alert requests by type', bars(kinds, 'n', 'k', 6))}
     </div>
     ${panel('Alert subscribers', al.length ? `<div class="atable"><table><tr><th>When</th><th>Telegram</th><th>Type</th><th>Filters</th><th>Status</th></tr>${al.map(a => `<tr><td>${when(a.created_at)}</td><td>${a.telegram ? `<a href="https://t.me/${esc(String(a.telegram).replace(/^@/, ''))}" target="_blank" rel="noopener">${esc(a.telegram)}</a>` : '–'}</td><td>${esc(({ my_messages: 'New messages', new_listings: 'New listings' })[a.kind] || a.kind)}</td><td class="tp">${esc(a.filters ? Object.entries(a.filters).filter(([, v]) => v !== '' && v != null).map(([k, v]) => k + ': ' + v).join(' · ') : '')}</td><td>${a.active === false ? 'Paused' : 'Active'}</td></tr>`).join('')}</table></div>` : empty('No Telegram alert requests yet'))}`;
 };

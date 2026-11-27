@@ -1484,3 +1484,36 @@ body.hfit1 .hdr .lang-btn{max-width:none!important;padding-left:9px!important;pa
 /* blog article in another language: a small note that the article text is English for now (owner, 2026-11-26 14:01) */
 .bart .bl-en{margin:-4px 0 10px;padding:7px 12px;border-radius:10px;background:#F1F4FA;color:#5B6478;font-size:12px}
 .page .ab-note{color:#8A93A6;font-size:12px;margin-top:14px}
+
+/* TELEGRAM BOT POSTING (owner, 2026-11-27: "a fő oldalon… a Telegram boton keresztül… 4 kártyára… mehet"): homepage 4-step block
+   (tgBotSection() in app.js) – the services cards' look; the Telegram button card's three choices (.tgch-o); the Telegram CTA strip icon;
+   the dashboard "Telegram listings" intro */
+.tgb{margin:8px 0 36px}
+.tgb-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.tgb-c{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:20px 14px 16px;text-decoration:none;color:var(--ink);box-shadow:0 1px 3px rgba(15,23,42,.04);transition:transform .2s,box-shadow .2s}
+.tgb-c:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(3,46,161,.12)}
+.tgb-c:hover b{color:var(--blue)}
+.tgb-n{position:absolute;top:10px;left:12px;min-width:22px;height:22px;padding:0 6px;border-radius:99px;background:#FDECEF;color:var(--red);font-size:12px;font-weight:600;display:grid;place-items:center}
+.tgb-ic{width:46px;height:46px;border-radius:50%;background:#EEF2FC;color:var(--blue);display:grid;place-items:center;margin-bottom:2px}
+.tgb-ic svg{width:22px;height:22px}
+.tgb-c:first-child .tgb-ic{background:#229ED9;color:#fff}
+.tgb-c:last-child .tgb-ic{background:#FDECEF;color:var(--red)}
+.tgb-s{font-size:12px;color:var(--muted);line-height:1.4}
+.tgb-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.tgb-go{background:#229ED9;color:#fff;border-color:#229ED9}
+.tgb-go:hover{background:#1C8FC4}
+.tgb-go svg{width:16px;height:16px}
+.tgb-fix{margin:12px 0 0;text-align:center;font-size:12px;color:var(--muted)}
+.tgb-fix a{color:var(--blue);font-weight:600;text-decoration:none;white-space:nowrap}
+@media (max-width:720px){.tgb-row{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.tgb-c{padding:16px 10px 12px;border-radius:22px}.tgb-btns .btn{flex:1 1 0;min-width:0}}
+.tgch-o{display:flex;align-items:center;gap:10px;padding:9px 10px;border:1px solid var(--line);border-radius:12px;text-decoration:none;color:var(--ink);transition:border-color .15s,background .15s}
+.tgch-o:hover{border-color:#229ED9;background:#F4FAFE}
+.tgch-oi{width:30px;height:30px;flex:none;border-radius:50%;background:#E8F5FC;color:#229ED9;display:grid;place-items:center}
+.tgch-oi svg{width:16px;height:16px}
+.tgch-o b{display:block;font-size:13px;font-weight:600;line-height:1.3}
+.tgch-o small{display:block;font-size:12px;color:var(--muted);line-height:1.3}
+.cta .ic.ic-tg{background:#229ED9}
+.cta .ic.ic-tg svg{width:15px;height:15px;display:block;margin:auto}
+.dx-tgi{margin:0 0 12px;font-size:13px;color:var(--muted);line-height:1.5}
+.dx-tgb{display:flex;gap:10px;flex-wrap:wrap}
+.dx-tgb .btn svg{width:16px;height:16px}

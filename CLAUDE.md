@@ -557,8 +557,26 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   6) PRICE DROPS – trigger yh_price_drop logs a cheaper live listing in yh_price_drops → alert subscribers whose search matches get it once.
   7) LANGUAGES – the bot answers in all 12 site languages (en, km, zh, fr, th, ru, de, cs, pl, hu, ko, ja) by the person's Telegram language (T in api/_tgx.js).
   8) DAILY DIGEST – from 19:00 Cambodia time, if 3+ new listings in 24 h: "Today's new homes" list post in the channel (once a day).
-  ONE CLICK TO JOIN (owner, 2026-11-25: "egyszerűbben egy klikkre"): the bottom-menu Telegram button and the footer Telegram icon
-  open t.me/yourhomeasia directly (new tab / the Telegram app) – no card in between; the card still opens by itself once per visitor.
+  TELEGRAM BUTTON = THREE CHOICES (owner, 2026-11-27: "csatornára feliratkozhat, amikor oda kattint a Telegramra, és hirdetést adhat
+  fel… mehet"; replaces the 2026-11-25 one-click rule): the bottom-menu Telegram button and the footer Telegram icon open the small
+  .tgch card "YourHome on Telegram" with Join our channel (t.me/yourhomeasia) · Post a listing in the bot (t.me/yourhomeasiabot?start=post
+  – the bot goes straight into posting) · Search in the bot (?start=search); a choice opens Telegram and closes the card; the card still
+  opens by itself once per visitor. tgCardFill() in app.js, texts tgo* (i18n.js TB), styles .tgch-o.
+  POSTING THROUGH THE BOT ON THE SITE (owner, 2026-11-27: "a fő oldalon… 4 kártyára… az ingatlanok közé… admin dashboardra is"):
+  · homepage block "Post your listing on Telegram – 4 steps" after the THIRD listing block (tgBotSection(): open the bot · send photos ·
+    one message · Publish; PC 4 cards, phones 2 × 2; blue "Post on Telegram" + "Or post on the website"; under them "Something went wrong?
+    … dashboard → Telegram listings") – styles "TELEGRAM BOT POSTING" in styles.css + fonts.css;
+  · the random call-to-action strips have a new kind 'tg' (CTA_KINDS, cv_tg / cvs_tg / cvb_tg, Telegram plane icon) → the bot;
+  · yh_listings.source = 'bot' (posted via @yourhomeasiabot) / 'channel' (taken from an agent's channel) / null (website);
+  · ADVERTISER DASHBOARD section card "Telegram listings" (#/account?tab=tglist, after My listings; owner 09:00: "legyen egy olyan külön
+    kocka… a telegramos hirdetéseim… ha rosszul ment el… a dashboardon tudja módosítani"): intro + "Post on Telegram" / "Connect my
+    channel", channel posts waiting for approval with a red Publish button (badge + "What needs you now"), every Telegram listing with
+    Bot / Channel tag, status, Edit, Delete. Texts dx_tgl* (TB). The bot's "published" messages end with fixHint (Edit / dashboard).
+  · ADMIN: Telegram section = 6 tiles (via the bot · from agents' channels · waiting for approval · agent channels · central channel ·
+    alert requests), "Listings from Telegram" table (Edit), "Posts from agents' channels" (RPC yh_admin_tg_imports), setup, alerts;
+    the Telegram card's badge = waiting posts; Listings has a "Telegram" pill; Verification is now "Agents, agencies and their listings"
+    – each profile shows listings / live count, its channel, contact buttons and a "Listings" button that opens Listings filtered to
+    that agent (S.lst.agent, "Show all listings" clears it).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

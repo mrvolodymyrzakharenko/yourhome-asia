@@ -282,7 +282,8 @@ function tgCardFill(c) {
   c.classList.toggle('tgch-opts', !!url);   // compact, as wide as its content (owner, 2026-11-27 04:34: "mennyi fehér hely")
 }
 function tgCardOpen(auto, top) {
-  if (auto && document.querySelector('.lpk, .ypk, .rpop')) return;   // never pop up over an open picker / popup
+  if (auto && document.querySelector('.lpk, .ypk, .rpop')) return;
+  if (auto && document.querySelector('.fad.on')) { setTimeout(() => tgCardOpen(true), 4000); return; }   // wait until the free-listing card is gone   // never pop up over an open picker / popup
   const c = tgCard(); tgCardFill(c); c.hidden = false;
   c.classList.toggle('at-top', !!top);   // opened from the header icon → the card drops down under the header
   requestAnimationFrame(() => c.classList.add('on'));
@@ -300,13 +301,14 @@ document.addEventListener('click', e => {
 });
 if (TG_CHANNEL) {
   document.querySelectorAll('.yft-s-tg').forEach(a => { a.setAttribute('aria-label', 'Telegram channel'); a.querySelector('.yft-tip')?.remove(); });
-  try { if (!localStorage.getItem('yh_tgch')) { localStorage.setItem('yh_tgch', '1'); setTimeout(() => tgCardOpen(true), 3000); } } catch (_) {}
+  try { if (!localStorage.getItem('yh_tgch')) { localStorage.setItem('yh_tgch', '1'); setTimeout(() => tgCardOpen(true), faDue() ? 20000 : 3000); } } catch (_) {}   // the free-listing nudge goes first (5 s), the channel card after it
 }
 
 // FREE-LISTING NUDGE (owner, 2026-11-27: "nem szabványos pop up, hanem ideiglenes ablak – Hirdess ingyen ingatlant"): a small card
 // slides in by itself (PC bottom-left, phones just above the bottom menu) – no dark overlay, the page stays usable. It closes itself
 // after 12 s (a thin red bar shows the time left; hovering pauses it), never on /post /edit /account /admin, never over another
 // popup / picker / the Telegram card, at most once every 3 days per visitor (localStorage yh_freead). Texts fa_* (i18n.js FA).
+function faDue() { try { return Date.now() - (+localStorage.getItem('yh_freead') || 0) >= 3 * 864e5; } catch (_) { return false; } }   // hoisted: used by the Telegram card above
 const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000, FA_LIFE = 12000;
 const faBlocked = () => /^#\/(post|edit|account|admin|login)/.test(YH.h()) || document.body.classList.contains('adm-mode');
 function faClose(c) { c = c || document.getElementById('fad'); if (!c || c.hidden) return; c.classList.remove('on'); clearTimeout(c._t); setTimeout(() => { c.hidden = true; }, 300); }
@@ -332,7 +334,7 @@ window.addEventListener('hashchange', () => { if (faBlocked()) faClose(); });
   if (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search)) return;
   let tries = 0;
   const tryOpen = () => {
-    if (document.hidden || !faOpen()) { if (++tries < 12) setTimeout(tryOpen, 10000); return; }   // busy → try again in 10 s
+    if (document.hidden || !faOpen()) { if (++tries < 60) setTimeout(tryOpen, 2000); return; }   // busy → try again in 2 s
     try { localStorage.setItem(FA_KEY, String(Date.now())); } catch (_) {}
   };
   setTimeout(tryOpen, FA_DELAY);

@@ -615,7 +615,8 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   no dark overlay: red house badge, "Advertise your property for free" + one line, red "Post for free" pill → /post, drawn × top-right,
   a thin red bar at the bottom shrinks for 12 s and then it closes itself (hover pauses). At most once every 3 days per visitor
   (localStorage yh_freead); never on /post /edit /account /admin /login, never over another popup, picker, the open menu or the Telegram
-  card (busy → retries every 10 s). faOpen() in app.js, texts fa_* (i18n.js FA), styles "FREE-LISTING NUDGE" at the end of styles.css.
+  card (busy → retries every 2 s). FIRST VISIT (owner 07:13: "nem sok a 15 másodperc, 5-6 mp"): the nudge comes first at 5 s and the
+  once-per-visitor Telegram channel card waits – it auto-opens at 20 s instead of 3 s when the nudge is due, and never over the nudge. faOpen() in app.js, texts fa_* (i18n.js FA), styles "FREE-LISTING NUDGE" at the end of styles.css.
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

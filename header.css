@@ -138,13 +138,18 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .hdr-post::before,.yft-post::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:inherit;background:inherit;pointer-events:none;animation:yh-ripple 2.8s ease-out infinite}
 @keyframes yh-ripple{0%{transform:scale(1);opacity:.3}100%{transform:scale(1.1,1.32);opacity:0}}
 @media (prefers-reduced-motion:reduce){.hdr-post::before,.yft-post::before{animation:none;opacity:0}}
-/* PHONE "FREE" BADGE (owner, 2026-11-27: "a post free még mindig nem jelenik meg mobil nézetben"): the phone header has no room
-   for "+ Post for free", so a small white badge with red "FREE" (freeTag, all 8 languages) sits on the top-right corner of the
-   red "+ Post" button – it takes no width. Phones only (where the short label shows). */
-.hp-free{display:none}
+/* PHONE "+ POST FREE" (owner, 2026-11-27: "azt kell legyen kiírva post free, nem csak free" – replaces the FREE badge): the phone
+   header button reads "+ Post free" (postFreeS, 8 languages). fitRows() tightens the header (hfit1/hfit2, here also 12px letters on
+   the button); hfit3 squeezes gaps / letters a bit more; only if the row STILL does not fit (hfit4) it falls back to "+ Post". */
+.hp-pf{display:none}
 @media (max-width:720px){
-  .hdr-post{overflow:visible}
-  .hdr-post .hp-free{display:block;position:absolute;top:-7px;right:-5px;z-index:2;font-style:normal;font-size:8.5px!important;font-weight:700!important;
-    line-height:1;letter-spacing:.02em;padding:2.5px 5px;border-radius:99px;background:#fff;color:var(--red,#E00025);
-    box-shadow:0 1px 4px rgba(224,0,37,.28);white-space:nowrap;pointer-events:none}
+  .hdr-post .hp-short{display:none!important}
+  .hdr-post .hp-pf{display:inline;white-space:nowrap}
+  body.hfit2 .hdr .hdr-post{font-size:12px!important;padding-left:7px!important;padding-right:7px!important;gap:3px}
+  body.hfit3 .hdr .wrap.hdr-in{gap:4px!important}
+  body.hfit3 .hdr-r{gap:3px!important}
+  body.hfit3 .hdr .hdr-post{font-size:11.5px!important;padding-left:6px!important;padding-right:6px!important;letter-spacing:-.035em}
+  body.hfit3 .hdr .hdr-r .menu-btn{width:50px!important}
+  body.hfit4 .hdr-post .hp-pf{display:none}
+  body.hfit4 .hdr-post .hp-short{display:inline!important}
 }

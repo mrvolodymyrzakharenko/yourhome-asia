@@ -424,3 +424,6 @@ for (const k of Object.keys(FA)) T[k] = Object.assign(T[k] || {}, FA[k]);
 // Phone header "+ Post" badge (owner 2026-11-27: "a post free… mobil nézetben")
 const FREE_TAG = {en:'FREE', km:'ឥតគិតថ្លៃ', zh:'免费', fr:'GRATUIT', th:'ฟรี', ru:'БЕСПЛАТНО', vi:'MIỄN PHÍ', ko:'무료', de:'GRATIS', cs:'ZDARMA', pl:'ZA DARMO', hu:'INGYEN', ja:'無料'};
 for (const k of Object.keys(FREE_TAG)) T[k] = Object.assign(T[k] || {}, {freeTag: FREE_TAG[k]});
+// Phone header button "+ Post free" (owner 2026-11-27: "azt kell legyen kiírva post free")
+const POST_FREE_S = {en:'Post free', km:'ប្រកាសឥតគិតថ្លៃ', zh:'免费发布', fr:'Dépôt gratuit', th:'ลงประกาศฟรี', ru:'Подать бесплатно', vi:'Đăng miễn phí', ko:'무료 등록', de:'Gratis inserieren', cs:'Přidat zdarma', pl:'Dodaj za darmo', hu:'Feladás ingyen', ja:'無料掲載'};
+for (const k of Object.keys(POST_FREE_S)) T[k] = Object.assign(T[k] || {}, {postFreeS: POST_FREE_S[k]});

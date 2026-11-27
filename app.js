@@ -371,7 +371,7 @@ window.addEventListener('hashchange', () => { if (faBlocked()) { faClose(); cons
     try { localStorage.setItem(FA_KEY, String(Date.now())); } catch (_) {}
   };
   if (FA_ADV) FA_LIFE = 20000;
-  setTimeout(tryOpen, FA_ADV ? 1200 : FA_DELAY);
+  setTimeout(tryOpen, 1200);   // EVERYONE after 1.2 s (owner, 2026-11-27 13:50: "egy és másfél másodperc között, nem több")
 })();
 
 // Footer / Support chat buttons: a channel without an address yet (Facebook) shows a "coming soon" bubble instead of opening

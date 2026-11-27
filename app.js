@@ -311,7 +311,7 @@ if (TG_CHANNEL) {
 // after 12 s (a thin red bar shows the time left; hovering pauses it), never on /post /edit /account /admin, never over another
 // popup / picker / the Telegram card, at most once every 3 days per visitor (localStorage yh_freead). Texts fa_* (i18n.js FA).
 function faDue() { try { return Date.now() - (+localStorage.getItem('yh_freead') || 0) >= 3 * 864e5; } catch (_) { return false; } }   // hoisted: used by the Telegram card above
-const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000; let FA_LIFE = 12000, FA_ADV = false;
+const FA_KEY = 'yh_freead', FA_GAP = 3 * 864e5, FA_DELAY = 5000; let FA_LIFE = 12000, FA_ADV = false; const FA_ALWAYS = true;   // ad period: on every homepage visit (see faPlan)
 const faBlocked = () => /^#\/(post|edit|account|admin|login)/.test(YH.h()) || document.body.classList.contains('adm-mode');
 function faClose(c) { c = c || document.getElementById('fad'); if (!c || c.hidden) return; c.classList.remove('on'); clearTimeout(c._t); setTimeout(() => { c.hidden = true; }, 300); }
 // BIG VERSION FOR AD VISITORS (owner, 2026-11-27 13:45: "legyen nagyobb, az oldal 30%-át takarja be… egy nagyon picit blurozza be a többit…
@@ -362,6 +362,23 @@ window.addEventListener('hashchange', () => { if (faBlocked()) { faClose(); cons
   // becsukni"): the ad promises free posting, so they get the card after 1.2 s (not 5 s), every visit from an ad, and it stays 20 s
   const fromAd = /[?&](fbclid|igshid)=|[?&]utm_source=(facebook|fb|ig|instagram|meta)\b/i.test(location.search) || /(^|\.)(facebook|instagram)\.com|^android-app:\/\/com\.facebook/i.test((() => { try { return new URL(document.referrer).hostname || document.referrer; } catch (_) { return document.referrer || ''; } })());
   if (fromAd) { FA_ADV = true; }
+  // AD PERIOD = EVERY TIME ON THE HOMEPAGE (owner, 2026-11-27 14:03: "akárhányszor a fő oldalra megyek, mindig a Facebook hirdetési
+  // időszakban… legyen ott a felugró ablak a kezdő oldalon"): while FA_ALWAYS is true the card opens on EVERY arrival at the homepage
+  // (first load and every later navigation to Home), for every visitor, no 3-day lock; other pages get none. Set FA_ALWAYS = false after
+  // the ad period to go back to the 3-day rule.
+  if (FA_ALWAYS) {
+    const isHome = () => /^#\/?(\?.*)?$/.test(YH.h() || '#/');
+    let tm = 0, n = 0;
+    const plan = () => {
+      clearTimeout(tm); if (!isHome()) return; n = 0;
+      const go = () => { if (!isHome()) return; if (document.hidden || !faOpen()) { if (++n < 30) tm = setTimeout(go, 1500); } };
+      tm = setTimeout(go, 1200);
+    };
+    let was = YH.h();
+    window.addEventListener('hashchange', () => { const now = YH.h(); if (now !== was) { was = now; plan(); } });
+    plan();
+    return;
+  }
   const force = /[?&]fad=1/.test(location.search) || fromAd;   // test link: yourhome.asia/?fad=1 shows it every time (skips the 3-day lock)
   if (force) { try { localStorage.removeItem(FA_KEY); } catch (_) {} }
   if (!force && (Date.now() - last < FA_GAP || /[?&]nocount=1/.test(location.search))) return;

@@ -653,6 +653,10 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   többit"): faOpen() always draws faBig() – the small slide-in card is retired (this replaces "NOT a modal" above). Timing (owner 13:50: "egy és
   másfél másodperc között, nem több"): EVERYONE after 1.2 s; ad visitors every visit, others once every 3 days (?fad=1 = test). Phones/tablets: card 70vw wide, min-height 40vh, title 21px;
   blur 3px + dim .22; screens under 640px tall hide the house badge (no inner scrolling).
+  AD PERIOD = EVERY HOMEPAGE VISIT (owner, 2026-11-27 14:03: "akárhányszor a fő oldalra megyek, mindig a Facebook hirdetési időszakban…
+  legyen ott a felugró ablak a kezdő oldalon"): FA_ALWAYS = true in app.js – the big card opens 1.2 s after EVERY arrival at the homepage
+  (first load + each later navigation to Home), for everyone, no 3-day lock; never on other pages. When the ad period ends, set
+  FA_ALWAYS = false (back to: ad visitors every visit, others once every 3 days).
 
 ## Agent profiles + links to other sites (owner, 2026-11-24: "Agent külön oldalak… belinkelheti… Booking, trip.com, agoda…")
 - Every advertiser can create one or more public profiles (table yh_agents: name, agent/agency/owner, company, photo, bio,

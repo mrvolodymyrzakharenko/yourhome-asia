@@ -216,6 +216,13 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
 - MENU LIST (owner, 2026-11-24 20:59): on phones/tablets the open Menu is 70% of the screen wide (right side), scrolls if long;
   its first row is a red "✕ Close menu" button (#drClose, closeMenu in i18n.js).
   The menu links sit in TWO COLUMNS (owner 21:02: "menüpontok két sorban"); Close menu and Currency span both (end of header.css).
+  SOFT PINK TILES + PAIRS (owner, 2026-11-27 11:27–11:29): every link and currency button is a borderless very light red
+  tile (#fff3f5), tight gaps, NO divider lines or borders anywhere in the menu; on phones it ends above the floating Search
+  button (scrolls inside if needed). Rows pair one-word with one-word and two-word with two-word items, all on ONE line:
+  Listings | Map · Commercial spaces | Office spaces · New projects | Pre-sale projects · Under construction | Move-in ready ·
+  Post listing | Find agents · Saved | Account · Blog | Support · Become a partner (full width) · Currency (menu-only keys
+  mn_officeS / mn_presale / mn_ready / mn_agents in i18n.js). The phone menu is as wide as its longest item (min 70%); if a
+  language is still too long, fit() in index.html makes every tile two-line (.dr-wrap) so the pairs stay equal.
 - CALL-TO-ACTION STRIPS BETWEEN LISTINGS (owner, 2026-11-25): no fixed banner any more – placeCtas() in app.js puts a RANDOM strip
   after every 4–6 listings on phones and every 8–12 on PC/tablet (PC: only after a full row / a whole homepage block), never the same
   kind twice in a row: post a listing · daily rental · sale · spare room · become a partner (#/partners) · post your project

@@ -102,3 +102,30 @@ a.card[href="#/post"] .ph{background:#fff0f2!important}
 .tgch.at-top{top:calc(68px + env(safe-area-inset-top));bottom:auto}
 @media (max-width:720px){.hdr .rb-tg{width:34px;height:34px}.tgch.at-top{top:calc(58px + env(safe-area-inset-top))}}
 @media (max-width:720px){.hdr .rb-tg svg{width:18px;height:18px}body.hfit1 .hdr .rb-tg{width:30px;height:30px}body.hfit1 .hdr .rb-tg svg{width:16px;height:16px}}
+
+/* MENU = SOFT PINK TILES (owner, 2026-11-27 11:27: "összebb kéne húzni… begombozni az összes menüt nagyon enyhe pirosra…
+   ne legyen csík, ne legyen border… a currency-nál se legyen border… rálóg a keresés ikonra"): every link is a borderless
+   very light red tile, tighter gaps, no divider lines (Close menu / Currency), currency buttons borderless too; on phones
+   the open menu ends above the floating Search button of the bottom menu (scrolls inside if a language makes it longer). */
+.drawer{gap:5px!important;padding:7px!important}
+.drawer a{background:#fff3f5!important;border:0!important;border-radius:10px!important;padding:8px 10px!important;line-height:1.25;color:var(--ink)}
+.drawer a:hover{background:#ffe6ea!important}
+.drawer a.dr-partner{background:#fff3f5!important;margin-top:0!important}
+.drawer>.dr-close{border-bottom:0!important;border-radius:10px!important;margin:0 0 2px!important;padding:8px 12px!important;background:#ffe6ea!important}
+.drawer .dr-cur{border-top:0!important;margin-top:2px!important;padding:2px 0 0!important}
+.drawer .dr-cur>span{margin:0 4px 5px!important}
+.drawer .dr-curs{gap:5px!important}
+.drawer .dr-curs button{border:0!important;background:#fff3f5!important;padding:7px 9px!important}
+.drawer .dr-curs button.on{background:#ffdfe5!important;color:var(--red)!important}
+@media (max-width:900px){.drawer{max-height:calc(100vh - 64px - 175px)!important;max-height:calc(100dvh - 64px - 175px)!important}}
+/* Two-word menu items stay on ONE line (owner, 2026-11-27 11:28: "kétszavas menük 1 sorban legyenek"): on phones the menu is
+   as wide as its longest item needs (at least 70% of the screen, at most the screen minus 12px each side), never wrapping. */
+@media (max-width:900px){
+  .drawer{width:auto!important;min-width:70vw!important;max-width:calc(100vw - 24px)!important}
+  .drawer a{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important}
+}
+/* A language whose words are too long for one line (e.g. Russian): the whole menu switches to two-line tiles, so the two
+   tiles of a row are always the same height and look alike (index.html fit() adds .dr-wrap). */
+.drawer a{display:flex!important;align-items:center}
+.drawer a.dr-partner{justify-content:center}
+.drawer.dr-wrap a{white-space:normal!important;overflow:visible!important;text-overflow:clip!important}

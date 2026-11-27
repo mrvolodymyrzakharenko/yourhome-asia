@@ -30,7 +30,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&family=Noto+Sans+Khmer:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <link rel="stylesheet" href="/styles.css?v=20261127l1">
-<link rel="stylesheet" href="/header.css?v=20261127a">
+<link rel="stylesheet" href="/header.css?v=20261127m2">
 <link rel="stylesheet" href="/agents.css?v=1">
 <link rel="stylesheet" href="/popup.css?v=c5">
 <link rel="stylesheet" href="/partners.css?v=3">
@@ -60,20 +60,20 @@
   <nav class="drawer" id="drawer" hidden>
     <button type="button" class="dr-close" id="drClose"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg><span data-i18n="closeMenu">Close menu</span></button>
     <a href="/search" data-i18n="listings">Listings</a>
-    <a href="/rent/phnom-penh/commercial" data-i18n="mn_commercial">Commercial spaces</a>
-    <a href="/rent/phnom-penh/office" data-i18n="mn_offices">Offices for rent</a>
-    <a href="/projects" class="dr-prj" data-i18n="newProjects">New projects</a>
-    <a href="/projects?stage=presale" data-i18n="st_presale">Pre-sale</a>
-    <a href="/projects?stage=construction" data-i18n="st_construction">Under construction</a>
-    <a href="/projects?stage=ready" data-i18n="st_ready">Ready to move in</a>
     <a href="/search?view=map" data-i18n="mapNav">Map</a>
-    <a href="/agents" data-i18n="experts">Experts</a>
+    <a href="/rent/phnom-penh/commercial" data-i18n="mn_commercial">Commercial spaces</a>
+    <a href="/rent/phnom-penh/office" data-i18n="mn_officeS">Office spaces</a>
+    <a href="/projects" class="dr-prj" data-i18n="newProjects">New projects</a>
+    <a href="/projects?stage=presale" data-i18n="mn_presale">Pre-sale projects</a>
+    <a href="/projects?stage=construction" data-i18n="st_construction">Under construction</a>
+    <a href="/projects?stage=ready" data-i18n="mn_ready">Move-in ready</a>
+    <a href="/post" class="dr-post" data-i18n="post">Post listing</a>
+    <a href="/agents" data-i18n="mn_agents">Find agents</a>
     <a href="/saved" data-i18n="saved">Saved</a>
     <a href="/account" data-i18n="account">Account</a>
-    <a href="/post" class="dr-post" data-i18n="post">Post listing</a>
-    <a href="/partners" class="dr-partner" data-i18n="becomePartner">Become a partner</a>
     <a href="/blog" data-i18n="blog">Blog</a>
     <a href="/support" data-i18n="support">Support</a>
+    <a href="/partners" class="dr-partner" data-i18n="becomePartner">Become a partner</a>
     <div class="dr-cur"><span data-i18n="currency">Currency</span><div class="dr-curs">
       <button type="button" data-cur="USD"><b>USD</b>US Dollar</button><button type="button" data-cur="THB"><b>THB</b>Thai Baht</button>
       <button type="button" data-cur="KHR"><b>KHR</b>Cambodian Riel</button><button type="button" data-cur="CNY"><b>CNY</b>Chinese Yuan</button>
@@ -125,7 +125,8 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 (function(){var b=document.getElementById('menuBtn'),d=document.getElementById('drawer');
-b.addEventListener('click',function(e){e.stopPropagation();d.hidden=!d.hidden;});
+function fit(){d.classList.remove('dr-wrap');if([].some.call(d.querySelectorAll('a'),function(a){return a.scrollWidth>a.clientWidth+1}))d.classList.add('dr-wrap');}
+b.addEventListener('click',function(e){e.stopPropagation();d.hidden=!d.hidden;if(!d.hidden)fit();});
 document.addEventListener('click',function(e){if(!d.hidden&&!d.contains(e.target))d.hidden=true;});
 window.addEventListener('hashchange',function(){d.hidden=true;});
 document.getElementById('drClose').addEventListener('click',function(e){e.stopPropagation();d.hidden=true;});})();

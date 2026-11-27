@@ -563,8 +563,9 @@ never touch the Study tables. When a new standing rule is agreed with the owner,
   – the bot goes straight into posting) · Search in the bot (?start=search); a choice opens Telegram and closes the card; the card still
   opens by itself once per visitor. tgCardFill() in app.js, texts tgo* (i18n.js TB), styles .tgch-o.
   HEADER TELEGRAM ICON (owner, 2026-11-27 09:05: "a fejlécbe is… egy telegramos ikont… mindjárt az elején"): the FIRST round button of
-  the header row (before the language button, every screen; phones 34px, hfit1 30px), SOFT look (owner 09:13: "nagyon kék az oldalra"):
-  pale tint #EEF8FD, thin border #CBE8F6, the plane in Telegram blue #229ED9 – full blue + white plane only on hover,
+  the header row (before the language button, every screen; phones 34px, hfit1 30px), LOOK (owner 09:13 "nagyon kék" → 09:14 "kék telegramikon,
+  a háromszög fehér, ilyen körbe, mint a language"): white circle with the language button's thin border, inside it the small blue
+  Telegram logo (24px blue circle #229ED9, white plane; phones 22px),
   [data-tgch] → the same three-choice card, dropping down under the header (.tgch.at-top). header.css last block.
   POSTING THROUGH THE BOT ON THE SITE (owner, 2026-11-27: "a fő oldalon… 4 kártyára… az ingatlanok közé… admin dashboardra is"):
   · homepage block "Post your listing on Telegram – 4 steps" after the THIRD listing block (tgBotSection(): open the bot · send photos ·
